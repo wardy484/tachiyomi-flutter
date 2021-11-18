@@ -16,7 +16,11 @@ class ReaderProgressCubit extends Cubit<ReaderProgressState> {
     emit(ReaderProgressState.progressed(progress));
   }
 
-  void moveProgressForVisibilityInfo(VisibilityInfo visibilityInfo) {
+  void moveProgressForVisibilityInfo(
+    VisibilityInfo visibilityInfo,
+    int maxPages,
+    bool reversed,
+  ) {
     var visiblePercentage = visibilityInfo.visibleFraction * 100;
 
     if (visiblePercentage > VISIBILITY_THRESHOLD) {
@@ -28,7 +32,13 @@ class ReaderProgressCubit extends Cubit<ReaderProgressState> {
               .group(0) ??
           "";
 
-      moveProgress(progress);
+      int pageNumber = int.parse(progress);
+
+      if (reversed) {
+        pageNumber = maxPages - (pageNumber - 1);
+      }
+
+      moveProgress(pageNumber.toString());
     }
   }
 }

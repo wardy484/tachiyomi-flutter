@@ -82,6 +82,8 @@ class _ReadPageState extends State<ReadPage> {
                               BlocProvider.of<ReaderProgressCubit>(context)
                                   .moveProgressForVisibilityInfo(
                                 visibilityInfo,
+                                pages.length,
+                                startFromEnd,
                               );
                             },
                           );

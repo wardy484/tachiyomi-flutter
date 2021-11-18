@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttiyomi/manga_dex/chapter_details/chapter_details_cubit.dart';
+import 'package:fluttiyomi/manga_dex/reader_progress/reader_progress_cubit.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_loader_footer.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_loader_header.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -49,7 +50,6 @@ class _ReaderLoaderState extends State<ReaderLoader> {
         reverse: widget.reverse,
       ),
       onRefresh: () async {
-        // TODO: Fix rendering and Labels on Refresh header and footer :face_palm: at least it works
         if (widget.reverse) {
           await BlocProvider.of<ChapterDetailsCubit>(context).nextChapter();
         } else {

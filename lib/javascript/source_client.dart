@@ -7,6 +7,11 @@ import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/data/search_results/searchresults.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+final sourceClientProvider = FutureProvider(
+  (ref) async => await SourceClient.init(),
+);
 
 class SourceClient {
   final JavascriptRuntime js = getJavascriptRuntime();
