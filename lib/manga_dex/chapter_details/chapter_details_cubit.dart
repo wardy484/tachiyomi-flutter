@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
+import 'package:fluttiyomi/database/tables.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/manga_dex/reader_progress/reader_progress_cubit.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -11,10 +12,15 @@ part 'chapter_details_cubit.freezed.dart';
 class ChapterDetailsCubit extends Cubit<ChapterDetailsState> {
   final SourceClient _source;
   final ReaderProgressCubit _readerProgress;
+  final MyDatabase _database;
 
-  ChapterDetailsCubit(SourceClient source, ReaderProgressCubit readerProgress)
-      : _source = source,
+  ChapterDetailsCubit(
+    SourceClient source,
+    ReaderProgressCubit readerProgress,
+    MyDatabase database,
+  )   : _source = source,
         _readerProgress = readerProgress,
+        _database = database,
         super(const ChapterDetailsState.initial());
 
   Future<ChapterDetails> getChapterDetails(
@@ -32,7 +38,12 @@ class ChapterDetailsCubit extends Cubit<ChapterDetailsState> {
     );
 
     emit(ChapterDetailsState.loaded(
-        mangaId, details, chapters, currentIndex, startFromEnd));
+      mangaId,
+      details,
+      chapters,
+      currentIndex,
+      startFromEnd,
+    ));
 
     return details;
   }
@@ -40,10 +51,16 @@ class ChapterDetailsCubit extends Cubit<ChapterDetailsState> {
   Future<void> nextChapter() async {
     await state.when(
       initial: () {},
-      loaded: (mangaId, chapterDetails, chapterList, currentChapter,
-          startFromEnd) async {
-        var newIndex = currentChapter - 1;
+      loaded: (
+        mangaId,
+        chapterDetails,
+        chapterList,
+        currentChapterIndex,
+        startFromEnd,
+      ) async {
+        var newIndex = currentChapterIndex - 1;
         var newChapter = chapterList.get(newIndex);
+        var currentChapter = chapterList.get(currentChapterIndex);
 
         await getChapterDetails(
           mangaId,
@@ -51,6 +68,12 @@ class ChapterDetailsCubit extends Cubit<ChapterDetailsState> {
           chapterList,
           newIndex,
           false,
+        );
+
+        await _database.markAsRead(
+          _source.src,
+          mangaId,
+          currentChapter.id,
         );
 
         _readerProgress.moveProgress("1");
@@ -61,10 +84,16 @@ class ChapterDetailsCubit extends Cubit<ChapterDetailsState> {
   Future<void> previousChapter() async {
     await state.when(
       initial: () {},
-      loaded: (mangaId, chapterDetails, chapterList, currentChapter,
-          startFromEnd) async {
-        var newIndex = currentChapter + 1;
+      loaded: (
+        mangaId,
+        chapterDetails,
+        chapterList,
+        currentChapterIndex,
+        startFromEnd,
+      ) async {
+        var newIndex = currentChapterIndex + 1;
         var newChapter = chapterList.get(newIndex);
+        var currentChapter = chapterList.get(currentChapterIndex);
 
         ChapterDetails details = await getChapterDetails(
           mangaId,
@@ -74,7 +103,6 @@ class ChapterDetailsCubit extends Cubit<ChapterDetailsState> {
           true,
         );
 
-        print(chapterDetails.pages.length);
         _readerProgress.moveProgress(chapterDetails.pages.length.toString());
       },
     );

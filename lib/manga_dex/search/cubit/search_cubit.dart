@@ -15,7 +15,7 @@ class SearchCubit extends Cubit<SearchState> {
         super(const SearchState.initial());
 
   Future<void> getMangaList() async {
-    SearchResults results = await _source.search("Dungeon Reset");
+    SearchResults results = await _source.search("Martial Peak");
 
     emit(SearchState.loaded(results));
   }

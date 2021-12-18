@@ -6,8 +6,13 @@ import 'package:fluttiyomi/widgets/MangaDetails/manga_image.dart';
 
 class Header extends StatelessWidget {
   final Manga manga;
+  final Function() onToggleFavourite;
 
-  const Header({Key? key, required this.manga}) : super(key: key);
+  const Header({
+    Key? key,
+    required this.manga,
+    required this.onToggleFavourite,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +38,19 @@ class Header extends StatelessWidget {
                   const SizedBox(height: 24),
                   const HeaderDetail(label: "Source", value: "Manga Fox"),
                 ],
+              )
+            ],
+          ),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              IconButton(
+                onPressed: onToggleFavourite,
+                icon: Icon(
+                  manga.favourite
+                      ? Icons.bookmark
+                      : Icons.bookmark_add_outlined,
+                ),
               )
             ],
           ),

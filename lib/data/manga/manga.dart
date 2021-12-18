@@ -17,8 +17,9 @@ class Manga with _$Manga {
     List<String>? covers,
     String? desc,
     double? follows,
-    DateTime? lastUpdate,
-  ) = _Manga;
+    DateTime? lastUpdate, {
+    @Default(false) bool favourite,
+  }) = _Manga;
 
   factory Manga.fromJson(Map<String, dynamic> json) => _$MangaFromJson(json);
 }

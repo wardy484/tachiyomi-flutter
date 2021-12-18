@@ -13,8 +13,9 @@ class Chapter with _$Chapter {
     String? name,
     String? volume,
     String? group,
-    String? time,
-  ) = _Chapter;
+    String? time, {
+    @Default(false) bool read,
+  }) = _Chapter;
 
   factory Chapter.fromJson(Map<String, dynamic> json) =>
       _$ChapterFromJson(json);

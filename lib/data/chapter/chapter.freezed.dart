@@ -29,7 +29,8 @@ class _$ChapterTearOff {
       String? name,
       String? volume,
       String? group,
-      String? time) {
+      String? time,
+      {bool read = false}) {
     return _Chapter(
       id,
       mangaId,
@@ -39,6 +40,7 @@ class _$ChapterTearOff {
       volume,
       group,
       time,
+      read: read,
     );
   }
 
@@ -61,6 +63,7 @@ mixin _$Chapter {
   String? get volume => throw _privateConstructorUsedError;
   String? get group => throw _privateConstructorUsedError;
   String? get time => throw _privateConstructorUsedError;
+  bool get read => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -79,7 +82,8 @@ abstract class $ChapterCopyWith<$Res> {
       String? name,
       String? volume,
       String? group,
-      String? time});
+      String? time,
+      bool read});
 }
 
 /// @nodoc
@@ -100,6 +104,7 @@ class _$ChapterCopyWithImpl<$Res> implements $ChapterCopyWith<$Res> {
     Object? volume = freezed,
     Object? group = freezed,
     Object? time = freezed,
+    Object? read = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -134,6 +139,10 @@ class _$ChapterCopyWithImpl<$Res> implements $ChapterCopyWith<$Res> {
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as String?,
+      read: read == freezed
+          ? _value.read
+          : read // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -151,7 +160,8 @@ abstract class _$ChapterCopyWith<$Res> implements $ChapterCopyWith<$Res> {
       String? name,
       String? volume,
       String? group,
-      String? time});
+      String? time,
+      bool read});
 }
 
 /// @nodoc
@@ -173,6 +183,7 @@ class __$ChapterCopyWithImpl<$Res> extends _$ChapterCopyWithImpl<$Res>
     Object? volume = freezed,
     Object? group = freezed,
     Object? time = freezed,
+    Object? read = freezed,
   }) {
     return _then(_Chapter(
       id == freezed
@@ -207,6 +218,10 @@ class __$ChapterCopyWithImpl<$Res> extends _$ChapterCopyWithImpl<$Res>
           ? _value.time
           : time // ignore: cast_nullable_to_non_nullable
               as String?,
+      read: read == freezed
+          ? _value.read
+          : read // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -215,7 +230,8 @@ class __$ChapterCopyWithImpl<$Res> extends _$ChapterCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Chapter implements _Chapter {
   _$_Chapter(this.id, this.mangaId, @JsonKey(name: 'chapNum') this.chapterNo,
-      this.langCode, this.name, this.volume, this.group, this.time);
+      this.langCode, this.name, this.volume, this.group, this.time,
+      {this.read = false});
 
   factory _$_Chapter.fromJson(Map<String, dynamic> json) =>
       _$$_ChapterFromJson(json);
@@ -237,10 +253,13 @@ class _$_Chapter implements _Chapter {
   final String? group;
   @override
   final String? time;
+  @JsonKey(defaultValue: false)
+  @override
+  final bool read;
 
   @override
   String toString() {
-    return 'Chapter(id: $id, mangaId: $mangaId, chapterNo: $chapterNo, langCode: $langCode, name: $name, volume: $volume, group: $group, time: $time)';
+    return 'Chapter(id: $id, mangaId: $mangaId, chapterNo: $chapterNo, langCode: $langCode, name: $name, volume: $volume, group: $group, time: $time, read: $read)';
   }
 
   @override
@@ -257,12 +276,13 @@ class _$_Chapter implements _Chapter {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.volume, volume) || other.volume == volume) &&
             (identical(other.group, group) || other.group == group) &&
-            (identical(other.time, time) || other.time == time));
+            (identical(other.time, time) || other.time == time) &&
+            (identical(other.read, read) || other.read == read));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, mangaId, chapterNo, langCode, name, volume, group, time);
+  int get hashCode => Object.hash(runtimeType, id, mangaId, chapterNo, langCode,
+      name, volume, group, time, read);
 
   @JsonKey(ignore: true)
   @override
@@ -284,7 +304,8 @@ abstract class _Chapter implements Chapter {
       String? name,
       String? volume,
       String? group,
-      String? time) = _$_Chapter;
+      String? time,
+      {bool read}) = _$_Chapter;
 
   factory _Chapter.fromJson(Map<String, dynamic> json) = _$_Chapter.fromJson;
 
@@ -305,6 +326,8 @@ abstract class _Chapter implements Chapter {
   String? get group;
   @override
   String? get time;
+  @override
+  bool get read;
   @override
   @JsonKey(ignore: true)
   _$ChapterCopyWith<_Chapter> get copyWith =>

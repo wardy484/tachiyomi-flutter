@@ -40,7 +40,13 @@ class _ChaptersPageState extends State<ChaptersPage> {
                         itemCount: results.length + 2,
                         itemBuilder: (context, index) {
                           if (index == 0) {
-                            return Header(manga: manga);
+                            return Header(
+                              manga: manga,
+                              onToggleFavourite: () {
+                                BlocProvider.of<MangaDetailsCubit>(context)
+                                    .toggleFavourite(widget.mangaName, manga);
+                              },
+                            );
                           }
 
                           if (index == 1) {
@@ -70,9 +76,14 @@ class _ChaptersPageState extends State<ChaptersPage> {
                               );
                             },
                             child: ListTile(
+                              textColor: item.read ? Colors.grey : Colors.white,
                               title: Text(
-                                  item.name ?? "Chapter ${item.chapterNo}"),
-                              subtitle: Text(item.chapterNo.toString()),
+                                item.name ?? "Chapter ${item.chapterNo}",
+                              ),
+                              subtitle: Text(
+                                item.chapterNo.toString(),
+                              ),
+                              // subtitle: Text(item.read.toString()),
                             ),
                           );
                         },

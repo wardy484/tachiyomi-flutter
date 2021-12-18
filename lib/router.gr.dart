@@ -1,3 +1,7 @@
+// **************************************************************************
+// AutoRouteGenerator
+// **************************************************************************
+
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -52,22 +56,23 @@ class AppRouter extends _i4.RootStackRouter {
       ];
 }
 
-/// generated route for [_i1.ListPage]
+/// generated route for
+/// [_i1.ListPage]
 class ListRoute extends _i4.PageRouteInfo<void> {
-  const ListRoute() : super(name, path: '/');
+  const ListRoute() : super(ListRoute.name, path: '/');
 
   static const String name = 'ListRoute';
 }
 
-/// generated route for [_i2.ChaptersPage]
+/// generated route for
+/// [_i2.ChaptersPage]
 class ChaptersRoute extends _i4.PageRouteInfo<ChaptersRouteArgs> {
   ChaptersRoute(
       {_i5.Key? key, required String mangaId, required String mangaName})
-      : super(name,
+      : super(ChaptersRoute.name,
             path: '/chapters/:mangaName/:mangaId',
             args: ChaptersRouteArgs(
-                key: key, mangaId: mangaId, mangaName: mangaName),
-            rawPathParams: {});
+                key: key, mangaId: mangaId, mangaName: mangaName));
 
   static const String name = 'ChaptersRoute';
 }
@@ -81,9 +86,15 @@ class ChaptersRouteArgs {
   final String mangaId;
 
   final String mangaName;
+
+  @override
+  String toString() {
+    return 'ChaptersRouteArgs{key: $key, mangaId: $mangaId, mangaName: $mangaName}';
+  }
 }
 
-/// generated route for [_i3.ReadPage]
+/// generated route for
+/// [_i3.ReadPage]
 class ReadRoute extends _i4.PageRouteInfo<ReadRouteArgs> {
   ReadRoute(
       {_i5.Key? key,
@@ -91,15 +102,14 @@ class ReadRoute extends _i4.PageRouteInfo<ReadRouteArgs> {
       required _i6.Chapter chapter,
       required _i7.ChapterList chapters,
       required int currentChapter})
-      : super(name,
+      : super(ReadRoute.name,
             path: '/read/:mangaId',
             args: ReadRouteArgs(
                 key: key,
                 mangaId: mangaId,
                 chapter: chapter,
                 chapters: chapters,
-                currentChapter: currentChapter),
-            rawPathParams: {});
+                currentChapter: currentChapter));
 
   static const String name = 'ReadRoute';
 }
@@ -121,4 +131,9 @@ class ReadRouteArgs {
   final _i7.ChapterList chapters;
 
   final int currentChapter;
+
+  @override
+  String toString() {
+    return 'ReadRouteArgs{key: $key, mangaId: $mangaId, chapter: $chapter, chapters: $chapters, currentChapter: $currentChapter}';
+  }
 }

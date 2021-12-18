@@ -21,6 +21,7 @@ _$_Manga _$$_MangaFromJson(Map<String, dynamic> json) => _$_Manga(
       json['lastUpdate'] == null
           ? null
           : DateTime.parse(json['lastUpdate'] as String),
+      favourite: json['favourite'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$_MangaToJson(_$_Manga instance) => <String, dynamic>{
@@ -36,4 +37,5 @@ Map<String, dynamic> _$$_MangaToJson(_$_Manga instance) => <String, dynamic>{
       'desc': instance.desc,
       'follows': instance.follows,
       'lastUpdate': instance.lastUpdate?.toIso8601String(),
+      'favourite': instance.favourite,
     };

@@ -33,7 +33,8 @@ class _$MangaTearOff {
       List<String>? covers,
       String? desc,
       double? follows,
-      DateTime? lastUpdate) {
+      DateTime? lastUpdate,
+      {bool favourite = false}) {
     return _Manga(
       id,
       titles,
@@ -47,6 +48,7 @@ class _$MangaTearOff {
       desc,
       follows,
       lastUpdate,
+      favourite: favourite,
     );
   }
 
@@ -72,6 +74,7 @@ mixin _$Manga {
   String? get desc => throw _privateConstructorUsedError;
   double? get follows => throw _privateConstructorUsedError;
   DateTime? get lastUpdate => throw _privateConstructorUsedError;
+  bool get favourite => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -94,7 +97,8 @@ abstract class $MangaCopyWith<$Res> {
       List<String>? covers,
       String? desc,
       double? follows,
-      DateTime? lastUpdate});
+      DateTime? lastUpdate,
+      bool favourite});
 }
 
 /// @nodoc
@@ -119,6 +123,7 @@ class _$MangaCopyWithImpl<$Res> implements $MangaCopyWith<$Res> {
     Object? desc = freezed,
     Object? follows = freezed,
     Object? lastUpdate = freezed,
+    Object? favourite = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -169,6 +174,10 @@ class _$MangaCopyWithImpl<$Res> implements $MangaCopyWith<$Res> {
           ? _value.lastUpdate
           : lastUpdate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      favourite: favourite == freezed
+          ? _value.favourite
+          : favourite // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -190,7 +199,8 @@ abstract class _$MangaCopyWith<$Res> implements $MangaCopyWith<$Res> {
       List<String>? covers,
       String? desc,
       double? follows,
-      DateTime? lastUpdate});
+      DateTime? lastUpdate,
+      bool favourite});
 }
 
 /// @nodoc
@@ -216,6 +226,7 @@ class __$MangaCopyWithImpl<$Res> extends _$MangaCopyWithImpl<$Res>
     Object? desc = freezed,
     Object? follows = freezed,
     Object? lastUpdate = freezed,
+    Object? favourite = freezed,
   }) {
     return _then(_Manga(
       id == freezed
@@ -266,6 +277,10 @@ class __$MangaCopyWithImpl<$Res> extends _$MangaCopyWithImpl<$Res>
           ? _value.lastUpdate
           : lastUpdate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      favourite: favourite == freezed
+          ? _value.favourite
+          : favourite // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -285,7 +300,8 @@ class _$_Manga implements _Manga {
       this.covers,
       this.desc,
       this.follows,
-      this.lastUpdate);
+      this.lastUpdate,
+      {this.favourite = false});
 
   factory _$_Manga.fromJson(Map<String, dynamic> json) =>
       _$$_MangaFromJson(json);
@@ -314,10 +330,13 @@ class _$_Manga implements _Manga {
   final double? follows;
   @override
   final DateTime? lastUpdate;
+  @JsonKey(defaultValue: false)
+  @override
+  final bool favourite;
 
   @override
   String toString() {
-    return 'Manga(id: $id, titles: $titles, image: $image, rating: $rating, mangaStatus: $mangaStatus, langFlag: $langFlag, author: $author, artist: $artist, covers: $covers, desc: $desc, follows: $follows, lastUpdate: $lastUpdate)';
+    return 'Manga(id: $id, titles: $titles, image: $image, rating: $rating, mangaStatus: $mangaStatus, langFlag: $langFlag, author: $author, artist: $artist, covers: $covers, desc: $desc, follows: $follows, lastUpdate: $lastUpdate, favourite: $favourite)';
   }
 
   @override
@@ -339,7 +358,9 @@ class _$_Manga implements _Manga {
             (identical(other.desc, desc) || other.desc == desc) &&
             (identical(other.follows, follows) || other.follows == follows) &&
             (identical(other.lastUpdate, lastUpdate) ||
-                other.lastUpdate == lastUpdate));
+                other.lastUpdate == lastUpdate) &&
+            (identical(other.favourite, favourite) ||
+                other.favourite == favourite));
   }
 
   @override
@@ -356,7 +377,8 @@ class _$_Manga implements _Manga {
       const DeepCollectionEquality().hash(covers),
       desc,
       follows,
-      lastUpdate);
+      lastUpdate,
+      favourite);
 
   @JsonKey(ignore: true)
   @override
@@ -382,7 +404,8 @@ abstract class _Manga implements Manga {
       List<String>? covers,
       String? desc,
       double? follows,
-      DateTime? lastUpdate) = _$_Manga;
+      DateTime? lastUpdate,
+      {bool favourite}) = _$_Manga;
 
   factory _Manga.fromJson(Map<String, dynamic> json) = _$_Manga.fromJson;
 
@@ -410,6 +433,8 @@ abstract class _Manga implements Manga {
   double? get follows;
   @override
   DateTime? get lastUpdate;
+  @override
+  bool get favourite;
   @override
   @JsonKey(ignore: true)
   _$MangaCopyWith<_Manga> get copyWith => throw _privateConstructorUsedError;
