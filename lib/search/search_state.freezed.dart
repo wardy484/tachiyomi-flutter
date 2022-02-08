@@ -2,7 +2,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'search_cubit.dart';
+part of 'search_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -212,8 +212,6 @@ abstract class _$LoadedCopyWith<$Res> {
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) then) =
       __$LoadedCopyWithImpl<$Res>;
   $Res call({SearchResults results});
-
-  $SearchResultsCopyWith<$Res> get results;
 }
 
 /// @nodoc
@@ -236,13 +234,6 @@ class __$LoadedCopyWithImpl<$Res> extends _$SearchStateCopyWithImpl<$Res>
               as SearchResults,
     ));
   }
-
-  @override
-  $SearchResultsCopyWith<$Res> get results {
-    return $SearchResultsCopyWith<$Res>(_value.results, (value) {
-      return _then(_value.copyWith(results: value));
-    });
-  }
 }
 
 /// @nodoc
@@ -263,11 +254,12 @@ class _$_Loaded implements _Loaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Loaded &&
-            (identical(other.results, results) || other.results == results));
+            const DeepCollectionEquality().equals(other.results, results));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, results);
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(results));
 
   @JsonKey(ignore: true)
   @override

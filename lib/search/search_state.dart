@@ -1,4 +1,7 @@
-part of 'search_cubit.dart';
+import 'package:fluttiyomi/data/search_results/searchresults.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'search_state.freezed.dart';
 
 @freezed
 class SearchState with _$SearchState {

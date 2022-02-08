@@ -12,7 +12,7 @@ class ChaptersPage extends StatefulWidget {
   final String mangaId;
   final String mangaName;
 
-  ChaptersPage({Key? key, required this.mangaId, required this.mangaName})
+  const ChaptersPage({Key? key, required this.mangaId, required this.mangaName})
       : super(key: key);
 
   @override

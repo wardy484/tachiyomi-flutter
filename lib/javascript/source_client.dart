@@ -9,8 +9,8 @@ import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/data/search_results/searchresults.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final sourceClientProvider = FutureProvider(
-  (ref) async => await SourceClient.init(),
+final sourceClientProvider = StateProvider<SourceClient>(
+  (ref) => SourceClient(""),
 );
 
 class SourceClient {
