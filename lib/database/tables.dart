@@ -35,6 +35,8 @@ LazyDatabase _openConnection() {
   });
 }
 
+final databaseProvider = Provider((_) => MyDatabase());
+
 @DriftDatabase(tables: [Favourites, CompletedChapters])
 class MyDatabase extends _$MyDatabase {
   // we tell the database where to store the data with this constructor
@@ -95,7 +97,3 @@ class MyDatabase extends _$MyDatabase {
         .get();
   }
 }
-
-final databaseProvider = Provider((ref) {
-  return MyDatabase();
-});

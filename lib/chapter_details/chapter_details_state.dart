@@ -1,4 +1,8 @@
-part of 'chapter_details_cubit.dart';
+import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
+import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'chapter_details_state.freezed.dart';
 
 @freezed
 class ChapterDetailsState with _$ChapterDetailsState {

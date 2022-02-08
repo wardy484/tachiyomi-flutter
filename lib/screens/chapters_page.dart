@@ -1,14 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttiyomi/manga_dex/chapters/chapter_cubit.dart';
-import 'package:fluttiyomi/manga_dex/manga_details/manga_details_cubit.dart';
+import 'package:fluttiyomi/chapters/chapters_notifier.dart';
+import 'package:fluttiyomi/manga_details/manga_details_notifier.dart';
 import 'package:fluttiyomi/router.gr.dart';
 import 'package:fluttiyomi/widgets/MangaDetails/header.dart';
 import 'package:fluttiyomi/widgets/common/full_page_loading_indicator.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ChaptersPage extends StatefulWidget {
+class ChaptersPage extends ConsumerStatefulWidget {
   final String mangaId;
   final String mangaName;
 
@@ -19,21 +18,27 @@ class ChaptersPage extends StatefulWidget {
   _ChaptersPageState createState() => _ChaptersPageState();
 }
 
-class _ChaptersPageState extends State<ChaptersPage> {
+class _ChaptersPageState extends ConsumerState<ChaptersPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    ref
+        .read(mangaDetailsNotifierProvider.notifier)
+        .getMangaDetails(widget.mangaId);
+    ref.read(chaptersNotifierProvider.notifier).getChapters(widget.mangaId);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.mangaName),
       ),
-      body: BlocBuilder<MangaDetailsCubit, MangaDetailsState>(
-        builder: (context, state) {
-          return state.when(
+      body: ref.watch(mangaDetailsNotifierProvider).when(
             initial: () => const FullPageLoadingIndicator(),
             loaded: (manga) {
-              return BlocBuilder<ChapterCubit, ChapterState>(
-                builder: (context, state) {
-                  return state.when(
+              return ref.watch(chaptersNotifierProvider).when(
                     initial: () => const FullPageLoadingIndicator(),
                     loaded: (results) {
                       return ListView.builder(
@@ -43,7 +48,8 @@ class _ChaptersPageState extends State<ChaptersPage> {
                             return Header(
                               manga: manga,
                               onToggleFavourite: () {
-                                BlocProvider.of<MangaDetailsCubit>(context)
+                                ref
+                                    .read(mangaDetailsNotifierProvider.notifier)
                                     .toggleFavourite(widget.mangaName, manga);
                               },
                             );
@@ -90,16 +96,8 @@ class _ChaptersPageState extends State<ChaptersPage> {
                       );
                     },
                   );
-                },
-                bloc: BlocProvider.of<ChapterCubit>(context)
-                  ..getChapters(widget.mangaId),
-              );
             },
-          );
-        },
-        bloc: BlocProvider.of<MangaDetailsCubit>(context)
-          ..getMangaDetails(widget.mangaId),
-      ),
+          ),
     );
   }
 }

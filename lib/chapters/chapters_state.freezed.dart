@@ -2,7 +2,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'reader_progress_cubit.dart';
+part of 'chapters_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,80 +14,80 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-class _$ReaderProgressStateTearOff {
-  const _$ReaderProgressStateTearOff();
+class _$ChaptersStateTearOff {
+  const _$ChaptersStateTearOff();
 
   _Initial initial() {
     return const _Initial();
   }
 
-  _Progressed progressed(String progress) {
-    return _Progressed(
-      progress,
+  _Loaded loaded(ChapterList chapters) {
+    return _Loaded(
+      chapters,
     );
   }
 }
 
 /// @nodoc
-const $ReaderProgressState = _$ReaderProgressStateTearOff();
+const $ChaptersState = _$ChaptersStateTearOff();
 
 /// @nodoc
-mixin _$ReaderProgressState {
+mixin _$ChaptersState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(String progress) progressed,
+    required TResult Function(ChapterList chapters) loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String progress)? progressed,
+    TResult Function(ChapterList chapters)? loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String progress)? progressed,
+    TResult Function(ChapterList chapters)? loaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_Progressed value) progressed,
+    required TResult Function(_Loaded value) loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_Progressed value)? progressed,
+    TResult Function(_Loaded value)? loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_Progressed value)? progressed,
+    TResult Function(_Loaded value)? loaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ReaderProgressStateCopyWith<$Res> {
-  factory $ReaderProgressStateCopyWith(
-          ReaderProgressState value, $Res Function(ReaderProgressState) then) =
-      _$ReaderProgressStateCopyWithImpl<$Res>;
+abstract class $ChaptersStateCopyWith<$Res> {
+  factory $ChaptersStateCopyWith(
+          ChaptersState value, $Res Function(ChaptersState) then) =
+      _$ChaptersStateCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$ReaderProgressStateCopyWithImpl<$Res>
-    implements $ReaderProgressStateCopyWith<$Res> {
-  _$ReaderProgressStateCopyWithImpl(this._value, this._then);
+class _$ChaptersStateCopyWithImpl<$Res>
+    implements $ChaptersStateCopyWith<$Res> {
+  _$ChaptersStateCopyWithImpl(this._value, this._then);
 
-  final ReaderProgressState _value;
+  final ChaptersState _value;
   // ignore: unused_field
-  final $Res Function(ReaderProgressState) _then;
+  final $Res Function(ChaptersState) _then;
 }
 
 /// @nodoc
@@ -97,8 +97,7 @@ abstract class _$InitialCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$InitialCopyWithImpl<$Res>
-    extends _$ReaderProgressStateCopyWithImpl<$Res>
+class __$InitialCopyWithImpl<$Res> extends _$ChaptersStateCopyWithImpl<$Res>
     implements _$InitialCopyWith<$Res> {
   __$InitialCopyWithImpl(_Initial _value, $Res Function(_Initial) _then)
       : super(_value, (v) => _then(v as _Initial));
@@ -114,7 +113,7 @@ class _$_Initial implements _Initial {
 
   @override
   String toString() {
-    return 'ReaderProgressState.initial()';
+    return 'ChaptersState.initial()';
   }
 
   @override
@@ -130,7 +129,7 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(String progress) progressed,
+    required TResult Function(ChapterList chapters) loaded,
   }) {
     return initial();
   }
@@ -139,7 +138,7 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String progress)? progressed,
+    TResult Function(ChapterList chapters)? loaded,
   }) {
     return initial?.call();
   }
@@ -148,7 +147,7 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String progress)? progressed,
+    TResult Function(ChapterList chapters)? loaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -161,7 +160,7 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_Progressed value) progressed,
+    required TResult Function(_Loaded value) loaded,
   }) {
     return initial(this);
   }
@@ -170,7 +169,7 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_Progressed value)? progressed,
+    TResult Function(_Loaded value)? loaded,
   }) {
     return initial?.call(this);
   }
@@ -179,7 +178,7 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_Progressed value)? progressed,
+    TResult Function(_Loaded value)? loaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -189,99 +188,105 @@ class _$_Initial implements _Initial {
   }
 }
 
-abstract class _Initial implements ReaderProgressState {
+abstract class _Initial implements ChaptersState {
   const factory _Initial() = _$_Initial;
 }
 
 /// @nodoc
-abstract class _$ProgressedCopyWith<$Res> {
-  factory _$ProgressedCopyWith(
-          _Progressed value, $Res Function(_Progressed) then) =
-      __$ProgressedCopyWithImpl<$Res>;
-  $Res call({String progress});
+abstract class _$LoadedCopyWith<$Res> {
+  factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) then) =
+      __$LoadedCopyWithImpl<$Res>;
+  $Res call({ChapterList chapters});
+
+  $ChapterListCopyWith<$Res> get chapters;
 }
 
 /// @nodoc
-class __$ProgressedCopyWithImpl<$Res>
-    extends _$ReaderProgressStateCopyWithImpl<$Res>
-    implements _$ProgressedCopyWith<$Res> {
-  __$ProgressedCopyWithImpl(
-      _Progressed _value, $Res Function(_Progressed) _then)
-      : super(_value, (v) => _then(v as _Progressed));
+class __$LoadedCopyWithImpl<$Res> extends _$ChaptersStateCopyWithImpl<$Res>
+    implements _$LoadedCopyWith<$Res> {
+  __$LoadedCopyWithImpl(_Loaded _value, $Res Function(_Loaded) _then)
+      : super(_value, (v) => _then(v as _Loaded));
 
   @override
-  _Progressed get _value => super._value as _Progressed;
+  _Loaded get _value => super._value as _Loaded;
 
   @override
   $Res call({
-    Object? progress = freezed,
+    Object? chapters = freezed,
   }) {
-    return _then(_Progressed(
-      progress == freezed
-          ? _value.progress
-          : progress // ignore: cast_nullable_to_non_nullable
-              as String,
+    return _then(_Loaded(
+      chapters == freezed
+          ? _value.chapters
+          : chapters // ignore: cast_nullable_to_non_nullable
+              as ChapterList,
     ));
+  }
+
+  @override
+  $ChapterListCopyWith<$Res> get chapters {
+    return $ChapterListCopyWith<$Res>(_value.chapters, (value) {
+      return _then(_value.copyWith(chapters: value));
+    });
   }
 }
 
 /// @nodoc
 
-class _$_Progressed implements _Progressed {
-  const _$_Progressed(this.progress);
+class _$_Loaded implements _Loaded {
+  const _$_Loaded(this.chapters);
 
   @override
-  final String progress;
+  final ChapterList chapters;
 
   @override
   String toString() {
-    return 'ReaderProgressState.progressed(progress: $progress)';
+    return 'ChaptersState.loaded(chapters: $chapters)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Progressed &&
-            (identical(other.progress, progress) ||
-                other.progress == progress));
+            other is _Loaded &&
+            (identical(other.chapters, chapters) ||
+                other.chapters == chapters));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, progress);
+  int get hashCode => Object.hash(runtimeType, chapters);
 
   @JsonKey(ignore: true)
   @override
-  _$ProgressedCopyWith<_Progressed> get copyWith =>
-      __$ProgressedCopyWithImpl<_Progressed>(this, _$identity);
+  _$LoadedCopyWith<_Loaded> get copyWith =>
+      __$LoadedCopyWithImpl<_Loaded>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(String progress) progressed,
+    required TResult Function(ChapterList chapters) loaded,
   }) {
-    return progressed(progress);
+    return loaded(chapters);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String progress)? progressed,
+    TResult Function(ChapterList chapters)? loaded,
   }) {
-    return progressed?.call(progress);
+    return loaded?.call(chapters);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String progress)? progressed,
+    TResult Function(ChapterList chapters)? loaded,
     required TResult orElse(),
   }) {
-    if (progressed != null) {
-      return progressed(progress);
+    if (loaded != null) {
+      return loaded(chapters);
     }
     return orElse();
   }
@@ -290,39 +295,38 @@ class _$_Progressed implements _Progressed {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Initial value) initial,
-    required TResult Function(_Progressed value) progressed,
+    required TResult Function(_Loaded value) loaded,
   }) {
-    return progressed(this);
+    return loaded(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_Progressed value)? progressed,
+    TResult Function(_Loaded value)? loaded,
   }) {
-    return progressed?.call(this);
+    return loaded?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Initial value)? initial,
-    TResult Function(_Progressed value)? progressed,
+    TResult Function(_Loaded value)? loaded,
     required TResult orElse(),
   }) {
-    if (progressed != null) {
-      return progressed(this);
+    if (loaded != null) {
+      return loaded(this);
     }
     return orElse();
   }
 }
 
-abstract class _Progressed implements ReaderProgressState {
-  const factory _Progressed(String progress) = _$_Progressed;
+abstract class _Loaded implements ChaptersState {
+  const factory _Loaded(ChapterList chapters) = _$_Loaded;
 
-  String get progress;
+  ChapterList get chapters;
   @JsonKey(ignore: true)
-  _$ProgressedCopyWith<_Progressed> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$LoadedCopyWith<_Loaded> get copyWith => throw _privateConstructorUsedError;
 }

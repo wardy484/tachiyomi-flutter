@@ -16,8 +16,6 @@ class SearchNotifier extends StateNotifier<SearchState> {
   }) : super(const SearchState.initial());
 
   Future<void> getMangaList(String searchValue) async {
-    state = const SearchState.initial();
-
     SearchResults results = await source.search(searchValue);
 
     state = SearchState.loaded(results);

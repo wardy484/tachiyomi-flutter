@@ -1,22 +1,28 @@
-import 'package:bloc/bloc.dart';
+import 'package:fluttiyomi/chapter_details/chapter_details_state.dart';
 import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/database/tables.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
-import 'package:fluttiyomi/manga_dex/reader_progress/reader_progress_cubit.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-part 'chapter_details_state.dart';
-part 'chapter_details_cubit.freezed.dart';
+final chapterDetailsProvider =
+    StateNotifierProvider<ChapterDetailsNotifier, ChapterDetailsState>((ref) {
+  return ChapterDetailsNotifier(
+    ref.watch(sourceClientProvider),
+    ref.watch(readerProvider.notifier),
+    ref.watch(databaseProvider),
+  );
+});
 
-class ChapterDetailsCubit extends Cubit<ChapterDetailsState> {
+class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
   final SourceClient _source;
-  final ReaderProgressCubit _readerProgress;
+  final ReaderNotifier _readerProgress;
   final MyDatabase _database;
 
-  ChapterDetailsCubit(
+  ChapterDetailsNotifier(
     SourceClient source,
-    ReaderProgressCubit readerProgress,
+    ReaderNotifier readerProgress,
     MyDatabase database,
   )   : _source = source,
         _readerProgress = readerProgress,
@@ -30,20 +36,18 @@ class ChapterDetailsCubit extends Cubit<ChapterDetailsState> {
     int currentIndex,
     bool startFromEnd,
   ) async {
-    emit(const ChapterDetailsState.initial());
-
     ChapterDetails details = await _source.getChapterDetails(
       mangaId,
       chapterId,
     );
 
-    emit(ChapterDetailsState.loaded(
+    state = ChapterDetailsState.loaded(
       mangaId,
       details,
       chapters,
       currentIndex,
       startFromEnd,
-    ));
+    );
 
     return details;
   }

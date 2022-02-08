@@ -212,6 +212,8 @@ abstract class _$LoadedCopyWith<$Res> {
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) then) =
       __$LoadedCopyWithImpl<$Res>;
   $Res call({SearchResults results});
+
+  $SearchResultsCopyWith<$Res> get results;
 }
 
 /// @nodoc
@@ -234,6 +236,13 @@ class __$LoadedCopyWithImpl<$Res> extends _$SearchStateCopyWithImpl<$Res>
               as SearchResults,
     ));
   }
+
+  @override
+  $SearchResultsCopyWith<$Res> get results {
+    return $SearchResultsCopyWith<$Res>(_value.results, (value) {
+      return _then(_value.copyWith(results: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -254,12 +263,11 @@ class _$_Loaded implements _Loaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Loaded &&
-            const DeepCollectionEquality().equals(other.results, results));
+            (identical(other.results, results) || other.results == results));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(results));
+  int get hashCode => Object.hash(runtimeType, results);
 
   @JsonKey(ignore: true)
   @override

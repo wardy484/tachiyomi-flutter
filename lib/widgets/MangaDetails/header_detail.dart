@@ -15,7 +15,7 @@ class HeaderDetail extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 7),
         Text(

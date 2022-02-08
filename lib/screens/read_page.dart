@@ -1,20 +1,17 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttiyomi/chapter_details/chapter_details_notifier.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
-import 'package:fluttiyomi/data/reader_appbar/readerappbar_cubit.dart';
-import 'package:fluttiyomi/manga_dex/chapter_details/chapter_details_cubit.dart';
-import 'package:fluttiyomi/manga_dex/reader_progress/reader_progress_cubit.dart';
+import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_appbar.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_bottom_appbar.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_loader.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_loading_content.dart';
 import 'package:fluttiyomi/widgets/manga_reader/scrolling_viewer.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class ReadPage extends StatefulWidget {
+class ReadPage extends ConsumerStatefulWidget {
   final String mangaId;
   final Chapter chapter;
   final ChapterList chapters;
@@ -32,14 +29,25 @@ class ReadPage extends StatefulWidget {
   _ReadPageState createState() => _ReadPageState();
 }
 
-class _ReadPageState extends State<ReadPage> {
+class _ReadPageState extends ConsumerState<ReadPage> {
   late Chapter chapter;
 
   @override
+  void initState() {
+    super.initState();
+
+    ref.read(chapterDetailsProvider.notifier).getChapterDetails(
+          widget.mangaId,
+          widget.chapter.id,
+          widget.chapters,
+          widget.currentChapter,
+          false,
+        );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChapterDetailsCubit, ChapterDetailsState>(
-      builder: (context, state) {
-        return state.when(
+    return ref.watch(chapterDetailsProvider).when(
           initial: () => ReaderLoadingContent(chapter: widget.chapter),
           loaded: (mangaId, chapterDetails, chapterList, currentChapter,
               startFromEnd) {
@@ -57,8 +65,7 @@ class _ReadPageState extends State<ReadPage> {
               appBar: ReaderAppBar(chapter: chapter),
               body: GestureDetector(
                 onTap: () {
-                  BlocProvider.of<ReaderappbarCubit>(context)
-                      .toggleVisibility();
+                  ref.read(readerProvider.notifier).toggleVisibility();
                 },
                 child: ScrollingViewer(
                   child: ReaderLoader(
@@ -79,12 +86,13 @@ class _ReadPageState extends State<ReadPage> {
                                 return;
                               }
 
-                              BlocProvider.of<ReaderProgressCubit>(context)
+                              ref
+                                  .read(readerProvider.notifier)
                                   .moveProgressForVisibilityInfo(
-                                visibilityInfo,
-                                pages.length,
-                                startFromEnd,
-                              );
+                                    visibilityInfo,
+                                    pages.length,
+                                    startFromEnd,
+                                  );
                             },
                           );
                         },
@@ -99,15 +107,5 @@ class _ReadPageState extends State<ReadPage> {
             );
           },
         );
-      },
-      bloc: BlocProvider.of<ChapterDetailsCubit>(context)
-        ..getChapterDetails(
-          widget.mangaId,
-          widget.chapter.id,
-          widget.chapters,
-          widget.currentChapter,
-          false,
-        ),
-    );
   }
 }

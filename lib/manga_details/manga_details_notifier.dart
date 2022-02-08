@@ -1,17 +1,22 @@
-import 'package:bloc/bloc.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/database/tables.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:fluttiyomi/manga_details/manga_details_state.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-part 'manga_details_state.dart';
-part 'manga_details_cubit.freezed.dart';
+final mangaDetailsNotifierProvider =
+    StateNotifierProvider<MangaDetailsNotifier, MangaDetailsState>((ref) {
+  return MangaDetailsNotifier(
+    ref.read(sourceClientProvider),
+    ref.read(databaseProvider),
+  );
+});
 
-class MangaDetailsCubit extends Cubit<MangaDetailsState> {
+class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
   final SourceClient _source;
   final MyDatabase _database;
 
-  MangaDetailsCubit(SourceClient source, MyDatabase database)
+  MangaDetailsNotifier(SourceClient source, MyDatabase database)
       : _source = source,
         _database = database,
         super(const MangaDetailsState.initial());
@@ -22,7 +27,7 @@ class MangaDetailsCubit extends Cubit<MangaDetailsState> {
       favourite: await _database.isFavourite(_source.src, mangaId),
     );
 
-    emit(MangaDetailsState.loaded(details));
+    state = MangaDetailsState.loaded(details);
   }
 
   Future<void> toggleFavourite(String mangaName, Manga manga) async {
@@ -32,8 +37,8 @@ class MangaDetailsCubit extends Cubit<MangaDetailsState> {
       await _database.deleteFavourite(_source.src, manga);
     }
 
-    emit(MangaDetailsState.loaded(manga.copyWith(
+    state = MangaDetailsState.loaded(manga.copyWith(
       favourite: !manga.favourite,
-    )));
+    ));
   }
 }

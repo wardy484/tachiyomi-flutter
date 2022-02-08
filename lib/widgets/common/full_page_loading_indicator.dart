@@ -9,12 +9,12 @@ class FullPageLoadingIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Center(
-          child: const CircularProgressIndicator(),
+      children: const [
+        Center(
+          child: CircularProgressIndicator(),
         ),
-        const SizedBox(height: 21),
-        const Center(
+        SizedBox(height: 21),
+        Center(
           child: Text("Loading"),
         ),
       ],

@@ -24,7 +24,7 @@ class _ScrollingViewerState extends State<ScrollingViewer>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 400),
     )..addListener(() {
         _transformationController.value = _animation.value;
       });

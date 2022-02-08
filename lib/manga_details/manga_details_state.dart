@@ -1,4 +1,7 @@
-part of 'manga_details_cubit.dart';
+import 'package:fluttiyomi/data/manga/manga.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'manga_details_state.freezed.dart';
 
 @freezed
 class MangaDetailsState with _$MangaDetailsState {

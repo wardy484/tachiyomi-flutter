@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttiyomi/manga_dex/chapter_details/chapter_details_cubit.dart';
-import 'package:fluttiyomi/manga_dex/reader_progress/reader_progress_cubit.dart';
+import 'package:fluttiyomi/chapter_details/chapter_details_notifier.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_loader_footer.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_loader_header.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class ReaderLoader extends StatefulWidget {
+class ReaderLoader extends ConsumerStatefulWidget {
   final Widget child;
   final int currentChapter;
   final int maxChapters;
@@ -24,7 +23,7 @@ class ReaderLoader extends StatefulWidget {
   _ReaderLoaderState createState() => _ReaderLoaderState();
 }
 
-class _ReaderLoaderState extends State<ReaderLoader> {
+class _ReaderLoaderState extends ConsumerState<ReaderLoader> {
   final RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
@@ -51,17 +50,17 @@ class _ReaderLoaderState extends State<ReaderLoader> {
       ),
       onRefresh: () async {
         if (widget.reverse) {
-          await BlocProvider.of<ChapterDetailsCubit>(context).nextChapter();
+          ref.read(chapterDetailsProvider.notifier).nextChapter();
         } else {
-          await BlocProvider.of<ChapterDetailsCubit>(context).previousChapter();
+          ref.read(chapterDetailsProvider.notifier).previousChapter();
         }
         _refreshController.loadComplete();
       },
       onLoading: () async {
         if (!widget.reverse) {
-          await BlocProvider.of<ChapterDetailsCubit>(context).nextChapter();
+          ref.read(chapterDetailsProvider.notifier).nextChapter();
         } else {
-          await BlocProvider.of<ChapterDetailsCubit>(context).previousChapter();
+          ref.read(chapterDetailsProvider.notifier).previousChapter();
         }
         _refreshController.loadComplete();
       },
