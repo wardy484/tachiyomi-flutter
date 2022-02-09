@@ -7,7 +7,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 const VISIBILITY_THRESHOLD = 70;
 
 final readerProvider =
-    StateNotifierProvider<ReaderNotifier, ReaderState>((ref) {
+    StateNotifierProvider.autoDispose<ReaderNotifier, ReaderState>((ref) {
   return ReaderNotifier();
 });
 

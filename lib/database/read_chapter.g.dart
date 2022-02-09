@@ -17,14 +17,13 @@ extension GetReadChapterCollection on Isar {
 final ReadChapterSchema = CollectionSchema(
   name: 'ReadChapter',
   schema:
-      '{"name":"ReadChapter","properties":[{"name":"chapterId","type":"String"},{"name":"mangaId","type":"String"},{"name":"sourceId","type":"String"}],"indexes":[{"name":"mangaId_sourceId_chapterId","unique":false,"properties":[{"name":"mangaId","type":"Hash","caseSensitive":true},{"name":"sourceId","type":"Hash","caseSensitive":true},{"name":"chapterId","type":"Hash","caseSensitive":true}]}],"links":[]}',
+      '{"name":"ReadChapter","properties":[{"name":"chapterId","type":"String"},{"name":"mangaId","type":"String"},{"name":"sourceId","type":"String"}],"indexes":[{"name":"mangaId_sourceId","unique":false,"properties":[{"name":"mangaId","type":"Hash","caseSensitive":true},{"name":"sourceId","type":"Hash","caseSensitive":true}]}],"links":[]}',
   adapter: const _ReadChapterAdapter(),
   idName: 'id',
   propertyIds: {'chapterId': 0, 'mangaId': 1, 'sourceId': 2},
-  indexIds: {'mangaId_sourceId_chapterId': 0},
+  indexIds: {'mangaId_sourceId': 0},
   indexTypes: {
-    'mangaId_sourceId_chapterId': [
-      NativeIndexType.stringHash,
+    'mangaId_sourceId': [
       NativeIndexType.stringHash,
       NativeIndexType.stringHash,
     ]
@@ -100,10 +99,9 @@ extension ReadChapterQueryWhereSort
     return addWhereClauseInternal(const WhereClause(indexName: null));
   }
 
-  QueryBuilder<ReadChapter, ReadChapter, QAfterWhere>
-      anyMangaIdSourceIdChapterId() {
+  QueryBuilder<ReadChapter, ReadChapter, QAfterWhere> anyMangaIdSourceId() {
     return addWhereClauseInternal(
-        const WhereClause(indexName: 'mangaId_sourceId_chapterId'));
+        const WhereClause(indexName: 'mangaId_sourceId'));
   }
 }
 
@@ -184,7 +182,7 @@ extension ReadChapterQueryWhere
   QueryBuilder<ReadChapter, ReadChapter, QAfterWhereClause> mangaIdEqualTo(
       String mangaId) {
     return addWhereClauseInternal(WhereClause(
-      indexName: 'mangaId_sourceId_chapterId',
+      indexName: 'mangaId_sourceId',
       lower: [mangaId],
       includeLower: true,
       upper: [mangaId],
@@ -196,21 +194,21 @@ extension ReadChapterQueryWhere
       String mangaId) {
     if (whereSortInternal == Sort.asc) {
       return addWhereClauseInternal(WhereClause(
-        indexName: 'mangaId_sourceId_chapterId',
+        indexName: 'mangaId_sourceId',
         upper: [mangaId],
         includeUpper: false,
       )).addWhereClauseInternal(WhereClause(
-        indexName: 'mangaId_sourceId_chapterId',
+        indexName: 'mangaId_sourceId',
         lower: [mangaId],
         includeLower: false,
       ));
     } else {
       return addWhereClauseInternal(WhereClause(
-        indexName: 'mangaId_sourceId_chapterId',
+        indexName: 'mangaId_sourceId',
         lower: [mangaId],
         includeLower: false,
       )).addWhereClauseInternal(WhereClause(
-        indexName: 'mangaId_sourceId_chapterId',
+        indexName: 'mangaId_sourceId',
         upper: [mangaId],
         includeUpper: false,
       ));
@@ -220,7 +218,7 @@ extension ReadChapterQueryWhere
   QueryBuilder<ReadChapter, ReadChapter, QAfterWhereClause>
       mangaIdSourceIdEqualTo(String mangaId, String sourceId) {
     return addWhereClauseInternal(WhereClause(
-      indexName: 'mangaId_sourceId_chapterId',
+      indexName: 'mangaId_sourceId',
       lower: [mangaId, sourceId],
       includeLower: true,
       upper: [mangaId, sourceId],
@@ -232,60 +230,22 @@ extension ReadChapterQueryWhere
       mangaIdSourceIdNotEqualTo(String mangaId, String sourceId) {
     if (whereSortInternal == Sort.asc) {
       return addWhereClauseInternal(WhereClause(
-        indexName: 'mangaId_sourceId_chapterId',
+        indexName: 'mangaId_sourceId',
         upper: [mangaId, sourceId],
         includeUpper: false,
       )).addWhereClauseInternal(WhereClause(
-        indexName: 'mangaId_sourceId_chapterId',
+        indexName: 'mangaId_sourceId',
         lower: [mangaId, sourceId],
         includeLower: false,
       ));
     } else {
       return addWhereClauseInternal(WhereClause(
-        indexName: 'mangaId_sourceId_chapterId',
+        indexName: 'mangaId_sourceId',
         lower: [mangaId, sourceId],
         includeLower: false,
       )).addWhereClauseInternal(WhereClause(
-        indexName: 'mangaId_sourceId_chapterId',
+        indexName: 'mangaId_sourceId',
         upper: [mangaId, sourceId],
-        includeUpper: false,
-      ));
-    }
-  }
-
-  QueryBuilder<ReadChapter, ReadChapter, QAfterWhereClause>
-      mangaIdSourceIdChapterIdEqualTo(
-          String mangaId, String sourceId, String chapterId) {
-    return addWhereClauseInternal(WhereClause(
-      indexName: 'mangaId_sourceId_chapterId',
-      lower: [mangaId, sourceId, chapterId],
-      includeLower: true,
-      upper: [mangaId, sourceId, chapterId],
-      includeUpper: true,
-    ));
-  }
-
-  QueryBuilder<ReadChapter, ReadChapter, QAfterWhereClause>
-      mangaIdSourceIdChapterIdNotEqualTo(
-          String mangaId, String sourceId, String chapterId) {
-    if (whereSortInternal == Sort.asc) {
-      return addWhereClauseInternal(WhereClause(
-        indexName: 'mangaId_sourceId_chapterId',
-        upper: [mangaId, sourceId, chapterId],
-        includeUpper: false,
-      )).addWhereClauseInternal(WhereClause(
-        indexName: 'mangaId_sourceId_chapterId',
-        lower: [mangaId, sourceId, chapterId],
-        includeLower: false,
-      ));
-    } else {
-      return addWhereClauseInternal(WhereClause(
-        indexName: 'mangaId_sourceId_chapterId',
-        lower: [mangaId, sourceId, chapterId],
-        includeLower: false,
-      )).addWhereClauseInternal(WhereClause(
-        indexName: 'mangaId_sourceId_chapterId',
-        upper: [mangaId, sourceId, chapterId],
         includeUpper: false,
       ));
     }

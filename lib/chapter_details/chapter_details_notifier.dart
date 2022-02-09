@@ -6,8 +6,8 @@ import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final chapterDetailsProvider =
-    StateNotifierProvider<ChapterDetailsNotifier, ChapterDetailsState>((ref) {
+final chapterDetailsProvider = StateNotifierProvider.autoDispose<
+    ChapterDetailsNotifier, ChapterDetailsState>((ref) {
   return ChapterDetailsNotifier(
     ref.watch(sourceClientProvider),
     ref.watch(readerProvider.notifier),
@@ -76,8 +76,8 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
 
         await _readChapters.markAsRead(
           _source.src,
-          mangaId,
           currentChapter.id,
+          mangaId,
         );
 
         _readerProgress.moveProgress("1");

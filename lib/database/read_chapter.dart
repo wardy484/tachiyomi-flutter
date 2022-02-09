@@ -9,7 +9,7 @@ class ReadChapter {
 
   late String sourceId;
 
-  @Index(composite: [CompositeIndex('sourceId'), CompositeIndex('chapterId')])
+  @Index(composite: [CompositeIndex('sourceId')])
   late String mangaId;
 
   late String chapterId;
