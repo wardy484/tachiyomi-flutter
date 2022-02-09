@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'manga.dart';
@@ -330,7 +331,7 @@ class _$_Manga implements _Manga {
   final double? follows;
   @override
   final DateTime? lastUpdate;
-  @JsonKey(defaultValue: false)
+  @JsonKey()
   @override
   final bool favourite;
 
@@ -344,41 +345,39 @@ class _$_Manga implements _Manga {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Manga &&
-            (identical(other.id, id) || other.id == id) &&
+            const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.titles, titles) &&
-            (identical(other.image, image) || other.image == image) &&
-            (identical(other.rating, rating) || other.rating == rating) &&
-            (identical(other.mangaStatus, mangaStatus) ||
-                other.mangaStatus == mangaStatus) &&
-            (identical(other.langFlag, langFlag) ||
-                other.langFlag == langFlag) &&
-            (identical(other.author, author) || other.author == author) &&
-            (identical(other.artist, artist) || other.artist == artist) &&
+            const DeepCollectionEquality().equals(other.image, image) &&
+            const DeepCollectionEquality().equals(other.rating, rating) &&
+            const DeepCollectionEquality()
+                .equals(other.mangaStatus, mangaStatus) &&
+            const DeepCollectionEquality().equals(other.langFlag, langFlag) &&
+            const DeepCollectionEquality().equals(other.author, author) &&
+            const DeepCollectionEquality().equals(other.artist, artist) &&
             const DeepCollectionEquality().equals(other.covers, covers) &&
-            (identical(other.desc, desc) || other.desc == desc) &&
-            (identical(other.follows, follows) || other.follows == follows) &&
-            (identical(other.lastUpdate, lastUpdate) ||
-                other.lastUpdate == lastUpdate) &&
-            (identical(other.favourite, favourite) ||
-                other.favourite == favourite));
+            const DeepCollectionEquality().equals(other.desc, desc) &&
+            const DeepCollectionEquality().equals(other.follows, follows) &&
+            const DeepCollectionEquality()
+                .equals(other.lastUpdate, lastUpdate) &&
+            const DeepCollectionEquality().equals(other.favourite, favourite));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      id,
+      const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(titles),
-      image,
-      rating,
-      mangaStatus,
-      langFlag,
-      author,
-      artist,
+      const DeepCollectionEquality().hash(image),
+      const DeepCollectionEquality().hash(rating),
+      const DeepCollectionEquality().hash(mangaStatus),
+      const DeepCollectionEquality().hash(langFlag),
+      const DeepCollectionEquality().hash(author),
+      const DeepCollectionEquality().hash(artist),
       const DeepCollectionEquality().hash(covers),
-      desc,
-      follows,
-      lastUpdate,
-      favourite);
+      const DeepCollectionEquality().hash(desc),
+      const DeepCollectionEquality().hash(follows),
+      const DeepCollectionEquality().hash(lastUpdate),
+      const DeepCollectionEquality().hash(favourite));
 
   @JsonKey(ignore: true)
   @override

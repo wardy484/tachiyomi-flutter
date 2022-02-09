@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttiyomi/database/database.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/router.gr.dart';
 import 'package:fluttiyomi/widgets/refresh_config.dart';
@@ -9,6 +10,8 @@ void main() async {
 
   final container = ProviderContainer();
   container.read(sourceClientProvider.state).state = await SourceClient.init();
+
+  await container.read(isarDatabaseProvider).init();
 
   runApp(
     UncontrolledProviderScope(

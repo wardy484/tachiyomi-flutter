@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttiyomi/database/tables.dart';
+import 'package:fluttiyomi/database/favourite.dart';
 import 'package:fluttiyomi/favourites/favourites_notifier.dart';
 import 'package:fluttiyomi/widgets/common/full_page_loading_indicator.dart';
 import 'package:fluttiyomi/widgets/common/manga_card.dart';

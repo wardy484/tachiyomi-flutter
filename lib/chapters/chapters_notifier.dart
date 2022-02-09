@@ -22,8 +22,6 @@ class ChaptersNotifier extends StateNotifier<ChaptersState> {
         super(const ChaptersState.initial());
 
   Future<void> getChapters(String mangaId) async {
-    state = const ChaptersState.initial();
-
     ChapterList allChapters = await _source.getChapters(mangaId);
     List<CompletedChapter> read = await _database.getRead(_source.src, mangaId);
 

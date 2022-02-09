@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'chapter.dart';
@@ -253,7 +254,7 @@ class _$_Chapter implements _Chapter {
   final String? group;
   @override
   final String? time;
-  @JsonKey(defaultValue: false)
+  @JsonKey()
   @override
   final bool read;
 
@@ -267,22 +268,29 @@ class _$_Chapter implements _Chapter {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Chapter &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.mangaId, mangaId) || other.mangaId == mangaId) &&
-            (identical(other.chapterNo, chapterNo) ||
-                other.chapterNo == chapterNo) &&
-            (identical(other.langCode, langCode) ||
-                other.langCode == langCode) &&
-            (identical(other.name, name) || other.name == name) &&
-            (identical(other.volume, volume) || other.volume == volume) &&
-            (identical(other.group, group) || other.group == group) &&
-            (identical(other.time, time) || other.time == time) &&
-            (identical(other.read, read) || other.read == read));
+            const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality().equals(other.mangaId, mangaId) &&
+            const DeepCollectionEquality().equals(other.chapterNo, chapterNo) &&
+            const DeepCollectionEquality().equals(other.langCode, langCode) &&
+            const DeepCollectionEquality().equals(other.name, name) &&
+            const DeepCollectionEquality().equals(other.volume, volume) &&
+            const DeepCollectionEquality().equals(other.group, group) &&
+            const DeepCollectionEquality().equals(other.time, time) &&
+            const DeepCollectionEquality().equals(other.read, read));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, id, mangaId, chapterNo, langCode,
-      name, volume, group, time, read);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(mangaId),
+      const DeepCollectionEquality().hash(chapterNo),
+      const DeepCollectionEquality().hash(langCode),
+      const DeepCollectionEquality().hash(name),
+      const DeepCollectionEquality().hash(volume),
+      const DeepCollectionEquality().hash(group),
+      const DeepCollectionEquality().hash(time),
+      const DeepCollectionEquality().hash(read));
 
   @JsonKey(ignore: true)
   @override

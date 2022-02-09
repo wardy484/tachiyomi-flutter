@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'chapter_details_state.dart';
@@ -309,20 +310,24 @@ class _$_Loaded implements _Loaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Loaded &&
-            (identical(other.mangaId, mangaId) || other.mangaId == mangaId) &&
-            (identical(other.chapterDetails, chapterDetails) ||
-                other.chapterDetails == chapterDetails) &&
-            (identical(other.chapters, chapters) ||
-                other.chapters == chapters) &&
-            (identical(other.currentIndex, currentIndex) ||
-                other.currentIndex == currentIndex) &&
-            (identical(other.startFromEnd, startFromEnd) ||
-                other.startFromEnd == startFromEnd));
+            const DeepCollectionEquality().equals(other.mangaId, mangaId) &&
+            const DeepCollectionEquality()
+                .equals(other.chapterDetails, chapterDetails) &&
+            const DeepCollectionEquality().equals(other.chapters, chapters) &&
+            const DeepCollectionEquality()
+                .equals(other.currentIndex, currentIndex) &&
+            const DeepCollectionEquality()
+                .equals(other.startFromEnd, startFromEnd));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, mangaId, chapterDetails,
-      chapters, currentIndex, startFromEnd);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(mangaId),
+      const DeepCollectionEquality().hash(chapterDetails),
+      const DeepCollectionEquality().hash(chapters),
+      const DeepCollectionEquality().hash(currentIndex),
+      const DeepCollectionEquality().hash(startFromEnd));
 
   @JsonKey(ignore: true)
   @override
