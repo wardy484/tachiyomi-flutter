@@ -1,7 +1,7 @@
 import 'package:fluttiyomi/chapter_details/chapter_details_state.dart';
+import 'package:fluttiyomi/chapter_details/read_chapters_repository.dart';
 import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
-import 'package:fluttiyomi/database/tables.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -11,22 +11,22 @@ final chapterDetailsProvider =
   return ChapterDetailsNotifier(
     ref.watch(sourceClientProvider),
     ref.watch(readerProvider.notifier),
-    ref.watch(databaseProvider),
+    ref.watch(readChaptersRepositoryProvider),
   );
 });
 
 class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
   final SourceClient _source;
   final ReaderNotifier _readerProgress;
-  final MyDatabase _database;
+  final ReadChaptersRepository _readChapters;
 
   ChapterDetailsNotifier(
     SourceClient source,
     ReaderNotifier readerProgress,
-    MyDatabase database,
+    ReadChaptersRepository readChapters,
   )   : _source = source,
         _readerProgress = readerProgress,
-        _database = database,
+        _readChapters = readChapters,
         super(const ChapterDetailsState.initial());
 
   Future<ChapterDetails> getChapterDetails(
@@ -74,7 +74,7 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
           false,
         );
 
-        await _database.markAsRead(
+        await _readChapters.markAsRead(
           _source.src,
           mangaId,
           currentChapter.id,
