@@ -5,6 +5,7 @@ import 'package:fluttiyomi/favourites/favourites_notifier.dart';
 import 'package:fluttiyomi/manga_details/manga_details_notifier.dart';
 import 'package:fluttiyomi/router.gr.dart';
 import 'package:fluttiyomi/widgets/MangaDetails/header.dart';
+import 'package:fluttiyomi/widgets/chapter_list_item.dart';
 import 'package:fluttiyomi/widgets/common/full_page_loading_indicator.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -67,7 +68,8 @@ class _ChaptersPageState extends ConsumerState<ChaptersPage> {
                             if (index == 1) {
                               return Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 14.0),
+                                  horizontal: 14.0,
+                                ),
                                 child: ElevatedButton.icon(
                                   onPressed: () {
                                     // Respond to button press
@@ -78,29 +80,20 @@ class _ChaptersPageState extends ConsumerState<ChaptersPage> {
                               );
                             }
 
-                            var item = results.get(index - 2);
+                            var chapter = results.get(index - 2);
 
-                            return GestureDetector(
+                            return ChapterListItem(
+                              chapter: chapter,
                               onTap: () {
                                 AutoRouter.of(context).push(
                                   ReadRoute(
-                                      mangaId: widget.mangaId,
-                                      chapter: item,
-                                      chapters: results,
-                                      currentChapter: index - 2),
+                                    mangaId: widget.mangaId,
+                                    chapter: chapter,
+                                    chapters: results,
+                                    currentChapter: index - 2,
+                                  ),
                                 );
                               },
-                              child: ListTile(
-                                textColor:
-                                    item.read ? Colors.grey : Colors.white,
-                                title: Text(
-                                  item.name ?? "Chapter ${item.chapterNo}",
-                                ),
-                                subtitle: Text(
-                                  item.chapterNo.toString(),
-                                ),
-                                // subtitle: Text(item.read.toString()),
-                              ),
                             );
                           },
                         );

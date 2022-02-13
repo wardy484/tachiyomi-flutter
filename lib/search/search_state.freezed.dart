@@ -22,7 +22,7 @@ class _$SearchStateTearOff {
     return const _Initial();
   }
 
-  _Loaded loaded(SearchResults results) {
+  _Loaded loaded(PagedResults results) {
     return _Loaded(
       results,
     );
@@ -41,21 +41,21 @@ mixin _$SearchState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(SearchResults results) loaded,
+    required TResult Function(PagedResults results) loaded,
     required TResult Function() failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(SearchResults results)? loaded,
+    TResult Function(PagedResults results)? loaded,
     TResult Function()? failed,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(SearchResults results)? loaded,
+    TResult Function(PagedResults results)? loaded,
     TResult Function()? failed,
     required TResult orElse(),
   }) =>
@@ -139,7 +139,7 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(SearchResults results) loaded,
+    required TResult Function(PagedResults results) loaded,
     required TResult Function() failed,
   }) {
     return initial();
@@ -149,7 +149,7 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(SearchResults results)? loaded,
+    TResult Function(PagedResults results)? loaded,
     TResult Function()? failed,
   }) {
     return initial?.call();
@@ -159,7 +159,7 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(SearchResults results)? loaded,
+    TResult Function(PagedResults results)? loaded,
     TResult Function()? failed,
     required TResult orElse(),
   }) {
@@ -212,9 +212,9 @@ abstract class _Initial implements SearchState {
 abstract class _$LoadedCopyWith<$Res> {
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) then) =
       __$LoadedCopyWithImpl<$Res>;
-  $Res call({SearchResults results});
+  $Res call({PagedResults results});
 
-  $SearchResultsCopyWith<$Res> get results;
+  $PagedResultsCopyWith<$Res> get results;
 }
 
 /// @nodoc
@@ -234,13 +234,13 @@ class __$LoadedCopyWithImpl<$Res> extends _$SearchStateCopyWithImpl<$Res>
       results == freezed
           ? _value.results
           : results // ignore: cast_nullable_to_non_nullable
-              as SearchResults,
+              as PagedResults,
     ));
   }
 
   @override
-  $SearchResultsCopyWith<$Res> get results {
-    return $SearchResultsCopyWith<$Res>(_value.results, (value) {
+  $PagedResultsCopyWith<$Res> get results {
+    return $PagedResultsCopyWith<$Res>(_value.results, (value) {
       return _then(_value.copyWith(results: value));
     });
   }
@@ -252,7 +252,7 @@ class _$_Loaded implements _Loaded {
   const _$_Loaded(this.results);
 
   @override
-  final SearchResults results;
+  final PagedResults results;
 
   @override
   String toString() {
@@ -280,7 +280,7 @@ class _$_Loaded implements _Loaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(SearchResults results) loaded,
+    required TResult Function(PagedResults results) loaded,
     required TResult Function() failed,
   }) {
     return loaded(results);
@@ -290,7 +290,7 @@ class _$_Loaded implements _Loaded {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(SearchResults results)? loaded,
+    TResult Function(PagedResults results)? loaded,
     TResult Function()? failed,
   }) {
     return loaded?.call(results);
@@ -300,7 +300,7 @@ class _$_Loaded implements _Loaded {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(SearchResults results)? loaded,
+    TResult Function(PagedResults results)? loaded,
     TResult Function()? failed,
     required TResult orElse(),
   }) {
@@ -346,9 +346,9 @@ class _$_Loaded implements _Loaded {
 }
 
 abstract class _Loaded implements SearchState {
-  const factory _Loaded(SearchResults results) = _$_Loaded;
+  const factory _Loaded(PagedResults results) = _$_Loaded;
 
-  SearchResults get results;
+  PagedResults get results;
   @JsonKey(ignore: true)
   _$LoadedCopyWith<_Loaded> get copyWith => throw _privateConstructorUsedError;
 }
@@ -392,7 +392,7 @@ class _$_Failed implements _Failed {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(SearchResults results) loaded,
+    required TResult Function(PagedResults results) loaded,
     required TResult Function() failed,
   }) {
     return failed();
@@ -402,7 +402,7 @@ class _$_Failed implements _Failed {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(SearchResults results)? loaded,
+    TResult Function(PagedResults results)? loaded,
     TResult Function()? failed,
   }) {
     return failed?.call();
@@ -412,7 +412,7 @@ class _$_Failed implements _Failed {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(SearchResults results)? loaded,
+    TResult Function(PagedResults results)? loaded,
     TResult Function()? failed,
     required TResult orElse(),
   }) {

@@ -4,6 +4,7 @@ import 'package:fluttiyomi/chapters/chapters_notifier.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
+import 'package:fluttiyomi/widgets/manga_page.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_appbar.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_bottom_appbar.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_loader.dart';
@@ -88,7 +89,7 @@ class _ReadPageState extends ConsumerState<ReadPage> {
 
                             return VisibilityDetector(
                               key: Key("Page-${index + 1}"),
-                              child: Image.network(item),
+                              child: MangaPage(imagePath: item),
                               onVisibilityChanged: (visibilityInfo) {
                                 // App crashes without this, seems to get called after popping screen off
                                 // of stack.

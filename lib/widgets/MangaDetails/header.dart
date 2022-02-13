@@ -24,7 +24,10 @@ class Header extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              MangaImage(url: manga.image),
+              SizedBox(
+                width: 200,
+                child: MangaImage(url: manga.image),
+              ),
               const SizedBox(width: 14),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,

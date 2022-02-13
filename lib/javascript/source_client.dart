@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_js/flutter_js.dart';
+import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
-import 'package:fluttiyomi/data/search_results/searchresults.dart';
+import 'package:fluttiyomi/data/paged_results/paged_results.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final sourceClientProvider = StateProvider<SourceClient>(
@@ -20,10 +21,17 @@ class SourceClient {
 
   SourceClient(String sourceCode) {
     js.enableHandlePromises();
+
+    if (sourceCode == "") {
+      return;
+    }
+
     js.evaluate("""var window = global = self = globalThis;""");
     js.evaluate(sourceCode);
-    js.evaluate("console.log('this'); console.log(globalThis.MangaFox);");
+    js.evaluate("console.log(Object.keys(globalThis))");
     js.evaluate("var $src = globalThis.MangaFox;");
+    js.evaluate("var readm = globalThis.MangaFox.createReadm();");
+
     js.evaluate("""
         var getPage = (callback) => {
           var result = callback();
@@ -39,71 +47,63 @@ class SourceClient {
       """);
   }
 
-  static Future<SourceClient> init(
-      {String sourcePath = "assets/index.js"}) async {
+  static Future<SourceClient> init({
+    String sourcePath = "assets/wanker.js",
+  }) async {
     String sourceFile = await rootBundle.loadString(sourcePath);
 
     return SourceClient(sourceFile);
   }
 
-  Future<SearchResults> search(String query) async {
-    String page = await getPage("$src.getSearchRequest(`$query`)");
-
-    var json = parseList(page, "$src.parseSearchResults(page)");
-
-    return SearchResults.fromJson(json);
+  Future<PagedResults> search(String query) async {
+    try {
+      var json = await executeJS(
+        "readm.getSearchResults({ title: `$query` });",
+      );
+      return PagedResults.fromJson(json);
+    } catch (e) {
+      print(
+        "Probably an empty set of results but the readm parse is shit so it threw an exception",
+      );
+      print(e);
+      return PagedResults(results: []);
+    }
   }
 
   Future<ChapterList> getChapters(String mangaId) async {
     String id = Uri.encodeQueryComponent(mangaId);
-    String page = await getPage("$src.getChaptersRequest(`$id`)");
+    var json = await executeJS("readm.getChapters(`$id`);") as List;
 
-    var json = parseList(page, "$src.parseChaptersResult(page, '$mangaId')");
-
-    return ChapterList.fromJson(json).descending();
+    return ChapterList(
+      json.map((e) => Chapter.fromJson(e)).toList(),
+    );
   }
 
   Future<Manga> getMangaDetails(String mangaId) async {
-    String id = Uri.encodeQueryComponent(mangaId);
-    String page = await getPage("$src.getMangaDetailsRequest(`$id`)");
-
-    var json = parseList(page, "$src.getMangaDetails(page, '$mangaId')");
-
+    var json = await executeJS("readm.getMangaDetails(`$mangaId`);");
     return Manga.fromJson(json);
   }
 
   Future<ChapterDetails> getChapterDetails(
-      String mangaId, String chapterId) async {
+    String mangaId,
+    String chapterId,
+  ) async {
     String decodedMangaId = Uri.encodeQueryComponent(mangaId);
     String decodedChapterId = Uri.encodeQueryComponent(chapterId);
 
-    String page = await getPage(
-      "$src.getChapterDetailsRequest(`$decodedMangaId`, `$decodedChapterId`)",
-    );
-
-    var json = parseList(
-      page,
-      "$src.getChapterDetails(page, '$decodedMangaId', `$decodedChapterId`)",
+    var json = await executeJS(
+      "readm.getChapterDetails(`$decodedMangaId`, `$decodedChapterId`)",
     );
 
     return ChapterDetails.fromJson(json);
   }
 
-  Future<String> getPage(String jsCode) async {
-    JsEvalResult searchRequest = js.evaluate("getPage(() => $jsCode)");
+  Future<dynamic> executeJS(String script) async {
+    JsEvalResult request = js.evaluate(script);
 
-    Request req = Request.fromJson(searchRequest.stringResult);
-
-    var res = await dio.get(req.url);
-
-    return Uri.encodeFull(res.data);
-  }
-
-  dynamic parseList(String page, String code) {
-    JsEvalResult result = js.evaluate(
-      "getObject(`$page`, (page) => $code)",
-    );
-    return jsonDecode(result.stringResult);
+    var newResult = await js.handlePromise(request);
+    var json = jsonDecode(newResult.stringResult);
+    return json;
   }
 }
 

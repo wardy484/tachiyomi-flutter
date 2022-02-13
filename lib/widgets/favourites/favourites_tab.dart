@@ -3,6 +3,7 @@ import 'package:fluttiyomi/database/favourite.dart';
 import 'package:fluttiyomi/favourites/favourites_notifier.dart';
 import 'package:fluttiyomi/widgets/common/full_page_loading_indicator.dart';
 import 'package:fluttiyomi/widgets/common/manga_card.dart';
+import 'package:fluttiyomi/widgets/common/manga_grid.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FavouritesTab extends ConsumerStatefulWidget {
@@ -27,24 +28,19 @@ class _FavouritesTabState extends ConsumerState<FavouritesTab> {
           loaded: (results) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
-              child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 14,
-                    mainAxisSpacing: 14,
-                    childAspectRatio: MediaQuery.of(context).size.width /
-                        (MediaQuery.of(context).size.height / 1.5),
-                  ),
-                  itemCount: results.length,
-                  itemBuilder: (context, index) {
-                    Favourite manga = results[index];
+              child: MangaGrid(
+                heightMultipler: 1.3,
+                itemCount: results.length,
+                itemBuilder: (context, index) {
+                  Favourite manga = results[index];
 
-                    return MangaCard(
-                      mangaId: manga.mangaId,
-                      name: manga.name,
-                      image: manga.image,
-                    );
-                  }),
+                  return MangaCard(
+                    mangaId: manga.mangaId,
+                    name: manga.name,
+                    image: manga.image,
+                  );
+                },
+              ),
             );
           },
         );

@@ -25,31 +25,43 @@ class MangaCard extends StatelessWidget {
           ),
         );
       },
-      child: Stack(children: [
-        Positioned.fill(child: Image.network(image)),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: DecoratedBox(
-                    child: Padding(
-                      padding: const EdgeInsets.all(7.0),
-                      child: Text(
-                        name,
-                      ),
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.8),
-                    ),
-                  ),
-                )
-              ],
+      // child: Column(
+      //   children: [
+      //     Expanded(
+      //       child: Image.network(
+      //         image,
+      //         fit: BoxFit.fitWidth,
+      //         alignment: ,
+      //       ),
+      //     ),
+      //     Text(name),
+      //   ],
+      // ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width,
+            height: 255,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                image: NetworkImage(image),
+              ),
             ),
-          ],
-        ),
-      ]),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: Text(
+              name,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
