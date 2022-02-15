@@ -1,44 +1,46 @@
+import 'package:fluttiyomi/database/chapter.dart';
 import 'package:fluttiyomi/database/database.dart';
-import 'package:fluttiyomi/database/read_chapter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
 final readChaptersRepositoryProvider = Provider((ref) {
   return ReadChaptersRepository(
-    readChapters: ref.watch(isarDatabaseProvider).readChapters,
+    chapters: ref.watch(isarDatabaseProvider).chapters,
     database: ref.watch(isarDatabaseProvider).isar,
   );
 });
 
 class ReadChaptersRepository {
-  final IsarCollection<ReadChapter> _readChapters;
+  final IsarCollection<Chapter> _chapters;
   final Isar _database;
 
   ReadChaptersRepository({
-    required IsarCollection<ReadChapter> readChapters,
+    required IsarCollection<Chapter> chapters,
     required Isar database,
-  })  : _readChapters = readChapters,
+  })  : _chapters = chapters,
         _database = database;
-
-  Future<List<ReadChapter>> getRead(String sourceId, String mangaId) async {
-    return await _readChapters
-        .where()
-        .mangaIdSourceIdEqualTo(mangaId, sourceId)
-        .findAll();
-  }
 
   Future<void> markAsRead(
     String sourceId,
     String chapterId,
     String mangaId,
   ) async {
-    final newReadChapter = ReadChapter()
-      ..mangaId = mangaId
-      ..sourceId = sourceId
-      ..chapterId = chapterId;
+    Chapter? chapter = await _chapters
+        .where()
+        .chapterIdSourceIdMangaIdEqualTo(
+          chapterId,
+          sourceId,
+          mangaId,
+        )
+        .findFirst();
 
-    await _database.writeTxn((_) async {
-      await _readChapters.put(newReadChapter);
-    });
+    // TODO: What should I do with mangas you have no favourited?
+    // perhaps build up a cache of mangas you've opened up previously
+    if (chapter != null) {
+      chapter.read = true;
+      await _database.writeTxn((_) async {
+        await _chapters.put(chapter);
+      });
+    }
   }
 }

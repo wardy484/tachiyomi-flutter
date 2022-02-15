@@ -1,4 +1,3 @@
-import 'package:fluttiyomi/database/favourite.dart';
 import 'package:fluttiyomi/database/settings.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 

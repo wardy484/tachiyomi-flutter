@@ -22,9 +22,10 @@ class _$MangaDetailsStateTearOff {
     return const _Initial();
   }
 
-  _Loaded loaded(Manga details) {
+  _Loaded loaded(Manga details, ChapterList chapters) {
     return _Loaded(
       details,
+      chapters,
     );
   }
 }
@@ -37,19 +38,19 @@ mixin _$MangaDetailsState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(Manga details) loaded,
+    required TResult Function(Manga details, ChapterList chapters) loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(Manga details)? loaded,
+    TResult Function(Manga details, ChapterList chapters)? loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(Manga details)? loaded,
+    TResult Function(Manga details, ChapterList chapters)? loaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -130,7 +131,7 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(Manga details) loaded,
+    required TResult Function(Manga details, ChapterList chapters) loaded,
   }) {
     return initial();
   }
@@ -139,7 +140,7 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(Manga details)? loaded,
+    TResult Function(Manga details, ChapterList chapters)? loaded,
   }) {
     return initial?.call();
   }
@@ -148,7 +149,7 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(Manga details)? loaded,
+    TResult Function(Manga details, ChapterList chapters)? loaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -197,9 +198,10 @@ abstract class _Initial implements MangaDetailsState {
 abstract class _$LoadedCopyWith<$Res> {
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) then) =
       __$LoadedCopyWithImpl<$Res>;
-  $Res call({Manga details});
+  $Res call({Manga details, ChapterList chapters});
 
   $MangaCopyWith<$Res> get details;
+  $ChapterListCopyWith<$Res> get chapters;
 }
 
 /// @nodoc
@@ -214,12 +216,17 @@ class __$LoadedCopyWithImpl<$Res> extends _$MangaDetailsStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? details = freezed,
+    Object? chapters = freezed,
   }) {
     return _then(_Loaded(
       details == freezed
           ? _value.details
           : details // ignore: cast_nullable_to_non_nullable
               as Manga,
+      chapters == freezed
+          ? _value.chapters
+          : chapters // ignore: cast_nullable_to_non_nullable
+              as ChapterList,
     ));
   }
 
@@ -229,19 +236,28 @@ class __$LoadedCopyWithImpl<$Res> extends _$MangaDetailsStateCopyWithImpl<$Res>
       return _then(_value.copyWith(details: value));
     });
   }
+
+  @override
+  $ChapterListCopyWith<$Res> get chapters {
+    return $ChapterListCopyWith<$Res>(_value.chapters, (value) {
+      return _then(_value.copyWith(chapters: value));
+    });
+  }
 }
 
 /// @nodoc
 
 class _$_Loaded implements _Loaded {
-  const _$_Loaded(this.details);
+  const _$_Loaded(this.details, this.chapters);
 
   @override
   final Manga details;
+  @override
+  final ChapterList chapters;
 
   @override
   String toString() {
-    return 'MangaDetailsState.loaded(details: $details)';
+    return 'MangaDetailsState.loaded(details: $details, chapters: $chapters)';
   }
 
   @override
@@ -249,12 +265,15 @@ class _$_Loaded implements _Loaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Loaded &&
-            const DeepCollectionEquality().equals(other.details, details));
+            const DeepCollectionEquality().equals(other.details, details) &&
+            const DeepCollectionEquality().equals(other.chapters, chapters));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(details));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(details),
+      const DeepCollectionEquality().hash(chapters));
 
   @JsonKey(ignore: true)
   @override
@@ -265,29 +284,29 @@ class _$_Loaded implements _Loaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(Manga details) loaded,
+    required TResult Function(Manga details, ChapterList chapters) loaded,
   }) {
-    return loaded(details);
+    return loaded(details, chapters);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(Manga details)? loaded,
+    TResult Function(Manga details, ChapterList chapters)? loaded,
   }) {
-    return loaded?.call(details);
+    return loaded?.call(details, chapters);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(Manga details)? loaded,
+    TResult Function(Manga details, ChapterList chapters)? loaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(details);
+      return loaded(details, chapters);
     }
     return orElse();
   }
@@ -325,9 +344,10 @@ class _$_Loaded implements _Loaded {
 }
 
 abstract class _Loaded implements MangaDetailsState {
-  const factory _Loaded(Manga details) = _$_Loaded;
+  const factory _Loaded(Manga details, ChapterList chapters) = _$_Loaded;
 
   Manga get details;
+  ChapterList get chapters;
   @JsonKey(ignore: true)
   _$LoadedCopyWith<_Loaded> get copyWith => throw _privateConstructorUsedError;
 }

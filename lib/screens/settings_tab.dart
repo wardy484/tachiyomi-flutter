@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:fluttiyomi/favourites/favourites_notifier.dart';
 import 'package:fluttiyomi/settings/settings_notifier.dart';
 import 'package:fluttiyomi/widgets/common/full_page_loading_indicator.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';

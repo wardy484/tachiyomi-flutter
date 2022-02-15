@@ -1,5 +1,5 @@
+import 'package:fluttiyomi/database/chapter.dart';
 import 'package:fluttiyomi/database/favourite.dart';
-import 'package:fluttiyomi/database/read_chapter.dart';
 import 'package:fluttiyomi/database/settings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
@@ -16,8 +16,8 @@ class Database {
     _isarDatabase = await Isar.open(
       schemas: [
         FavouriteSchema,
-        ReadChapterSchema,
         SettingSchema,
+        ChapterSchema,
       ],
       directory: dir.path,
     );
@@ -39,8 +39,8 @@ class Database {
     return _isarDatabase.favourites;
   }
 
-  IsarCollection<ReadChapter> get readChapters {
-    return _isarDatabase.readChapters;
+  IsarCollection<Chapter> get chapters {
+    return _isarDatabase.chapters;
   }
 
   IsarCollection<Setting> get settings {

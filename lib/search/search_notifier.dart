@@ -1,5 +1,4 @@
 import 'package:fluttiyomi/data/paged_results/paged_results.dart';
-import 'package:fluttiyomi/data/search_results/searchresults.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/search/search_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

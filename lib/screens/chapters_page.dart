@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttiyomi/chapters/chapters_notifier.dart';
 import 'package:fluttiyomi/favourites/favourites_notifier.dart';
 import 'package:fluttiyomi/manga_details/manga_details_notifier.dart';
 import 'package:fluttiyomi/router.gr.dart';
@@ -25,14 +24,12 @@ class _ChaptersPageState extends ConsumerState<ChaptersPage> {
   @override
   void initState() {
     super.initState();
+    // TODO: get real source id
 
     ref
         .read(mangaDetailsNotifierProvider.notifier)
-        .getMangaDetails(widget.mangaId);
+        .getMangaDetails("mangaFox", widget.mangaId);
 
-    ref.read(chaptersNotifierProvider.notifier).getChapters(widget.mangaId);
-
-    // TODO: get real source id
     ref
         .read(favouritesProvider.notifier)
         .markAsOpened("mangaFox", widget.mangaId);
@@ -53,47 +50,47 @@ class _ChaptersPageState extends ConsumerState<ChaptersPage> {
         ),
         body: ref.watch(mangaDetailsNotifierProvider).when(
               initial: () => const FullPageLoadingIndicator(),
-              loaded: (manga) {
-                return ref.watch(chaptersNotifierProvider).when(
-                      initial: () => const FullPageLoadingIndicator(),
-                      loaded: (results) {
-                        return ListView.separated(
-                          separatorBuilder: (context, index) => const Divider(
-                            height: 1,
-                          ),
-                          itemCount: results.length + 1,
-                          itemBuilder: (context, index) {
-                            if (index == 0) {
-                              return Header(
-                                manga: manga,
-                                onToggleFavourite: () {
-                                  ref
-                                      .read(
-                                          mangaDetailsNotifierProvider.notifier)
-                                      .toggleFavourite(widget.mangaName, manga);
-                                },
+              loaded: (manga, chapters) {
+                return ListView.separated(
+                  separatorBuilder: (context, index) => const Divider(
+                    height: 1,
+                  ),
+                  itemCount: chapters.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return Header(
+                        manga: manga,
+                        onToggleFavourite: () {
+                          ref
+                              .read(
+                                mangaDetailsNotifierProvider.notifier,
+                              )
+                              .toggleFavourite(
+                                widget.mangaName,
+                                manga,
+                                chapters,
                               );
-                            }
+                        },
+                      );
+                    }
 
-                            var chapter = results.get(index - 1);
+                    var chapter = chapters.get(index - 1);
 
-                            return ChapterListItem(
-                              chapter: chapter,
-                              onTap: () {
-                                AutoRouter.of(context).push(
-                                  ReadRoute(
-                                    mangaId: widget.mangaId,
-                                    chapter: chapter,
-                                    chapters: results,
-                                    currentChapter: index - 1,
-                                  ),
-                                );
-                              },
-                            );
-                          },
+                    return ChapterListItem(
+                      chapter: chapter,
+                      onTap: () {
+                        AutoRouter.of(context).push(
+                          ReadRoute(
+                            mangaId: widget.mangaId,
+                            chapter: chapter,
+                            chapters: chapters,
+                            currentChapter: index - 1,
+                          ),
                         );
                       },
                     );
+                  },
+                );
               },
             ),
       ),

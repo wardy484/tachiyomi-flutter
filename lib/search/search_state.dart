@@ -1,5 +1,4 @@
 import 'package:fluttiyomi/data/paged_results/paged_results.dart';
-import 'package:fluttiyomi/data/search_results/searchresults.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'search_state.freezed.dart';

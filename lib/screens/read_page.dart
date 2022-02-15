@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/chapter_details/chapter_details_notifier.dart';
-import 'package:fluttiyomi/chapters/chapters_notifier.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
+import 'package:fluttiyomi/manga_details/manga_details_notifier.dart';
 import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
 import 'package:fluttiyomi/settings/settings_notifier.dart';
 import 'package:fluttiyomi/widgets/manga_page.dart';
@@ -67,9 +67,10 @@ class _ReadPageState extends ConsumerState<ReadPage> {
             return ConditionalWillPopScope(
               shouldAddCallback: false,
               onWillPop: () async {
+                // TODO: dont hard source id you munter!
                 ref
-                    .read(chaptersNotifierProvider.notifier)
-                    .getChapters(widget.mangaId);
+                    .read(mangaDetailsNotifierProvider.notifier)
+                    .getMangaDetails("mangaFox", mangaId);
 
                 return true;
               },

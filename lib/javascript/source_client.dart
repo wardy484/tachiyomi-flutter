@@ -8,8 +8,6 @@ import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/data/paged_results/paged_results.dart';
-import 'package:fluttiyomi/database/favourite.dart';
-import 'package:fluttiyomi/database/read_chapter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final sourceClientProvider = StateProvider<SourceClient>(
@@ -64,35 +62,19 @@ class SourceClient {
       );
       return PagedResults.fromJson(json);
     } catch (e) {
-      print(
-        "Probably an empty set of results but the readm parse is shit so it threw an exception",
-      );
-      print(e);
       return PagedResults(results: []);
     }
   }
 
   Future<ChapterList> getChapters(
     String mangaId,
-    List<ReadChapter> read, // needed to mark chapter as read efficiently
   ) async {
     String id = Uri.encodeQueryComponent(mangaId);
     var json = await executeJS("readm.getChapters(`$id`);") as List;
     List<Chapter> chapters = [];
-    // read.map((e) => ))
 
     for (var i = 0; i < json.length; i++) {
       var current = json[i];
-
-      for (var x = 0; x < read.length; x++) {
-        var currentRead = read[x];
-
-        if (currentRead.id == current['id']) {
-          current['read'] = true;
-          break;
-        }
-      }
-
       chapters.add(Chapter.fromJson(current));
     }
 

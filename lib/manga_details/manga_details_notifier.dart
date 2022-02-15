@@ -1,4 +1,6 @@
+import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
+import 'package:fluttiyomi/database/favourite.dart';
 import 'package:fluttiyomi/favourites/favourites_repository.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/manga_details/manga_details_state.dart';
@@ -16,7 +18,6 @@ final mangaDetailsNotifierProvider =
 
 class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
   final SourceClient _source;
-  // final MyDatabase _database;
   final FavouritesRepository _favourites;
 
   MangaDetailsNotifier(SourceClient source, FavouritesRepository favourites)
@@ -24,25 +25,46 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
         _favourites = favourites,
         super(const MangaDetailsState.initial());
 
-  Future<void> getMangaDetails(String mangaId) async {
-    Manga details = await _source.getMangaDetails(mangaId);
+  Future<void> getMangaDetails(
+    String sourceId,
+    String mangaId,
+  ) async {
+    Favourite? favourite = await _favourites.getFavourite(sourceId, mangaId);
+    Manga details;
+    ChapterList chapters;
 
-    details = details.copyWith(
-      favourite: await _favourites.isFavourite(_source.src, mangaId),
-    );
+    if (favourite == null) {
+      details = await _source.getMangaDetails(mangaId);
+      chapters = await _source.getChapters(mangaId);
+    } else {
+      details = favourite.toManga();
+      chapters = await favourite.getChapterList();
+    }
 
-    state = MangaDetailsState.loaded(details);
+    state = MangaDetailsState.loaded(details, chapters);
   }
 
-  Future<void> toggleFavourite(String mangaName, Manga manga) async {
+  Future<void> toggleFavourite(
+    String mangaName,
+    Manga manga,
+    ChapterList chapterList,
+  ) async {
     if (!manga.favourite) {
-      await _favourites.addFavourite(_source.src, mangaName, manga);
+      await _favourites.addFavourite(
+        _source.src,
+        mangaName,
+        manga,
+        chapterList,
+      );
     } else {
       await _favourites.deleteFavourite(_source.src, manga);
     }
 
-    state = MangaDetailsState.loaded(manga.copyWith(
-      favourite: !manga.favourite,
-    ));
+    state = MangaDetailsState.loaded(
+      manga.copyWith(
+        favourite: !manga.favourite,
+      ),
+      chapterList,
+    );
   }
 }

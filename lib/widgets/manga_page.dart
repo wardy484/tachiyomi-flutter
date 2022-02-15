@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_networkimage_2/provider.dart';
 
 class MangaPage extends StatelessWidget {
   final String imagePath;
