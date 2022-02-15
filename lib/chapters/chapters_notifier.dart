@@ -23,16 +23,8 @@ class ChaptersNotifier extends StateNotifier<ChaptersState> {
         super(const ChaptersState.initial());
 
   Future<void> getChapters(String mangaId) async {
-    ChapterList allChapters = await _source.getChapters(mangaId);
     List<ReadChapter> read = await _readChapters.getRead(_source.src, mangaId);
-
-    allChapters = allChapters.copyWith(
-      chapters: allChapters.chapters
-          .map((chapter) => chapter.copyWith(
-                read: read.where((e) => e.chapterId == chapter.id).isNotEmpty,
-              ))
-          .toList(),
-    );
+    ChapterList allChapters = await _source.getChapters(mangaId, read);
 
     state = ChaptersState.loaded(allChapters);
   }

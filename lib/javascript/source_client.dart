@@ -8,6 +8,8 @@ import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/data/paged_results/paged_results.dart';
+import 'package:fluttiyomi/database/favourite.dart';
+import 'package:fluttiyomi/database/read_chapter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final sourceClientProvider = StateProvider<SourceClient>(
@@ -70,13 +72,31 @@ class SourceClient {
     }
   }
 
-  Future<ChapterList> getChapters(String mangaId) async {
+  Future<ChapterList> getChapters(
+    String mangaId,
+    List<ReadChapter> read, // needed to mark chapter as read efficiently
+  ) async {
     String id = Uri.encodeQueryComponent(mangaId);
     var json = await executeJS("readm.getChapters(`$id`);") as List;
+    List<Chapter> chapters = [];
+    // read.map((e) => ))
 
-    return ChapterList(
-      json.map((e) => Chapter.fromJson(e)).toList(),
-    );
+    for (var i = 0; i < json.length; i++) {
+      var current = json[i];
+
+      for (var x = 0; x < read.length; x++) {
+        var currentRead = read[x];
+
+        if (currentRead.id == current['id']) {
+          current['read'] = true;
+          break;
+        }
+      }
+
+      chapters.add(Chapter.fromJson(current));
+    }
+
+    return ChapterList(chapters);
   }
 
   Future<Manga> getMangaDetails(String mangaId) async {
@@ -98,10 +118,37 @@ class SourceClient {
     return ChapterDetails.fromJson(json);
   }
 
+  Future<void> checkForUpdates(
+    List<String> mangaIds,
+    DateTime lastCheckedAt,
+    Function(List<String> updated) onUpdated,
+  ) async {
+    String ids = mangaIds.map((e) => "'$e'").toString();
+    DateTime d = lastCheckedAt;
+
+    js.onMessage('newChapters', (dynamic updated) {
+      var updatedChapters = updated['ids'] as List;
+      onUpdated(updatedChapters.map<String>((e) => e as String).toList());
+    });
+
+    JsEvalResult request = js.evaluate("""
+      readm.filterUpdatedManga(
+        (updates) => {
+          sendMessage('newChapters', JSON.stringify(updates));
+        },
+        new Date(${d.year}, ${d.month - 1}, ${d.day}, ${d.hour}, ${d.minute}, ${d.second}),
+        $ids,
+      )
+    """);
+
+    await js.handlePromise(request);
+  }
+
   Future<dynamic> executeJS(String script) async {
     JsEvalResult request = js.evaluate(script);
 
     var newResult = await js.handlePromise(request);
+
     var json = jsonDecode(newResult.stringResult);
     return json;
   }

@@ -17,10 +17,16 @@ extension GetFavouriteCollection on Isar {
 final FavouriteSchema = CollectionSchema(
   name: 'Favourite',
   schema:
-      '{"name":"Favourite","properties":[{"name":"image","type":"String"},{"name":"mangaId","type":"String"},{"name":"name","type":"String"},{"name":"sourceId","type":"String"}],"indexes":[{"name":"mangaId_sourceId","unique":false,"properties":[{"name":"mangaId","type":"Hash","caseSensitive":true},{"name":"sourceId","type":"Hash","caseSensitive":true}]}],"links":[]}',
+      '{"name":"Favourite","properties":[{"name":"hasNewChapters","type":"Byte"},{"name":"image","type":"String"},{"name":"mangaId","type":"String"},{"name":"name","type":"String"},{"name":"sourceId","type":"String"}],"indexes":[{"name":"mangaId_sourceId","unique":false,"properties":[{"name":"mangaId","type":"Hash","caseSensitive":true},{"name":"sourceId","type":"Hash","caseSensitive":true}]}],"links":[]}',
   adapter: const _FavouriteAdapter(),
   idName: 'id',
-  propertyIds: {'image': 0, 'mangaId': 1, 'name': 2, 'sourceId': 3},
+  propertyIds: {
+    'hasNewChapters': 0,
+    'image': 1,
+    'mangaId': 2,
+    'name': 3,
+    'sourceId': 4
+  },
   indexIds: {'mangaId_sourceId': 0},
   indexTypes: {
     'mangaId_sourceId': [
@@ -44,39 +50,43 @@ class _FavouriteAdapter extends IsarTypeAdapter<Favourite> {
   void serialize(IsarCollection<Favourite> collection, IsarRawObject rawObj,
       Favourite object, List<int> offsets, AdapterAlloc alloc) {
     var dynamicSize = 0;
-    final value0 = object.image;
-    final _image = BinaryWriter.utf8Encoder.convert(value0);
+    final value0 = object.hasNewChapters;
+    final _hasNewChapters = value0;
+    final value1 = object.image;
+    final _image = BinaryWriter.utf8Encoder.convert(value1);
     dynamicSize += _image.length;
-    final value1 = object.mangaId;
-    final _mangaId = BinaryWriter.utf8Encoder.convert(value1);
+    final value2 = object.mangaId;
+    final _mangaId = BinaryWriter.utf8Encoder.convert(value2);
     dynamicSize += _mangaId.length;
-    final value2 = object.name;
-    final _name = BinaryWriter.utf8Encoder.convert(value2);
+    final value3 = object.name;
+    final _name = BinaryWriter.utf8Encoder.convert(value3);
     dynamicSize += _name.length;
-    final value3 = object.sourceId;
-    final _sourceId = BinaryWriter.utf8Encoder.convert(value3);
+    final value4 = object.sourceId;
+    final _sourceId = BinaryWriter.utf8Encoder.convert(value4);
     dynamicSize += _sourceId.length;
-    final size = dynamicSize + 34;
+    final size = dynamicSize + 35;
 
     rawObj.buffer = alloc(size);
     rawObj.buffer_length = size;
     final buffer = bufAsBytes(rawObj.buffer, size);
-    final writer = BinaryWriter(buffer, 34);
-    writer.writeBytes(offsets[0], _image);
-    writer.writeBytes(offsets[1], _mangaId);
-    writer.writeBytes(offsets[2], _name);
-    writer.writeBytes(offsets[3], _sourceId);
+    final writer = BinaryWriter(buffer, 35);
+    writer.writeBool(offsets[0], _hasNewChapters);
+    writer.writeBytes(offsets[1], _image);
+    writer.writeBytes(offsets[2], _mangaId);
+    writer.writeBytes(offsets[3], _name);
+    writer.writeBytes(offsets[4], _sourceId);
   }
 
   @override
   Favourite deserialize(IsarCollection<Favourite> collection, int id,
       BinaryReader reader, List<int> offsets) {
     final object = Favourite();
+    object.hasNewChapters = reader.readBool(offsets[0]);
     object.id = id;
-    object.image = reader.readString(offsets[0]);
-    object.mangaId = reader.readString(offsets[1]);
-    object.name = reader.readString(offsets[2]);
-    object.sourceId = reader.readString(offsets[3]);
+    object.image = reader.readString(offsets[1]);
+    object.mangaId = reader.readString(offsets[2]);
+    object.name = reader.readString(offsets[3]);
+    object.sourceId = reader.readString(offsets[4]);
     return object;
   }
 
@@ -87,12 +97,14 @@ class _FavouriteAdapter extends IsarTypeAdapter<Favourite> {
       case -1:
         return id as P;
       case 0:
-        return (reader.readString(offset)) as P;
+        return (reader.readBool(offset)) as P;
       case 1:
         return (reader.readString(offset)) as P;
       case 2:
         return (reader.readString(offset)) as P;
       case 3:
+        return (reader.readString(offset)) as P;
+      case 4:
         return (reader.readString(offset)) as P;
       default:
         throw 'Illegal propertyIndex';
@@ -260,6 +272,15 @@ extension FavouriteQueryWhere
 
 extension FavouriteQueryFilter
     on QueryBuilder<Favourite, Favourite, QFilterCondition> {
+  QueryBuilder<Favourite, Favourite, QAfterFilterCondition>
+      hasNewChaptersEqualTo(bool value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'hasNewChapters',
+      value: value,
+    ));
+  }
+
   QueryBuilder<Favourite, Favourite, QAfterFilterCondition> idIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
@@ -731,6 +752,14 @@ extension FavouriteQueryFilter
 
 extension FavouriteQueryWhereSortBy
     on QueryBuilder<Favourite, Favourite, QSortBy> {
+  QueryBuilder<Favourite, Favourite, QAfterSortBy> sortByHasNewChapters() {
+    return addSortByInternal('hasNewChapters', Sort.asc);
+  }
+
+  QueryBuilder<Favourite, Favourite, QAfterSortBy> sortByHasNewChaptersDesc() {
+    return addSortByInternal('hasNewChapters', Sort.desc);
+  }
+
   QueryBuilder<Favourite, Favourite, QAfterSortBy> sortById() {
     return addSortByInternal('id', Sort.asc);
   }
@@ -774,6 +803,14 @@ extension FavouriteQueryWhereSortBy
 
 extension FavouriteQueryWhereSortThenBy
     on QueryBuilder<Favourite, Favourite, QSortThenBy> {
+  QueryBuilder<Favourite, Favourite, QAfterSortBy> thenByHasNewChapters() {
+    return addSortByInternal('hasNewChapters', Sort.asc);
+  }
+
+  QueryBuilder<Favourite, Favourite, QAfterSortBy> thenByHasNewChaptersDesc() {
+    return addSortByInternal('hasNewChapters', Sort.desc);
+  }
+
   QueryBuilder<Favourite, Favourite, QAfterSortBy> thenById() {
     return addSortByInternal('id', Sort.asc);
   }
@@ -817,6 +854,10 @@ extension FavouriteQueryWhereSortThenBy
 
 extension FavouriteQueryWhereDistinct
     on QueryBuilder<Favourite, Favourite, QDistinct> {
+  QueryBuilder<Favourite, Favourite, QDistinct> distinctByHasNewChapters() {
+    return addDistinctByInternal('hasNewChapters');
+  }
+
   QueryBuilder<Favourite, Favourite, QDistinct> distinctById() {
     return addDistinctByInternal('id');
   }
@@ -844,6 +885,10 @@ extension FavouriteQueryWhereDistinct
 
 extension FavouriteQueryProperty
     on QueryBuilder<Favourite, Favourite, QQueryProperty> {
+  QueryBuilder<Favourite, bool, QQueryOperations> hasNewChaptersProperty() {
+    return addPropertyNameInternal('hasNewChapters');
+  }
+
   QueryBuilder<Favourite, int?, QQueryOperations> idProperty() {
     return addPropertyNameInternal('id');
   }

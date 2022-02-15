@@ -14,17 +14,28 @@ class MangaGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      padding: const EdgeInsets.all(8),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 14,
-        mainAxisSpacing: 14,
-        childAspectRatio: MediaQuery.of(context).size.width /
-            (MediaQuery.of(context).size.height / heightMultipler),
-      ),
-      itemCount: itemCount,
-      itemBuilder: itemBuilder,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        int crossAxisCount = 2;
+
+        if (constraints.maxWidth > 1000) {
+          crossAxisCount = 6;
+        } else if (constraints.maxWidth > 800) {
+          crossAxisCount = 4;
+        }
+
+        return GridView.builder(
+          padding: const EdgeInsets.all(8),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            crossAxisSpacing: 14,
+            mainAxisSpacing: 14,
+            childAspectRatio: 0.8,
+          ),
+          itemCount: itemCount,
+          itemBuilder: itemBuilder,
+        );
+      },
     );
   }
 }

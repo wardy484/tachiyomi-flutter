@@ -6,12 +6,14 @@ class MangaCard extends StatelessWidget {
   final String mangaId;
   final String name;
   final String image;
+  final bool showBadge;
 
   const MangaCard({
     Key? key,
     required this.mangaId,
     required this.name,
     required this.image,
+    this.showBadge = false,
   }) : super(key: key);
 
   @override
@@ -25,20 +27,8 @@ class MangaCard extends StatelessWidget {
           ),
         );
       },
-      // child: Column(
-      //   children: [
-      //     Expanded(
-      //       child: Image.network(
-      //         image,
-      //         fit: BoxFit.fitWidth,
-      //         alignment: ,
-      //       ),
-      //     ),
-      //     Text(name),
-      //   ],
-      // ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
+        alignment: AlignmentDirectional.bottomStart,
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
@@ -51,12 +41,29 @@ class MangaCard extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: Text(
-              name,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
+          Container(
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [
+                  Colors.black,
+                  Colors.transparent,
+                ],
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: 50,
+                left: 8,
+                bottom: 5,
+              ),
+              child: Text(
+                name,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),

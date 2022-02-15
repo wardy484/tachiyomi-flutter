@@ -50,19 +50,23 @@ class _ReaderLoaderState extends ConsumerState<ReaderLoader> {
       ),
       onRefresh: () async {
         if (widget.reverse) {
-          ref.read(chapterDetailsProvider.notifier).nextChapter();
+          await ref.read(chapterDetailsProvider.notifier).nextChapter();
         } else {
-          ref.read(chapterDetailsProvider.notifier).previousChapter();
+          await ref.read(chapterDetailsProvider.notifier).previousChapter();
         }
+
         _refreshController.loadComplete();
+        _refreshController.refreshCompleted();
       },
       onLoading: () async {
         if (!widget.reverse) {
-          ref.read(chapterDetailsProvider.notifier).nextChapter();
+          await ref.read(chapterDetailsProvider.notifier).nextChapter();
         } else {
-          ref.read(chapterDetailsProvider.notifier).previousChapter();
+          await ref.read(chapterDetailsProvider.notifier).previousChapter();
         }
+
         _refreshController.loadComplete();
+        _refreshController.refreshCompleted();
       },
       child: widget.child,
     );

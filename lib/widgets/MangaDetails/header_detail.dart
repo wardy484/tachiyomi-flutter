@@ -19,7 +19,7 @@ class HeaderDetail extends StatelessWidget {
         ),
         const SizedBox(height: 7),
         Text(
-          value ?? "Unknown",
+          (value == "" || value == null) ? "Unknown" : value!,
           overflow: TextOverflow.clip,
           maxLines: 1,
           softWrap: false,

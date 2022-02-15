@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/widgets/MangaDetails/header_detail.dart';
 import 'package:fluttiyomi/widgets/MangaDetails/manga_image.dart';
+import 'package:fluttiyomi/widgets/MangaDetails/manga_tags.dart';
 
 class Header extends StatelessWidget {
   final Manga manga;
@@ -17,7 +18,7 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.only(top: 14, left: 14, right: 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -25,39 +26,54 @@ class Header extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                width: 200,
+                width: 250,
                 child: MangaImage(url: manga.image),
               ),
               const SizedBox(width: 14),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  HeaderDetail(label: "Author", value: manga.author),
-                  const SizedBox(height: 24),
-                  HeaderDetail(label: "Artist", value: manga.artist),
-                  const SizedBox(height: 24),
-                  HeaderDetail(label: "Status", value: manga.mangaStatus),
-                  const SizedBox(height: 24),
-                  const HeaderDetail(label: "Source", value: "Manga Fox"),
-                ],
-              )
-            ],
-          ),
-          const SizedBox(height: 14),
-          Row(
-            children: [
-              IconButton(
-                onPressed: onToggleFavourite,
-                icon: Icon(
-                  manga.favourite
-                      ? Icons.bookmark
-                      : Icons.bookmark_add_outlined,
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    HeaderDetail(label: "Author", value: manga.author),
+                    const SizedBox(height: 24),
+                    HeaderDetail(label: "Artist", value: manga.artist),
+                    const SizedBox(height: 24),
+                    HeaderDetail(label: "Status", value: manga.mangaStatus),
+                    const SizedBox(height: 24),
+                    const HeaderDetail(label: "Source", value: "Manga Fox"),
+                  ],
                 ),
               )
             ],
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 7),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: onToggleFavourite,
+                  label: manga.favourite
+                      ? const Text("In library")
+                      : const Text("Save to library"),
+                  icon: Icon(
+                    manga.favourite
+                        ? Icons.bookmark
+                        : Icons.bookmark_add_outlined,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: onToggleFavourite,
+                  label: const Text("Continue"),
+                  icon: const Icon(Icons.play_arrow),
+                ),
+              )
+            ],
+          ),
+          const SizedBox(height: 7),
           const Text(
             "About this manga",
             style: TextStyle(fontWeight: FontWeight.bold),
@@ -67,8 +83,10 @@ class Header extends StatelessWidget {
             manga.desc ?? "...",
             expandText: "Show more",
             collapseText: "Show less",
-            maxLines: 3,
+            maxLines: 2,
           ),
+          if (manga.tags != null && manga.tags!.isNotEmpty)
+            MangaTags(tagSection: manga.tags!.first),
         ],
       ),
     );

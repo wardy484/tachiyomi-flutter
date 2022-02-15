@@ -6,5 +6,8 @@ part 'favourites_state.freezed.dart';
 @freezed
 class FavouritesState with _$FavouritesState {
   const factory FavouritesState.initial() = _Initial;
-  const factory FavouritesState.loaded(List<Favourite> favourites) = _Loaded;
+  const factory FavouritesState.loaded(
+    List<Favourite> favourites,
+    bool checkingForUpdates,
+  ) = _Loaded;
 }

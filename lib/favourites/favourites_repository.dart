@@ -34,15 +34,29 @@ class FavouritesRepository {
     return favouriteCount > 0;
   }
 
+  Future<Favourite?> getFavourite(String sourceId, String mangaId) async {
+    return await _favourites
+        .where()
+        .mangaIdSourceIdEqualTo(mangaId, sourceId)
+        .findFirst();
+  }
+
   Future<void> addFavourite(String sourceId, String name, Manga manga) async {
     final newFavourite = Favourite()
       ..mangaId = manga.id
       ..sourceId = sourceId
       ..name = name
-      ..image = manga.image;
+      ..image = manga.image
+      ..hasNewChapters = false;
 
     await _database.writeTxn((_) async {
       await _favourites.put(newFavourite);
+    });
+  }
+
+  Future<void> update(List<Favourite> favourites) async {
+    await _database.writeTxn((_) async {
+      _favourites.putAll(favourites);
     });
   }
 

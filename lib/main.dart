@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/database/database.dart';
+import 'package:fluttiyomi/favourites/favourites_notifier.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/router.gr.dart';
+import 'package:fluttiyomi/settings/settings_repository.dart';
 import 'package:fluttiyomi/widgets/refresh_config.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -12,6 +14,13 @@ void main() async {
   container.read(sourceClientProvider.state).state = await SourceClient.init();
 
   await container.read(isarDatabaseProvider).init();
+
+  // TODO: delete when done testing notify
+  await container
+      .read(settingsRepositoryProvider)
+      .updateGlobalSettings(DateTime.now().subtract(const Duration(days: 1)));
+
+  container.read(favouritesProvider.notifier).checkForUpdates();
 
   runApp(
     UncontrolledProviderScope(

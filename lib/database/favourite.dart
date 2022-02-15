@@ -15,4 +15,6 @@ class Favourite {
   late String name;
 
   late String image;
+
+  late bool hasNewChapters;
 }

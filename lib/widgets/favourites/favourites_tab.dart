@@ -25,11 +25,11 @@ class _FavouritesTabState extends ConsumerState<FavouritesTab> {
   Widget build(BuildContext context) {
     return ref.watch(favouritesProvider).when(
           initial: () => const FullPageLoadingIndicator(),
-          loaded: (results) {
+          loaded: (results, checkingForUpdates) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: MangaGrid(
-                heightMultipler: 1.3,
+                heightMultipler: 1.55,
                 itemCount: results.length,
                 itemBuilder: (context, index) {
                   Favourite manga = results[index];
@@ -38,6 +38,7 @@ class _FavouritesTabState extends ConsumerState<FavouritesTab> {
                     mangaId: manga.mangaId,
                     name: manga.name,
                     image: manga.image,
+                    showBadge: manga.hasNewChapters,
                   );
                 },
               ),

@@ -8,7 +8,10 @@ class MangaImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(14),
-      child: Image.network(url),
+      child: Image.network(
+        url,
+        fit: BoxFit.cover,
+      ),
     );
   }
 }

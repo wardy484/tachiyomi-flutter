@@ -25,7 +25,6 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
         super(const MangaDetailsState.initial());
 
   Future<void> getMangaDetails(String mangaId) async {
-    state = MangaDetailsState.initial();
     Manga details = await _source.getMangaDetails(mangaId);
 
     details = details.copyWith(

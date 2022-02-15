@@ -44,6 +44,7 @@ class _ScrollingViewerState extends State<ScrollingViewer>
       child: InteractiveViewer(
         transformationController: _transformationController,
         maxScale: 5,
+        minScale: 1,
         child: widget.child,
       ),
     );

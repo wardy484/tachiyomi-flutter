@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
+import 'package:intl/intl.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ChapterListItem extends StatelessWidget {
   final Chapter chapter;
@@ -13,6 +15,13 @@ class ChapterListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String timeSince = "";
+
+    if (chapter.time is String) {
+      DateTime date = DateFormat("E LLL d y H:mm:ss").parse(chapter.time!);
+      timeSince = timeago.format(date);
+    }
+
     return GestureDetector(
       onTap: onTap,
       child: ListTile(
@@ -21,9 +30,12 @@ class ChapterListItem extends StatelessWidget {
           chapter.name ?? "Chapter ${chapter.chapterNo}",
         ),
         subtitle: Text(
-          chapter.chapterNo.toString(),
+          chapter.langCode.toUpperCase(),
+          style: TextStyle(
+            color: Colors.grey[400],
+          ),
         ),
-        // subtitle: Text(item.read.toString()),
+        trailing: Text(timeSince),
       ),
     );
   }

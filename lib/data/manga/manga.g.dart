@@ -18,6 +18,9 @@ _$_Manga _$$_MangaFromJson(Map<String, dynamic> json) => _$_Manga(
       (json['covers'] as List<dynamic>?)?.map((e) => e as String).toList(),
       json['desc'] as String?,
       (json['follows'] as num?)?.toDouble(),
+      (json['tags'] as List<dynamic>?)
+          ?.map((e) => TagSection.fromJson(e as Map<String, dynamic>))
+          .toList(),
       json['lastUpdate'] == null
           ? null
           : DateTime.parse(json['lastUpdate'] as String),
@@ -36,6 +39,7 @@ Map<String, dynamic> _$$_MangaToJson(_$_Manga instance) => <String, dynamic>{
       'covers': instance.covers,
       'desc': instance.desc,
       'follows': instance.follows,
+      'tags': instance.tags,
       'lastUpdate': instance.lastUpdate?.toIso8601String(),
       'favourite': instance.favourite,
     };

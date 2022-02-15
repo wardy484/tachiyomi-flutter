@@ -1,3 +1,4 @@
+import 'package:fluttiyomi/data/tag_section/tag_section.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'manga.freezed.dart';
@@ -17,6 +18,7 @@ class Manga with _$Manga {
     List<String>? covers,
     String? desc,
     double? follows,
+    List<TagSection>? tags,
     DateTime? lastUpdate, {
     @Default(false) bool favourite,
   }) = _Manga;

@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'favourites_state.dart';
+part of 'settings_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,46 +15,41 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-class _$FavouritesStateTearOff {
-  const _$FavouritesStateTearOff();
+class _$SettingsStateTearOff {
+  const _$SettingsStateTearOff();
 
   _Initial initial() {
     return const _Initial();
   }
 
-  _Loaded loaded(List<Favourite> favourites, bool checkingForUpdates) {
+  _Loaded loaded(Setting settings) {
     return _Loaded(
-      favourites,
-      checkingForUpdates,
+      settings,
     );
   }
 }
 
 /// @nodoc
-const $FavouritesState = _$FavouritesStateTearOff();
+const $SettingsState = _$SettingsStateTearOff();
 
 /// @nodoc
-mixin _$FavouritesState {
+mixin _$SettingsState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(
-            List<Favourite> favourites, bool checkingForUpdates)
-        loaded,
+    required TResult Function(Setting settings) loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(List<Favourite> favourites, bool checkingForUpdates)?
-        loaded,
+    TResult Function(Setting settings)? loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(List<Favourite> favourites, bool checkingForUpdates)?
-        loaded,
+    TResult Function(Setting settings)? loaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -80,20 +75,20 @@ mixin _$FavouritesState {
 }
 
 /// @nodoc
-abstract class $FavouritesStateCopyWith<$Res> {
-  factory $FavouritesStateCopyWith(
-          FavouritesState value, $Res Function(FavouritesState) then) =
-      _$FavouritesStateCopyWithImpl<$Res>;
+abstract class $SettingsStateCopyWith<$Res> {
+  factory $SettingsStateCopyWith(
+          SettingsState value, $Res Function(SettingsState) then) =
+      _$SettingsStateCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$FavouritesStateCopyWithImpl<$Res>
-    implements $FavouritesStateCopyWith<$Res> {
-  _$FavouritesStateCopyWithImpl(this._value, this._then);
+class _$SettingsStateCopyWithImpl<$Res>
+    implements $SettingsStateCopyWith<$Res> {
+  _$SettingsStateCopyWithImpl(this._value, this._then);
 
-  final FavouritesState _value;
+  final SettingsState _value;
   // ignore: unused_field
-  final $Res Function(FavouritesState) _then;
+  final $Res Function(SettingsState) _then;
 }
 
 /// @nodoc
@@ -103,7 +98,7 @@ abstract class _$InitialCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$InitialCopyWithImpl<$Res> extends _$FavouritesStateCopyWithImpl<$Res>
+class __$InitialCopyWithImpl<$Res> extends _$SettingsStateCopyWithImpl<$Res>
     implements _$InitialCopyWith<$Res> {
   __$InitialCopyWithImpl(_Initial _value, $Res Function(_Initial) _then)
       : super(_value, (v) => _then(v as _Initial));
@@ -119,7 +114,7 @@ class _$_Initial implements _Initial {
 
   @override
   String toString() {
-    return 'FavouritesState.initial()';
+    return 'SettingsState.initial()';
   }
 
   @override
@@ -135,9 +130,7 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(
-            List<Favourite> favourites, bool checkingForUpdates)
-        loaded,
+    required TResult Function(Setting settings) loaded,
   }) {
     return initial();
   }
@@ -146,8 +139,7 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(List<Favourite> favourites, bool checkingForUpdates)?
-        loaded,
+    TResult Function(Setting settings)? loaded,
   }) {
     return initial?.call();
   }
@@ -156,8 +148,7 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(List<Favourite> favourites, bool checkingForUpdates)?
-        loaded,
+    TResult Function(Setting settings)? loaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -198,7 +189,7 @@ class _$_Initial implements _Initial {
   }
 }
 
-abstract class _Initial implements FavouritesState {
+abstract class _Initial implements SettingsState {
   const factory _Initial() = _$_Initial;
 }
 
@@ -206,11 +197,11 @@ abstract class _Initial implements FavouritesState {
 abstract class _$LoadedCopyWith<$Res> {
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) then) =
       __$LoadedCopyWithImpl<$Res>;
-  $Res call({List<Favourite> favourites, bool checkingForUpdates});
+  $Res call({Setting settings});
 }
 
 /// @nodoc
-class __$LoadedCopyWithImpl<$Res> extends _$FavouritesStateCopyWithImpl<$Res>
+class __$LoadedCopyWithImpl<$Res> extends _$SettingsStateCopyWithImpl<$Res>
     implements _$LoadedCopyWith<$Res> {
   __$LoadedCopyWithImpl(_Loaded _value, $Res Function(_Loaded) _then)
       : super(_value, (v) => _then(v as _Loaded));
@@ -220,18 +211,13 @@ class __$LoadedCopyWithImpl<$Res> extends _$FavouritesStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? favourites = freezed,
-    Object? checkingForUpdates = freezed,
+    Object? settings = freezed,
   }) {
     return _then(_Loaded(
-      favourites == freezed
-          ? _value.favourites
-          : favourites // ignore: cast_nullable_to_non_nullable
-              as List<Favourite>,
-      checkingForUpdates == freezed
-          ? _value.checkingForUpdates
-          : checkingForUpdates // ignore: cast_nullable_to_non_nullable
-              as bool,
+      settings == freezed
+          ? _value.settings
+          : settings // ignore: cast_nullable_to_non_nullable
+              as Setting,
     ));
   }
 }
@@ -239,16 +225,14 @@ class __$LoadedCopyWithImpl<$Res> extends _$FavouritesStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Loaded implements _Loaded {
-  const _$_Loaded(this.favourites, this.checkingForUpdates);
+  const _$_Loaded(this.settings);
 
   @override
-  final List<Favourite> favourites;
-  @override
-  final bool checkingForUpdates;
+  final Setting settings;
 
   @override
   String toString() {
-    return 'FavouritesState.loaded(favourites: $favourites, checkingForUpdates: $checkingForUpdates)';
+    return 'SettingsState.loaded(settings: $settings)';
   }
 
   @override
@@ -256,17 +240,12 @@ class _$_Loaded implements _Loaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Loaded &&
-            const DeepCollectionEquality()
-                .equals(other.favourites, favourites) &&
-            const DeepCollectionEquality()
-                .equals(other.checkingForUpdates, checkingForUpdates));
+            const DeepCollectionEquality().equals(other.settings, settings));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(favourites),
-      const DeepCollectionEquality().hash(checkingForUpdates));
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(settings));
 
   @JsonKey(ignore: true)
   @override
@@ -277,33 +256,29 @@ class _$_Loaded implements _Loaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(
-            List<Favourite> favourites, bool checkingForUpdates)
-        loaded,
+    required TResult Function(Setting settings) loaded,
   }) {
-    return loaded(favourites, checkingForUpdates);
+    return loaded(settings);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(List<Favourite> favourites, bool checkingForUpdates)?
-        loaded,
+    TResult Function(Setting settings)? loaded,
   }) {
-    return loaded?.call(favourites, checkingForUpdates);
+    return loaded?.call(settings);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(List<Favourite> favourites, bool checkingForUpdates)?
-        loaded,
+    TResult Function(Setting settings)? loaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(favourites, checkingForUpdates);
+      return loaded(settings);
     }
     return orElse();
   }
@@ -340,12 +315,10 @@ class _$_Loaded implements _Loaded {
   }
 }
 
-abstract class _Loaded implements FavouritesState {
-  const factory _Loaded(List<Favourite> favourites, bool checkingForUpdates) =
-      _$_Loaded;
+abstract class _Loaded implements SettingsState {
+  const factory _Loaded(Setting settings) = _$_Loaded;
 
-  List<Favourite> get favourites;
-  bool get checkingForUpdates;
+  Setting get settings;
   @JsonKey(ignore: true)
   _$LoadedCopyWith<_Loaded> get copyWith => throw _privateConstructorUsedError;
 }

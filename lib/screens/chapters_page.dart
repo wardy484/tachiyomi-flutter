@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/chapters/chapters_notifier.dart';
 import 'package:fluttiyomi/favourites/favourites_notifier.dart';
@@ -30,11 +31,17 @@ class _ChaptersPageState extends ConsumerState<ChaptersPage> {
         .getMangaDetails(widget.mangaId);
 
     ref.read(chaptersNotifierProvider.notifier).getChapters(widget.mangaId);
+
+    // TODO: get real source id
+    ref
+        .read(favouritesProvider.notifier)
+        .markAsOpened("mangaFox", widget.mangaId);
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return ConditionalWillPopScope(
+      shouldAddCallback: false,
       onWillPop: () async {
         ref.read(favouritesProvider.notifier).get();
 
@@ -50,8 +57,11 @@ class _ChaptersPageState extends ConsumerState<ChaptersPage> {
                 return ref.watch(chaptersNotifierProvider).when(
                       initial: () => const FullPageLoadingIndicator(),
                       loaded: (results) {
-                        return ListView.builder(
-                          itemCount: results.length + 2,
+                        return ListView.separated(
+                          separatorBuilder: (context, index) => const Divider(
+                            height: 1,
+                          ),
+                          itemCount: results.length + 1,
                           itemBuilder: (context, index) {
                             if (index == 0) {
                               return Header(
@@ -65,22 +75,7 @@ class _ChaptersPageState extends ConsumerState<ChaptersPage> {
                               );
                             }
 
-                            if (index == 1) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 14.0,
-                                ),
-                                child: ElevatedButton.icon(
-                                  onPressed: () {
-                                    // Respond to button press
-                                  },
-                                  label: const Text("Continue Reading"),
-                                  icon: const Icon(Icons.play_arrow, size: 18),
-                                ),
-                              );
-                            }
-
-                            var chapter = results.get(index - 2);
+                            var chapter = results.get(index - 1);
 
                             return ChapterListItem(
                               chapter: chapter,
@@ -90,7 +85,7 @@ class _ChaptersPageState extends ConsumerState<ChaptersPage> {
                                     mangaId: widget.mangaId,
                                     chapter: chapter,
                                     chapters: results,
-                                    currentChapter: index - 2,
+                                    currentChapter: index - 1,
                                   ),
                                 );
                               },

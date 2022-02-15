@@ -11,11 +11,9 @@ class MangaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image(
-      image: AdvancedNetworkImage(
-        imagePath,
-        timeoutDuration: const Duration(minutes: 1),
-      ),
+    return Image.network(
+      imagePath,
+      fit: BoxFit.fill,
     );
   }
 }

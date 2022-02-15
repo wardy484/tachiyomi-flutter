@@ -34,6 +34,7 @@ class _$MangaTearOff {
       List<String>? covers,
       String? desc,
       double? follows,
+      List<TagSection>? tags,
       DateTime? lastUpdate,
       {bool favourite = false}) {
     return _Manga(
@@ -48,6 +49,7 @@ class _$MangaTearOff {
       covers,
       desc,
       follows,
+      tags,
       lastUpdate,
       favourite: favourite,
     );
@@ -74,6 +76,7 @@ mixin _$Manga {
   List<String>? get covers => throw _privateConstructorUsedError;
   String? get desc => throw _privateConstructorUsedError;
   double? get follows => throw _privateConstructorUsedError;
+  List<TagSection>? get tags => throw _privateConstructorUsedError;
   DateTime? get lastUpdate => throw _privateConstructorUsedError;
   bool get favourite => throw _privateConstructorUsedError;
 
@@ -98,6 +101,7 @@ abstract class $MangaCopyWith<$Res> {
       List<String>? covers,
       String? desc,
       double? follows,
+      List<TagSection>? tags,
       DateTime? lastUpdate,
       bool favourite});
 }
@@ -123,6 +127,7 @@ class _$MangaCopyWithImpl<$Res> implements $MangaCopyWith<$Res> {
     Object? covers = freezed,
     Object? desc = freezed,
     Object? follows = freezed,
+    Object? tags = freezed,
     Object? lastUpdate = freezed,
     Object? favourite = freezed,
   }) {
@@ -171,6 +176,10 @@ class _$MangaCopyWithImpl<$Res> implements $MangaCopyWith<$Res> {
           ? _value.follows
           : follows // ignore: cast_nullable_to_non_nullable
               as double?,
+      tags: tags == freezed
+          ? _value.tags
+          : tags // ignore: cast_nullable_to_non_nullable
+              as List<TagSection>?,
       lastUpdate: lastUpdate == freezed
           ? _value.lastUpdate
           : lastUpdate // ignore: cast_nullable_to_non_nullable
@@ -200,6 +209,7 @@ abstract class _$MangaCopyWith<$Res> implements $MangaCopyWith<$Res> {
       List<String>? covers,
       String? desc,
       double? follows,
+      List<TagSection>? tags,
       DateTime? lastUpdate,
       bool favourite});
 }
@@ -226,6 +236,7 @@ class __$MangaCopyWithImpl<$Res> extends _$MangaCopyWithImpl<$Res>
     Object? covers = freezed,
     Object? desc = freezed,
     Object? follows = freezed,
+    Object? tags = freezed,
     Object? lastUpdate = freezed,
     Object? favourite = freezed,
   }) {
@@ -274,6 +285,10 @@ class __$MangaCopyWithImpl<$Res> extends _$MangaCopyWithImpl<$Res>
           ? _value.follows
           : follows // ignore: cast_nullable_to_non_nullable
               as double?,
+      tags == freezed
+          ? _value.tags
+          : tags // ignore: cast_nullable_to_non_nullable
+              as List<TagSection>?,
       lastUpdate == freezed
           ? _value.lastUpdate
           : lastUpdate // ignore: cast_nullable_to_non_nullable
@@ -301,6 +316,7 @@ class _$_Manga implements _Manga {
       this.covers,
       this.desc,
       this.follows,
+      this.tags,
       this.lastUpdate,
       {this.favourite = false});
 
@@ -330,6 +346,8 @@ class _$_Manga implements _Manga {
   @override
   final double? follows;
   @override
+  final List<TagSection>? tags;
+  @override
   final DateTime? lastUpdate;
   @JsonKey()
   @override
@@ -337,7 +355,7 @@ class _$_Manga implements _Manga {
 
   @override
   String toString() {
-    return 'Manga(id: $id, titles: $titles, image: $image, rating: $rating, mangaStatus: $mangaStatus, langFlag: $langFlag, author: $author, artist: $artist, covers: $covers, desc: $desc, follows: $follows, lastUpdate: $lastUpdate, favourite: $favourite)';
+    return 'Manga(id: $id, titles: $titles, image: $image, rating: $rating, mangaStatus: $mangaStatus, langFlag: $langFlag, author: $author, artist: $artist, covers: $covers, desc: $desc, follows: $follows, tags: $tags, lastUpdate: $lastUpdate, favourite: $favourite)';
   }
 
   @override
@@ -357,6 +375,7 @@ class _$_Manga implements _Manga {
             const DeepCollectionEquality().equals(other.covers, covers) &&
             const DeepCollectionEquality().equals(other.desc, desc) &&
             const DeepCollectionEquality().equals(other.follows, follows) &&
+            const DeepCollectionEquality().equals(other.tags, tags) &&
             const DeepCollectionEquality()
                 .equals(other.lastUpdate, lastUpdate) &&
             const DeepCollectionEquality().equals(other.favourite, favourite));
@@ -376,6 +395,7 @@ class _$_Manga implements _Manga {
       const DeepCollectionEquality().hash(covers),
       const DeepCollectionEquality().hash(desc),
       const DeepCollectionEquality().hash(follows),
+      const DeepCollectionEquality().hash(tags),
       const DeepCollectionEquality().hash(lastUpdate),
       const DeepCollectionEquality().hash(favourite));
 
@@ -403,6 +423,7 @@ abstract class _Manga implements Manga {
       List<String>? covers,
       String? desc,
       double? follows,
+      List<TagSection>? tags,
       DateTime? lastUpdate,
       {bool favourite}) = _$_Manga;
 
@@ -430,6 +451,8 @@ abstract class _Manga implements Manga {
   String? get desc;
   @override
   double? get follows;
+  @override
+  List<TagSection>? get tags;
   @override
   DateTime? get lastUpdate;
   @override

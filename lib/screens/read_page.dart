@@ -4,6 +4,7 @@ import 'package:fluttiyomi/chapters/chapters_notifier.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
+import 'package:fluttiyomi/settings/settings_notifier.dart';
 import 'package:fluttiyomi/widgets/manga_page.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_appbar.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_bottom_appbar.dart';
@@ -12,6 +13,7 @@ import 'package:fluttiyomi/widgets/manga_reader/reader_loading_content.dart';
 import 'package:fluttiyomi/widgets/manga_reader/scrolling_viewer.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
 
 class ReadPage extends ConsumerStatefulWidget {
   final String mangaId;
@@ -38,6 +40,7 @@ class _ReadPageState extends ConsumerState<ReadPage> {
   void initState() {
     super.initState();
 
+    ref.read(settingsProvider.notifier).loadSettings();
     ref.read(chapterDetailsProvider.notifier).getChapterDetails(
           widget.mangaId,
           widget.chapter.id,
@@ -61,7 +64,8 @@ class _ReadPageState extends ConsumerState<ReadPage> {
               pages = pages.reversed.toList();
             }
 
-            return WillPopScope(
+            return ConditionalWillPopScope(
+              shouldAddCallback: false,
               onWillPop: () async {
                 ref
                     .read(chaptersNotifierProvider.notifier)
@@ -80,36 +84,44 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                   },
                   child: ScrollingViewer(
                     child: ReaderLoader(
+                      reverse: startFromEnd,
+                      child: ListView.builder(
+                        padding: ref.watch(settingsProvider).when(
+                              initial: () => EdgeInsets.zero,
+                              loaded: (settings) => EdgeInsets.symmetric(
+                                horizontal: settings.padding.toDouble(),
+                              ),
+                            ),
+                        shrinkWrap: true,
                         reverse: startFromEnd,
-                        child: ListView.builder(
-                          reverse: startFromEnd,
-                          itemCount: pages.length,
-                          itemBuilder: (context, index) {
-                            var item = pages[index];
+                        itemCount: pages.length,
+                        itemBuilder: (context, index) {
+                          var item = pages[index];
 
-                            return VisibilityDetector(
-                              key: Key("Page-${index + 1}"),
-                              child: MangaPage(imagePath: item),
-                              onVisibilityChanged: (visibilityInfo) {
-                                // App crashes without this, seems to get called after popping screen off
-                                // of stack.
-                                if (visibilityInfo.visibleFraction == 0) {
-                                  return;
-                                }
+                          return VisibilityDetector(
+                            key: Key("Page-${index + 1}"),
+                            child: MangaPage(imagePath: item),
+                            onVisibilityChanged: (visibilityInfo) {
+                              // App crashes without this, seems to get called after popping screen off
+                              // of stack.
+                              if (visibilityInfo.visibleFraction == 0) {
+                                return;
+                              }
 
-                                ref
-                                    .read(readerProvider.notifier)
-                                    .moveProgressForVisibilityInfo(
-                                      visibilityInfo,
-                                      pages.length,
-                                      startFromEnd,
-                                    );
-                              },
-                            );
-                          },
-                        ),
-                        currentChapter: currentChapter + 1,
-                        maxChapters: chapterList.length),
+                              ref
+                                  .read(readerProvider.notifier)
+                                  .moveProgressForVisibilityInfo(
+                                    visibilityInfo,
+                                    pages.length,
+                                    startFromEnd,
+                                  );
+                            },
+                          );
+                        },
+                      ),
+                      currentChapter: currentChapter + 1,
+                      maxChapters: chapterList.length,
+                    ),
                   ),
                 ),
                 bottomNavigationBar: ReaderBottomAppBar(
