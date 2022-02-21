@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:fluttiyomi/chapter_details/read_chapters_repository.dart';
 import 'package:fluttiyomi/reader/reader_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -8,17 +9,23 @@ const VISIBILITY_THRESHOLD = 70;
 
 final readerProvider =
     StateNotifierProvider.autoDispose<ReaderNotifier, ReaderState>((ref) {
-  return ReaderNotifier();
+  return ReaderNotifier(
+    chapters: ref.watch(readChaptersRepositoryProvider),
+  );
 });
 
 class ReaderNotifier extends StateNotifier<ReaderState> {
-  ReaderNotifier() : super(const ReaderState.reading("1", true));
+  final ReadChaptersRepository chapters;
+
+  ReaderNotifier({
+    required this.chapters,
+  }) : super(const ReaderState.reading("1", true));
 
   void moveProgress(String progress) {
     state = state.copyWith(progress: progress);
   }
 
-  void moveProgressForVisibilityInfo(
+  int moveProgressForVisibilityInfo(
     VisibilityInfo visibilityInfo,
     int maxPages,
     bool reversed,
@@ -41,7 +48,11 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
       }
 
       moveProgress(pageNumber.toString());
+
+      return pageNumber;
     }
+
+    return 0;
   }
 
   void toggleVisibility() {

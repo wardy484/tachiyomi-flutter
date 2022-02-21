@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 class MangaGrid extends StatelessWidget {
   final int itemCount;
   final IndexedWidgetBuilder itemBuilder;
-  final double heightMultipler;
 
   const MangaGrid({
     Key? key,
     required this.itemCount,
     required this.itemBuilder,
-    required this.heightMultipler,
   }) : super(key: key);
 
   @override
@@ -19,13 +17,13 @@ class MangaGrid extends StatelessWidget {
         int crossAxisCount = 2;
 
         if (constraints.maxWidth > 1000) {
-          crossAxisCount = 6;
+          crossAxisCount = 4;
         } else if (constraints.maxWidth > 800) {
           crossAxisCount = 4;
         }
 
         return GridView.builder(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(16),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: crossAxisCount,
             crossAxisSpacing: 14,

@@ -25,7 +25,46 @@ class ReadChaptersRepository {
     String chapterId,
     String mangaId,
   ) async {
-    Chapter? chapter = await _chapters
+    Chapter? chapter = await _getChapter(sourceId, mangaId, chapterId);
+
+    // TODO: What should I do with mangas you have no favourited?
+    // perhaps build up a cache of mangas you've opened up previously
+    if (chapter == null) return;
+
+    chapter.read = true;
+
+    await _database.writeTxn((_) async {
+      await _chapters.put(chapter);
+    });
+  }
+
+  Future<void> setLastPage(
+    String sourceId,
+    String mangaId,
+    String chapterId,
+    int pageNumber,
+  ) async {
+    if (pageNumber == 0) {
+      return;
+    }
+
+    Chapter? chapter = await _getChapter(sourceId, mangaId, chapterId);
+
+    if (chapter == null) return;
+
+    chapter.page = pageNumber;
+
+    await _database.writeTxn((_) async {
+      await _chapters.put(chapter);
+    });
+  }
+
+  Future<Chapter?> _getChapter(
+    String sourceId,
+    String mangaId,
+    String chapterId,
+  ) async {
+    return await _chapters
         .where()
         .chapterIdSourceIdMangaIdEqualTo(
           chapterId,
@@ -33,14 +72,5 @@ class ReadChaptersRepository {
           mangaId,
         )
         .findFirst();
-
-    // TODO: What should I do with mangas you have no favourited?
-    // perhaps build up a cache of mangas you've opened up previously
-    if (chapter != null) {
-      chapter.read = true;
-      await _database.writeTxn((_) async {
-        await _chapters.put(chapter);
-      });
-    }
   }
 }

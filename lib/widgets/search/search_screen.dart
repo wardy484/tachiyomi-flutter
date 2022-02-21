@@ -46,7 +46,6 @@ class _SearchTabState extends ConsumerState<SearchTab> {
                 ),
                 Flexible(
                   child: MangaGrid(
-                    heightMultipler: 1.55,
                     itemCount: results.results.length,
                     itemBuilder: (context, index) {
                       var manga = results.results[index];

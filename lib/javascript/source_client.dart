@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_js/flutter_js.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
@@ -14,10 +15,25 @@ final sourceClientProvider = StateProvider<SourceClient>(
   (ref) => SourceClient(""),
 );
 
+ChapterList parseChapters(dynamic json) {
+  List<Chapter> chapters = [];
+
+  for (var i = 0; i < json.length; i++) {
+    var current = json[i];
+    chapters.add(Chapter.fromJson(current));
+  }
+
+  return ChapterList(chapters);
+}
+
 class SourceClient {
   final JavascriptRuntime js = getJavascriptRuntime();
   final Dio dio = Dio();
   String src = "mangaFox";
+
+  get sourceId {
+    return src;
+  }
 
   SourceClient(String sourceCode) {
     js.enableHandlePromises();
@@ -66,19 +82,11 @@ class SourceClient {
     }
   }
 
-  Future<ChapterList> getChapters(
-    String mangaId,
-  ) async {
+  Future<ChapterList> getChapters(String mangaId) async {
     String id = Uri.encodeQueryComponent(mangaId);
-    var json = await executeJS("readm.getChapters(`$id`);") as List;
-    List<Chapter> chapters = [];
 
-    for (var i = 0; i < json.length; i++) {
-      var current = json[i];
-      chapters.add(Chapter.fromJson(current));
-    }
-
-    return ChapterList(chapters);
+    var json = await executeJS("readm.getChapters(`$id`);");
+    return compute(parseChapters, json);
   }
 
   Future<Manga> getMangaDetails(String mangaId) async {
@@ -131,7 +139,7 @@ class SourceClient {
 
     var newResult = await js.handlePromise(request);
 
-    var json = jsonDecode(newResult.stringResult);
+    var json = await compute(jsonDecode, newResult.stringResult);
     return json;
   }
 }

@@ -1,4 +1,3 @@
-import 'package:fluttiyomi/data/list_item/mangalistitem.dart';
 import 'package:fluttiyomi/data/manga_tile/manga_tile.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 

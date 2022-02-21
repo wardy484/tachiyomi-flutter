@@ -2,6 +2,7 @@ import 'package:fluttiyomi/chapter_details/chapter_details_state.dart';
 import 'package:fluttiyomi/chapter_details/read_chapters_repository.dart';
 import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
+import 'package:fluttiyomi/favourites/favourites_repository.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -12,6 +13,7 @@ final chapterDetailsProvider = StateNotifierProvider.autoDispose<
     ref.watch(sourceClientProvider),
     ref.watch(readerProvider.notifier),
     ref.watch(readChaptersRepositoryProvider),
+    ref.watch(favouritesRepositoryProvider),
   );
 });
 
@@ -19,14 +21,17 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
   final SourceClient _source;
   final ReaderNotifier _readerProgress;
   final ReadChaptersRepository _readChapters;
+  final FavouritesRepository _favourites;
 
   ChapterDetailsNotifier(
     SourceClient source,
     ReaderNotifier readerProgress,
     ReadChaptersRepository readChapters,
+    FavouritesRepository favourites,
   )   : _source = source,
         _readerProgress = readerProgress,
         _readChapters = readChapters,
+        _favourites = favourites,
         super(const ChapterDetailsState.initial());
 
   Future<ChapterDetails> getChapterDetails(
@@ -53,8 +58,7 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
   }
 
   Future<void> nextChapter() async {
-    await state.when(
-      initial: () {},
+    await state.whenOrNull(
       loaded: (
         mangaId,
         chapterDetails,
@@ -75,9 +79,15 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
         );
 
         await _readChapters.markAsRead(
-          _source.src,
+          _source.sourceId,
           currentChapter.id,
           mangaId,
+        );
+
+        await _favourites.setLastChapterRead(
+          _source.sourceId,
+          chapterDetails.mangaId,
+          currentChapter.id,
         );
 
         _readerProgress.moveProgress("1");
@@ -97,9 +107,9 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
       ) async {
         var newIndex = currentChapterIndex + 1;
         var newChapter = chapterList.get(newIndex);
-        var currentChapter = chapterList.get(currentChapterIndex);
+        chapterList.get(currentChapterIndex);
 
-        ChapterDetails details = await getChapterDetails(
+        await getChapterDetails(
           mangaId,
           newChapter.id,
           chapterList,

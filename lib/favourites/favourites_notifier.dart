@@ -1,3 +1,7 @@
+import 'package:flutter/foundation.dart';
+import 'package:fluttiyomi/data/chapter/chapter.dart';
+import 'package:fluttiyomi/database/chapter.dart' as chapter_model;
+import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/database/favourite.dart';
 import 'package:fluttiyomi/database/settings.dart';
 import 'package:fluttiyomi/favourites/favourites_repository.dart';
@@ -45,12 +49,14 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
     await _source.checkForUpdates(
       favourites.map<String>((e) => e.mangaId).toList(),
       settings.lastUpdateCheck,
-      (updated) {
-        favourites.forEach((e) {
+      // DateTime.now().subtract(Duration(minutes: 20)),
+      (updated) async {
+        for (var e in favourites) {
           if (updated.contains(e.mangaId)) {
             e.hasNewChapters = true;
+            await getLatestChapters(e.mangaId);
           }
-        });
+        }
 
         _favourites.update(favourites);
         state = FavouritesState.loaded(favourites, false);
@@ -60,8 +66,11 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
     await _settings.updateGlobalSettings(DateTime.now());
   }
 
-  Future<void> markAsOpened(String sourceId, String mangaId) async {
-    Favourite? favourite = await _favourites.getFavourite(sourceId, mangaId);
+  Future<void> markAsOpened(String mangaId) async {
+    Favourite? favourite = await _favourites.getFavourite(
+      _source.sourceId,
+      mangaId,
+    );
 
     if (favourite is Favourite) {
       favourite.hasNewChapters = false;
@@ -69,4 +78,57 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
       _favourites.update([favourite]);
     }
   }
+
+  Future<void> getLatestChapters(
+    String mangaId,
+  ) async {
+    Favourite? favourite = await _favourites.getFavourite(
+      _source.sourceId,
+      mangaId,
+    );
+
+    if (favourite == null) return;
+
+    await favourite.chapters.load();
+
+    ChapterList chapterList = await _source.getChapters(mangaId);
+    List<Chapter> newChapters = await compute(_sortNewChapters, {
+      "savedChapters": favourite.chapters.toList(),
+      "chapterList": chapterList
+    });
+
+    await _favourites.addChapters(favourite, newChapters);
+  }
+
+  Future<Chapter?> getLastReadChapter(String mangaId) async {
+    var favourite = await _favourites.getFavourite(
+      _source.sourceId,
+      mangaId,
+    );
+
+    if (favourite == null) return null;
+
+    await favourite.lastChapterRead.load();
+
+    if (favourite.lastChapterRead.value is! Chapter) return null;
+
+    return favourite.lastChapterRead.value!.convertToChapter();
+  }
+}
+
+// External function so it can be run in an isolate
+List<Chapter> _sortNewChapters(Map args) {
+  List<chapter_model.Chapter> savedChapters = args['savedChapters'];
+  ChapterList chapterList = args['chapterList'] as ChapterList;
+
+  savedChapters.sort((a, b) {
+    return double.parse(b.chapterId).compareTo(double.parse(a.chapterId));
+  });
+
+  final latestChapter = savedChapters.first;
+  // _favourites.deleteChapter(latestChapter);
+
+  return chapterList.chapters.where((chapter) {
+    return double.parse(chapter.id) > double.parse(latestChapter.chapterId);
+  }).toList();
 }

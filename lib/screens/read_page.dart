@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/chapter_details/chapter_details_notifier.dart';
+import 'package:fluttiyomi/chapter_details/chapter_details_state.dart';
+import 'package:fluttiyomi/chapter_details/read_chapters_repository.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
+import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/manga_details/manga_details_notifier.dart';
 import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
 import 'package:fluttiyomi/settings/settings_notifier.dart';
@@ -12,6 +15,7 @@ import 'package:fluttiyomi/widgets/manga_reader/reader_loader.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_loading_content.dart';
 import 'package:fluttiyomi/widgets/manga_reader/scrolling_viewer.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
 
@@ -20,6 +24,7 @@ class ReadPage extends ConsumerStatefulWidget {
   final Chapter chapter;
   final ChapterList chapters;
   final int currentChapter;
+  final int? resumeFrom;
 
   const ReadPage({
     Key? key,
@@ -27,6 +32,7 @@ class ReadPage extends ConsumerStatefulWidget {
     required this.chapter,
     required this.chapters,
     required this.currentChapter,
+    this.resumeFrom,
   }) : super(key: key);
 
   @override
@@ -35,6 +41,7 @@ class ReadPage extends ConsumerStatefulWidget {
 
 class _ReadPageState extends ConsumerState<ReadPage> {
   late Chapter chapter;
+  final ItemScrollController itemScrollController = ItemScrollController();
 
   @override
   void initState() {
@@ -52,6 +59,22 @@ class _ReadPageState extends ConsumerState<ReadPage> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(chapterDetailsProvider, (previous, ChapterDetailsState next) {
+      next.whenOrNull(
+        loaded: (
+          mangaId,
+          chapterDetails,
+          chapterList,
+          currentChapter,
+          startFromEnd,
+        ) {
+          if (widget.resumeFrom != null) {
+            // itemScrollController.jumpTo(index: widget.resumeFrom!);
+          }
+        },
+      );
+    });
+
     return ref.watch(chapterDetailsProvider).when(
           initial: () => ReaderLoadingContent(chapter: widget.chapter),
           loaded: (mangaId, chapterDetails, chapterList, currentChapter,
@@ -67,10 +90,9 @@ class _ReadPageState extends ConsumerState<ReadPage> {
             return ConditionalWillPopScope(
               shouldAddCallback: false,
               onWillPop: () async {
-                // TODO: dont hard source id you munter!
                 ref
                     .read(mangaDetailsNotifierProvider.notifier)
-                    .getMangaDetails("mangaFox", mangaId);
+                    .getMangaDetails(mangaId);
 
                 return true;
               },
@@ -86,7 +108,9 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                   child: ScrollingViewer(
                     child: ReaderLoader(
                       reverse: startFromEnd,
-                      child: ListView.builder(
+                      child: ScrollablePositionedList.builder(
+                        initialScrollIndex: widget.resumeFrom ?? 0,
+                        itemScrollController: itemScrollController,
                         padding: ref.watch(settingsProvider).when(
                               initial: () => EdgeInsets.zero,
                               loaded: (settings) => EdgeInsets.symmetric(
@@ -109,12 +133,21 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                                 return;
                               }
 
-                              ref
+                              int pageNumber = ref
                                   .read(readerProvider.notifier)
                                   .moveProgressForVisibilityInfo(
                                     visibilityInfo,
                                     pages.length,
                                     startFromEnd,
+                                  );
+
+                              ref
+                                  .read(readChaptersRepositoryProvider)
+                                  .setLastPage(
+                                    ref.read(sourceClientProvider).sourceId,
+                                    mangaId,
+                                    widget.chapter.id,
+                                    pageNumber,
                                   );
                             },
                           );

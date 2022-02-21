@@ -17,7 +17,7 @@ extension GetFavouriteCollection on Isar {
 final FavouriteSchema = CollectionSchema(
   name: 'Favourite',
   schema:
-      '{"name":"Favourite","properties":[{"name":"artist","type":"String"},{"name":"author","type":"String"},{"name":"covers","type":"StringList"},{"name":"desc","type":"String"},{"name":"follows","type":"Double"},{"name":"hasNewChapters","type":"Byte"},{"name":"image","type":"String"},{"name":"langFlag","type":"String"},{"name":"lastUpdate","type":"Long"},{"name":"mangaId","type":"String"},{"name":"mangaStatus","type":"String"},{"name":"name","type":"String"},{"name":"rating","type":"Double"},{"name":"sourceId","type":"String"},{"name":"titles","type":"StringList"}],"indexes":[{"name":"mangaId_sourceId","unique":false,"properties":[{"name":"mangaId","type":"Hash","caseSensitive":true},{"name":"sourceId","type":"Hash","caseSensitive":true}]}],"links":[{"name":"chapters","target":"Chapter"}]}',
+      '{"name":"Favourite","properties":[{"name":"artist","type":"String"},{"name":"author","type":"String"},{"name":"covers","type":"StringList"},{"name":"desc","type":"String"},{"name":"follows","type":"Double"},{"name":"hasNewChapters","type":"Byte"},{"name":"image","type":"String"},{"name":"langFlag","type":"String"},{"name":"lastUpdate","type":"Long"},{"name":"mangaId","type":"String"},{"name":"mangaStatus","type":"String"},{"name":"name","type":"String"},{"name":"rating","type":"Double"},{"name":"sourceId","type":"String"},{"name":"titles","type":"StringList"}],"indexes":[{"name":"mangaId_sourceId","unique":false,"properties":[{"name":"mangaId","type":"Hash","caseSensitive":true},{"name":"sourceId","type":"Hash","caseSensitive":true}]}],"links":[{"name":"lastChapterRead","target":"Chapter"},{"name":"chapters","target":"Chapter"}]}',
   adapter: const _FavouriteAdapter(),
   idName: 'id',
   propertyIds: {
@@ -44,12 +44,12 @@ final FavouriteSchema = CollectionSchema(
       NativeIndexType.stringHash,
     ]
   },
-  linkIds: {'chapters': 0},
+  linkIds: {'lastChapterRead': 0, 'chapters': 1},
   backlinkIds: {},
   linkedCollections: ['Chapter'],
   getId: (obj) => obj.id,
   setId: (obj, id) => obj.id = id,
-  getLinks: (obj) => [obj.chapters],
+  getLinks: (obj) => [obj.lastChapterRead, obj.chapters],
   version: 1,
 );
 
@@ -221,6 +221,13 @@ class _FavouriteAdapter extends IsarTypeAdapter<Favourite> {
   }
 
   void attachLinks(Isar isar, Favourite object) {
+    object.lastChapterRead.attach(
+      isar.favourites,
+      isar.getCollection<Chapter>("Chapter"),
+      object,
+      "lastChapterRead",
+      false,
+    );
     object.chapters.attach(
       isar.favourites,
       isar.getCollection<Chapter>("Chapter"),

@@ -1,4 +1,5 @@
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
+import 'package:fluttiyomi/data/chapter/chapter.dart' as data_chapter;
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/database/chapter.dart';
 import 'package:fluttiyomi/database/database.dart';
@@ -66,31 +67,29 @@ class FavouritesRepository {
       ..follows = manga.follows
       ..lastUpdate = manga.lastUpdate;
 
-    final List<Chapter> newChapters = [];
-
-    for (var i = 0; i < chapterList.chapters.length; i++) {
-      final chapter = chapterList.chapters[i];
-
-      final newChapter = Chapter()
-        ..sourceId = sourceId
-        ..chapterId = chapter.id
-        ..mangaId = chapter.mangaId
-        ..chapterNo = chapter.chapterNo
-        ..langCode = chapter.langCode
-        ..name = chapter.name
-        ..volume = chapter.volume
-        ..group = chapter.group
-        ..time = chapter.time
-        ..read = false;
-
-      newChapters.add(newChapter);
-    }
+    List<Chapter> newChapters = _mapChapters(chapterList.chapters, sourceId);
 
     newFavourite.chapters.addAll(newChapters);
 
     await _database.writeTxn((_) async {
       await _favourites.put(newFavourite);
       await newFavourite.chapters.save();
+    });
+  }
+
+  Future<void> addChapters(
+    Favourite favourite,
+    List<data_chapter.Chapter> chapters,
+  ) async {
+    List<Chapter> newChapters = _mapChapters(
+      chapters,
+      favourite.sourceId,
+    );
+
+    favourite.chapters.addAll(newChapters);
+
+    await _database.writeTxn((_) async {
+      await favourite.chapters.save();
     });
   }
 
@@ -105,6 +104,67 @@ class FavouritesRepository {
       await _favourites
           .where()
           .mangaIdSourceIdEqualTo(manga.id, sourceId)
+          .deleteAll();
+    });
+  }
+
+  Future<void> setLastChapterRead(
+    String sourceId,
+    String mangaId,
+    String chapterId,
+  ) async {
+    var favourite = await getFavourite(sourceId, mangaId);
+
+    if (favourite == null) return;
+
+    await favourite.chapters.load();
+
+    favourite.lastChapterRead.value = favourite.chapters
+        .where(
+          (c) => c.chapterId == chapterId,
+        )
+        .first;
+
+    await _database.writeTxn((isar) async {
+      await _favourites.put(favourite);
+    });
+  }
+
+  List<Chapter> _mapChapters(
+    List<data_chapter.Chapter> chapters,
+    String sourceId,
+  ) {
+    final List<Chapter> newChapters = [];
+
+    for (var i = 0; i < chapters.length; i++) {
+      final chapter = chapters[i];
+
+      final newChapter = Chapter()
+        ..sourceId = sourceId
+        ..chapterId = chapter.id
+        ..mangaId = chapter.mangaId
+        ..chapterNo = chapter.chapterNo
+        ..langCode = chapter.langCode
+        ..name = chapter.name
+        ..volume = chapter.volume
+        ..group = chapter.group
+        ..time = chapter.time
+        ..read = false
+        ..page = 1;
+
+      newChapters.add(newChapter);
+    }
+
+    return newChapters;
+  }
+
+  // Used for debug atm
+  Future<void> deleteChapter(Chapter chapter) async {
+    await _database.writeTxn((isar) async {
+      await _database.chapters
+          .where()
+          .chapterIdSourceIdMangaIdEqualTo(
+              chapter.chapterId, chapter.sourceId, chapter.mangaId)
           .deleteAll();
     });
   }

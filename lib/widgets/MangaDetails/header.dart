@@ -4,19 +4,22 @@ import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/widgets/MangaDetails/header_detail.dart';
 import 'package:fluttiyomi/widgets/MangaDetails/manga_image.dart';
 import 'package:fluttiyomi/widgets/MangaDetails/manga_tags.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class Header extends StatelessWidget {
+class Header extends ConsumerWidget {
   final Manga manga;
   final Function() onToggleFavourite;
+  final Function() onContinuePressed;
 
   const Header({
     Key? key,
     required this.manga,
     required this.onToggleFavourite,
+    required this.onContinuePressed,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     return Padding(
       padding: const EdgeInsets.only(top: 14, left: 14, right: 14),
       child: Column(
@@ -66,7 +69,7 @@ class Header extends StatelessWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: ElevatedButton.icon(
-                  onPressed: onToggleFavourite,
+                  onPressed: onContinuePressed,
                   label: const Text("Continue"),
                   icon: const Icon(Icons.play_arrow),
                 ),

@@ -32,7 +32,7 @@ class MangaCard extends StatelessWidget {
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            height: 255,
+            height: 300,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               image: DecorationImage(
@@ -43,8 +43,9 @@ class MangaCard extends StatelessWidget {
           ),
           Container(
             width: double.infinity,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              gradient: const LinearGradient(
                 begin: Alignment.bottomCenter,
                 end: Alignment.topCenter,
                 colors: [

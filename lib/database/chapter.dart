@@ -1,4 +1,5 @@
 import 'package:isar/isar.dart';
+import 'package:fluttiyomi/data/chapter/chapter.dart' as data_chapter;
 
 part 'chapter.g.dart';
 
@@ -27,6 +28,22 @@ class Chapter {
   late String? time;
 
   late bool read;
+
+  late int? page;
+
+  data_chapter.Chapter convertToChapter() {
+    return data_chapter.Chapter(
+      chapterId,
+      mangaId,
+      chapterNo,
+      langCode,
+      name,
+      volume,
+      group,
+      time,
+      read: read,
+    );
+  }
 }
 
 // TODO: Add manga details to favourite

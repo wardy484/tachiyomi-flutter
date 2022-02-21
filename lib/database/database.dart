@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:fluttiyomi/database/chapter.dart';
 import 'package:fluttiyomi/database/favourite.dart';
 import 'package:fluttiyomi/database/settings.dart';
@@ -20,6 +21,7 @@ class Database {
         ChapterSchema,
       ],
       directory: dir.path,
+      inspector: kDebugMode,
     );
   }
 

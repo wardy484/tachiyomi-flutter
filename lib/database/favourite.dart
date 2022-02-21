@@ -42,6 +42,8 @@ class Favourite {
 
   late bool hasNewChapters;
 
+  final lastChapterRead = IsarLink<Chapter>();
+
   final chapters = IsarLinks<Chapter>();
 
   Manga toManga() {
@@ -66,22 +68,9 @@ class Favourite {
   Future<ChapterList> getChapterList() async {
     await chapters.load();
     List<Chapter> oldChapters = chapters.toList();
-    // // ..sort((a, b) {
-    //   return (a.id ?? 0) > (b.id ?? 0) ? 1 : 0;
-    // });
 
     List<data_chapter.Chapter> newChapters = oldChapters.map((chapter) {
-      return data_chapter.Chapter(
-        chapter.chapterId,
-        chapter.mangaId,
-        chapter.chapterNo,
-        chapter.langCode,
-        chapter.name,
-        chapter.volume,
-        chapter.group,
-        chapter.time,
-        read: chapter.read,
-      );
+      return chapter.convertToChapter();
     }).toList()
       ..sort((a, b) {
         return double.parse(b.id).compareTo(double.parse(a.id));

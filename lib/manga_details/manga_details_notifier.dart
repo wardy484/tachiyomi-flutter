@@ -1,3 +1,4 @@
+import 'package:fluttiyomi/chapter_details/read_chapters_repository.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/database/favourite.dart';
@@ -12,6 +13,7 @@ final mangaDetailsNotifierProvider =
     return MangaDetailsNotifier(
       ref.read(sourceClientProvider),
       ref.read(favouritesRepositoryProvider),
+      ref.read(readChaptersRepositoryProvider),
     );
   },
 );
@@ -19,17 +21,25 @@ final mangaDetailsNotifierProvider =
 class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
   final SourceClient _source;
   final FavouritesRepository _favourites;
+  final ReadChaptersRepository _chapters;
 
-  MangaDetailsNotifier(SourceClient source, FavouritesRepository favourites)
-      : _source = source,
+  MangaDetailsNotifier(
+    SourceClient source,
+    FavouritesRepository favourites,
+    ReadChaptersRepository chapters,
+  )   : _source = source,
         _favourites = favourites,
+        _chapters = chapters,
         super(const MangaDetailsState.initial());
 
   Future<void> getMangaDetails(
-    String sourceId,
     String mangaId,
   ) async {
-    Favourite? favourite = await _favourites.getFavourite(sourceId, mangaId);
+    Favourite? favourite = await _favourites.getFavourite(
+      _source.sourceId,
+      mangaId,
+    );
+
     Manga details;
     ChapterList chapters;
 
@@ -51,7 +61,7 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
   ) async {
     if (!manga.favourite) {
       await _favourites.addFavourite(
-        _source.src,
+        _source.sourceId,
         mangaName,
         manga,
         chapterList,
@@ -66,5 +76,18 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
       ),
       chapterList,
     );
+  }
+
+  Future<void> markAsRead(
+    String chapterId,
+    String mangaId,
+  ) async {
+    await _chapters.markAsRead(
+      _source.src,
+      chapterId,
+      mangaId,
+    );
+
+    getMangaDetails(mangaId);
   }
 }
