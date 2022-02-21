@@ -42,6 +42,7 @@ class Chapter {
       group,
       time,
       read: read,
+      page: page ?? 1,
     );
   }
 }

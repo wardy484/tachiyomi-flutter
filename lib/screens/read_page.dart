@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/chapter_details/chapter_details_notifier.dart';
 import 'package:fluttiyomi/chapter_details/chapter_details_state.dart';
@@ -15,7 +16,7 @@ import 'package:fluttiyomi/widgets/manga_reader/reader_loader.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_loading_content.dart';
 import 'package:fluttiyomi/widgets/manga_reader/scrolling_viewer.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
 
@@ -41,13 +42,16 @@ class ReadPage extends ConsumerStatefulWidget {
 
 class _ReadPageState extends ConsumerState<ReadPage> {
   late Chapter chapter;
-  final ItemScrollController itemScrollController = ItemScrollController();
+
+  final AutoScrollController _autoScrollController = AutoScrollController();
+  final List<ExtendedNetworkImageProvider> _images = [];
 
   @override
   void initState() {
     super.initState();
 
     ref.read(settingsProvider.notifier).loadSettings();
+
     ref.read(chapterDetailsProvider.notifier).getChapterDetails(
           widget.mangaId,
           widget.chapter.id,
@@ -58,18 +62,50 @@ class _ReadPageState extends ConsumerState<ReadPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  tryToScrollToIndex() {
+    Future.delayed(const Duration(milliseconds: 20), () {
+      _autoScrollController.scrollToIndex(widget.resumeFrom! - 1);
+      // if the scroller is not properly mounted then the auto scroll will not
+      // scroll there but it also will not error, as such we try at small intervals
+      // until we get scrolling. This seems to be the most efficient way to do it.
+      if (!_autoScrollController.isAutoScrolling) {
+        tryToScrollToIndex();
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     ref.listen(chapterDetailsProvider, (previous, ChapterDetailsState next) {
       next.whenOrNull(
-        loaded: (
-          mangaId,
-          chapterDetails,
-          chapterList,
-          currentChapter,
-          startFromEnd,
-        ) {
+        loaded: (_, chapterDetails, _cl, _cc, startFromEnd) async {
+          setState(() {
+            _images.addAll(
+              chapterDetails.pages.map((page) {
+                return ExtendedNetworkImageProvider(
+                  page,
+                  cache: true,
+                );
+              }),
+            );
+          });
+
+          List<Future> futures = [];
+
+          for (var element in _images) {
+            futures.add(precacheImage(element, context));
+          }
+
+          await Future.wait(futures);
+
+          ref.read(chapterDetailsProvider.notifier).imagesPrecached();
+
           if (widget.resumeFrom != null) {
-            // itemScrollController.jumpTo(index: widget.resumeFrom!);
+            tryToScrollToIndex();
           }
         },
       );
@@ -77,8 +113,23 @@ class _ReadPageState extends ConsumerState<ReadPage> {
 
     return ref.watch(chapterDetailsProvider).when(
           initial: () => ReaderLoadingContent(chapter: widget.chapter),
-          loaded: (mangaId, chapterDetails, chapterList, currentChapter,
-              startFromEnd) {
+          loaded: (
+            mangaId,
+            chapterDetails,
+            chapterList,
+            currentChapter,
+            startFromEnd,
+          ) {
+            return ReaderLoadingContent(chapter: widget.chapter);
+          },
+          precached: (
+            mangaId,
+            chapterDetails,
+            chapterList,
+            currentChapter,
+            startFromEnd,
+          ) {
+            print(widget.resumeFrom);
             Chapter chapter = chapterList.get(currentChapter);
 
             var pages = chapterDetails.pages;
@@ -108,9 +159,8 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                   child: ScrollingViewer(
                     child: ReaderLoader(
                       reverse: startFromEnd,
-                      child: ScrollablePositionedList.builder(
-                        initialScrollIndex: widget.resumeFrom ?? 0,
-                        itemScrollController: itemScrollController,
+                      child: ListView.builder(
+                        controller: _autoScrollController,
                         padding: ref.watch(settingsProvider).when(
                               initial: () => EdgeInsets.zero,
                               loaded: (settings) => EdgeInsets.symmetric(
@@ -123,33 +173,38 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                         itemBuilder: (context, index) {
                           var item = pages[index];
 
-                          return VisibilityDetector(
-                            key: Key("Page-${index + 1}"),
-                            child: MangaPage(imagePath: item),
-                            onVisibilityChanged: (visibilityInfo) {
-                              // App crashes without this, seems to get called after popping screen off
-                              // of stack.
-                              if (visibilityInfo.visibleFraction == 0) {
-                                return;
-                              }
+                          return AutoScrollTag(
+                            key: ValueKey(index),
+                            index: index,
+                            controller: _autoScrollController,
+                            child: VisibilityDetector(
+                              key: Key("Page-${index + 1}"),
+                              child: MangaPage(imagePath: item),
+                              onVisibilityChanged: (visibilityInfo) {
+                                // App crashes without this, seems to get called after popping screen off
+                                // of stack.
+                                if (visibilityInfo.visibleFraction == 0) {
+                                  return;
+                                }
 
-                              int pageNumber = ref
-                                  .read(readerProvider.notifier)
-                                  .moveProgressForVisibilityInfo(
-                                    visibilityInfo,
-                                    pages.length,
-                                    startFromEnd,
-                                  );
+                                int pageNumber = ref
+                                    .read(readerProvider.notifier)
+                                    .moveProgressForVisibilityInfo(
+                                      visibilityInfo,
+                                      pages.length,
+                                      startFromEnd,
+                                    );
 
-                              ref
-                                  .read(readChaptersRepositoryProvider)
-                                  .setLastPage(
-                                    ref.read(sourceClientProvider).sourceId,
-                                    mangaId,
-                                    widget.chapter.id,
-                                    pageNumber,
-                                  );
-                            },
+                                ref
+                                    .read(readChaptersRepositoryProvider)
+                                    .setLastPage(
+                                      ref.read(sourceClientProvider).sourceId,
+                                      mangaId,
+                                      widget.chapter.id,
+                                      pageNumber,
+                                    );
+                              },
+                            ),
                           );
                         },
                       ),

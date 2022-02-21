@@ -62,6 +62,15 @@ dependencies:
   focused_menu: ^1.0.5
   flutter_isolate: ^2.0.0
   cool_alert: ^1.1.0
+  extended_image: ^6.0.1
+  image_downloader: ^0.31.0
+  loadany: ^1.0.0
+  flutter_easyrefresh: ^2.2.1
+  refresh_loadmore: ^2.0.5
+  custom_refresh_indicator: ^1.0.0
+  loadmore: ^2.0.1
+  indexed_list_view: ^2.0.1
+  scroll_to_index: ^2.1.1
 
 dev_dependencies:
   auto_route_generator: ^3.2.0

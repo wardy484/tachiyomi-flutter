@@ -29,10 +29,14 @@ ChapterList parseChapters(dynamic json) {
 class SourceClient {
   final JavascriptRuntime js = getJavascriptRuntime();
   final Dio dio = Dio();
-  String src = "mangaFox";
+  String src = "readm";
 
   get sourceId {
     return src;
+  }
+
+  get sourceName {
+    return "Readm";
   }
 
   SourceClient(String sourceCode) {

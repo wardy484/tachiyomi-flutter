@@ -1,3 +1,4 @@
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 
 class MangaPage extends StatelessWidget {
@@ -10,9 +11,10 @@ class MangaPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(
+    return ExtendedImage.network(
       imagePath,
       fit: BoxFit.fill,
+      cache: true,
     );
   }
 }

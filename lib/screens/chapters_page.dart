@@ -83,17 +83,12 @@ class _ChaptersPageState extends ConsumerState<ChaptersPage> {
                               );
                         },
                         onContinuePressed: () async {
-                          var sourceId =
-                              ref.read(sourceClientProvider).sourceId;
+                          LastReadChapter lastRead = await ref
+                              .read(favouritesProvider.notifier)
+                              .getLastReadChapter(widget.mangaId);
 
-                          var favourite = await ref
-                              .read(favouritesRepositoryProvider)
-                              .getFavourite(sourceId, widget.mangaId);
-
-                          data_chapter.Chapter chapter = await ref
-                                  .read(favouritesProvider.notifier)
-                                  .getLastReadChapter(widget.mangaId) ??
-                              chapters.chapters.last;
+                          var chapter =
+                              lastRead.chapter ?? chapters.chapters.last;
 
                           AutoRouter.of(context).push(
                             ReadRoute(
@@ -103,8 +98,7 @@ class _ChaptersPageState extends ConsumerState<ChaptersPage> {
                               currentChapter: chapters.chapters.indexWhere(
                                 (element) => element.id == chapter.id,
                               ),
-                              resumeFrom:
-                                  favourite?.lastChapterRead.value?.page,
+                              resumeFrom: lastRead.nextPage,
                             ),
                           );
                         },

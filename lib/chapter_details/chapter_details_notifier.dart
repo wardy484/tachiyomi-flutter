@@ -57,9 +57,23 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
     return details;
   }
 
+  Future<void> imagesPrecached() async {
+    state.whenOrNull(
+      loaded: (mangaId, details, chapters, currentIndex, startFromEnd) {
+        state = ChapterDetailsState.precached(
+          mangaId,
+          details,
+          chapters,
+          currentIndex,
+          startFromEnd,
+        );
+      },
+    );
+  }
+
   Future<void> nextChapter() async {
     await state.whenOrNull(
-      loaded: (
+      precached: (
         mangaId,
         chapterDetails,
         chapterList,
@@ -96,9 +110,8 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
   }
 
   Future<void> previousChapter() async {
-    await state.when(
-      initial: () {},
-      loaded: (
+    await state.whenOrNull(
+      precached: (
         mangaId,
         chapterDetails,
         chapterList,

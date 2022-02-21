@@ -31,7 +31,8 @@ class _$ChapterTearOff {
       String? volume,
       String? group,
       String? time,
-      {bool read = false}) {
+      {bool read = false,
+      int page = 0}) {
     return _Chapter(
       id,
       mangaId,
@@ -42,6 +43,7 @@ class _$ChapterTearOff {
       group,
       time,
       read: read,
+      page: page,
     );
   }
 
@@ -65,6 +67,7 @@ mixin _$Chapter {
   String? get group => throw _privateConstructorUsedError;
   String? get time => throw _privateConstructorUsedError;
   bool get read => throw _privateConstructorUsedError;
+  int get page => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -84,7 +87,8 @@ abstract class $ChapterCopyWith<$Res> {
       String? volume,
       String? group,
       String? time,
-      bool read});
+      bool read,
+      int page});
 }
 
 /// @nodoc
@@ -106,6 +110,7 @@ class _$ChapterCopyWithImpl<$Res> implements $ChapterCopyWith<$Res> {
     Object? group = freezed,
     Object? time = freezed,
     Object? read = freezed,
+    Object? page = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -144,6 +149,10 @@ class _$ChapterCopyWithImpl<$Res> implements $ChapterCopyWith<$Res> {
           ? _value.read
           : read // ignore: cast_nullable_to_non_nullable
               as bool,
+      page: page == freezed
+          ? _value.page
+          : page // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -162,7 +171,8 @@ abstract class _$ChapterCopyWith<$Res> implements $ChapterCopyWith<$Res> {
       String? volume,
       String? group,
       String? time,
-      bool read});
+      bool read,
+      int page});
 }
 
 /// @nodoc
@@ -185,6 +195,7 @@ class __$ChapterCopyWithImpl<$Res> extends _$ChapterCopyWithImpl<$Res>
     Object? group = freezed,
     Object? time = freezed,
     Object? read = freezed,
+    Object? page = freezed,
   }) {
     return _then(_Chapter(
       id == freezed
@@ -223,6 +234,10 @@ class __$ChapterCopyWithImpl<$Res> extends _$ChapterCopyWithImpl<$Res>
           ? _value.read
           : read // ignore: cast_nullable_to_non_nullable
               as bool,
+      page: page == freezed
+          ? _value.page
+          : page // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -232,7 +247,7 @@ class __$ChapterCopyWithImpl<$Res> extends _$ChapterCopyWithImpl<$Res>
 class _$_Chapter implements _Chapter {
   _$_Chapter(this.id, this.mangaId, @JsonKey(name: 'chapNum') this.chapterNo,
       this.langCode, this.name, this.volume, this.group, this.time,
-      {this.read = false});
+      {this.read = false, this.page = 0});
 
   factory _$_Chapter.fromJson(Map<String, dynamic> json) =>
       _$$_ChapterFromJson(json);
@@ -257,10 +272,13 @@ class _$_Chapter implements _Chapter {
   @JsonKey()
   @override
   final bool read;
+  @JsonKey()
+  @override
+  final int page;
 
   @override
   String toString() {
-    return 'Chapter(id: $id, mangaId: $mangaId, chapterNo: $chapterNo, langCode: $langCode, name: $name, volume: $volume, group: $group, time: $time, read: $read)';
+    return 'Chapter(id: $id, mangaId: $mangaId, chapterNo: $chapterNo, langCode: $langCode, name: $name, volume: $volume, group: $group, time: $time, read: $read, page: $page)';
   }
 
   @override
@@ -276,7 +294,8 @@ class _$_Chapter implements _Chapter {
             const DeepCollectionEquality().equals(other.volume, volume) &&
             const DeepCollectionEquality().equals(other.group, group) &&
             const DeepCollectionEquality().equals(other.time, time) &&
-            const DeepCollectionEquality().equals(other.read, read));
+            const DeepCollectionEquality().equals(other.read, read) &&
+            const DeepCollectionEquality().equals(other.page, page));
   }
 
   @override
@@ -290,7 +309,8 @@ class _$_Chapter implements _Chapter {
       const DeepCollectionEquality().hash(volume),
       const DeepCollectionEquality().hash(group),
       const DeepCollectionEquality().hash(time),
-      const DeepCollectionEquality().hash(read));
+      const DeepCollectionEquality().hash(read),
+      const DeepCollectionEquality().hash(page));
 
   @JsonKey(ignore: true)
   @override
@@ -313,7 +333,8 @@ abstract class _Chapter implements Chapter {
       String? volume,
       String? group,
       String? time,
-      {bool read}) = _$_Chapter;
+      {bool read,
+      int page}) = _$_Chapter;
 
   factory _Chapter.fromJson(Map<String, dynamic> json) = _$_Chapter.fromJson;
 
@@ -336,6 +357,8 @@ abstract class _Chapter implements Chapter {
   String? get time;
   @override
   bool get read;
+  @override
+  int get page;
   @override
   @JsonKey(ignore: true)
   _$ChapterCopyWith<_Chapter> get copyWith =>

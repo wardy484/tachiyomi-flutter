@@ -22,6 +22,8 @@ class ChapterListItem extends StatelessWidget {
       timeSince = timeago.format(date);
     }
 
+    String subtitle = "Page: ${chapter.page}";
+
     return GestureDetector(
       onTap: onTap,
       child: ListTile(
@@ -30,7 +32,7 @@ class ChapterListItem extends StatelessWidget {
           chapter.name ?? "Chapter ${chapter.chapterNo}",
         ),
         subtitle: Text(
-          chapter.langCode.toUpperCase(),
+          subtitle,
           style: TextStyle(
             color: Colors.grey[400],
           ),

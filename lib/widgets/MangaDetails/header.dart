@@ -1,6 +1,7 @@
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
+import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/widgets/MangaDetails/header_detail.dart';
 import 'package:fluttiyomi/widgets/MangaDetails/manga_image.dart';
 import 'package:fluttiyomi/widgets/MangaDetails/manga_tags.dart';
@@ -44,7 +45,10 @@ class Header extends ConsumerWidget {
                     const SizedBox(height: 24),
                     HeaderDetail(label: "Status", value: manga.mangaStatus),
                     const SizedBox(height: 24),
-                    const HeaderDetail(label: "Source", value: "Manga Fox"),
+                    HeaderDetail(
+                      label: "Source",
+                      value: ref.watch(sourceClientProvider).sourceName,
+                    ),
                   ],
                 ),
               )

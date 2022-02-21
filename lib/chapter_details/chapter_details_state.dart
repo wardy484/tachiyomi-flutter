@@ -14,4 +14,12 @@ class ChapterDetailsState with _$ChapterDetailsState {
     int currentIndex,
     bool startFromEnd,
   ) = _Loaded;
+
+  const factory ChapterDetailsState.precached(
+    String mangaId,
+    ChapterDetails chapterDetails,
+    ChapterList chapters,
+    int currentIndex,
+    bool startFromEnd,
+  ) = _precached;
 }

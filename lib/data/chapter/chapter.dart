@@ -15,6 +15,7 @@ class Chapter with _$Chapter {
     String? group,
     String? time, {
     @Default(false) bool read,
+    @Default(1) int page,
   }) = _Chapter;
 
   factory Chapter.fromJson(Map<String, dynamic> json) =>

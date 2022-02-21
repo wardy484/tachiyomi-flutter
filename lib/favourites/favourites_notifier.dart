@@ -11,13 +11,15 @@ import 'package:fluttiyomi/settings/settings_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final favouritesProvider =
-    StateNotifierProvider<FavouritesNotifier, FavouritesState>((ref) {
-  return FavouritesNotifier(
-    ref.watch(favouritesRepositoryProvider),
-    ref.watch(settingsRepositoryProvider),
-    ref.watch(sourceClientProvider.state).state,
-  );
-});
+    StateNotifierProvider<FavouritesNotifier, FavouritesState>(
+  (ref) {
+    return FavouritesNotifier(
+      ref.watch(favouritesRepositoryProvider),
+      ref.watch(settingsRepositoryProvider),
+      ref.watch(sourceClientProvider.state).state,
+    );
+  },
+);
 
 class FavouritesNotifier extends StateNotifier<FavouritesState> {
   final FavouritesRepository _favourites;
@@ -100,19 +102,42 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
     await _favourites.addChapters(favourite, newChapters);
   }
 
-  Future<Chapter?> getLastReadChapter(String mangaId) async {
+  Future<LastReadChapter> getLastReadChapter(String mangaId) async {
     var favourite = await _favourites.getFavourite(
       _source.sourceId,
       mangaId,
     );
 
-    if (favourite == null) return null;
+    if (favourite == null) return LastReadChapter();
 
     await favourite.lastChapterRead.load();
 
-    if (favourite.lastChapterRead.value is! Chapter) return null;
+    if (favourite.lastChapterRead.value is! chapter_model.Chapter) {
+      return LastReadChapter();
+    }
 
-    return favourite.lastChapterRead.value!.convertToChapter();
+    return LastReadChapter(
+      chapter: favourite.lastChapterRead.value!.convertToChapter(),
+      page: favourite.lastChapterRead.value!.page,
+    );
+  }
+}
+
+class LastReadChapter {
+  final Chapter? chapter;
+  final int? _page;
+
+  LastReadChapter({
+    this.chapter,
+    int? page,
+  }) : _page = page;
+
+  bool get hasChapter {
+    return chapter is Chapter;
+  }
+
+  int get nextPage {
+    return _page ?? 0;
   }
 }
 
