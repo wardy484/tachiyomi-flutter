@@ -10,6 +10,7 @@ import 'package:fluttiyomi/favourites/favourites_state.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/settings/settings_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:fluttiyomi/extensions/list.dart';
 
 final favouritesProvider =
     StateNotifierProvider<FavouritesNotifier, FavouritesState>(
@@ -42,19 +43,19 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
     state = FavouritesState.loaded(favourites, false);
   }
 
-  // Future<void> deleteLatestChapters() async {
-  //   List<Favourite> favourites = await _favourites.getFavourites();
-  //   await favourites.first.chapters.load();
+  Future<void> deleteLatestChapters() async {
+    List<Favourite> favourites = await _favourites.getFavourites();
+    await favourites.first.chapters.load();
 
-  //   var chaps = favourites.first.chapters.toList()
-  //     ..sort((a, b) {
-  //       return double.parse(b.chapterId).compareTo(double.parse(a.chapterId));
-  //     });
+    var chaps = favourites.first.chapters.toList()
+      ..sort((a, b) {
+        return double.parse(b.chapterId).compareTo(double.parse(a.chapterId));
+      });
 
-  //   for (var i = 0; i < 9; i++) {
-  //     _favourites.deleteChapter(chaps[i]);
-  //   }
-  // }
+    for (var i = 0; i < 9; i++) {
+      _favourites.deleteChapter(chaps[i]);
+    }
+  }
 
   Future<void> checkForUpdates() async {
     Setting settings = await _settings.getGlobalSettings();
@@ -71,7 +72,9 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
 
     for (var e in favourites) {
       if (updated.ids.contains(e.mangaId)) {
-        e.newChapterIds = await getLatestChapters(e.mangaId);
+        var newChapters = await getLatestChapters(e.mangaId);
+        e.newChapterIds.addAll(newChapters);
+        e.newChapterIds = e.newChapterIds.unique();
         print(e.newChapterIds);
       }
     }
