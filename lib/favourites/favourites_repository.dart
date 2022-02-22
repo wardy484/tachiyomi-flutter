@@ -55,7 +55,7 @@ class FavouritesRepository {
       ..sourceId = sourceId
       ..name = name
       ..image = manga.image
-      ..hasNewChapters = false
+      ..newChapterIds = []
       ..titles = manga.titles
       ..rating = manga.rating
       ..mangaStatus = manga.mangaStatus

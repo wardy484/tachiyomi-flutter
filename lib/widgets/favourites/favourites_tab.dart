@@ -37,7 +37,7 @@ class _FavouritesTabState extends ConsumerState<FavouritesTab> {
                     mangaId: manga.mangaId,
                     name: manga.name,
                     image: manga.image,
-                    showBadge: manga.hasNewChapters,
+                    newChapterCount: manga.newChapterIds.length,
                   );
                 },
               ),

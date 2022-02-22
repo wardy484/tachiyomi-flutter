@@ -42,6 +42,20 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
     state = FavouritesState.loaded(favourites, false);
   }
 
+  // Future<void> deleteLatestChapters() async {
+  //   List<Favourite> favourites = await _favourites.getFavourites();
+  //   await favourites.first.chapters.load();
+
+  //   var chaps = favourites.first.chapters.toList()
+  //     ..sort((a, b) {
+  //       return double.parse(b.chapterId).compareTo(double.parse(a.chapterId));
+  //     });
+
+  //   for (var i = 0; i < 9; i++) {
+  //     _favourites.deleteChapter(chaps[i]);
+  //   }
+  // }
+
   Future<void> checkForUpdates() async {
     Setting settings = await _settings.getGlobalSettings();
 
@@ -52,36 +66,37 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
     UpdatedChapters updated = await _source.checkForUpdates(
       favourites.map<String>((e) => e.mangaId).toList(),
       // settings.lastUpdateCheck,
-      DateTime.now().subtract(Duration(days: 5)),
+      DateTime.now().subtract(Duration(days: 1)),
     );
 
     for (var e in favourites) {
       if (updated.ids.contains(e.mangaId)) {
-        e.hasNewChapters = true;
-        await getLatestChapters(e.mangaId);
+        e.newChapterIds = await getLatestChapters(e.mangaId);
+        print(e.newChapterIds);
       }
     }
-
     _favourites.update(favourites);
     state = FavouritesState.loaded(favourites, false);
 
     await _settings.updateGlobalSettings(DateTime.now());
   }
 
-  Future<void> markAsOpened(String mangaId) async {
+  Future<void> markAsOpened(String mangaId, String chapterId) async {
     Favourite? favourite = await _favourites.getFavourite(
       _source.sourceId,
       mangaId,
     );
 
     if (favourite is Favourite) {
-      favourite.hasNewChapters = false;
-
+      favourite.newChapterIds.removeWhere((id) => id == chapterId);
       _favourites.update([favourite]);
     }
+
+    var favourites = await _favourites.getFavourites();
+    state = FavouritesState.loaded(favourites, false);
   }
 
-  Future<void> getLatestChapters(
+  Future<List<String>> getLatestChapters(
     String mangaId,
   ) async {
     Favourite? favourite = await _favourites.getFavourite(
@@ -89,7 +104,7 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
       mangaId,
     );
 
-    if (favourite == null) return;
+    if (favourite == null) return [];
 
     await favourite.chapters.load();
 
@@ -100,6 +115,8 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
     });
 
     await _favourites.addChapters(favourite, newChapters);
+
+    return newChapters.map((chapter) => chapter.id).toList();
   }
 
   Future<LastReadChapter> getLastReadChapter(String mangaId) async {

@@ -17,7 +17,7 @@ extension GetFavouriteCollection on Isar {
 final FavouriteSchema = CollectionSchema(
   name: 'Favourite',
   schema:
-      '{"name":"Favourite","properties":[{"name":"artist","type":"String"},{"name":"author","type":"String"},{"name":"covers","type":"StringList"},{"name":"desc","type":"String"},{"name":"follows","type":"Double"},{"name":"hasNewChapters","type":"Byte"},{"name":"image","type":"String"},{"name":"langFlag","type":"String"},{"name":"lastUpdate","type":"Long"},{"name":"mangaId","type":"String"},{"name":"mangaStatus","type":"String"},{"name":"name","type":"String"},{"name":"rating","type":"Double"},{"name":"sourceId","type":"String"},{"name":"titles","type":"StringList"}],"indexes":[{"name":"mangaId_sourceId","unique":false,"properties":[{"name":"mangaId","type":"Hash","caseSensitive":true},{"name":"sourceId","type":"Hash","caseSensitive":true}]}],"links":[{"name":"lastChapterRead","target":"Chapter"},{"name":"chapters","target":"Chapter"}]}',
+      '{"name":"Favourite","properties":[{"name":"artist","type":"String"},{"name":"author","type":"String"},{"name":"covers","type":"StringList"},{"name":"desc","type":"String"},{"name":"follows","type":"Double"},{"name":"image","type":"String"},{"name":"langFlag","type":"String"},{"name":"lastUpdate","type":"Long"},{"name":"mangaId","type":"String"},{"name":"mangaStatus","type":"String"},{"name":"name","type":"String"},{"name":"newChapterIds","type":"StringList"},{"name":"rating","type":"Double"},{"name":"sourceId","type":"String"},{"name":"titles","type":"StringList"}],"indexes":[{"name":"mangaId_sourceId","unique":false,"properties":[{"name":"mangaId","type":"Hash","caseSensitive":true},{"name":"sourceId","type":"Hash","caseSensitive":true}]}],"links":[{"name":"lastChapterRead","target":"Chapter"},{"name":"chapters","target":"Chapter"}]}',
   adapter: const _FavouriteAdapter(),
   idName: 'id',
   propertyIds: {
@@ -26,13 +26,13 @@ final FavouriteSchema = CollectionSchema(
     'covers': 2,
     'desc': 3,
     'follows': 4,
-    'hasNewChapters': 5,
-    'image': 6,
-    'langFlag': 7,
-    'lastUpdate': 8,
-    'mangaId': 9,
-    'mangaStatus': 10,
-    'name': 11,
+    'image': 5,
+    'langFlag': 6,
+    'lastUpdate': 7,
+    'mangaId': 8,
+    'mangaStatus': 9,
+    'name': 10,
+    'newChapterIds': 11,
     'rating': 12,
     'sourceId': 13,
     'titles': 14
@@ -92,31 +92,38 @@ class _FavouriteAdapter extends IsarTypeAdapter<Favourite> {
     dynamicSize += _desc?.length ?? 0;
     final value4 = object.follows;
     final _follows = value4;
-    final value5 = object.hasNewChapters;
-    final _hasNewChapters = value5;
-    final value6 = object.image;
-    final _image = BinaryWriter.utf8Encoder.convert(value6);
+    final value5 = object.image;
+    final _image = BinaryWriter.utf8Encoder.convert(value5);
     dynamicSize += _image.length;
-    final value7 = object.langFlag;
+    final value6 = object.langFlag;
     IsarUint8List? _langFlag;
-    if (value7 != null) {
-      _langFlag = BinaryWriter.utf8Encoder.convert(value7);
+    if (value6 != null) {
+      _langFlag = BinaryWriter.utf8Encoder.convert(value6);
     }
     dynamicSize += _langFlag?.length ?? 0;
-    final value8 = object.lastUpdate;
-    final _lastUpdate = value8;
-    final value9 = object.mangaId;
-    final _mangaId = BinaryWriter.utf8Encoder.convert(value9);
+    final value7 = object.lastUpdate;
+    final _lastUpdate = value7;
+    final value8 = object.mangaId;
+    final _mangaId = BinaryWriter.utf8Encoder.convert(value8);
     dynamicSize += _mangaId.length;
-    final value10 = object.mangaStatus;
+    final value9 = object.mangaStatus;
     IsarUint8List? _mangaStatus;
-    if (value10 != null) {
-      _mangaStatus = BinaryWriter.utf8Encoder.convert(value10);
+    if (value9 != null) {
+      _mangaStatus = BinaryWriter.utf8Encoder.convert(value9);
     }
     dynamicSize += _mangaStatus?.length ?? 0;
-    final value11 = object.name;
-    final _name = BinaryWriter.utf8Encoder.convert(value11);
+    final value10 = object.name;
+    final _name = BinaryWriter.utf8Encoder.convert(value10);
     dynamicSize += _name.length;
+    final value11 = object.newChapterIds;
+    dynamicSize += (value11.length) * 8;
+    final bytesList11 = <IsarUint8List>[];
+    for (var str in value11) {
+      final bytes = BinaryWriter.utf8Encoder.convert(str);
+      bytesList11.add(bytes);
+      dynamicSize += bytes.length;
+    }
+    final _newChapterIds = bytesList11;
     final value12 = object.rating;
     final _rating = value12;
     final value13 = object.sourceId;
@@ -131,24 +138,24 @@ class _FavouriteAdapter extends IsarTypeAdapter<Favourite> {
       dynamicSize += bytes.length;
     }
     final _titles = bytesList14;
-    final size = dynamicSize + 115;
+    final size = dynamicSize + 122;
 
     rawObj.buffer = alloc(size);
     rawObj.buffer_length = size;
     final buffer = bufAsBytes(rawObj.buffer, size);
-    final writer = BinaryWriter(buffer, 115);
+    final writer = BinaryWriter(buffer, 122);
     writer.writeBytes(offsets[0], _artist);
     writer.writeBytes(offsets[1], _author);
     writer.writeStringList(offsets[2], _covers);
     writer.writeBytes(offsets[3], _desc);
     writer.writeDouble(offsets[4], _follows);
-    writer.writeBool(offsets[5], _hasNewChapters);
-    writer.writeBytes(offsets[6], _image);
-    writer.writeBytes(offsets[7], _langFlag);
-    writer.writeDateTime(offsets[8], _lastUpdate);
-    writer.writeBytes(offsets[9], _mangaId);
-    writer.writeBytes(offsets[10], _mangaStatus);
-    writer.writeBytes(offsets[11], _name);
+    writer.writeBytes(offsets[5], _image);
+    writer.writeBytes(offsets[6], _langFlag);
+    writer.writeDateTime(offsets[7], _lastUpdate);
+    writer.writeBytes(offsets[8], _mangaId);
+    writer.writeBytes(offsets[9], _mangaStatus);
+    writer.writeBytes(offsets[10], _name);
+    writer.writeStringList(offsets[11], _newChapterIds);
     writer.writeDouble(offsets[12], _rating);
     writer.writeBytes(offsets[13], _sourceId);
     writer.writeStringList(offsets[14], _titles);
@@ -164,14 +171,14 @@ class _FavouriteAdapter extends IsarTypeAdapter<Favourite> {
     object.covers = reader.readStringList(offsets[2]);
     object.desc = reader.readStringOrNull(offsets[3]);
     object.follows = reader.readDoubleOrNull(offsets[4]);
-    object.hasNewChapters = reader.readBool(offsets[5]);
     object.id = id;
-    object.image = reader.readString(offsets[6]);
-    object.langFlag = reader.readStringOrNull(offsets[7]);
-    object.lastUpdate = reader.readDateTimeOrNull(offsets[8]);
-    object.mangaId = reader.readString(offsets[9]);
-    object.mangaStatus = reader.readStringOrNull(offsets[10]);
-    object.name = reader.readString(offsets[11]);
+    object.image = reader.readString(offsets[5]);
+    object.langFlag = reader.readStringOrNull(offsets[6]);
+    object.lastUpdate = reader.readDateTimeOrNull(offsets[7]);
+    object.mangaId = reader.readString(offsets[8]);
+    object.mangaStatus = reader.readStringOrNull(offsets[9]);
+    object.name = reader.readString(offsets[10]);
+    object.newChapterIds = reader.readStringList(offsets[11]) ?? [];
     object.rating = reader.readDoubleOrNull(offsets[12]);
     object.sourceId = reader.readString(offsets[13]);
     object.titles = reader.readStringList(offsets[14]) ?? [];
@@ -196,19 +203,19 @@ class _FavouriteAdapter extends IsarTypeAdapter<Favourite> {
       case 4:
         return (reader.readDoubleOrNull(offset)) as P;
       case 5:
-        return (reader.readBool(offset)) as P;
+        return (reader.readString(offset)) as P;
       case 6:
-        return (reader.readString(offset)) as P;
+        return (reader.readStringOrNull(offset)) as P;
       case 7:
-        return (reader.readStringOrNull(offset)) as P;
-      case 8:
         return (reader.readDateTimeOrNull(offset)) as P;
+      case 8:
+        return (reader.readString(offset)) as P;
       case 9:
-        return (reader.readString(offset)) as P;
-      case 10:
         return (reader.readStringOrNull(offset)) as P;
-      case 11:
+      case 10:
         return (reader.readString(offset)) as P;
+      case 11:
+        return (reader.readStringList(offset) ?? []) as P;
       case 12:
         return (reader.readDoubleOrNull(offset)) as P;
       case 13:
@@ -890,15 +897,6 @@ extension FavouriteQueryFilter
     ));
   }
 
-  QueryBuilder<Favourite, Favourite, QAfterFilterCondition>
-      hasNewChaptersEqualTo(bool value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'hasNewChapters',
-      value: value,
-    ));
-  }
-
   QueryBuilder<Favourite, Favourite, QAfterFilterCondition> idIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
@@ -1546,6 +1544,113 @@ extension FavouriteQueryFilter
     ));
   }
 
+  QueryBuilder<Favourite, Favourite, QAfterFilterCondition>
+      newChapterIdsAnyEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'newChapterIds',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Favourite, Favourite, QAfterFilterCondition>
+      newChapterIdsAnyGreaterThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'newChapterIds',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Favourite, Favourite, QAfterFilterCondition>
+      newChapterIdsAnyLessThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'newChapterIds',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Favourite, Favourite, QAfterFilterCondition>
+      newChapterIdsAnyBetween(
+    String lower,
+    String upper, {
+    bool caseSensitive = true,
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'newChapterIds',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Favourite, Favourite, QAfterFilterCondition>
+      newChapterIdsAnyStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'newChapterIds',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Favourite, Favourite, QAfterFilterCondition>
+      newChapterIdsAnyEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'newChapterIds',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Favourite, Favourite, QAfterFilterCondition>
+      newChapterIdsAnyContains(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'newChapterIds',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<Favourite, Favourite, QAfterFilterCondition>
+      newChapterIdsAnyMatches(String pattern, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'newChapterIds',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
   QueryBuilder<Favourite, Favourite, QAfterFilterCondition> ratingIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
@@ -1827,14 +1932,6 @@ extension FavouriteQueryWhereSortBy
     return addSortByInternal('follows', Sort.desc);
   }
 
-  QueryBuilder<Favourite, Favourite, QAfterSortBy> sortByHasNewChapters() {
-    return addSortByInternal('hasNewChapters', Sort.asc);
-  }
-
-  QueryBuilder<Favourite, Favourite, QAfterSortBy> sortByHasNewChaptersDesc() {
-    return addSortByInternal('hasNewChapters', Sort.desc);
-  }
-
   QueryBuilder<Favourite, Favourite, QAfterSortBy> sortById() {
     return addSortByInternal('id', Sort.asc);
   }
@@ -1942,14 +2039,6 @@ extension FavouriteQueryWhereSortThenBy
     return addSortByInternal('follows', Sort.desc);
   }
 
-  QueryBuilder<Favourite, Favourite, QAfterSortBy> thenByHasNewChapters() {
-    return addSortByInternal('hasNewChapters', Sort.asc);
-  }
-
-  QueryBuilder<Favourite, Favourite, QAfterSortBy> thenByHasNewChaptersDesc() {
-    return addSortByInternal('hasNewChapters', Sort.desc);
-  }
-
   QueryBuilder<Favourite, Favourite, QAfterSortBy> thenById() {
     return addSortByInternal('id', Sort.asc);
   }
@@ -2044,10 +2133,6 @@ extension FavouriteQueryWhereDistinct
     return addDistinctByInternal('follows');
   }
 
-  QueryBuilder<Favourite, Favourite, QDistinct> distinctByHasNewChapters() {
-    return addDistinctByInternal('hasNewChapters');
-  }
-
   QueryBuilder<Favourite, Favourite, QDistinct> distinctById() {
     return addDistinctByInternal('id');
   }
@@ -2113,10 +2198,6 @@ extension FavouriteQueryProperty
     return addPropertyNameInternal('follows');
   }
 
-  QueryBuilder<Favourite, bool, QQueryOperations> hasNewChaptersProperty() {
-    return addPropertyNameInternal('hasNewChapters');
-  }
-
   QueryBuilder<Favourite, int?, QQueryOperations> idProperty() {
     return addPropertyNameInternal('id');
   }
@@ -2143,6 +2224,11 @@ extension FavouriteQueryProperty
 
   QueryBuilder<Favourite, String, QQueryOperations> nameProperty() {
     return addPropertyNameInternal('name');
+  }
+
+  QueryBuilder<Favourite, List<String>, QQueryOperations>
+      newChapterIdsProperty() {
+    return addPropertyNameInternal('newChapterIds');
   }
 
   QueryBuilder<Favourite, double?, QQueryOperations> ratingProperty() {

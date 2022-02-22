@@ -5,6 +5,7 @@ import 'package:fluttiyomi/chapter_details/chapter_details_state.dart';
 import 'package:fluttiyomi/chapter_details/read_chapters_repository.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
+import 'package:fluttiyomi/favourites/favourites_notifier.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/manga_details/manga_details_notifier.dart';
 import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
@@ -58,6 +59,17 @@ class _ReadPageState extends ConsumerState<ReadPage> {
           widget.chapters,
           widget.currentChapter,
           false,
+        );
+
+    ref.read(readChaptersRepositoryProvider).markAsRead(
+          ref.read(sourceClientProvider).sourceId,
+          widget.chapter.id,
+          widget.mangaId,
+        );
+
+    ref.read(favouritesProvider.notifier).markAsOpened(
+          widget.mangaId,
+          widget.chapter.id,
         );
   }
 
@@ -129,7 +141,6 @@ class _ReadPageState extends ConsumerState<ReadPage> {
             currentChapter,
             startFromEnd,
           ) {
-            print(widget.resumeFrom);
             Chapter chapter = chapterList.get(currentChapter);
 
             var pages = chapterDetails.pages;
@@ -139,7 +150,7 @@ class _ReadPageState extends ConsumerState<ReadPage> {
             }
 
             return ConditionalWillPopScope(
-              shouldAddCallback: false,
+              shouldAddCallback: true,
               onWillPop: () async {
                 ref
                     .read(mangaDetailsNotifierProvider.notifier)

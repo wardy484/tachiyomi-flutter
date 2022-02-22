@@ -6,14 +6,14 @@ class MangaCard extends StatelessWidget {
   final String mangaId;
   final String name;
   final String image;
-  final bool showBadge;
+  final int newChapterCount;
 
   const MangaCard({
     Key? key,
     required this.mangaId,
     required this.name,
     required this.image,
-    this.showBadge = false,
+    this.newChapterCount = 0,
   }) : super(key: key);
 
   @override
@@ -42,11 +42,11 @@ class MangaCard extends StatelessWidget {
             ),
           ),
           Column(
-            mainAxisAlignment: showBadge
+            mainAxisAlignment: newChapterCount > 0
                 ? MainAxisAlignment.spaceBetween
                 : MainAxisAlignment.end,
             children: [
-              if (showBadge)
+              if (newChapterCount > 0)
                 Padding(
                   padding: const EdgeInsets.all(3.0),
                   child: Row(
@@ -62,7 +62,7 @@ class MangaCard extends StatelessWidget {
                             vertical: 6,
                             horizontal: 8,
                           ),
-                          child: Text("New!"),
+                          child: Text(newChapterCount.toString()),
                         ),
                       ),
                     ],

@@ -34,8 +34,6 @@ class _ChaptersPageState extends ConsumerState<ChaptersPage> {
     ref
         .read(mangaDetailsNotifierProvider.notifier)
         .getMangaDetails(widget.mangaId);
-
-    ref.read(favouritesProvider.notifier).markAsOpened(widget.mangaId);
   }
 
   @override

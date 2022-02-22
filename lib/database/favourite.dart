@@ -40,7 +40,7 @@ class Favourite {
 
   late DateTime? lastUpdate;
 
-  late bool hasNewChapters;
+  late List<String> newChapterIds;
 
   final lastChapterRead = IsarLink<Chapter>();
 
