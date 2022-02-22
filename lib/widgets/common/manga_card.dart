@@ -41,33 +41,62 @@ class MangaCard extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              gradient: const LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [
-                  Colors.black,
-                  Colors.transparent,
-                ],
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                top: 50,
-                left: 8,
-                bottom: 5,
-              ),
-              child: Text(
-                name,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+          Column(
+            mainAxisAlignment: showBadge
+                ? MainAxisAlignment.spaceBetween
+                : MainAxisAlignment.end,
+            children: [
+              if (showBadge)
+                Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: Colors.orange,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 6,
+                            horizontal: 8,
+                          ),
+                          child: Text("New!"),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  gradient: const LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    colors: [
+                      Colors.black,
+                      Colors.transparent,
+                    ],
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    top: 50,
+                    left: 8,
+                    bottom: 5,
+                  ),
+                  child: Text(
+                    name,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
+            ],
+          )
         ],
       ),
     );

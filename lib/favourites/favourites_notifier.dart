@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
+import 'package:fluttiyomi/data/updated_chapters/updated_chapters.dart';
 import 'package:fluttiyomi/database/chapter.dart' as chapter_model;
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/database/favourite.dart';
@@ -48,22 +49,21 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
 
     state = FavouritesState.loaded(favourites, true);
 
-    await _source.checkForUpdates(
+    UpdatedChapters updated = await _source.checkForUpdates(
       favourites.map<String>((e) => e.mangaId).toList(),
-      settings.lastUpdateCheck,
-      // DateTime.now().subtract(Duration(minutes: 20)),
-      (updated) async {
-        for (var e in favourites) {
-          if (updated.contains(e.mangaId)) {
-            e.hasNewChapters = true;
-            await getLatestChapters(e.mangaId);
-          }
-        }
-
-        _favourites.update(favourites);
-        state = FavouritesState.loaded(favourites, false);
-      },
+      // settings.lastUpdateCheck,
+      DateTime.now().subtract(Duration(days: 5)),
     );
+
+    for (var e in favourites) {
+      if (updated.ids.contains(e.mangaId)) {
+        e.hasNewChapters = true;
+        await getLatestChapters(e.mangaId);
+      }
+    }
+
+    _favourites.update(favourites);
+    state = FavouritesState.loaded(favourites, false);
 
     await _settings.updateGlobalSettings(DateTime.now());
   }

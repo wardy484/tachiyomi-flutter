@@ -1,15 +1,13 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_js/flutter_js.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/data/paged_results/paged_results.dart';
+import 'package:fluttiyomi/data/updated_chapters/updated_chapters.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:intl/intl.dart';
 
 final sourceClientProvider = StateProvider<SourceClient>(
   (ref) => SourceClient(""),
@@ -27,9 +25,10 @@ ChapterList parseChapters(dynamic json) {
 }
 
 class SourceClient {
-  final JavascriptRuntime js = getJavascriptRuntime();
-  final Dio dio = Dio();
-  String src = "readm";
+  final Dio _dio;
+  final String _baseUrl;
+
+  final String src;
 
   get sourceId {
     return src;
@@ -39,63 +38,42 @@ class SourceClient {
     return "Readm";
   }
 
-  SourceClient(String sourceCode) {
-    js.enableHandlePromises();
-
-    if (sourceCode == "") {
-      return;
-    }
-
-    js.evaluate("""var window = global = self = globalThis;""");
-    js.evaluate(sourceCode);
-    js.evaluate("console.log(Object.keys(globalThis))");
-    js.evaluate("var $src = globalThis.MangaFox;");
-    js.evaluate("var readm = globalThis.MangaFox.createReadm();");
-
-    js.evaluate("""
-        var getPage = (callback) => {
-          var result = callback();
-          return JSON.stringify(result);
-        };
-      """);
-
-    js.evaluate("""var getObject = (encodedPage, callback) => {
-        var page = decodeURI(encodedPage);
-        var result = callback(page);
-        return JSON.stringify(result);
-        };
-      """);
-  }
+  SourceClient(String baseUrl)
+      : _baseUrl = baseUrl,
+        src = "readm",
+        _dio = Dio(
+          BaseOptions(
+            baseUrl: baseUrl,
+          ),
+        );
 
   static Future<SourceClient> init({
-    String sourcePath = "assets/wanker.js",
+    String baseUrl = "https://manga-source-proxy-xi.vercel.app/",
   }) async {
-    String sourceFile = await rootBundle.loadString(sourcePath);
-
-    return SourceClient(sourceFile);
+    return SourceClient(baseUrl);
   }
 
   Future<PagedResults> search(String query) async {
     try {
-      var json = await executeJS(
-        "readm.getSearchResults({ title: `$query` });",
+      var response = await _dio.get(
+        "/",
+        queryParameters: {"manga": query},
       );
-      return PagedResults.fromJson(json);
+
+      return PagedResults.fromJson(response.data);
     } catch (e) {
       return PagedResults(results: []);
     }
   }
 
   Future<ChapterList> getChapters(String mangaId) async {
-    String id = Uri.encodeQueryComponent(mangaId);
-
-    var json = await executeJS("readm.getChapters(`$id`);");
-    return compute(parseChapters, json);
+    var response = await _dio.get("/manga/$mangaId/chapters");
+    return compute(parseChapters, response.data);
   }
 
   Future<Manga> getMangaDetails(String mangaId) async {
-    var json = await executeJS("readm.getMangaDetails(`$mangaId`);");
-    return Manga.fromJson(json);
+    var response = await _dio.get("/manga/$mangaId");
+    return Manga.fromJson(response.data);
   }
 
   Future<ChapterDetails> getChapterDetails(
@@ -105,59 +83,27 @@ class SourceClient {
     String decodedMangaId = Uri.encodeQueryComponent(mangaId);
     String decodedChapterId = Uri.encodeQueryComponent(chapterId);
 
-    var json = await executeJS(
-      "readm.getChapterDetails(`$decodedMangaId`, `$decodedChapterId`)",
+    var response = await _dio.get(
+      "/manga/$decodedMangaId/chapters/$decodedChapterId",
     );
 
-    return ChapterDetails.fromJson(json);
+    return ChapterDetails.fromJson(response.data);
   }
 
-  Future<void> checkForUpdates(
+  Future<UpdatedChapters> checkForUpdates(
     List<String> mangaIds,
     DateTime lastCheckedAt,
-    Function(List<String> updated) onUpdated,
   ) async {
     String ids = mangaIds.map((e) => "'$e'").toString();
-    DateTime d = lastCheckedAt;
 
-    js.onMessage('newChapters', (dynamic updated) {
-      var updatedChapters = updated['ids'] as List;
-      onUpdated(updatedChapters.map<String>((e) => e as String).toList());
-    });
+    var response = await _dio.post(
+      "/updated-manga",
+      data: {
+        "ids": ids,
+        "time": DateFormat.yMd().add_jm().format(lastCheckedAt),
+      },
+    );
 
-    JsEvalResult request = js.evaluate("""
-      readm.filterUpdatedManga(
-        (updates) => {
-          sendMessage('newChapters', JSON.stringify(updates));
-        },
-        new Date(${d.year}, ${d.month - 1}, ${d.day}, ${d.hour}, ${d.minute}, ${d.second}),
-        $ids,
-      )
-    """);
-
-    await js.handlePromise(request);
-  }
-
-  Future<dynamic> executeJS(String script) async {
-    JsEvalResult request = js.evaluate(script);
-
-    var newResult = await js.handlePromise(request);
-
-    var json = await compute(jsonDecode, newResult.stringResult);
-    return json;
-  }
-}
-
-class Request {
-  final String url;
-
-  Request(this.url);
-
-  static Request fromJson(String json) {
-    Map data = jsonDecode(json);
-
-    String url = data["url"];
-
-    return Request(url);
+    return UpdatedChapters.fromJson(response.data);
   }
 }

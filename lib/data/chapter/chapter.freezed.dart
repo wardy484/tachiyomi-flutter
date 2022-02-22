@@ -32,7 +32,7 @@ class _$ChapterTearOff {
       String? group,
       String? time,
       {bool read = false,
-      int page = 0}) {
+      int page = 1}) {
     return _Chapter(
       id,
       mangaId,
@@ -247,7 +247,7 @@ class __$ChapterCopyWithImpl<$Res> extends _$ChapterCopyWithImpl<$Res>
 class _$_Chapter implements _Chapter {
   _$_Chapter(this.id, this.mangaId, @JsonKey(name: 'chapNum') this.chapterNo,
       this.langCode, this.name, this.volume, this.group, this.time,
-      {this.read = false, this.page = 0});
+      {this.read = false, this.page = 1});
 
   factory _$_Chapter.fromJson(Map<String, dynamic> json) =>
       _$$_ChapterFromJson(json);

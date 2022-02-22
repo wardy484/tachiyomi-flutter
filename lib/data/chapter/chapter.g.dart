@@ -16,7 +16,7 @@ _$_Chapter _$$_ChapterFromJson(Map<String, dynamic> json) => _$_Chapter(
       json['group'] as String?,
       json['time'] as String?,
       read: json['read'] as bool? ?? false,
-      page: json['page'] as int? ?? 0,
+      page: json['page'] as int? ?? 1,
     );
 
 Map<String, dynamic> _$$_ChapterToJson(_$_Chapter instance) =>
