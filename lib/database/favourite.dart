@@ -73,7 +73,7 @@ class Favourite {
       return chapter.convertToChapter();
     }).toList()
       ..sort((a, b) {
-        return double.parse(b.id).compareTo(double.parse(a.id));
+        return b.chapterNo.compareTo(a.chapterNo);
       });
 
     return ChapterList(newChapters);

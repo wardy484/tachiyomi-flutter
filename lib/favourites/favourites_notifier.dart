@@ -72,6 +72,7 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
 
     for (var e in favourites) {
       if (updated.ids.contains(e.mangaId)) {
+        // TODO: Run these in paralell
         var newChapters = await getLatestChapters(e.mangaId);
         e.newChapterIds.addAll(newChapters);
         e.newChapterIds = e.newChapterIds.unique();
@@ -167,13 +168,13 @@ List<Chapter> _sortNewChapters(Map args) {
   ChapterList chapterList = args['chapterList'] as ChapterList;
 
   savedChapters.sort((a, b) {
-    return double.parse(b.chapterId).compareTo(double.parse(a.chapterId));
+    return b.chapterNo.compareTo(a.chapterNo);
   });
 
   final latestChapter = savedChapters.first;
   // _favourites.deleteChapter(latestChapter);
 
   return chapterList.chapters.where((chapter) {
-    return double.parse(chapter.id) > double.parse(latestChapter.chapterId);
+    return chapter.chapterNo > latestChapter.chapterNo;
   }).toList();
 }
