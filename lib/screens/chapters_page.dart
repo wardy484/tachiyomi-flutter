@@ -2,8 +2,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/favourites/favourites_notifier.dart';
-import 'package:fluttiyomi/favourites/favourites_repository.dart';
-import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/manga_details/manga_details_notifier.dart';
 import 'package:fluttiyomi/router.gr.dart';
 import 'package:fluttiyomi/widgets/MangaDetails/header.dart';
@@ -13,7 +11,6 @@ import 'package:fluttiyomi/widgets/common/refresh_icon_button.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:fluttiyomi/data/chapter/chapter.dart' as data_chapter;
 
 class ChaptersPage extends ConsumerStatefulWidget {
   final String mangaId;
@@ -40,11 +37,7 @@ class _ChaptersPageState extends ConsumerState<ChaptersPage> {
   Widget build(BuildContext context) {
     return ConditionalWillPopScope(
       shouldAddCallback: false,
-      onWillPop: () async {
-        ref.read(favouritesProvider.notifier).get();
-
-        return true;
-      },
+      onWillPop: () async => true,
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.mangaName),
@@ -88,7 +81,7 @@ class _ChaptersPageState extends ConsumerState<ChaptersPage> {
                           var chapter =
                               lastRead.chapter ?? chapters.chapters.last;
 
-                          AutoRouter.of(context).push(
+                          await AutoRouter.of(context).push(
                             ReadRoute(
                               mangaId: widget.mangaId,
                               chapter: chapter,
@@ -99,6 +92,10 @@ class _ChaptersPageState extends ConsumerState<ChaptersPage> {
                               resumeFrom: lastRead.nextPage,
                             ),
                           );
+
+                          await ref
+                              .read(mangaDetailsNotifierProvider.notifier)
+                              .getMangaDetails(widget.mangaId);
                         },
                       );
                     }
@@ -156,8 +153,8 @@ class _ChaptersPageState extends ConsumerState<ChaptersPage> {
                       ],
                       child: ChapterListItem(
                         chapter: chapter,
-                        onTap: () {
-                          AutoRouter.of(context).push(
+                        onTap: () async {
+                          await AutoRouter.of(context).push(
                             ReadRoute(
                               mangaId: widget.mangaId,
                               chapter: chapter,
@@ -165,6 +162,10 @@ class _ChaptersPageState extends ConsumerState<ChaptersPage> {
                               currentChapter: index - 1,
                             ),
                           );
+
+                          await ref
+                              .read(mangaDetailsNotifierProvider.notifier)
+                              .getMangaDetails(widget.mangaId);
                         },
                       ),
                     );

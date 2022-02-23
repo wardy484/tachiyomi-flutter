@@ -150,14 +150,8 @@ class _ReadPageState extends ConsumerState<ReadPage> {
             }
 
             return ConditionalWillPopScope(
-              shouldAddCallback: true,
-              onWillPop: () async {
-                ref
-                    .read(mangaDetailsNotifierProvider.notifier)
-                    .getMangaDetails(mangaId);
-
-                return true;
-              },
+              shouldAddCallback: false,
+              onWillPop: () async => true,
               child: Scaffold(
                 extendBodyBehindAppBar: true,
                 extendBody: true,

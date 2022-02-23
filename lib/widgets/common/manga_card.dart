@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttiyomi/favourites/favourites_notifier.dart';
 import 'package:fluttiyomi/router.gr.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class MangaCard extends StatelessWidget {
+class MangaCard extends ConsumerWidget {
   final String mangaId;
   final String name;
   final String image;
@@ -17,15 +19,17 @@ class MangaCard extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
     return GestureDetector(
-      onTap: () {
-        AutoRouter.of(context).push(
+      onTap: () async {
+        await AutoRouter.of(context).push(
           ChaptersRoute(
             mangaId: mangaId,
             mangaName: name,
           ),
         );
+
+        await ref.read(favouritesProvider.notifier).get();
       },
       child: Stack(
         alignment: AlignmentDirectional.bottomStart,
