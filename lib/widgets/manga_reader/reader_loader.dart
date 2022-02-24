@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:fluttiyomi/chapter_details/chapter_details_notifier.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_loader_footer.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_loader_header.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:refresh_loadmore/refresh_loadmore.dart';
 
 class ReaderLoader extends ConsumerStatefulWidget {
   final Widget child;

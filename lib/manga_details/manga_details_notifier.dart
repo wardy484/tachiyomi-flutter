@@ -47,7 +47,7 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
       details = await _source.getMangaDetails(mangaId);
       chapters = await _source.getChapters(mangaId);
     } else {
-      details = favourite.toManga();
+      details = await favourite.toManga();
       chapters = await favourite.getChapterList();
     }
 

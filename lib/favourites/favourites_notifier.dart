@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/updated_chapters/updated_chapters.dart';
-import 'package:fluttiyomi/database/chapter.dart' as chapter_model;
+import 'package:fluttiyomi/database/models.dart' as models;
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/database/favourite.dart';
 import 'package:fluttiyomi/database/settings.dart';
@@ -40,7 +40,10 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
   Future<void> get() async {
     final favourites = await _favourites.getFavourites();
 
-    state = FavouritesState.loaded(favourites, false);
+    state = FavouritesState.loaded(
+      _sortAndGroupFavourites(favourites),
+      false,
+    );
   }
 
   Future<void> deleteLatestChapters() async {
@@ -66,8 +69,8 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
 
     UpdatedChapters updated = await _source.checkForUpdates(
       favourites.map<String>((e) => e.mangaId).toList(),
-      // settings.lastUpdateCheck,
-      DateTime.now().subtract(Duration(days: 1)),
+      settings.lastUpdateCheck,
+      // DateTime.now().subtract(Duration(days: 1)),
     );
 
     for (var e in favourites) {
@@ -97,7 +100,10 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
     }
 
     var favourites = await _favourites.getFavourites();
-    state = FavouritesState.loaded(favourites, false);
+    state = FavouritesState.loaded(
+      _sortAndGroupFavourites(favourites),
+      false,
+    );
   }
 
   Future<List<String>> getLatestChapters(
@@ -133,7 +139,7 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
 
     await favourite.lastChapterRead.load();
 
-    if (favourite.lastChapterRead.value is! chapter_model.Chapter) {
+    if (favourite.lastChapterRead.value is! models.Chapter) {
       return LastReadChapter();
     }
 
@@ -141,6 +147,22 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
       chapter: favourite.lastChapterRead.value!.convertToChapter(),
       page: favourite.lastChapterRead.value!.page,
     );
+  }
+
+  List<Favourite> _sortAndGroupFavourites(List<Favourite> favourites) {
+    final withNewChapters = favourites
+        .where((favourite) => favourite.newChapterIds.isNotEmpty)
+        .toList()
+      ..sort((a, b) => a.name.compareTo(b.name));
+
+    final withNoNewChapters = favourites
+        .where((favourite) => favourite.newChapterIds.isEmpty)
+        .toList()
+      ..sort((a, b) => a.name.compareTo(b.name));
+
+    withNewChapters.addAll(withNoNewChapters);
+
+    return withNewChapters;
   }
 }
 
@@ -164,7 +186,7 @@ class LastReadChapter {
 
 // External function so it can be run in an isolate
 List<Chapter> _sortNewChapters(Map args) {
-  List<chapter_model.Chapter> savedChapters = args['savedChapters'];
+  List<models.Chapter> savedChapters = args['savedChapters'];
   ChapterList chapterList = args['chapterList'] as ChapterList;
 
   savedChapters.sort((a, b) {

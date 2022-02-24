@@ -1,9 +1,11 @@
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
-import 'package:fluttiyomi/data/chapter/chapter.dart' as data_chapter;
+import 'package:fluttiyomi/data/source_data.dart' as source_data;
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/database/chapter.dart';
 import 'package:fluttiyomi/database/database.dart';
 import 'package:fluttiyomi/database/favourite.dart';
+import 'package:fluttiyomi/database/tag.dart';
+import 'package:fluttiyomi/database/tag_section.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
@@ -68,18 +70,21 @@ class FavouritesRepository {
       ..lastUpdate = manga.lastUpdate;
 
     List<Chapter> newChapters = _mapChapters(chapterList.chapters, sourceId);
+    List<TagSection> newTagSections = _mapTagSections(manga.tags ?? []);
 
     newFavourite.chapters.addAll(newChapters);
+    newFavourite.tagSections.addAll(newTagSections);
 
     await _database.writeTxn((_) async {
       await _favourites.put(newFavourite);
       await newFavourite.chapters.save();
+      await newFavourite.tagSections.save();
     });
   }
 
   Future<void> addChapters(
     Favourite favourite,
-    List<data_chapter.Chapter> chapters,
+    List<source_data.Chapter> chapters,
   ) async {
     List<Chapter> newChapters = _mapChapters(
       chapters,
@@ -131,7 +136,7 @@ class FavouritesRepository {
   }
 
   List<Chapter> _mapChapters(
-    List<data_chapter.Chapter> chapters,
+    List<source_data.Chapter> chapters,
     String sourceId,
   ) {
     final List<Chapter> newChapters = [];
@@ -156,6 +161,34 @@ class FavouritesRepository {
     }
 
     return newChapters;
+  }
+
+  List<TagSection> _mapTagSections(
+    List<source_data.TagSection> tagSections,
+  ) {
+    final List<TagSection> newTagSectons = [];
+
+    for (var i = 0; i < tagSections.length; i++) {
+      final tagSection = tagSections[i];
+
+      final newTagSection = TagSection()
+        ..label = tagSection.label
+        ..tagSectionId = tagSection.id;
+
+      newTagSectons.add(newTagSection);
+
+      for (var x = 0; x < tagSection.tags.length; x++) {
+        final tag = tagSection.tags[x];
+
+        final newTag = Tag()
+          ..tagId = tag.id
+          ..label = tag.label;
+
+        newTagSection.tags.add(newTag);
+      }
+    }
+
+    return newTagSectons;
   }
 
   // Used for debug atm

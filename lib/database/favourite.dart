@@ -2,6 +2,10 @@ import 'package:fluttiyomi/data/chapter/chapter.dart' as data_chapter;
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/database/chapter.dart';
+import 'package:fluttiyomi/database/tag_section.dart';
+import 'package:fluttiyomi/data/tag_section/tag_section.dart'
+    as tag_section_dto;
+
 import 'package:isar/isar.dart';
 
 part 'favourite.g.dart';
@@ -46,7 +50,9 @@ class Favourite {
 
   final chapters = IsarLinks<Chapter>();
 
-  Manga toManga() {
+  final tagSections = IsarLinks<TagSection>();
+
+  Future<Manga> toManga() async {
     return Manga(
       mangaId,
       titles,
@@ -59,10 +65,24 @@ class Favourite {
       covers,
       desc,
       follows,
-      null, // TODO: include tags
+      await _getTagSectionDto(),
       lastUpdate,
       favourite: true,
     );
+  }
+
+  Future<List<tag_section_dto.TagSection>?> _getTagSectionDto() async {
+    await tagSections.load();
+
+    if (tagSections.isNotEmpty) {
+      final sections = [
+        for (final section in tagSections) await section.toDto()
+      ];
+
+      return sections;
+    }
+
+    return null;
   }
 
   Future<ChapterList> getChapterList() async {
@@ -80,6 +100,4 @@ class Favourite {
   }
 }
 
-// TODO: Add chapter entity
 // TODO: Tag / Tag Section entities
-// TODO: Add relationship to chapters has many
