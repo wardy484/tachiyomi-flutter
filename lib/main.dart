@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return RefreshConfig(
       child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
         title: 'Fluttiyomi',
         theme: ThemeData(
           brightness: Brightness.dark,

@@ -17,7 +17,7 @@ class MangaGrid extends StatelessWidget {
         int crossAxisCount = 2;
 
         if (constraints.maxWidth > 1000) {
-          crossAxisCount = 4;
+          crossAxisCount = 5;
         } else if (constraints.maxWidth > 800) {
           crossAxisCount = 4;
         }
@@ -28,7 +28,7 @@ class MangaGrid extends StatelessWidget {
             crossAxisCount: crossAxisCount,
             crossAxisSpacing: 14,
             mainAxisSpacing: 14,
-            childAspectRatio: 0.8,
+            childAspectRatio: 0.75,
           ),
           itemCount: itemCount,
           itemBuilder: itemBuilder,

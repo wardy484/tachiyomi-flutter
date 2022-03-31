@@ -36,7 +36,7 @@ class MangaCard extends ConsumerWidget {
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            height: 300,
+            height: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               image: DecorationImage(

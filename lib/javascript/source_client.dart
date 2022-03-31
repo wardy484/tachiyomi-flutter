@@ -48,7 +48,7 @@ class SourceClient {
         );
 
   static Future<SourceClient> init({
-    String baseUrl = "https://manga-source-proxy-xi.vercel.app/",
+    String baseUrl = "https://manga-source-proxy.vercel.app/",
   }) async {
     return SourceClient(baseUrl);
   }
