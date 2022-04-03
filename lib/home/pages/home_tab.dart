@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fluttiyomi/database/favourite.dart';
-import 'package:fluttiyomi/favourites/favourites_notifier.dart';
 import 'package:fluttiyomi/home/home_notifier.dart';
 import 'package:fluttiyomi/widgets/common/full_page_loading_indicator.dart';
 import 'package:fluttiyomi/widgets/common/manga_card.dart';
-import 'package:fluttiyomi/widgets/common/manga_grid.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomeTab extends ConsumerStatefulWidget {
@@ -24,24 +21,54 @@ class _HomeTabState extends ConsumerState<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
-    return ref.watch(favouritesProvider).when(
+    return ref.watch(homeProvider).when(
           initial: () => const FullPageLoadingIndicator(),
-          loaded: (results, checkingForUpdates) {
+          loaded: (results) {
             return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: MangaGrid(
-                onRefresh: () async {
-                  ref.read(favouritesProvider.notifier).checkForUpdates();
-                },
+              padding: const EdgeInsets.all(16.0),
+              child: ListView.separated(
+                separatorBuilder: (_, __) => const Divider(
+                  height: 1,
+                ),
                 itemCount: results.length,
                 itemBuilder: (context, index) {
-                  Favourite manga = results[index];
-
-                  return MangaCard(
-                    mangaId: manga.mangaId,
-                    name: manga.name,
-                    image: manga.image,
-                    newChapterCount: manga.newChapterIds.length,
+                  var section = results[index];
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Text(
+                          section.title,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        height: 300,
+                        child: ListView.separated(
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(width: 18),
+                          scrollDirection: Axis.horizontal,
+                          itemCount: section.items?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            var manga = section.items![index];
+                            return SizedBox(
+                              width: 250,
+                              child: MangaCard(
+                                mangaId: manga.id,
+                                name: manga.title.text,
+                                image: manga.image,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                    ],
                   );
                 },
               ),

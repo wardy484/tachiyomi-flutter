@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/favourites/widgets/library_appbar.dart';
+import 'package:fluttiyomi/home/pages/home_tab.dart';
+import 'package:fluttiyomi/home/widgets/HomeAppbar.dart';
 import 'package:fluttiyomi/screens/settings_tab.dart';
 import 'package:fluttiyomi/search/widgets/search_appbar.dart';
 import 'package:fluttiyomi/settings/widgets/settings_appbar.dart';
-import 'package:fluttiyomi/update_queue/update_queue.dart';
 import 'package:fluttiyomi/widgets/favourites/favourites_tab.dart';
 import 'package:fluttiyomi/widgets/search/search_screen.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -16,7 +17,7 @@ class ListPage extends ConsumerStatefulWidget {
 }
 
 class _ListPageState extends ConsumerState<ListPage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +34,13 @@ class _ListPageState extends ConsumerState<ListPage> {
       appBar: <PreferredSizeWidget>[
         const LibraryAppbar(),
         const SearchAppbar(),
+        const HomeAppbar(),
         const SettingsAppbar(),
       ].elementAt(_selectedIndex),
       body: [
         const FavouritesTab(),
         const SearchTab(),
+        const HomeTab(),
         const SettingsTab(),
       ].elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
@@ -50,6 +53,10 @@ class _ListPageState extends ConsumerState<ListPage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
+            label: 'Search',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
             label: 'Search',
           ),
           BottomNavigationBarItem(

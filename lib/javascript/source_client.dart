@@ -109,7 +109,7 @@ class SourceClient {
   }
 
   Future<List<HomeSection>> getHomeSections() async {
-    var data = (await _dio.get('/home')) as List;
+    var data = (await _dio.get('/home')).data as List;
 
     return data.map((e) {
       return HomeSection.fromJson(e);
