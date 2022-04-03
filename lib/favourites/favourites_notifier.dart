@@ -9,6 +9,7 @@ import 'package:fluttiyomi/favourites/favourites_repository.dart';
 import 'package:fluttiyomi/favourites/favourites_state.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/settings/settings_repository.dart';
+import 'package:fluttiyomi/update_queue/update_queue.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:fluttiyomi/extensions/list.dart';
 
@@ -19,6 +20,7 @@ final favouritesProvider =
       ref.watch(favouritesRepositoryProvider),
       ref.watch(settingsRepositoryProvider),
       ref.watch(sourceClientProvider.state).state,
+      ref.watch(updateQueueProvider.notifier),
     );
   },
 );
@@ -27,14 +29,17 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
   final FavouritesRepository _favourites;
   final SettingsRepository _settings;
   final SourceClient _source;
+  final UpdateQueueNotifier _updateQueue;
 
   FavouritesNotifier(
     FavouritesRepository favourites,
     SettingsRepository settings,
     SourceClient source,
+    UpdateQueueNotifier updateQueue,
   )   : _favourites = favourites,
         _settings = settings,
         _source = source,
+        _updateQueue = updateQueue,
         super(const FavouritesState.initial());
 
   Future<void> get() async {
@@ -61,6 +66,7 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
   }
 
   Future<void> checkForUpdates() async {
+    await deleteLatestChapters();
     Setting settings = await _settings.getGlobalSettings();
 
     List<Favourite> favourites = await _favourites.getFavourites();
@@ -69,23 +75,28 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
 
     UpdatedChapters updated = await _source.checkForUpdates(
       favourites.map<String>((e) => e.mangaId).toList(),
-      settings.lastUpdateCheck,
-      // DateTime.now().subtract(Duration(days: 1)),
+      // settings.lastUpdateCheck,
+      DateTime.now().subtract(Duration(days: 1)),
     );
 
     for (var e in favourites) {
-      if (updated.ids.contains(e.mangaId)) {
-        // TODO: Run these in paralell
-        var newChapters = await getLatestChapters(e.mangaId);
-        e.newChapterIds.addAll(newChapters);
-        e.newChapterIds = e.newChapterIds.unique();
-        print(e.newChapterIds);
-      }
-    }
-    _favourites.update(favourites);
-    state = FavouritesState.loaded(favourites, false);
+      // TODO: Run these in paralell
+      var future = getLatestChapters(e.mangaId);
 
-    await _settings.updateGlobalSettings(DateTime.now());
+      _updateQueue.addToQueue(e.name, () => future);
+
+      future.then((value) {
+        e.newChapterIds.addAll(value);
+        e.newChapterIds = e.newChapterIds.unique();
+        _favourites.update([e]);
+
+        print(e.newChapterIds);
+      });
+    }
+
+    // state = FavouritesState.loaded(favourites, false);
+
+    // await _settings.updateGlobalSettings(DateTime.now());
   }
 
   Future<void> markAsOpened(String mangaId, String chapterId) async {

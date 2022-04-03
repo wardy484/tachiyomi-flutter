@@ -29,6 +29,9 @@ class _FavouritesTabState extends ConsumerState<FavouritesTab> {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: MangaGrid(
+                onRefresh: () async {
+                  ref.read(favouritesProvider.notifier).checkForUpdates();
+                },
                 itemCount: results.length,
                 itemBuilder: (context, index) {
                   Favourite manga = results[index];

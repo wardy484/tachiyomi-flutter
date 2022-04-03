@@ -14,7 +14,7 @@ void main() async {
 
   await container.read(isarDatabaseProvider).init();
 
-  container.read(favouritesProvider.notifier).checkForUpdates();
+  // container.read(favouritesProvider.notifier).checkForUpdates();
 
   runApp(
     UncontrolledProviderScope(

@@ -3,22 +3,33 @@ import 'package:fluttiyomi/favourites/widgets/library_appbar.dart';
 import 'package:fluttiyomi/screens/settings_tab.dart';
 import 'package:fluttiyomi/search/widgets/search_appbar.dart';
 import 'package:fluttiyomi/settings/widgets/settings_appbar.dart';
+import 'package:fluttiyomi/update_queue/update_queue.dart';
 import 'package:fluttiyomi/widgets/favourites/favourites_tab.dart';
 import 'package:fluttiyomi/widgets/search/search_screen.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class ListPage extends StatefulWidget {
+class ListPage extends ConsumerStatefulWidget {
   const ListPage({Key? key}) : super(key: key);
 
   @override
   _ListPageState createState() => _ListPageState();
 }
 
-class _ListPageState extends State<ListPage> {
+class _ListPageState extends ConsumerState<ListPage> {
   int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // drawer: Drawer(
+      //   child: ListView(
+      //     children: ref
+      //         .watch(updateQueueProvider)
+      //         .queue
+      //         .map((e) => Text(e.name))
+      //         .toList(),
+      //   ),
+      // ),
       appBar: <PreferredSizeWidget>[
         const LibraryAppbar(),
         const SearchAppbar(),

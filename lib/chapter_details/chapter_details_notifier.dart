@@ -101,7 +101,7 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
         await _favourites.setLastChapterRead(
           _source.sourceId,
           chapterDetails.mangaId,
-          currentChapter.id,
+          newChapter.id,
         );
 
         _readerProgress.moveProgress("1");
