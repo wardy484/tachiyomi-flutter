@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/favourites/favourites_notifier.dart';
 import 'package:fluttiyomi/router.gr.dart';
@@ -41,7 +42,10 @@ class MangaCard extends ConsumerWidget {
               borderRadius: BorderRadius.circular(8),
               image: DecorationImage(
                 fit: BoxFit.fill,
-                image: NetworkImage(image),
+                image: ExtendedNetworkImageProvider(
+                  image,
+                  cache: true,
+                ),
               ),
             ),
           ),

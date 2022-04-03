@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
+import 'package:fluttiyomi/data/home_results/home_section.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/data/paged_results/paged_results.dart';
 import 'package:fluttiyomi/data/updated_chapters/updated_chapters.dart';
@@ -105,5 +106,13 @@ class SourceClient {
     );
 
     return UpdatedChapters.fromJson(response.data);
+  }
+
+  Future<List<HomeSection>> getHomeSections() async {
+    var data = (await _dio.get('/home')) as List;
+
+    return data.map((e) {
+      return HomeSection.fromJson(e);
+    }).toList();
   }
 }
