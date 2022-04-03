@@ -66,12 +66,12 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
   }
 
   Future<void> checkForUpdates() async {
-    await deleteLatestChapters();
+    // await deleteLatestChapters();
     Setting settings = await _settings.getGlobalSettings();
 
     List<Favourite> favourites = await _favourites.getFavourites();
 
-    state = FavouritesState.loaded(favourites, true);
+    state = FavouritesState.loaded(_sortAndGroupFavourites(favourites), true);
 
     UpdatedChapters updated = await _source.checkForUpdates(
       favourites.map<String>((e) => e.mangaId).toList(),
@@ -80,7 +80,6 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
     );
 
     for (var e in favourites) {
-      // TODO: Run these in paralell
       var future = getLatestChapters(e.mangaId);
 
       _updateQueue.addToQueue(e.name, () => future);
@@ -94,9 +93,7 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
       });
     }
 
-    // state = FavouritesState.loaded(favourites, false);
-
-    // await _settings.updateGlobalSettings(DateTime.now());
+    await _settings.updateGlobalSettings(DateTime.now());
   }
 
   Future<void> markAsOpened(String mangaId, String chapterId) async {
