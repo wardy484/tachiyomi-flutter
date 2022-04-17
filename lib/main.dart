@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/database/database.dart';
-import 'package:fluttiyomi/favourites/favourites_notifier.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/router.gr.dart';
 import 'package:fluttiyomi/widgets/refresh_config.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,6 +15,28 @@ void main() async {
   container.read(sourceClientProvider.state).state = await SourceClient.init();
 
   await container.read(isarDatabaseProvider).init();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://7fe8e00f82e64d7d83a6fb366a762855@o1207946.ingest.sentry.io/6341248';
+      // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+      // We recommend adjusting this value in production.
+      options.tracesSampleRate = 1.0;
+    },
+    appRunner: () => runApp(MyApp()),
+  );
+
+  try {
+    throw Exception("fucked up");
+  } catch (exception, stackTrace) {
+    await Sentry.captureException(
+      exception,
+      stackTrace: stackTrace,
+    );
+  }
 
   // container.read(favouritesProvider.notifier).checkForUpdates();
 

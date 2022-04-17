@@ -38,6 +38,28 @@ class ReadChaptersRepository {
     });
   }
 
+  Future<void> markManyAsRead(
+    String sourceId,
+    String mangaId,
+    List<String> chapterIds,
+  ) async {
+    List<Chapter> chapters = [];
+
+    for (var chapterId in chapterIds) {
+      Chapter? chapter = await _getChapter(sourceId, mangaId, chapterId);
+
+      if (chapter == null) return;
+
+      chapter.read = true;
+
+      chapters.add(chapter);
+    }
+
+    await _database.writeTxn((_) async {
+      await _chapters.putAll(chapters);
+    });
+  }
+
   Future<void> setLastPage(
     String sourceId,
     String mangaId,

@@ -61,7 +61,7 @@ class _MangaGridState extends ConsumerState<MangaGrid> {
 
         return SmartRefresher(
           enablePullDown: true,
-          enablePullUp: true,
+          enablePullUp: false,
           header: const ClassicHeader(),
           controller: _refreshController,
           onRefresh: _onRefresh,

@@ -25,7 +25,7 @@ class _HomeTabState extends ConsumerState<HomeTab> {
           initial: () => const FullPageLoadingIndicator(),
           loaded: (results) {
             return Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: ListView.separated(
                 separatorBuilder: (_, __) => const Divider(
                   height: 1,
@@ -37,7 +37,7 @@ class _HomeTabState extends ConsumerState<HomeTab> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        padding: const EdgeInsets.symmetric(vertical: 18),
                         child: Text(
                           section.title,
                           style: const TextStyle(
@@ -46,9 +46,8 @@ class _HomeTabState extends ConsumerState<HomeTab> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
                       SizedBox(
-                        height: 300,
+                        height: 230,
                         child: ListView.separated(
                           separatorBuilder: (_, __) =>
                               const SizedBox(width: 18),
@@ -57,7 +56,7 @@ class _HomeTabState extends ConsumerState<HomeTab> {
                           itemBuilder: (context, index) {
                             var manga = section.items![index];
                             return SizedBox(
-                              width: 250,
+                              width: 170,
                               child: MangaCard(
                                 mangaId: manga.id,
                                 name: manga.title.text,

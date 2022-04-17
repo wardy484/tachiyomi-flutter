@@ -1,10 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
-import 'package:fluttiyomi/data/updated_chapters/updated_chapters.dart';
 import 'package:fluttiyomi/database/models.dart' as models;
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/database/favourite.dart';
-import 'package:fluttiyomi/database/settings.dart';
 import 'package:fluttiyomi/favourites/favourites_repository.dart';
 import 'package:fluttiyomi/favourites/favourites_state.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
@@ -67,17 +65,9 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
 
   Future<void> checkForUpdates() async {
     // await deleteLatestChapters();
-    Setting settings = await _settings.getGlobalSettings();
-
     List<Favourite> favourites = await _favourites.getFavourites();
 
     state = FavouritesState.loaded(_sortAndGroupFavourites(favourites), true);
-
-    UpdatedChapters updated = await _source.checkForUpdates(
-      favourites.map<String>((e) => e.mangaId).toList(),
-      // settings.lastUpdateCheck,
-      DateTime.now().subtract(Duration(days: 1)),
-    );
 
     for (var e in favourites) {
       var future = getLatestChapters(e.mangaId);
@@ -88,8 +78,15 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
         e.newChapterIds.addAll(value);
         e.newChapterIds = e.newChapterIds.unique();
         _favourites.update([e]);
+      });
 
-        print(e.newChapterIds);
+      _updateQueue.setOnComplete(() async {
+        List<Favourite> favourites = await _favourites.getFavourites();
+
+        state = FavouritesState.loaded(
+          _sortAndGroupFavourites(favourites),
+          false,
+        );
       });
     }
 
@@ -104,6 +101,30 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
 
     if (favourite is Favourite) {
       favourite.newChapterIds.removeWhere((id) => id == chapterId);
+      _favourites.update([favourite]);
+    }
+
+    var favourites = await _favourites.getFavourites();
+    state = FavouritesState.loaded(
+      _sortAndGroupFavourites(favourites),
+      false,
+    );
+  }
+
+  Future<void> markManyAsOpened(
+    String mangaId,
+    List<String> chapterIds,
+  ) async {
+    Favourite? favourite = await _favourites.getFavourite(
+      _source.sourceId,
+      mangaId,
+    );
+
+    if (favourite is Favourite) {
+      favourite.newChapterIds.removeWhere(
+        (id) => chapterIds.contains(id),
+      );
+
       _favourites.update([favourite]);
     }
 

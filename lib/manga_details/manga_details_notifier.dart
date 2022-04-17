@@ -90,4 +90,17 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
 
     getMangaDetails(mangaId);
   }
+
+  Future<void> markManyAsRead(
+    String mangaId,
+    List<String> chapterIds,
+  ) async {
+    await _chapters.markManyAsRead(
+      _source.src,
+      mangaId,
+      chapterIds,
+    );
+
+    getMangaDetails(mangaId);
+  }
 }

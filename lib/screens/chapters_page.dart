@@ -148,14 +148,19 @@ class _ChaptersPageState extends ConsumerState<ChaptersPage> {
                               color: Colors.grey,
                             ),
                             onPressed: () {
+                              List<String> chapterIds = [];
+
                               for (var i = index; i < chapters.length; i++) {
-                                ref
-                                    .read(mangaDetailsNotifierProvider.notifier)
-                                    .markAsRead(
-                                      chapters.get(i).id,
-                                      widget.mangaId,
-                                    );
+                                chapterIds.add(chapters.get(i).id);
                               }
+
+                              ref
+                                  .read(mangaDetailsNotifierProvider.notifier)
+                                  .markManyAsRead(widget.mangaId, chapterIds);
+
+                              ref
+                                  .read(favouritesProvider.notifier)
+                                  .markManyAsOpened(widget.mangaId, chapterIds);
                             },
                           ),
                         ],
