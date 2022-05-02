@@ -52,13 +52,11 @@ class _ReadPageState extends ConsumerState<ReadPage> {
 
     ref.read(settingsProvider.notifier).loadSettings();
 
-    ref.read(chapterDetailsProvider.notifier).getChapterDetails(
-          widget.mangaId,
-          widget.chapter.id,
-          widget.chapters,
-          widget.currentChapter,
-          false,
-        );
+    ref.read(readerProvider.notifier).setIndex(widget.currentChapter);
+
+    ref
+        .read(chapterDetailsProvider.notifier)
+        .getChapterDetails(widget.mangaId, widget.chapter.id);
 
     ref.read(readChaptersRepositoryProvider).markAsRead(
           ref.read(sourceClientProvider).sourceId,
@@ -70,11 +68,6 @@ class _ReadPageState extends ConsumerState<ReadPage> {
           widget.mangaId,
           widget.chapter.id,
         );
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
   }
 
   tryToScrollToIndex() {
@@ -93,58 +86,23 @@ class _ReadPageState extends ConsumerState<ReadPage> {
   Widget build(BuildContext context) {
     ref.listen(chapterDetailsProvider, (previous, ChapterDetailsState next) {
       next.whenOrNull(
-        loaded: (_, chapterDetails, _cl, _cc, startFromEnd) async {
-          setState(() {
-            _images.addAll(
-              chapterDetails.pages.map((page) {
-                return ExtendedNetworkImageProvider(
-                  page,
-                  cache: true,
-                );
-              }),
-            );
-          });
-
-          List<Future> futures = [];
-
-          for (var element in _images) {
-            futures.add(precacheImage(element, context));
-          }
-
-          await Future.wait(futures);
-
-          ref.read(chapterDetailsProvider.notifier).imagesPrecached();
-
-          if (widget.resumeFrom != null) {
-            tryToScrollToIndex();
-          }
-        },
+        loaded: (_, chapterDetails) => preloadImages(chapterDetails.pages),
       );
     });
 
     return ref.watch(chapterDetailsProvider).when(
           initial: () => ReaderLoadingContent(chapter: widget.chapter),
-          loaded: (
-            mangaId,
-            chapterDetails,
-            chapterList,
-            currentChapter,
-            startFromEnd,
-          ) {
+          loaded: (mangaId, chapterDetails) {
             return ReaderLoadingContent(chapter: widget.chapter);
           },
-          precached: (
-            mangaId,
-            chapterDetails,
-            chapterList,
-            currentChapter,
-            startFromEnd,
-          ) {
-            Chapter chapter = chapterList.get(currentChapter);
+          precached: (mangaId, chapterDetails) {
+            Chapter chapter =
+                ref.read(chapterDetailsProvider.notifier).getCurrentChapter();
 
             var pages = chapterDetails.pages;
+            var readState = ref.watch(readerProvider);
 
-            if (startFromEnd) {
+            if (readState.reversed) {
               pages = pages.reversed.toList();
             }
 
@@ -162,7 +120,7 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                   },
                   child: ScrollingViewer(
                     child: ReaderLoader(
-                      reverse: startFromEnd,
+                      reverse: readState.reversed,
                       child: ListView.builder(
                         controller: _autoScrollController,
                         padding: ref.watch(settingsProvider).when(
@@ -172,7 +130,7 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                               ),
                             ),
                         shrinkWrap: true,
-                        reverse: startFromEnd,
+                        reverse: readState.reversed,
                         itemCount: pages.length,
                         itemBuilder: (context, index) {
                           var item = pages[index];
@@ -196,7 +154,7 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                                     .moveProgressForVisibilityInfo(
                                       visibilityInfo,
                                       pages.length,
-                                      startFromEnd,
+                                      readState.reversed,
                                     );
 
                                 ref
@@ -212,8 +170,8 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                           );
                         },
                       ),
-                      currentChapter: currentChapter + 1,
-                      maxChapters: chapterList.length,
+                      currentChapter: readState.currentIndex + 1,
+                      maxChapters: widget.chapters.length,
                     ),
                   ),
                 ),
@@ -224,5 +182,32 @@ class _ReadPageState extends ConsumerState<ReadPage> {
             );
           },
         );
+  }
+
+  void preloadImages(List<String> images) async {
+    setState(() {
+      _images.addAll(
+        images.map((page) {
+          return ExtendedNetworkImageProvider(
+            page,
+            cache: true,
+          );
+        }),
+      );
+    });
+
+    List<Future> futures = [];
+
+    for (var element in _images) {
+      futures.add(precacheImage(element, context));
+    }
+
+    await Future.wait(futures);
+
+    ref.read(chapterDetailsProvider.notifier).imagesPrecached();
+
+    if (widget.resumeFrom != null) {
+      tryToScrollToIndex();
+    }
   }
 }

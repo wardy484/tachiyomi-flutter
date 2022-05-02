@@ -25,7 +25,7 @@ class ReaderBottomAppBar extends ConsumerWidget {
               child: StatefulBuilder(
                 builder: (context, state) {
                   String progress = ref.watch(readerProvider).when(
-                        reading: (index, _) => index,
+                        reading: (index, _, __, ___, ____) => index,
                       );
 
                   return Text(
@@ -42,7 +42,9 @@ class ReaderBottomAppBar extends ConsumerWidget {
                 IconButton(
                   icon: const Icon(Icons.arrow_back_ios),
                   onPressed: () {
-                    ref.read(readerProvider.notifier).moveProgress("1");
+                    ref.read(readerProvider.notifier).moveProgress(
+                          progress: "1",
+                        );
 
                     ref.read(chapterDetailsProvider.notifier).previousChapter();
                   },
@@ -50,7 +52,9 @@ class ReaderBottomAppBar extends ConsumerWidget {
                 IconButton(
                   icon: const Icon(Icons.arrow_forward_ios),
                   onPressed: () {
-                    ref.read(readerProvider.notifier).moveProgress("1");
+                    ref.read(readerProvider.notifier).moveProgress(
+                          progress: "1",
+                        );
 
                     ref.read(chapterDetailsProvider.notifier).nextChapter();
                   },
