@@ -12,29 +12,11 @@ part of 'chapterlist.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 ChapterList _$ChapterListFromJson(Map<String, dynamic> json) {
   return _ChapterList.fromJson(json);
 }
-
-/// @nodoc
-class _$ChapterListTearOff {
-  const _$ChapterListTearOff();
-
-  _ChapterList call(List<Chapter> chapters) {
-    return _ChapterList(
-      chapters,
-    );
-  }
-
-  ChapterList fromJson(Map<String, Object?> json) {
-    return ChapterList.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $ChapterList = _$ChapterListTearOff();
 
 /// @nodoc
 mixin _$ChapterList {
@@ -111,13 +93,19 @@ class __$ChapterListCopyWithImpl<$Res> extends _$ChapterListCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_ChapterList extends _ChapterList {
-  _$_ChapterList(this.chapters) : super._();
+  _$_ChapterList(final List<Chapter> chapters)
+      : _chapters = chapters,
+        super._();
 
   factory _$_ChapterList.fromJson(Map<String, dynamic> json) =>
       _$$_ChapterListFromJson(json);
 
+  final List<Chapter> _chapters;
   @override
-  final List<Chapter> chapters;
+  List<Chapter> get chapters {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_chapters);
+  }
 
   @override
   String toString() {
@@ -132,6 +120,7 @@ class _$_ChapterList extends _ChapterList {
             const DeepCollectionEquality().equals(other.chapters, chapters));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(chapters));
@@ -148,14 +137,14 @@ class _$_ChapterList extends _ChapterList {
 }
 
 abstract class _ChapterList extends ChapterList {
-  factory _ChapterList(List<Chapter> chapters) = _$_ChapterList;
+  factory _ChapterList(final List<Chapter> chapters) = _$_ChapterList;
   _ChapterList._() : super._();
 
   factory _ChapterList.fromJson(Map<String, dynamic> json) =
       _$_ChapterList.fromJson;
 
   @override
-  List<Chapter> get chapters;
+  List<Chapter> get chapters => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$ChapterListCopyWith<_ChapterList> get copyWith =>

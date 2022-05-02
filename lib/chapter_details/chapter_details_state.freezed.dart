@@ -12,41 +12,7 @@ part of 'chapter_details_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$ChapterDetailsStateTearOff {
-  const _$ChapterDetailsStateTearOff();
-
-  _Initial initial() {
-    return const _Initial();
-  }
-
-  _Loaded loaded(String mangaId, ChapterDetails chapterDetails,
-      ChapterList chapters, int currentIndex, bool startFromEnd) {
-    return _Loaded(
-      mangaId,
-      chapterDetails,
-      chapters,
-      currentIndex,
-      startFromEnd,
-    );
-  }
-
-  _precached precached(String mangaId, ChapterDetails chapterDetails,
-      ChapterList chapters, int currentIndex, bool startFromEnd) {
-    return _precached(
-      mangaId,
-      chapterDetails,
-      chapters,
-      currentIndex,
-      startFromEnd,
-    );
-  }
-}
-
-/// @nodoc
-const $ChapterDetailsState = _$ChapterDetailsStateTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$ChapterDetailsState {
@@ -454,14 +420,18 @@ class _$_Loaded implements _Loaded {
 }
 
 abstract class _Loaded implements ChapterDetailsState {
-  const factory _Loaded(String mangaId, ChapterDetails chapterDetails,
-      ChapterList chapters, int currentIndex, bool startFromEnd) = _$_Loaded;
+  const factory _Loaded(
+      final String mangaId,
+      final ChapterDetails chapterDetails,
+      final ChapterList chapters,
+      final int currentIndex,
+      final bool startFromEnd) = _$_Loaded;
 
-  String get mangaId;
-  ChapterDetails get chapterDetails;
-  ChapterList get chapters;
-  int get currentIndex;
-  bool get startFromEnd;
+  String get mangaId => throw _privateConstructorUsedError;
+  ChapterDetails get chapterDetails => throw _privateConstructorUsedError;
+  ChapterList get chapters => throw _privateConstructorUsedError;
+  int get currentIndex => throw _privateConstructorUsedError;
+  bool get startFromEnd => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$LoadedCopyWith<_Loaded> get copyWith => throw _privateConstructorUsedError;
 }
@@ -675,14 +645,18 @@ class _$_precached implements _precached {
 }
 
 abstract class _precached implements ChapterDetailsState {
-  const factory _precached(String mangaId, ChapterDetails chapterDetails,
-      ChapterList chapters, int currentIndex, bool startFromEnd) = _$_precached;
+  const factory _precached(
+      final String mangaId,
+      final ChapterDetails chapterDetails,
+      final ChapterList chapters,
+      final int currentIndex,
+      final bool startFromEnd) = _$_precached;
 
-  String get mangaId;
-  ChapterDetails get chapterDetails;
-  ChapterList get chapters;
-  int get currentIndex;
-  bool get startFromEnd;
+  String get mangaId => throw _privateConstructorUsedError;
+  ChapterDetails get chapterDetails => throw _privateConstructorUsedError;
+  ChapterList get chapters => throw _privateConstructorUsedError;
+  int get currentIndex => throw _privateConstructorUsedError;
+  bool get startFromEnd => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$precachedCopyWith<_precached> get copyWith =>
       throw _privateConstructorUsedError;

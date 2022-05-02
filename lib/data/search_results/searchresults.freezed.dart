@@ -12,29 +12,11 @@ part of 'searchresults.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 SearchResults _$SearchResultsFromJson(Map<String, dynamic> json) {
   return _SearchResults.fromJson(json);
 }
-
-/// @nodoc
-class _$SearchResultsTearOff {
-  const _$SearchResultsTearOff();
-
-  _SearchResults call(List<MangaListItem> results) {
-    return _SearchResults(
-      results,
-    );
-  }
-
-  SearchResults fromJson(Map<String, Object?> json) {
-    return SearchResults.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $SearchResults = _$SearchResultsTearOff();
 
 /// @nodoc
 mixin _$SearchResults {
@@ -113,13 +95,19 @@ class __$SearchResultsCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_SearchResults extends _SearchResults {
-  _$_SearchResults(this.results) : super._();
+  _$_SearchResults(final List<MangaListItem> results)
+      : _results = results,
+        super._();
 
   factory _$_SearchResults.fromJson(Map<String, dynamic> json) =>
       _$$_SearchResultsFromJson(json);
 
+  final List<MangaListItem> _results;
   @override
-  final List<MangaListItem> results;
+  List<MangaListItem> get results {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_results);
+  }
 
   @override
   String toString() {
@@ -134,6 +122,7 @@ class _$_SearchResults extends _SearchResults {
             const DeepCollectionEquality().equals(other.results, results));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(results));
@@ -150,14 +139,14 @@ class _$_SearchResults extends _SearchResults {
 }
 
 abstract class _SearchResults extends SearchResults {
-  factory _SearchResults(List<MangaListItem> results) = _$_SearchResults;
+  factory _SearchResults(final List<MangaListItem> results) = _$_SearchResults;
   _SearchResults._() : super._();
 
   factory _SearchResults.fromJson(Map<String, dynamic> json) =
       _$_SearchResults.fromJson;
 
   @override
-  List<MangaListItem> get results;
+  List<MangaListItem> get results => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$SearchResultsCopyWith<_SearchResults> get copyWith =>

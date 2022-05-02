@@ -12,29 +12,11 @@ part of 'updated_chapters.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 UpdatedChapters _$UpdatedChaptersFromJson(Map<String, dynamic> json) {
   return _UpdatedChapters.fromJson(json);
 }
-
-/// @nodoc
-class _$UpdatedChaptersTearOff {
-  const _$UpdatedChaptersTearOff();
-
-  _UpdatedChapters call({required List<String> ids}) {
-    return _UpdatedChapters(
-      ids: ids,
-    );
-  }
-
-  UpdatedChapters fromJson(Map<String, Object?> json) {
-    return UpdatedChapters.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $UpdatedChapters = _$UpdatedChaptersTearOff();
 
 /// @nodoc
 mixin _$UpdatedChapters {
@@ -113,13 +95,17 @@ class __$UpdatedChaptersCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_UpdatedChapters implements _UpdatedChapters {
-  _$_UpdatedChapters({required this.ids});
+  _$_UpdatedChapters({required final List<String> ids}) : _ids = ids;
 
   factory _$_UpdatedChapters.fromJson(Map<String, dynamic> json) =>
       _$$_UpdatedChaptersFromJson(json);
 
+  final List<String> _ids;
   @override
-  final List<String> ids;
+  List<String> get ids {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_ids);
+  }
 
   @override
   String toString() {
@@ -134,6 +120,7 @@ class _$_UpdatedChapters implements _UpdatedChapters {
             const DeepCollectionEquality().equals(other.ids, ids));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(ids));
@@ -150,13 +137,14 @@ class _$_UpdatedChapters implements _UpdatedChapters {
 }
 
 abstract class _UpdatedChapters implements UpdatedChapters {
-  factory _UpdatedChapters({required List<String> ids}) = _$_UpdatedChapters;
+  factory _UpdatedChapters({required final List<String> ids}) =
+      _$_UpdatedChapters;
 
   factory _UpdatedChapters.fromJson(Map<String, dynamic> json) =
       _$_UpdatedChapters.fromJson;
 
   @override
-  List<String> get ids;
+  List<String> get ids => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$UpdatedChaptersCopyWith<_UpdatedChapters> get copyWith =>

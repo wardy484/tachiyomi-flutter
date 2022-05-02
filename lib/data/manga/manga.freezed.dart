@@ -12,56 +12,11 @@ part of 'manga.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 Manga _$MangaFromJson(Map<String, dynamic> json) {
   return _Manga.fromJson(json);
 }
-
-/// @nodoc
-class _$MangaTearOff {
-  const _$MangaTearOff();
-
-  _Manga call(
-      String id,
-      List<String> titles,
-      String image,
-      double? rating,
-      String? mangaStatus,
-      String? langFlag,
-      String? author,
-      String? artist,
-      List<String>? covers,
-      String? desc,
-      double? follows,
-      List<TagSection>? tags,
-      DateTime? lastUpdate,
-      {bool favourite = false}) {
-    return _Manga(
-      id,
-      titles,
-      image,
-      rating,
-      mangaStatus,
-      langFlag,
-      author,
-      artist,
-      covers,
-      desc,
-      follows,
-      tags,
-      lastUpdate,
-      favourite: favourite,
-    );
-  }
-
-  Manga fromJson(Map<String, Object?> json) {
-    return Manga.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $Manga = _$MangaTearOff();
 
 /// @nodoc
 mixin _$Manga {
@@ -306,27 +261,35 @@ class __$MangaCopyWithImpl<$Res> extends _$MangaCopyWithImpl<$Res>
 class _$_Manga implements _Manga {
   _$_Manga(
       this.id,
-      this.titles,
+      final List<String> titles,
       this.image,
       this.rating,
       this.mangaStatus,
       this.langFlag,
       this.author,
       this.artist,
-      this.covers,
+      final List<String>? covers,
       this.desc,
       this.follows,
-      this.tags,
+      final List<TagSection>? tags,
       this.lastUpdate,
-      {this.favourite = false});
+      {this.favourite = false})
+      : _titles = titles,
+        _covers = covers,
+        _tags = tags;
 
   factory _$_Manga.fromJson(Map<String, dynamic> json) =>
       _$$_MangaFromJson(json);
 
   @override
   final String id;
+  final List<String> _titles;
   @override
-  final List<String> titles;
+  List<String> get titles {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_titles);
+  }
+
   @override
   final String image;
   @override
@@ -339,18 +302,32 @@ class _$_Manga implements _Manga {
   final String? author;
   @override
   final String? artist;
+  final List<String>? _covers;
   @override
-  final List<String>? covers;
+  List<String>? get covers {
+    final value = _covers;
+    if (value == null) return null;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   final String? desc;
   @override
   final double? follows;
+  final List<TagSection>? _tags;
   @override
-  final List<TagSection>? tags;
+  List<TagSection>? get tags {
+    final value = _tags;
+    if (value == null) return null;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   final DateTime? lastUpdate;
-  @JsonKey()
   @override
+  @JsonKey()
   final bool favourite;
 
   @override
@@ -381,6 +358,7 @@ class _$_Manga implements _Manga {
             const DeepCollectionEquality().equals(other.favourite, favourite));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -412,51 +390,51 @@ class _$_Manga implements _Manga {
 
 abstract class _Manga implements Manga {
   factory _Manga(
-      String id,
-      List<String> titles,
-      String image,
-      double? rating,
-      String? mangaStatus,
-      String? langFlag,
-      String? author,
-      String? artist,
-      List<String>? covers,
-      String? desc,
-      double? follows,
-      List<TagSection>? tags,
-      DateTime? lastUpdate,
-      {bool favourite}) = _$_Manga;
+      final String id,
+      final List<String> titles,
+      final String image,
+      final double? rating,
+      final String? mangaStatus,
+      final String? langFlag,
+      final String? author,
+      final String? artist,
+      final List<String>? covers,
+      final String? desc,
+      final double? follows,
+      final List<TagSection>? tags,
+      final DateTime? lastUpdate,
+      {final bool favourite}) = _$_Manga;
 
   factory _Manga.fromJson(Map<String, dynamic> json) = _$_Manga.fromJson;
 
   @override
-  String get id;
+  String get id => throw _privateConstructorUsedError;
   @override
-  List<String> get titles;
+  List<String> get titles => throw _privateConstructorUsedError;
   @override
-  String get image;
+  String get image => throw _privateConstructorUsedError;
   @override
-  double? get rating;
+  double? get rating => throw _privateConstructorUsedError;
   @override
-  String? get mangaStatus;
+  String? get mangaStatus => throw _privateConstructorUsedError;
   @override
-  String? get langFlag;
+  String? get langFlag => throw _privateConstructorUsedError;
   @override
-  String? get author;
+  String? get author => throw _privateConstructorUsedError;
   @override
-  String? get artist;
+  String? get artist => throw _privateConstructorUsedError;
   @override
-  List<String>? get covers;
+  List<String>? get covers => throw _privateConstructorUsedError;
   @override
-  String? get desc;
+  String? get desc => throw _privateConstructorUsedError;
   @override
-  double? get follows;
+  double? get follows => throw _privateConstructorUsedError;
   @override
-  List<TagSection>? get tags;
+  List<TagSection>? get tags => throw _privateConstructorUsedError;
   @override
-  DateTime? get lastUpdate;
+  DateTime? get lastUpdate => throw _privateConstructorUsedError;
   @override
-  bool get favourite;
+  bool get favourite => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$MangaCopyWith<_Manga> get copyWith => throw _privateConstructorUsedError;

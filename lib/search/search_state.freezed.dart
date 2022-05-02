@@ -12,29 +12,7 @@ part of 'search_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$SearchStateTearOff {
-  const _$SearchStateTearOff();
-
-  _Initial initial() {
-    return const _Initial();
-  }
-
-  _Loaded loaded(PagedResults results) {
-    return _Loaded(
-      results,
-    );
-  }
-
-  _Failed failed() {
-    return const _Failed();
-  }
-}
-
-/// @nodoc
-const $SearchState = _$SearchStateTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$SearchState {
@@ -346,9 +324,9 @@ class _$_Loaded implements _Loaded {
 }
 
 abstract class _Loaded implements SearchState {
-  const factory _Loaded(PagedResults results) = _$_Loaded;
+  const factory _Loaded(final PagedResults results) = _$_Loaded;
 
-  PagedResults get results;
+  PagedResults get results => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$LoadedCopyWith<_Loaded> get copyWith => throw _privateConstructorUsedError;
 }

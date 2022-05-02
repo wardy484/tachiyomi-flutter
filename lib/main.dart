@@ -15,28 +15,19 @@ void main() async {
   container.read(sourceClientProvider.state).state = await SourceClient.init();
 
   await container.read(isarDatabaseProvider).init();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  await SentryFlutter.init(
-    (options) {
-      options.dsn =
-          'https://7fe8e00f82e64d7d83a6fb366a762855@o1207946.ingest.sentry.io/6341248';
-      // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-      // We recommend adjusting this value in production.
-      options.tracesSampleRate = 1.0;
-    },
-    appRunner: () => runApp(MyApp()),
-  );
-
-  try {
-    throw Exception("fucked up");
-  } catch (exception, stackTrace) {
-    await Sentry.captureException(
-      exception,
-      stackTrace: stackTrace,
-    );
-  }
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
+  // await SentryFlutter.init(
+  //   (options) {
+  //     options.dsn =
+  //         'https://7fe8e00f82e64d7d83a6fb366a762855@o1207946.ingest.sentry.io/6341248';
+  //     // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
+  //     // We recommend adjusting this value in production.
+  //     options.tracesSampleRate = 1.0;
+  //   },
+  //   appRunner: () => runApp(MyApp()),
+  // );
 
   // container.read(favouritesProvider.notifier).checkForUpdates();
 

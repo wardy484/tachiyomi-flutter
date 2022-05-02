@@ -6,19 +6,16 @@ part of 'chapter.dart';
 // IsarCollectionGenerator
 // **************************************************************************
 
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, invalid_use_of_protected_member
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, unused_local_variable
 
 extension GetChapterCollection on Isar {
-  IsarCollection<Chapter> get chapters {
-    return getCollection('Chapter');
-  }
+  IsarCollection<Chapter> get chapters => getCollection();
 }
 
-final ChapterSchema = CollectionSchema(
+const ChapterSchema = CollectionSchema(
   name: 'Chapter',
   schema:
-      '{"name":"Chapter","properties":[{"name":"chapterId","type":"String"},{"name":"chapterNo","type":"Double"},{"name":"group","type":"String"},{"name":"langCode","type":"String"},{"name":"mangaId","type":"String"},{"name":"name","type":"String"},{"name":"page","type":"Long"},{"name":"read","type":"Byte"},{"name":"sourceId","type":"String"},{"name":"time","type":"String"},{"name":"volume","type":"String"}],"indexes":[{"name":"chapterId_sourceId_mangaId","unique":false,"properties":[{"name":"chapterId","type":"Hash","caseSensitive":true},{"name":"sourceId","type":"Hash","caseSensitive":true},{"name":"mangaId","type":"Hash","caseSensitive":true}]}],"links":[]}',
-  adapter: const _ChapterAdapter(),
+      '{"name":"Chapter","idName":"id","properties":[{"name":"chapterId","type":"String"},{"name":"chapterNo","type":"Double"},{"name":"group","type":"String"},{"name":"langCode","type":"String"},{"name":"mangaId","type":"String"},{"name":"name","type":"String"},{"name":"page","type":"Long"},{"name":"read","type":"Bool"},{"name":"sourceId","type":"String"},{"name":"time","type":"String"},{"name":"volume","type":"String"}],"indexes":[{"name":"chapterId_sourceId_mangaId","unique":false,"properties":[{"name":"chapterId","type":"Hash","caseSensitive":true},{"name":"sourceId","type":"Hash","caseSensitive":true},{"name":"mangaId","type":"Hash","caseSensitive":true}]}],"links":[]}',
   idName: 'id',
   propertyIds: {
     'chapterId': 0,
@@ -33,256 +30,327 @@ final ChapterSchema = CollectionSchema(
     'time': 9,
     'volume': 10
   },
+  listProperties: {},
   indexIds: {'chapterId_sourceId_mangaId': 0},
-  indexTypes: {
+  indexValueTypes: {
     'chapterId_sourceId_mangaId': [
-      NativeIndexType.stringHash,
-      NativeIndexType.stringHash,
-      NativeIndexType.stringHash,
+      IndexValueType.stringHash,
+      IndexValueType.stringHash,
+      IndexValueType.stringHash,
     ]
   },
   linkIds: {},
-  backlinkIds: {},
-  linkedCollections: [],
-  getId: (obj) => obj.id,
-  setId: (obj, id) => obj.id = id,
-  getLinks: (obj) => [],
-  version: 1,
+  backlinkLinkNames: {},
+  getId: _chapterGetId,
+  setId: _chapterSetId,
+  getLinks: _chapterGetLinks,
+  attachLinks: _chapterAttachLinks,
+  serializeNative: _chapterSerializeNative,
+  deserializeNative: _chapterDeserializeNative,
+  deserializePropNative: _chapterDeserializePropNative,
+  serializeWeb: _chapterSerializeWeb,
+  deserializeWeb: _chapterDeserializeWeb,
+  deserializePropWeb: _chapterDeserializePropWeb,
+  version: 3,
 );
 
-class _ChapterAdapter extends IsarTypeAdapter<Chapter> {
-  const _ChapterAdapter();
-
-  @override
-  void serialize(IsarCollection<Chapter> collection, IsarRawObject rawObj,
-      Chapter object, List<int> offsets, AdapterAlloc alloc) {
-    var dynamicSize = 0;
-    final value0 = object.chapterId;
-    final _chapterId = BinaryWriter.utf8Encoder.convert(value0);
-    dynamicSize += _chapterId.length;
-    final value1 = object.chapterNo;
-    final _chapterNo = value1;
-    final value2 = object.group;
-    IsarUint8List? _group;
-    if (value2 != null) {
-      _group = BinaryWriter.utf8Encoder.convert(value2);
-    }
-    dynamicSize += _group?.length ?? 0;
-    final value3 = object.langCode;
-    final _langCode = BinaryWriter.utf8Encoder.convert(value3);
-    dynamicSize += _langCode.length;
-    final value4 = object.mangaId;
-    final _mangaId = BinaryWriter.utf8Encoder.convert(value4);
-    dynamicSize += _mangaId.length;
-    final value5 = object.name;
-    IsarUint8List? _name;
-    if (value5 != null) {
-      _name = BinaryWriter.utf8Encoder.convert(value5);
-    }
-    dynamicSize += _name?.length ?? 0;
-    final value6 = object.page;
-    final _page = value6;
-    final value7 = object.read;
-    final _read = value7;
-    final value8 = object.sourceId;
-    final _sourceId = BinaryWriter.utf8Encoder.convert(value8);
-    dynamicSize += _sourceId.length;
-    final value9 = object.time;
-    IsarUint8List? _time;
-    if (value9 != null) {
-      _time = BinaryWriter.utf8Encoder.convert(value9);
-    }
-    dynamicSize += _time?.length ?? 0;
-    final value10 = object.volume;
-    IsarUint8List? _volume;
-    if (value10 != null) {
-      _volume = BinaryWriter.utf8Encoder.convert(value10);
-    }
-    dynamicSize += _volume?.length ?? 0;
-    final size = dynamicSize + 83;
-
-    rawObj.buffer = alloc(size);
-    rawObj.buffer_length = size;
-    final buffer = bufAsBytes(rawObj.buffer, size);
-    final writer = BinaryWriter(buffer, 83);
-    writer.writeBytes(offsets[0], _chapterId);
-    writer.writeDouble(offsets[1], _chapterNo);
-    writer.writeBytes(offsets[2], _group);
-    writer.writeBytes(offsets[3], _langCode);
-    writer.writeBytes(offsets[4], _mangaId);
-    writer.writeBytes(offsets[5], _name);
-    writer.writeLong(offsets[6], _page);
-    writer.writeBool(offsets[7], _read);
-    writer.writeBytes(offsets[8], _sourceId);
-    writer.writeBytes(offsets[9], _time);
-    writer.writeBytes(offsets[10], _volume);
-  }
-
-  @override
-  Chapter deserialize(IsarCollection<Chapter> collection, int id,
-      BinaryReader reader, List<int> offsets) {
-    final object = Chapter();
-    object.chapterId = reader.readString(offsets[0]);
-    object.chapterNo = reader.readDouble(offsets[1]);
-    object.group = reader.readStringOrNull(offsets[2]);
-    object.id = id;
-    object.langCode = reader.readString(offsets[3]);
-    object.mangaId = reader.readString(offsets[4]);
-    object.name = reader.readStringOrNull(offsets[5]);
-    object.page = reader.readLongOrNull(offsets[6]);
-    object.read = reader.readBool(offsets[7]);
-    object.sourceId = reader.readString(offsets[8]);
-    object.time = reader.readStringOrNull(offsets[9]);
-    object.volume = reader.readStringOrNull(offsets[10]);
-    return object;
-  }
-
-  @override
-  P deserializeProperty<P>(
-      int id, BinaryReader reader, int propertyIndex, int offset) {
-    switch (propertyIndex) {
-      case -1:
-        return id as P;
-      case 0:
-        return (reader.readString(offset)) as P;
-      case 1:
-        return (reader.readDouble(offset)) as P;
-      case 2:
-        return (reader.readStringOrNull(offset)) as P;
-      case 3:
-        return (reader.readString(offset)) as P;
-      case 4:
-        return (reader.readString(offset)) as P;
-      case 5:
-        return (reader.readStringOrNull(offset)) as P;
-      case 6:
-        return (reader.readLongOrNull(offset)) as P;
-      case 7:
-        return (reader.readBool(offset)) as P;
-      case 8:
-        return (reader.readString(offset)) as P;
-      case 9:
-        return (reader.readStringOrNull(offset)) as P;
-      case 10:
-        return (reader.readStringOrNull(offset)) as P;
-      default:
-        throw 'Illegal propertyIndex';
-    }
+int? _chapterGetId(Chapter object) {
+  if (object.id == Isar.autoIncrement) {
+    return null;
+  } else {
+    return object.id;
   }
 }
 
+void _chapterSetId(Chapter object, int id) {
+  object.id = id;
+}
+
+List<IsarLinkBase> _chapterGetLinks(Chapter object) {
+  return [];
+}
+
+void _chapterSerializeNative(
+    IsarCollection<Chapter> collection,
+    IsarRawObject rawObj,
+    Chapter object,
+    int staticSize,
+    List<int> offsets,
+    AdapterAlloc alloc) {
+  var dynamicSize = 0;
+  final value0 = object.chapterId;
+  final _chapterId = IsarBinaryWriter.utf8Encoder.convert(value0);
+  dynamicSize += (_chapterId.length) as int;
+  final value1 = object.chapterNo;
+  final _chapterNo = value1;
+  final value2 = object.group;
+  IsarUint8List? _group;
+  if (value2 != null) {
+    _group = IsarBinaryWriter.utf8Encoder.convert(value2);
+  }
+  dynamicSize += (_group?.length ?? 0) as int;
+  final value3 = object.langCode;
+  final _langCode = IsarBinaryWriter.utf8Encoder.convert(value3);
+  dynamicSize += (_langCode.length) as int;
+  final value4 = object.mangaId;
+  final _mangaId = IsarBinaryWriter.utf8Encoder.convert(value4);
+  dynamicSize += (_mangaId.length) as int;
+  final value5 = object.name;
+  IsarUint8List? _name;
+  if (value5 != null) {
+    _name = IsarBinaryWriter.utf8Encoder.convert(value5);
+  }
+  dynamicSize += (_name?.length ?? 0) as int;
+  final value6 = object.page;
+  final _page = value6;
+  final value7 = object.read;
+  final _read = value7;
+  final value8 = object.sourceId;
+  final _sourceId = IsarBinaryWriter.utf8Encoder.convert(value8);
+  dynamicSize += (_sourceId.length) as int;
+  final value9 = object.time;
+  IsarUint8List? _time;
+  if (value9 != null) {
+    _time = IsarBinaryWriter.utf8Encoder.convert(value9);
+  }
+  dynamicSize += (_time?.length ?? 0) as int;
+  final value10 = object.volume;
+  IsarUint8List? _volume;
+  if (value10 != null) {
+    _volume = IsarBinaryWriter.utf8Encoder.convert(value10);
+  }
+  dynamicSize += (_volume?.length ?? 0) as int;
+  final size = staticSize + dynamicSize;
+
+  rawObj.buffer = alloc(size);
+  rawObj.buffer_length = size;
+  final buffer = IsarNative.bufAsBytes(rawObj.buffer, size);
+  final writer = IsarBinaryWriter(buffer, staticSize);
+  writer.writeBytes(offsets[0], _chapterId);
+  writer.writeDouble(offsets[1], _chapterNo);
+  writer.writeBytes(offsets[2], _group);
+  writer.writeBytes(offsets[3], _langCode);
+  writer.writeBytes(offsets[4], _mangaId);
+  writer.writeBytes(offsets[5], _name);
+  writer.writeLong(offsets[6], _page);
+  writer.writeBool(offsets[7], _read);
+  writer.writeBytes(offsets[8], _sourceId);
+  writer.writeBytes(offsets[9], _time);
+  writer.writeBytes(offsets[10], _volume);
+}
+
+Chapter _chapterDeserializeNative(IsarCollection<Chapter> collection, int id,
+    IsarBinaryReader reader, List<int> offsets) {
+  final object = Chapter();
+  object.chapterId = reader.readString(offsets[0]);
+  object.chapterNo = reader.readDouble(offsets[1]);
+  object.group = reader.readStringOrNull(offsets[2]);
+  object.id = id;
+  object.langCode = reader.readString(offsets[3]);
+  object.mangaId = reader.readString(offsets[4]);
+  object.name = reader.readStringOrNull(offsets[5]);
+  object.page = reader.readLongOrNull(offsets[6]);
+  object.read = reader.readBool(offsets[7]);
+  object.sourceId = reader.readString(offsets[8]);
+  object.time = reader.readStringOrNull(offsets[9]);
+  object.volume = reader.readStringOrNull(offsets[10]);
+  return object;
+}
+
+P _chapterDeserializePropNative<P>(
+    int id, IsarBinaryReader reader, int propertyIndex, int offset) {
+  switch (propertyIndex) {
+    case -1:
+      return id as P;
+    case 0:
+      return (reader.readString(offset)) as P;
+    case 1:
+      return (reader.readDouble(offset)) as P;
+    case 2:
+      return (reader.readStringOrNull(offset)) as P;
+    case 3:
+      return (reader.readString(offset)) as P;
+    case 4:
+      return (reader.readString(offset)) as P;
+    case 5:
+      return (reader.readStringOrNull(offset)) as P;
+    case 6:
+      return (reader.readLongOrNull(offset)) as P;
+    case 7:
+      return (reader.readBool(offset)) as P;
+    case 8:
+      return (reader.readString(offset)) as P;
+    case 9:
+      return (reader.readStringOrNull(offset)) as P;
+    case 10:
+      return (reader.readStringOrNull(offset)) as P;
+    default:
+      throw 'Illegal propertyIndex';
+  }
+}
+
+dynamic _chapterSerializeWeb(
+    IsarCollection<Chapter> collection, Chapter object) {
+  final jsObj = IsarNative.newJsObject();
+  IsarNative.jsObjectSet(jsObj, 'chapterId', object.chapterId);
+  IsarNative.jsObjectSet(jsObj, 'chapterNo', object.chapterNo);
+  IsarNative.jsObjectSet(jsObj, 'group', object.group);
+  IsarNative.jsObjectSet(jsObj, 'id', object.id);
+  IsarNative.jsObjectSet(jsObj, 'langCode', object.langCode);
+  IsarNative.jsObjectSet(jsObj, 'mangaId', object.mangaId);
+  IsarNative.jsObjectSet(jsObj, 'name', object.name);
+  IsarNative.jsObjectSet(jsObj, 'page', object.page);
+  IsarNative.jsObjectSet(jsObj, 'read', object.read);
+  IsarNative.jsObjectSet(jsObj, 'sourceId', object.sourceId);
+  IsarNative.jsObjectSet(jsObj, 'time', object.time);
+  IsarNative.jsObjectSet(jsObj, 'volume', object.volume);
+  return jsObj;
+}
+
+Chapter _chapterDeserializeWeb(
+    IsarCollection<Chapter> collection, dynamic jsObj) {
+  final object = Chapter();
+  object.chapterId = IsarNative.jsObjectGet(jsObj, 'chapterId') ?? '';
+  object.chapterNo =
+      IsarNative.jsObjectGet(jsObj, 'chapterNo') ?? double.negativeInfinity;
+  object.group = IsarNative.jsObjectGet(jsObj, 'group');
+  object.id = IsarNative.jsObjectGet(jsObj, 'id');
+  object.langCode = IsarNative.jsObjectGet(jsObj, 'langCode') ?? '';
+  object.mangaId = IsarNative.jsObjectGet(jsObj, 'mangaId') ?? '';
+  object.name = IsarNative.jsObjectGet(jsObj, 'name');
+  object.page = IsarNative.jsObjectGet(jsObj, 'page');
+  object.read = IsarNative.jsObjectGet(jsObj, 'read') ?? false;
+  object.sourceId = IsarNative.jsObjectGet(jsObj, 'sourceId') ?? '';
+  object.time = IsarNative.jsObjectGet(jsObj, 'time');
+  object.volume = IsarNative.jsObjectGet(jsObj, 'volume');
+  return object;
+}
+
+P _chapterDeserializePropWeb<P>(Object jsObj, String propertyName) {
+  switch (propertyName) {
+    case 'chapterId':
+      return (IsarNative.jsObjectGet(jsObj, 'chapterId') ?? '') as P;
+    case 'chapterNo':
+      return (IsarNative.jsObjectGet(jsObj, 'chapterNo') ??
+          double.negativeInfinity) as P;
+    case 'group':
+      return (IsarNative.jsObjectGet(jsObj, 'group')) as P;
+    case 'id':
+      return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
+    case 'langCode':
+      return (IsarNative.jsObjectGet(jsObj, 'langCode') ?? '') as P;
+    case 'mangaId':
+      return (IsarNative.jsObjectGet(jsObj, 'mangaId') ?? '') as P;
+    case 'name':
+      return (IsarNative.jsObjectGet(jsObj, 'name')) as P;
+    case 'page':
+      return (IsarNative.jsObjectGet(jsObj, 'page')) as P;
+    case 'read':
+      return (IsarNative.jsObjectGet(jsObj, 'read') ?? false) as P;
+    case 'sourceId':
+      return (IsarNative.jsObjectGet(jsObj, 'sourceId') ?? '') as P;
+    case 'time':
+      return (IsarNative.jsObjectGet(jsObj, 'time')) as P;
+    case 'volume':
+      return (IsarNative.jsObjectGet(jsObj, 'volume')) as P;
+    default:
+      throw 'Illegal propertyName';
+  }
+}
+
+void _chapterAttachLinks(IsarCollection col, int id, Chapter object) {}
+
 extension ChapterQueryWhereSort on QueryBuilder<Chapter, Chapter, QWhere> {
   QueryBuilder<Chapter, Chapter, QAfterWhere> anyId() {
-    return addWhereClauseInternal(const WhereClause(indexName: null));
+    return addWhereClauseInternal(const IdWhereClause.any());
   }
 
   QueryBuilder<Chapter, Chapter, QAfterWhere> anyChapterIdSourceIdMangaId() {
     return addWhereClauseInternal(
-        const WhereClause(indexName: 'chapterId_sourceId_mangaId'));
+        const IndexWhereClause.any(indexName: 'chapterId_sourceId_mangaId'));
   }
 }
 
 extension ChapterQueryWhere on QueryBuilder<Chapter, Chapter, QWhereClause> {
-  QueryBuilder<Chapter, Chapter, QAfterWhereClause> idEqualTo(int? id) {
-    return addWhereClauseInternal(WhereClause(
-      indexName: null,
-      lower: [id],
+  QueryBuilder<Chapter, Chapter, QAfterWhereClause> idEqualTo(int id) {
+    return addWhereClauseInternal(IdWhereClause.between(
+      lower: id,
       includeLower: true,
-      upper: [id],
+      upper: id,
       includeUpper: true,
     ));
   }
 
-  QueryBuilder<Chapter, Chapter, QAfterWhereClause> idNotEqualTo(int? id) {
+  QueryBuilder<Chapter, Chapter, QAfterWhereClause> idNotEqualTo(int id) {
     if (whereSortInternal == Sort.asc) {
-      return addWhereClauseInternal(WhereClause(
-        indexName: null,
-        upper: [id],
-        includeUpper: false,
-      )).addWhereClauseInternal(WhereClause(
-        indexName: null,
-        lower: [id],
-        includeLower: false,
-      ));
+      return addWhereClauseInternal(
+        IdWhereClause.lessThan(upper: id, includeUpper: false),
+      ).addWhereClauseInternal(
+        IdWhereClause.greaterThan(lower: id, includeLower: false),
+      );
     } else {
-      return addWhereClauseInternal(WhereClause(
-        indexName: null,
-        lower: [id],
-        includeLower: false,
-      )).addWhereClauseInternal(WhereClause(
-        indexName: null,
-        upper: [id],
-        includeUpper: false,
-      ));
+      return addWhereClauseInternal(
+        IdWhereClause.greaterThan(lower: id, includeLower: false),
+      ).addWhereClauseInternal(
+        IdWhereClause.lessThan(upper: id, includeUpper: false),
+      );
     }
   }
 
-  QueryBuilder<Chapter, Chapter, QAfterWhereClause> idGreaterThan(
-    int? id, {
-    bool include = false,
-  }) {
-    return addWhereClauseInternal(WhereClause(
-      indexName: null,
-      lower: [id],
-      includeLower: include,
-    ));
+  QueryBuilder<Chapter, Chapter, QAfterWhereClause> idGreaterThan(int id,
+      {bool include = false}) {
+    return addWhereClauseInternal(
+      IdWhereClause.greaterThan(lower: id, includeLower: include),
+    );
   }
 
-  QueryBuilder<Chapter, Chapter, QAfterWhereClause> idLessThan(
-    int? id, {
-    bool include = false,
-  }) {
-    return addWhereClauseInternal(WhereClause(
-      indexName: null,
-      upper: [id],
-      includeUpper: include,
-    ));
+  QueryBuilder<Chapter, Chapter, QAfterWhereClause> idLessThan(int id,
+      {bool include = false}) {
+    return addWhereClauseInternal(
+      IdWhereClause.lessThan(upper: id, includeUpper: include),
+    );
   }
 
   QueryBuilder<Chapter, Chapter, QAfterWhereClause> idBetween(
-    int? lowerId,
-    int? upperId, {
+    int lowerId,
+    int upperId, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addWhereClauseInternal(WhereClause(
-      indexName: null,
-      lower: [lowerId],
+    return addWhereClauseInternal(IdWhereClause.between(
+      lower: lowerId,
       includeLower: includeLower,
-      upper: [upperId],
+      upper: upperId,
       includeUpper: includeUpper,
     ));
   }
 
   QueryBuilder<Chapter, Chapter, QAfterWhereClause> chapterIdEqualTo(
       String chapterId) {
-    return addWhereClauseInternal(WhereClause(
+    return addWhereClauseInternal(IndexWhereClause.equalTo(
       indexName: 'chapterId_sourceId_mangaId',
-      lower: [chapterId],
-      includeLower: true,
-      upper: [chapterId],
-      includeUpper: true,
+      value: [chapterId],
     ));
   }
 
   QueryBuilder<Chapter, Chapter, QAfterWhereClause> chapterIdNotEqualTo(
       String chapterId) {
     if (whereSortInternal == Sort.asc) {
-      return addWhereClauseInternal(WhereClause(
+      return addWhereClauseInternal(IndexWhereClause.lessThan(
         indexName: 'chapterId_sourceId_mangaId',
         upper: [chapterId],
         includeUpper: false,
-      )).addWhereClauseInternal(WhereClause(
+      )).addWhereClauseInternal(IndexWhereClause.greaterThan(
         indexName: 'chapterId_sourceId_mangaId',
         lower: [chapterId],
         includeLower: false,
       ));
     } else {
-      return addWhereClauseInternal(WhereClause(
+      return addWhereClauseInternal(IndexWhereClause.greaterThan(
         indexName: 'chapterId_sourceId_mangaId',
         lower: [chapterId],
         includeLower: false,
-      )).addWhereClauseInternal(WhereClause(
+      )).addWhereClauseInternal(IndexWhereClause.lessThan(
         indexName: 'chapterId_sourceId_mangaId',
         upper: [chapterId],
         includeUpper: false,
@@ -292,33 +360,30 @@ extension ChapterQueryWhere on QueryBuilder<Chapter, Chapter, QWhereClause> {
 
   QueryBuilder<Chapter, Chapter, QAfterWhereClause> chapterIdSourceIdEqualTo(
       String chapterId, String sourceId) {
-    return addWhereClauseInternal(WhereClause(
+    return addWhereClauseInternal(IndexWhereClause.equalTo(
       indexName: 'chapterId_sourceId_mangaId',
-      lower: [chapterId, sourceId],
-      includeLower: true,
-      upper: [chapterId, sourceId],
-      includeUpper: true,
+      value: [chapterId, sourceId],
     ));
   }
 
   QueryBuilder<Chapter, Chapter, QAfterWhereClause> chapterIdSourceIdNotEqualTo(
       String chapterId, String sourceId) {
     if (whereSortInternal == Sort.asc) {
-      return addWhereClauseInternal(WhereClause(
+      return addWhereClauseInternal(IndexWhereClause.lessThan(
         indexName: 'chapterId_sourceId_mangaId',
         upper: [chapterId, sourceId],
         includeUpper: false,
-      )).addWhereClauseInternal(WhereClause(
+      )).addWhereClauseInternal(IndexWhereClause.greaterThan(
         indexName: 'chapterId_sourceId_mangaId',
         lower: [chapterId, sourceId],
         includeLower: false,
       ));
     } else {
-      return addWhereClauseInternal(WhereClause(
+      return addWhereClauseInternal(IndexWhereClause.greaterThan(
         indexName: 'chapterId_sourceId_mangaId',
         lower: [chapterId, sourceId],
         includeLower: false,
-      )).addWhereClauseInternal(WhereClause(
+      )).addWhereClauseInternal(IndexWhereClause.lessThan(
         indexName: 'chapterId_sourceId_mangaId',
         upper: [chapterId, sourceId],
         includeUpper: false,
@@ -329,12 +394,9 @@ extension ChapterQueryWhere on QueryBuilder<Chapter, Chapter, QWhereClause> {
   QueryBuilder<Chapter, Chapter, QAfterWhereClause>
       chapterIdSourceIdMangaIdEqualTo(
           String chapterId, String sourceId, String mangaId) {
-    return addWhereClauseInternal(WhereClause(
+    return addWhereClauseInternal(IndexWhereClause.equalTo(
       indexName: 'chapterId_sourceId_mangaId',
-      lower: [chapterId, sourceId, mangaId],
-      includeLower: true,
-      upper: [chapterId, sourceId, mangaId],
-      includeUpper: true,
+      value: [chapterId, sourceId, mangaId],
     ));
   }
 
@@ -342,21 +404,21 @@ extension ChapterQueryWhere on QueryBuilder<Chapter, Chapter, QWhereClause> {
       chapterIdSourceIdMangaIdNotEqualTo(
           String chapterId, String sourceId, String mangaId) {
     if (whereSortInternal == Sort.asc) {
-      return addWhereClauseInternal(WhereClause(
+      return addWhereClauseInternal(IndexWhereClause.lessThan(
         indexName: 'chapterId_sourceId_mangaId',
         upper: [chapterId, sourceId, mangaId],
         includeUpper: false,
-      )).addWhereClauseInternal(WhereClause(
+      )).addWhereClauseInternal(IndexWhereClause.greaterThan(
         indexName: 'chapterId_sourceId_mangaId',
         lower: [chapterId, sourceId, mangaId],
         includeLower: false,
       ));
     } else {
-      return addWhereClauseInternal(WhereClause(
+      return addWhereClauseInternal(IndexWhereClause.greaterThan(
         indexName: 'chapterId_sourceId_mangaId',
         lower: [chapterId, sourceId, mangaId],
         includeLower: false,
-      )).addWhereClauseInternal(WhereClause(
+      )).addWhereClauseInternal(IndexWhereClause.lessThan(
         indexName: 'chapterId_sourceId_mangaId',
         upper: [chapterId, sourceId, mangaId],
         includeUpper: false,
@@ -620,7 +682,7 @@ extension ChapterQueryFilter
     ));
   }
 
-  QueryBuilder<Chapter, Chapter, QAfterFilterCondition> idEqualTo(int? value) {
+  QueryBuilder<Chapter, Chapter, QAfterFilterCondition> idEqualTo(int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
       property: 'id',
@@ -629,7 +691,7 @@ extension ChapterQueryFilter
   }
 
   QueryBuilder<Chapter, Chapter, QAfterFilterCondition> idGreaterThan(
-    int? value, {
+    int value, {
     bool include = false,
   }) {
     return addFilterConditionInternal(FilterCondition(
@@ -641,7 +703,7 @@ extension ChapterQueryFilter
   }
 
   QueryBuilder<Chapter, Chapter, QAfterFilterCondition> idLessThan(
-    int? value, {
+    int value, {
     bool include = false,
   }) {
     return addFilterConditionInternal(FilterCondition(
@@ -653,8 +715,8 @@ extension ChapterQueryFilter
   }
 
   QueryBuilder<Chapter, Chapter, QAfterFilterCondition> idBetween(
-    int? lower,
-    int? upper, {
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -1374,6 +1436,9 @@ extension ChapterQueryFilter
     ));
   }
 }
+
+extension ChapterQueryLinks
+    on QueryBuilder<Chapter, Chapter, QFilterCondition> {}
 
 extension ChapterQueryWhereSortBy on QueryBuilder<Chapter, Chapter, QSortBy> {
   QueryBuilder<Chapter, Chapter, QAfterSortBy> sortByChapterId() {

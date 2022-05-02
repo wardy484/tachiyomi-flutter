@@ -12,30 +12,11 @@ part of 'tag.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 Tag _$TagFromJson(Map<String, dynamic> json) {
   return _Tag.fromJson(json);
 }
-
-/// @nodoc
-class _$TagTearOff {
-  const _$TagTearOff();
-
-  _Tag call({required String id, required String label}) {
-    return _Tag(
-      id: id,
-      label: label,
-    );
-  }
-
-  Tag fromJson(Map<String, Object?> json) {
-    return Tag.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $Tag = _$TagTearOff();
 
 /// @nodoc
 mixin _$Tag {
@@ -141,6 +122,7 @@ class _$_Tag implements _Tag {
             const DeepCollectionEquality().equals(other.label, label));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -159,14 +141,15 @@ class _$_Tag implements _Tag {
 }
 
 abstract class _Tag implements Tag {
-  factory _Tag({required String id, required String label}) = _$_Tag;
+  factory _Tag({required final String id, required final String label}) =
+      _$_Tag;
 
   factory _Tag.fromJson(Map<String, dynamic> json) = _$_Tag.fromJson;
 
   @override
-  String get id;
+  String get id => throw _privateConstructorUsedError;
   @override
-  String get label;
+  String get label => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$TagCopyWith<_Tag> get copyWith => throw _privateConstructorUsedError;

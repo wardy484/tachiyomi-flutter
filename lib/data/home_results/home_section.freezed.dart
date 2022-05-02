@@ -12,38 +12,11 @@ part of 'home_section.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 HomeSection _$HomeSectionFromJson(Map<String, dynamic> json) {
   return _HomeSection.fromJson(json);
 }
-
-/// @nodoc
-class _$HomeSectionTearOff {
-  const _$HomeSectionTearOff();
-
-  _HomeSection call(
-      {required String id,
-      required String title,
-      String? type,
-      List<MangaTile>? items,
-      @JsonKey(name: 'view_more') bool? viewMore}) {
-    return _HomeSection(
-      id: id,
-      title: title,
-      type: type,
-      items: items,
-      viewMore: viewMore,
-    );
-  }
-
-  HomeSection fromJson(Map<String, Object?> json) {
-    return HomeSection.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $HomeSection = _$HomeSectionTearOff();
 
 /// @nodoc
 mixin _$HomeSection {
@@ -179,8 +152,9 @@ class _$_HomeSection implements _HomeSection {
       {required this.id,
       required this.title,
       this.type,
-      this.items,
-      @JsonKey(name: 'view_more') this.viewMore});
+      final List<MangaTile>? items,
+      @JsonKey(name: 'view_more') this.viewMore})
+      : _items = items;
 
   factory _$_HomeSection.fromJson(Map<String, dynamic> json) =>
       _$$_HomeSectionFromJson(json);
@@ -191,8 +165,15 @@ class _$_HomeSection implements _HomeSection {
   final String title;
   @override
   final String? type;
+  final List<MangaTile>? _items;
   @override
-  final List<MangaTile>? items;
+  List<MangaTile>? get items {
+    final value = _items;
+    if (value == null) return null;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   @JsonKey(name: 'view_more')
   final bool? viewMore;
@@ -214,6 +195,7 @@ class _$_HomeSection implements _HomeSection {
             const DeepCollectionEquality().equals(other.viewMore, viewMore));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -236,26 +218,26 @@ class _$_HomeSection implements _HomeSection {
 
 abstract class _HomeSection implements HomeSection {
   factory _HomeSection(
-      {required String id,
-      required String title,
-      String? type,
-      List<MangaTile>? items,
-      @JsonKey(name: 'view_more') bool? viewMore}) = _$_HomeSection;
+      {required final String id,
+      required final String title,
+      final String? type,
+      final List<MangaTile>? items,
+      @JsonKey(name: 'view_more') final bool? viewMore}) = _$_HomeSection;
 
   factory _HomeSection.fromJson(Map<String, dynamic> json) =
       _$_HomeSection.fromJson;
 
   @override
-  String get id;
+  String get id => throw _privateConstructorUsedError;
   @override
-  String get title;
+  String get title => throw _privateConstructorUsedError;
   @override
-  String? get type;
+  String? get type => throw _privateConstructorUsedError;
   @override
-  List<MangaTile>? get items;
+  List<MangaTile>? get items => throw _privateConstructorUsedError;
   @override
   @JsonKey(name: 'view_more')
-  bool? get viewMore;
+  bool? get viewMore => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$HomeSectionCopyWith<_HomeSection> get copyWith =>

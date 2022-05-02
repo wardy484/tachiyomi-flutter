@@ -12,30 +12,11 @@ part of 'icon_text.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 IconText _$IconTextFromJson(Map<String, dynamic> json) {
   return _IconText.fromJson(json);
 }
-
-/// @nodoc
-class _$IconTextTearOff {
-  const _$IconTextTearOff();
-
-  _IconText call({required String text, String? icon}) {
-    return _IconText(
-      text: text,
-      icon: icon,
-    );
-  }
-
-  IconText fromJson(Map<String, Object?> json) {
-    return IconText.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $IconText = _$IconTextTearOff();
 
 /// @nodoc
 mixin _$IconText {
@@ -143,6 +124,7 @@ class _$_IconText implements _IconText {
             const DeepCollectionEquality().equals(other.icon, icon));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -161,14 +143,15 @@ class _$_IconText implements _IconText {
 }
 
 abstract class _IconText implements IconText {
-  factory _IconText({required String text, String? icon}) = _$_IconText;
+  factory _IconText({required final String text, final String? icon}) =
+      _$_IconText;
 
   factory _IconText.fromJson(Map<String, dynamic> json) = _$_IconText.fromJson;
 
   @override
-  String get text;
+  String get text => throw _privateConstructorUsedError;
   @override
-  String? get icon;
+  String? get icon => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$IconTextCopyWith<_IconText> get copyWith =>

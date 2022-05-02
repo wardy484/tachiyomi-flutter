@@ -12,48 +12,11 @@ part of 'chapter.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 Chapter _$ChapterFromJson(Map<String, dynamic> json) {
   return _Chapter.fromJson(json);
 }
-
-/// @nodoc
-class _$ChapterTearOff {
-  const _$ChapterTearOff();
-
-  _Chapter call(
-      String id,
-      String mangaId,
-      @JsonKey(name: 'chapNum') double chapterNo,
-      String langCode,
-      String? name,
-      String? volume,
-      String? group,
-      String? time,
-      {bool read = false,
-      int page = 1}) {
-    return _Chapter(
-      id,
-      mangaId,
-      chapterNo,
-      langCode,
-      name,
-      volume,
-      group,
-      time,
-      read: read,
-      page: page,
-    );
-  }
-
-  Chapter fromJson(Map<String, Object?> json) {
-    return Chapter.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $Chapter = _$ChapterTearOff();
 
 /// @nodoc
 mixin _$Chapter {
@@ -261,7 +224,8 @@ class _$_Chapter implements _Chapter {
   final double chapterNo;
   @override
   final String langCode;
-  @override // TODO: use enum
+// TODO: use enum
+  @override
   final String? name;
   @override
   final String? volume;
@@ -269,11 +233,11 @@ class _$_Chapter implements _Chapter {
   final String? group;
   @override
   final String? time;
-  @JsonKey()
   @override
+  @JsonKey()
   final bool read;
-  @JsonKey()
   @override
+  @JsonKey()
   final int page;
 
   @override
@@ -298,6 +262,7 @@ class _$_Chapter implements _Chapter {
             const DeepCollectionEquality().equals(other.page, page));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -325,40 +290,40 @@ class _$_Chapter implements _Chapter {
 
 abstract class _Chapter implements Chapter {
   factory _Chapter(
-      String id,
-      String mangaId,
-      @JsonKey(name: 'chapNum') double chapterNo,
-      String langCode,
-      String? name,
-      String? volume,
-      String? group,
-      String? time,
-      {bool read,
-      int page}) = _$_Chapter;
+      final String id,
+      final String mangaId,
+      @JsonKey(name: 'chapNum') final double chapterNo,
+      final String langCode,
+      final String? name,
+      final String? volume,
+      final String? group,
+      final String? time,
+      {final bool read,
+      final int page}) = _$_Chapter;
 
   factory _Chapter.fromJson(Map<String, dynamic> json) = _$_Chapter.fromJson;
 
   @override
-  String get id;
+  String get id => throw _privateConstructorUsedError;
   @override
-  String get mangaId;
+  String get mangaId => throw _privateConstructorUsedError;
   @override
   @JsonKey(name: 'chapNum')
-  double get chapterNo;
+  double get chapterNo => throw _privateConstructorUsedError;
   @override
-  String get langCode;
+  String get langCode => throw _privateConstructorUsedError;
   @override // TODO: use enum
-  String? get name;
+  String? get name => throw _privateConstructorUsedError;
   @override
-  String? get volume;
+  String? get volume => throw _privateConstructorUsedError;
   @override
-  String? get group;
+  String? get group => throw _privateConstructorUsedError;
   @override
-  String? get time;
+  String? get time => throw _privateConstructorUsedError;
   @override
-  bool get read;
+  bool get read => throw _privateConstructorUsedError;
   @override
-  int get page;
+  int get page => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$ChapterCopyWith<_Chapter> get copyWith =>

@@ -12,31 +12,11 @@ part of 'paged_results.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 PagedResults _$PagedResultsFromJson(Map<String, dynamic> json) {
   return _PagedResults.fromJson(json);
 }
-
-/// @nodoc
-class _$PagedResultsTearOff {
-  const _$PagedResultsTearOff();
-
-  _PagedResults call(
-      {required List<MangaTile> results, Map<dynamic, dynamic>? meta}) {
-    return _PagedResults(
-      results: results,
-      meta: meta,
-    );
-  }
-
-  PagedResults fromJson(Map<String, Object?> json) {
-    return PagedResults.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $PagedResults = _$PagedResultsTearOff();
 
 /// @nodoc
 mixin _$PagedResults {
@@ -124,15 +104,30 @@ class __$PagedResultsCopyWithImpl<$Res> extends _$PagedResultsCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_PagedResults implements _PagedResults {
-  _$_PagedResults({required this.results, this.meta});
+  _$_PagedResults(
+      {required final List<MangaTile> results,
+      final Map<dynamic, dynamic>? meta})
+      : _results = results,
+        _meta = meta;
 
   factory _$_PagedResults.fromJson(Map<String, dynamic> json) =>
       _$$_PagedResultsFromJson(json);
 
+  final List<MangaTile> _results;
   @override
-  final List<MangaTile> results;
+  List<MangaTile> get results {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_results);
+  }
+
+  final Map<dynamic, dynamic>? _meta;
   @override
-  final Map<dynamic, dynamic>? meta;
+  Map<dynamic, dynamic>? get meta {
+    final value = _meta;
+    if (value == null) return null;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
 
   @override
   String toString() {
@@ -148,6 +143,7 @@ class _$_PagedResults implements _PagedResults {
             const DeepCollectionEquality().equals(other.meta, meta));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -167,16 +163,16 @@ class _$_PagedResults implements _PagedResults {
 
 abstract class _PagedResults implements PagedResults {
   factory _PagedResults(
-      {required List<MangaTile> results,
-      Map<dynamic, dynamic>? meta}) = _$_PagedResults;
+      {required final List<MangaTile> results,
+      final Map<dynamic, dynamic>? meta}) = _$_PagedResults;
 
   factory _PagedResults.fromJson(Map<String, dynamic> json) =
       _$_PagedResults.fromJson;
 
   @override
-  List<MangaTile> get results;
+  List<MangaTile> get results => throw _privateConstructorUsedError;
   @override
-  Map<dynamic, dynamic>? get meta;
+  Map<dynamic, dynamic>? get meta => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$PagedResultsCopyWith<_PagedResults> get copyWith =>

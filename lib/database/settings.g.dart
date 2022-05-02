@@ -6,153 +6,200 @@ part of 'settings.dart';
 // IsarCollectionGenerator
 // **************************************************************************
 
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, invalid_use_of_protected_member
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, unused_local_variable
 
 extension GetSettingCollection on Isar {
-  IsarCollection<Setting> get settings {
-    return getCollection('Setting');
-  }
+  IsarCollection<Setting> get settings => getCollection();
 }
 
-final SettingSchema = CollectionSchema(
+const SettingSchema = CollectionSchema(
   name: 'Setting',
   schema:
-      '{"name":"Setting","properties":[{"name":"lastUpdateCheck","type":"Long"},{"name":"padding","type":"Long"}],"indexes":[],"links":[]}',
-  adapter: const _SettingAdapter(),
+      '{"name":"Setting","idName":"id","properties":[{"name":"lastUpdateCheck","type":"Long"},{"name":"padding","type":"Long"}],"indexes":[],"links":[]}',
   idName: 'id',
   propertyIds: {'lastUpdateCheck': 0, 'padding': 1},
+  listProperties: {},
   indexIds: {},
-  indexTypes: {},
+  indexValueTypes: {},
   linkIds: {},
-  backlinkIds: {},
-  linkedCollections: [],
-  getId: (obj) => obj.id,
-  setId: (obj, id) => obj.id = id,
-  getLinks: (obj) => [],
-  version: 1,
+  backlinkLinkNames: {},
+  getId: _settingGetId,
+  setId: _settingSetId,
+  getLinks: _settingGetLinks,
+  attachLinks: _settingAttachLinks,
+  serializeNative: _settingSerializeNative,
+  deserializeNative: _settingDeserializeNative,
+  deserializePropNative: _settingDeserializePropNative,
+  serializeWeb: _settingSerializeWeb,
+  deserializeWeb: _settingDeserializeWeb,
+  deserializePropWeb: _settingDeserializePropWeb,
+  version: 3,
 );
 
-class _SettingAdapter extends IsarTypeAdapter<Setting> {
-  const _SettingAdapter();
-
-  @override
-  void serialize(IsarCollection<Setting> collection, IsarRawObject rawObj,
-      Setting object, List<int> offsets, AdapterAlloc alloc) {
-    var dynamicSize = 0;
-    final value0 = object.lastUpdateCheck;
-    final _lastUpdateCheck = value0;
-    final value1 = object.padding;
-    final _padding = value1;
-    final size = dynamicSize + 18;
-
-    rawObj.buffer = alloc(size);
-    rawObj.buffer_length = size;
-    final buffer = bufAsBytes(rawObj.buffer, size);
-    final writer = BinaryWriter(buffer, 18);
-    writer.writeDateTime(offsets[0], _lastUpdateCheck);
-    writer.writeLong(offsets[1], _padding);
-  }
-
-  @override
-  Setting deserialize(IsarCollection<Setting> collection, int id,
-      BinaryReader reader, List<int> offsets) {
-    final object = Setting();
-    object.id = id;
-    object.lastUpdateCheck = reader.readDateTime(offsets[0]);
-    object.padding = reader.readLong(offsets[1]);
-    return object;
-  }
-
-  @override
-  P deserializeProperty<P>(
-      int id, BinaryReader reader, int propertyIndex, int offset) {
-    switch (propertyIndex) {
-      case -1:
-        return id as P;
-      case 0:
-        return (reader.readDateTime(offset)) as P;
-      case 1:
-        return (reader.readLong(offset)) as P;
-      default:
-        throw 'Illegal propertyIndex';
-    }
+int? _settingGetId(Setting object) {
+  if (object.id == Isar.autoIncrement) {
+    return null;
+  } else {
+    return object.id;
   }
 }
+
+void _settingSetId(Setting object, int id) {
+  object.id = id;
+}
+
+List<IsarLinkBase> _settingGetLinks(Setting object) {
+  return [];
+}
+
+void _settingSerializeNative(
+    IsarCollection<Setting> collection,
+    IsarRawObject rawObj,
+    Setting object,
+    int staticSize,
+    List<int> offsets,
+    AdapterAlloc alloc) {
+  var dynamicSize = 0;
+  final value0 = object.lastUpdateCheck;
+  final _lastUpdateCheck = value0;
+  final value1 = object.padding;
+  final _padding = value1;
+  final size = staticSize + dynamicSize;
+
+  rawObj.buffer = alloc(size);
+  rawObj.buffer_length = size;
+  final buffer = IsarNative.bufAsBytes(rawObj.buffer, size);
+  final writer = IsarBinaryWriter(buffer, staticSize);
+  writer.writeDateTime(offsets[0], _lastUpdateCheck);
+  writer.writeLong(offsets[1], _padding);
+}
+
+Setting _settingDeserializeNative(IsarCollection<Setting> collection, int id,
+    IsarBinaryReader reader, List<int> offsets) {
+  final object = Setting();
+  object.id = id;
+  object.lastUpdateCheck = reader.readDateTime(offsets[0]);
+  object.padding = reader.readLong(offsets[1]);
+  return object;
+}
+
+P _settingDeserializePropNative<P>(
+    int id, IsarBinaryReader reader, int propertyIndex, int offset) {
+  switch (propertyIndex) {
+    case -1:
+      return id as P;
+    case 0:
+      return (reader.readDateTime(offset)) as P;
+    case 1:
+      return (reader.readLong(offset)) as P;
+    default:
+      throw 'Illegal propertyIndex';
+  }
+}
+
+dynamic _settingSerializeWeb(
+    IsarCollection<Setting> collection, Setting object) {
+  final jsObj = IsarNative.newJsObject();
+  IsarNative.jsObjectSet(jsObj, 'id', object.id);
+  IsarNative.jsObjectSet(jsObj, 'lastUpdateCheck',
+      object.lastUpdateCheck.toUtc().millisecondsSinceEpoch);
+  IsarNative.jsObjectSet(jsObj, 'padding', object.padding);
+  return jsObj;
+}
+
+Setting _settingDeserializeWeb(
+    IsarCollection<Setting> collection, dynamic jsObj) {
+  final object = Setting();
+  object.id = IsarNative.jsObjectGet(jsObj, 'id');
+  object.lastUpdateCheck =
+      IsarNative.jsObjectGet(jsObj, 'lastUpdateCheck') != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+                  IsarNative.jsObjectGet(jsObj, 'lastUpdateCheck'),
+                  isUtc: true)
+              .toLocal()
+          : DateTime.fromMillisecondsSinceEpoch(0);
+  object.padding =
+      IsarNative.jsObjectGet(jsObj, 'padding') ?? double.negativeInfinity;
+  return object;
+}
+
+P _settingDeserializePropWeb<P>(Object jsObj, String propertyName) {
+  switch (propertyName) {
+    case 'id':
+      return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
+    case 'lastUpdateCheck':
+      return (IsarNative.jsObjectGet(jsObj, 'lastUpdateCheck') != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+                  IsarNative.jsObjectGet(jsObj, 'lastUpdateCheck'),
+                  isUtc: true)
+              .toLocal()
+          : DateTime.fromMillisecondsSinceEpoch(0)) as P;
+    case 'padding':
+      return (IsarNative.jsObjectGet(jsObj, 'padding') ??
+          double.negativeInfinity) as P;
+    default:
+      throw 'Illegal propertyName';
+  }
+}
+
+void _settingAttachLinks(IsarCollection col, int id, Setting object) {}
 
 extension SettingQueryWhereSort on QueryBuilder<Setting, Setting, QWhere> {
   QueryBuilder<Setting, Setting, QAfterWhere> anyId() {
-    return addWhereClauseInternal(const WhereClause(indexName: null));
+    return addWhereClauseInternal(const IdWhereClause.any());
   }
 }
 
 extension SettingQueryWhere on QueryBuilder<Setting, Setting, QWhereClause> {
-  QueryBuilder<Setting, Setting, QAfterWhereClause> idEqualTo(int? id) {
-    return addWhereClauseInternal(WhereClause(
-      indexName: null,
-      lower: [id],
+  QueryBuilder<Setting, Setting, QAfterWhereClause> idEqualTo(int id) {
+    return addWhereClauseInternal(IdWhereClause.between(
+      lower: id,
       includeLower: true,
-      upper: [id],
+      upper: id,
       includeUpper: true,
     ));
   }
 
-  QueryBuilder<Setting, Setting, QAfterWhereClause> idNotEqualTo(int? id) {
+  QueryBuilder<Setting, Setting, QAfterWhereClause> idNotEqualTo(int id) {
     if (whereSortInternal == Sort.asc) {
-      return addWhereClauseInternal(WhereClause(
-        indexName: null,
-        upper: [id],
-        includeUpper: false,
-      )).addWhereClauseInternal(WhereClause(
-        indexName: null,
-        lower: [id],
-        includeLower: false,
-      ));
+      return addWhereClauseInternal(
+        IdWhereClause.lessThan(upper: id, includeUpper: false),
+      ).addWhereClauseInternal(
+        IdWhereClause.greaterThan(lower: id, includeLower: false),
+      );
     } else {
-      return addWhereClauseInternal(WhereClause(
-        indexName: null,
-        lower: [id],
-        includeLower: false,
-      )).addWhereClauseInternal(WhereClause(
-        indexName: null,
-        upper: [id],
-        includeUpper: false,
-      ));
+      return addWhereClauseInternal(
+        IdWhereClause.greaterThan(lower: id, includeLower: false),
+      ).addWhereClauseInternal(
+        IdWhereClause.lessThan(upper: id, includeUpper: false),
+      );
     }
   }
 
-  QueryBuilder<Setting, Setting, QAfterWhereClause> idGreaterThan(
-    int? id, {
-    bool include = false,
-  }) {
-    return addWhereClauseInternal(WhereClause(
-      indexName: null,
-      lower: [id],
-      includeLower: include,
-    ));
+  QueryBuilder<Setting, Setting, QAfterWhereClause> idGreaterThan(int id,
+      {bool include = false}) {
+    return addWhereClauseInternal(
+      IdWhereClause.greaterThan(lower: id, includeLower: include),
+    );
   }
 
-  QueryBuilder<Setting, Setting, QAfterWhereClause> idLessThan(
-    int? id, {
-    bool include = false,
-  }) {
-    return addWhereClauseInternal(WhereClause(
-      indexName: null,
-      upper: [id],
-      includeUpper: include,
-    ));
+  QueryBuilder<Setting, Setting, QAfterWhereClause> idLessThan(int id,
+      {bool include = false}) {
+    return addWhereClauseInternal(
+      IdWhereClause.lessThan(upper: id, includeUpper: include),
+    );
   }
 
   QueryBuilder<Setting, Setting, QAfterWhereClause> idBetween(
-    int? lowerId,
-    int? upperId, {
+    int lowerId,
+    int upperId, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addWhereClauseInternal(WhereClause(
-      indexName: null,
-      lower: [lowerId],
+    return addWhereClauseInternal(IdWhereClause.between(
+      lower: lowerId,
       includeLower: includeLower,
-      upper: [upperId],
+      upper: upperId,
       includeUpper: includeUpper,
     ));
   }
@@ -168,7 +215,7 @@ extension SettingQueryFilter
     ));
   }
 
-  QueryBuilder<Setting, Setting, QAfterFilterCondition> idEqualTo(int? value) {
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> idEqualTo(int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
       property: 'id',
@@ -177,7 +224,7 @@ extension SettingQueryFilter
   }
 
   QueryBuilder<Setting, Setting, QAfterFilterCondition> idGreaterThan(
-    int? value, {
+    int value, {
     bool include = false,
   }) {
     return addFilterConditionInternal(FilterCondition(
@@ -189,7 +236,7 @@ extension SettingQueryFilter
   }
 
   QueryBuilder<Setting, Setting, QAfterFilterCondition> idLessThan(
-    int? value, {
+    int value, {
     bool include = false,
   }) {
     return addFilterConditionInternal(FilterCondition(
@@ -201,8 +248,8 @@ extension SettingQueryFilter
   }
 
   QueryBuilder<Setting, Setting, QAfterFilterCondition> idBetween(
-    int? lower,
-    int? upper, {
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -312,6 +359,9 @@ extension SettingQueryFilter
     ));
   }
 }
+
+extension SettingQueryLinks
+    on QueryBuilder<Setting, Setting, QFilterCondition> {}
 
 extension SettingQueryWhereSortBy on QueryBuilder<Setting, Setting, QSortBy> {
   QueryBuilder<Setting, Setting, QAfterSortBy> sortById() {

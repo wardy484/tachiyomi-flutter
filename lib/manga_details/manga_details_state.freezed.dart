@@ -12,26 +12,7 @@ part of 'manga_details_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$MangaDetailsStateTearOff {
-  const _$MangaDetailsStateTearOff();
-
-  _Initial initial() {
-    return const _Initial();
-  }
-
-  _Loaded loaded(Manga details, ChapterList chapters) {
-    return _Loaded(
-      details,
-      chapters,
-    );
-  }
-}
-
-/// @nodoc
-const $MangaDetailsState = _$MangaDetailsStateTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$MangaDetailsState {
@@ -344,10 +325,11 @@ class _$_Loaded implements _Loaded {
 }
 
 abstract class _Loaded implements MangaDetailsState {
-  const factory _Loaded(Manga details, ChapterList chapters) = _$_Loaded;
+  const factory _Loaded(final Manga details, final ChapterList chapters) =
+      _$_Loaded;
 
-  Manga get details;
-  ChapterList get chapters;
+  Manga get details => throw _privateConstructorUsedError;
+  ChapterList get chapters => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$LoadedCopyWith<_Loaded> get copyWith => throw _privateConstructorUsedError;
 }

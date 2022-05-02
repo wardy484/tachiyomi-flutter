@@ -6,19 +6,16 @@ part of 'favourite.dart';
 // IsarCollectionGenerator
 // **************************************************************************
 
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, invalid_use_of_protected_member
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, unused_local_variable
 
 extension GetFavouriteCollection on Isar {
-  IsarCollection<Favourite> get favourites {
-    return getCollection('Favourite');
-  }
+  IsarCollection<Favourite> get favourites => getCollection();
 }
 
-final FavouriteSchema = CollectionSchema(
+const FavouriteSchema = CollectionSchema(
   name: 'Favourite',
   schema:
-      '{"name":"Favourite","properties":[{"name":"artist","type":"String"},{"name":"author","type":"String"},{"name":"covers","type":"StringList"},{"name":"desc","type":"String"},{"name":"follows","type":"Double"},{"name":"image","type":"String"},{"name":"langFlag","type":"String"},{"name":"lastUpdate","type":"Long"},{"name":"mangaId","type":"String"},{"name":"mangaStatus","type":"String"},{"name":"name","type":"String"},{"name":"newChapterIds","type":"StringList"},{"name":"rating","type":"Double"},{"name":"sourceId","type":"String"},{"name":"titles","type":"StringList"}],"indexes":[{"name":"mangaId_sourceId","unique":false,"properties":[{"name":"mangaId","type":"Hash","caseSensitive":true},{"name":"sourceId","type":"Hash","caseSensitive":true}]}],"links":[{"name":"lastChapterRead","target":"Chapter"},{"name":"chapters","target":"Chapter"},{"name":"tagSections","target":"TagSection"}]}',
-  adapter: const _FavouriteAdapter(),
+      '{"name":"Favourite","idName":"id","properties":[{"name":"artist","type":"String"},{"name":"author","type":"String"},{"name":"covers","type":"StringList"},{"name":"desc","type":"String"},{"name":"follows","type":"Double"},{"name":"image","type":"String"},{"name":"langFlag","type":"String"},{"name":"lastUpdate","type":"Long"},{"name":"mangaId","type":"String"},{"name":"mangaStatus","type":"String"},{"name":"name","type":"String"},{"name":"newChapterIds","type":"StringList"},{"name":"rating","type":"Double"},{"name":"sourceId","type":"String"},{"name":"titles","type":"StringList"}],"indexes":[{"name":"mangaId_sourceId","unique":false,"properties":[{"name":"mangaId","type":"Hash","caseSensitive":true},{"name":"sourceId","type":"Hash","caseSensitive":true}]}],"links":[{"name":"chapters","target":"Chapter"},{"name":"lastChapterRead","target":"Chapter"},{"name":"tagSections","target":"TagSection"}]}',
   idName: 'id',
   propertyIds: {
     'artist': 0,
@@ -37,335 +34,435 @@ final FavouriteSchema = CollectionSchema(
     'sourceId': 13,
     'titles': 14
   },
+  listProperties: {'covers', 'newChapterIds', 'titles'},
   indexIds: {'mangaId_sourceId': 0},
-  indexTypes: {
+  indexValueTypes: {
     'mangaId_sourceId': [
-      NativeIndexType.stringHash,
-      NativeIndexType.stringHash,
+      IndexValueType.stringHash,
+      IndexValueType.stringHash,
     ]
   },
-  linkIds: {'lastChapterRead': 0, 'chapters': 1, 'tagSections': 2},
-  backlinkIds: {},
-  linkedCollections: ['Chapter', 'TagSection'],
-  getId: (obj) => obj.id,
-  setId: (obj, id) => obj.id = id,
-  getLinks: (obj) => [obj.lastChapterRead, obj.chapters, obj.tagSections],
-  version: 1,
+  linkIds: {'chapters': 0, 'lastChapterRead': 1, 'tagSections': 2},
+  backlinkLinkNames: {},
+  getId: _favouriteGetId,
+  setId: _favouriteSetId,
+  getLinks: _favouriteGetLinks,
+  attachLinks: _favouriteAttachLinks,
+  serializeNative: _favouriteSerializeNative,
+  deserializeNative: _favouriteDeserializeNative,
+  deserializePropNative: _favouriteDeserializePropNative,
+  serializeWeb: _favouriteSerializeWeb,
+  deserializeWeb: _favouriteDeserializeWeb,
+  deserializePropWeb: _favouriteDeserializePropWeb,
+  version: 3,
 );
 
-class _FavouriteAdapter extends IsarTypeAdapter<Favourite> {
-  const _FavouriteAdapter();
-
-  @override
-  void serialize(IsarCollection<Favourite> collection, IsarRawObject rawObj,
-      Favourite object, List<int> offsets, AdapterAlloc alloc) {
-    var dynamicSize = 0;
-    final value0 = object.artist;
-    IsarUint8List? _artist;
-    if (value0 != null) {
-      _artist = BinaryWriter.utf8Encoder.convert(value0);
-    }
-    dynamicSize += _artist?.length ?? 0;
-    final value1 = object.author;
-    IsarUint8List? _author;
-    if (value1 != null) {
-      _author = BinaryWriter.utf8Encoder.convert(value1);
-    }
-    dynamicSize += _author?.length ?? 0;
-    final value2 = object.covers;
-    dynamicSize += (value2?.length ?? 0) * 8;
-    List<IsarUint8List?>? bytesList2;
-    if (value2 != null) {
-      bytesList2 = [];
-      for (var str in value2) {
-        final bytes = BinaryWriter.utf8Encoder.convert(str);
-        bytesList2.add(bytes);
-        dynamicSize += bytes.length;
-      }
-    }
-    final _covers = bytesList2;
-    final value3 = object.desc;
-    IsarUint8List? _desc;
-    if (value3 != null) {
-      _desc = BinaryWriter.utf8Encoder.convert(value3);
-    }
-    dynamicSize += _desc?.length ?? 0;
-    final value4 = object.follows;
-    final _follows = value4;
-    final value5 = object.image;
-    final _image = BinaryWriter.utf8Encoder.convert(value5);
-    dynamicSize += _image.length;
-    final value6 = object.langFlag;
-    IsarUint8List? _langFlag;
-    if (value6 != null) {
-      _langFlag = BinaryWriter.utf8Encoder.convert(value6);
-    }
-    dynamicSize += _langFlag?.length ?? 0;
-    final value7 = object.lastUpdate;
-    final _lastUpdate = value7;
-    final value8 = object.mangaId;
-    final _mangaId = BinaryWriter.utf8Encoder.convert(value8);
-    dynamicSize += _mangaId.length;
-    final value9 = object.mangaStatus;
-    IsarUint8List? _mangaStatus;
-    if (value9 != null) {
-      _mangaStatus = BinaryWriter.utf8Encoder.convert(value9);
-    }
-    dynamicSize += _mangaStatus?.length ?? 0;
-    final value10 = object.name;
-    final _name = BinaryWriter.utf8Encoder.convert(value10);
-    dynamicSize += _name.length;
-    final value11 = object.newChapterIds;
-    dynamicSize += (value11.length) * 8;
-    final bytesList11 = <IsarUint8List>[];
-    for (var str in value11) {
-      final bytes = BinaryWriter.utf8Encoder.convert(str);
-      bytesList11.add(bytes);
-      dynamicSize += bytes.length;
-    }
-    final _newChapterIds = bytesList11;
-    final value12 = object.rating;
-    final _rating = value12;
-    final value13 = object.sourceId;
-    final _sourceId = BinaryWriter.utf8Encoder.convert(value13);
-    dynamicSize += _sourceId.length;
-    final value14 = object.titles;
-    dynamicSize += (value14.length) * 8;
-    final bytesList14 = <IsarUint8List>[];
-    for (var str in value14) {
-      final bytes = BinaryWriter.utf8Encoder.convert(str);
-      bytesList14.add(bytes);
-      dynamicSize += bytes.length;
-    }
-    final _titles = bytesList14;
-    final size = dynamicSize + 122;
-
-    rawObj.buffer = alloc(size);
-    rawObj.buffer_length = size;
-    final buffer = bufAsBytes(rawObj.buffer, size);
-    final writer = BinaryWriter(buffer, 122);
-    writer.writeBytes(offsets[0], _artist);
-    writer.writeBytes(offsets[1], _author);
-    writer.writeStringList(offsets[2], _covers);
-    writer.writeBytes(offsets[3], _desc);
-    writer.writeDouble(offsets[4], _follows);
-    writer.writeBytes(offsets[5], _image);
-    writer.writeBytes(offsets[6], _langFlag);
-    writer.writeDateTime(offsets[7], _lastUpdate);
-    writer.writeBytes(offsets[8], _mangaId);
-    writer.writeBytes(offsets[9], _mangaStatus);
-    writer.writeBytes(offsets[10], _name);
-    writer.writeStringList(offsets[11], _newChapterIds);
-    writer.writeDouble(offsets[12], _rating);
-    writer.writeBytes(offsets[13], _sourceId);
-    writer.writeStringList(offsets[14], _titles);
-    attachLinks(collection.isar, object);
+int? _favouriteGetId(Favourite object) {
+  if (object.id == Isar.autoIncrement) {
+    return null;
+  } else {
+    return object.id;
   }
+}
 
-  @override
-  Favourite deserialize(IsarCollection<Favourite> collection, int id,
-      BinaryReader reader, List<int> offsets) {
-    final object = Favourite();
-    object.artist = reader.readStringOrNull(offsets[0]);
-    object.author = reader.readStringOrNull(offsets[1]);
-    object.covers = reader.readStringList(offsets[2]);
-    object.desc = reader.readStringOrNull(offsets[3]);
-    object.follows = reader.readDoubleOrNull(offsets[4]);
-    object.id = id;
-    object.image = reader.readString(offsets[5]);
-    object.langFlag = reader.readStringOrNull(offsets[6]);
-    object.lastUpdate = reader.readDateTimeOrNull(offsets[7]);
-    object.mangaId = reader.readString(offsets[8]);
-    object.mangaStatus = reader.readStringOrNull(offsets[9]);
-    object.name = reader.readString(offsets[10]);
-    object.newChapterIds = reader.readStringList(offsets[11]) ?? [];
-    object.rating = reader.readDoubleOrNull(offsets[12]);
-    object.sourceId = reader.readString(offsets[13]);
-    object.titles = reader.readStringList(offsets[14]) ?? [];
-    attachLinks(collection.isar, object);
-    return object;
+void _favouriteSetId(Favourite object, int id) {
+  object.id = id;
+}
+
+List<IsarLinkBase> _favouriteGetLinks(Favourite object) {
+  return [object.chapters, object.lastChapterRead, object.tagSections];
+}
+
+void _favouriteSerializeNative(
+    IsarCollection<Favourite> collection,
+    IsarRawObject rawObj,
+    Favourite object,
+    int staticSize,
+    List<int> offsets,
+    AdapterAlloc alloc) {
+  var dynamicSize = 0;
+  final value0 = object.artist;
+  IsarUint8List? _artist;
+  if (value0 != null) {
+    _artist = IsarBinaryWriter.utf8Encoder.convert(value0);
   }
-
-  @override
-  P deserializeProperty<P>(
-      int id, BinaryReader reader, int propertyIndex, int offset) {
-    switch (propertyIndex) {
-      case -1:
-        return id as P;
-      case 0:
-        return (reader.readStringOrNull(offset)) as P;
-      case 1:
-        return (reader.readStringOrNull(offset)) as P;
-      case 2:
-        return (reader.readStringList(offset)) as P;
-      case 3:
-        return (reader.readStringOrNull(offset)) as P;
-      case 4:
-        return (reader.readDoubleOrNull(offset)) as P;
-      case 5:
-        return (reader.readString(offset)) as P;
-      case 6:
-        return (reader.readStringOrNull(offset)) as P;
-      case 7:
-        return (reader.readDateTimeOrNull(offset)) as P;
-      case 8:
-        return (reader.readString(offset)) as P;
-      case 9:
-        return (reader.readStringOrNull(offset)) as P;
-      case 10:
-        return (reader.readString(offset)) as P;
-      case 11:
-        return (reader.readStringList(offset) ?? []) as P;
-      case 12:
-        return (reader.readDoubleOrNull(offset)) as P;
-      case 13:
-        return (reader.readString(offset)) as P;
-      case 14:
-        return (reader.readStringList(offset) ?? []) as P;
-      default:
-        throw 'Illegal propertyIndex';
+  dynamicSize += (_artist?.length ?? 0) as int;
+  final value1 = object.author;
+  IsarUint8List? _author;
+  if (value1 != null) {
+    _author = IsarBinaryWriter.utf8Encoder.convert(value1);
+  }
+  dynamicSize += (_author?.length ?? 0) as int;
+  final value2 = object.covers;
+  dynamicSize += (value2?.length ?? 0) * 8;
+  List<IsarUint8List?>? bytesList2;
+  if (value2 != null) {
+    bytesList2 = [];
+    for (var str in value2) {
+      final bytes = IsarBinaryWriter.utf8Encoder.convert(str);
+      bytesList2.add(bytes);
+      dynamicSize += bytes.length as int;
     }
   }
-
-  void attachLinks(Isar isar, Favourite object) {
-    object.lastChapterRead.attach(
-      isar.favourites,
-      isar.getCollection<Chapter>("Chapter"),
-      object,
-      "lastChapterRead",
-      false,
-    );
-    object.chapters.attach(
-      isar.favourites,
-      isar.getCollection<Chapter>("Chapter"),
-      object,
-      "chapters",
-      false,
-    );
-    object.tagSections.attach(
-      isar.favourites,
-      isar.getCollection<TagSection>("TagSection"),
-      object,
-      "tagSections",
-      false,
-    );
+  final _covers = bytesList2;
+  final value3 = object.desc;
+  IsarUint8List? _desc;
+  if (value3 != null) {
+    _desc = IsarBinaryWriter.utf8Encoder.convert(value3);
   }
+  dynamicSize += (_desc?.length ?? 0) as int;
+  final value4 = object.follows;
+  final _follows = value4;
+  final value5 = object.image;
+  final _image = IsarBinaryWriter.utf8Encoder.convert(value5);
+  dynamicSize += (_image.length) as int;
+  final value6 = object.langFlag;
+  IsarUint8List? _langFlag;
+  if (value6 != null) {
+    _langFlag = IsarBinaryWriter.utf8Encoder.convert(value6);
+  }
+  dynamicSize += (_langFlag?.length ?? 0) as int;
+  final value7 = object.lastUpdate;
+  final _lastUpdate = value7;
+  final value8 = object.mangaId;
+  final _mangaId = IsarBinaryWriter.utf8Encoder.convert(value8);
+  dynamicSize += (_mangaId.length) as int;
+  final value9 = object.mangaStatus;
+  IsarUint8List? _mangaStatus;
+  if (value9 != null) {
+    _mangaStatus = IsarBinaryWriter.utf8Encoder.convert(value9);
+  }
+  dynamicSize += (_mangaStatus?.length ?? 0) as int;
+  final value10 = object.name;
+  final _name = IsarBinaryWriter.utf8Encoder.convert(value10);
+  dynamicSize += (_name.length) as int;
+  final value11 = object.newChapterIds;
+  dynamicSize += (value11.length) * 8;
+  final bytesList11 = <IsarUint8List>[];
+  for (var str in value11) {
+    final bytes = IsarBinaryWriter.utf8Encoder.convert(str);
+    bytesList11.add(bytes);
+    dynamicSize += bytes.length as int;
+  }
+  final _newChapterIds = bytesList11;
+  final value12 = object.rating;
+  final _rating = value12;
+  final value13 = object.sourceId;
+  final _sourceId = IsarBinaryWriter.utf8Encoder.convert(value13);
+  dynamicSize += (_sourceId.length) as int;
+  final value14 = object.titles;
+  dynamicSize += (value14.length) * 8;
+  final bytesList14 = <IsarUint8List>[];
+  for (var str in value14) {
+    final bytes = IsarBinaryWriter.utf8Encoder.convert(str);
+    bytesList14.add(bytes);
+    dynamicSize += bytes.length as int;
+  }
+  final _titles = bytesList14;
+  final size = staticSize + dynamicSize;
+
+  rawObj.buffer = alloc(size);
+  rawObj.buffer_length = size;
+  final buffer = IsarNative.bufAsBytes(rawObj.buffer, size);
+  final writer = IsarBinaryWriter(buffer, staticSize);
+  writer.writeBytes(offsets[0], _artist);
+  writer.writeBytes(offsets[1], _author);
+  writer.writeStringList(offsets[2], _covers);
+  writer.writeBytes(offsets[3], _desc);
+  writer.writeDouble(offsets[4], _follows);
+  writer.writeBytes(offsets[5], _image);
+  writer.writeBytes(offsets[6], _langFlag);
+  writer.writeDateTime(offsets[7], _lastUpdate);
+  writer.writeBytes(offsets[8], _mangaId);
+  writer.writeBytes(offsets[9], _mangaStatus);
+  writer.writeBytes(offsets[10], _name);
+  writer.writeStringList(offsets[11], _newChapterIds);
+  writer.writeDouble(offsets[12], _rating);
+  writer.writeBytes(offsets[13], _sourceId);
+  writer.writeStringList(offsets[14], _titles);
+}
+
+Favourite _favouriteDeserializeNative(IsarCollection<Favourite> collection,
+    int id, IsarBinaryReader reader, List<int> offsets) {
+  final object = Favourite();
+  object.artist = reader.readStringOrNull(offsets[0]);
+  object.author = reader.readStringOrNull(offsets[1]);
+  object.covers = reader.readStringList(offsets[2]);
+  object.desc = reader.readStringOrNull(offsets[3]);
+  object.follows = reader.readDoubleOrNull(offsets[4]);
+  object.id = id;
+  object.image = reader.readString(offsets[5]);
+  object.langFlag = reader.readStringOrNull(offsets[6]);
+  object.lastUpdate = reader.readDateTimeOrNull(offsets[7]);
+  object.mangaId = reader.readString(offsets[8]);
+  object.mangaStatus = reader.readStringOrNull(offsets[9]);
+  object.name = reader.readString(offsets[10]);
+  object.newChapterIds = reader.readStringList(offsets[11]) ?? [];
+  object.rating = reader.readDoubleOrNull(offsets[12]);
+  object.sourceId = reader.readString(offsets[13]);
+  object.titles = reader.readStringList(offsets[14]) ?? [];
+  _favouriteAttachLinks(collection, id, object);
+  return object;
+}
+
+P _favouriteDeserializePropNative<P>(
+    int id, IsarBinaryReader reader, int propertyIndex, int offset) {
+  switch (propertyIndex) {
+    case -1:
+      return id as P;
+    case 0:
+      return (reader.readStringOrNull(offset)) as P;
+    case 1:
+      return (reader.readStringOrNull(offset)) as P;
+    case 2:
+      return (reader.readStringList(offset)) as P;
+    case 3:
+      return (reader.readStringOrNull(offset)) as P;
+    case 4:
+      return (reader.readDoubleOrNull(offset)) as P;
+    case 5:
+      return (reader.readString(offset)) as P;
+    case 6:
+      return (reader.readStringOrNull(offset)) as P;
+    case 7:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 8:
+      return (reader.readString(offset)) as P;
+    case 9:
+      return (reader.readStringOrNull(offset)) as P;
+    case 10:
+      return (reader.readString(offset)) as P;
+    case 11:
+      return (reader.readStringList(offset) ?? []) as P;
+    case 12:
+      return (reader.readDoubleOrNull(offset)) as P;
+    case 13:
+      return (reader.readString(offset)) as P;
+    case 14:
+      return (reader.readStringList(offset) ?? []) as P;
+    default:
+      throw 'Illegal propertyIndex';
+  }
+}
+
+dynamic _favouriteSerializeWeb(
+    IsarCollection<Favourite> collection, Favourite object) {
+  final jsObj = IsarNative.newJsObject();
+  IsarNative.jsObjectSet(jsObj, 'artist', object.artist);
+  IsarNative.jsObjectSet(jsObj, 'author', object.author);
+  IsarNative.jsObjectSet(jsObj, 'covers', object.covers);
+  IsarNative.jsObjectSet(jsObj, 'desc', object.desc);
+  IsarNative.jsObjectSet(jsObj, 'follows', object.follows);
+  IsarNative.jsObjectSet(jsObj, 'id', object.id);
+  IsarNative.jsObjectSet(jsObj, 'image', object.image);
+  IsarNative.jsObjectSet(jsObj, 'langFlag', object.langFlag);
+  IsarNative.jsObjectSet(
+      jsObj, 'lastUpdate', object.lastUpdate?.toUtc().millisecondsSinceEpoch);
+  IsarNative.jsObjectSet(jsObj, 'mangaId', object.mangaId);
+  IsarNative.jsObjectSet(jsObj, 'mangaStatus', object.mangaStatus);
+  IsarNative.jsObjectSet(jsObj, 'name', object.name);
+  IsarNative.jsObjectSet(jsObj, 'newChapterIds', object.newChapterIds);
+  IsarNative.jsObjectSet(jsObj, 'rating', object.rating);
+  IsarNative.jsObjectSet(jsObj, 'sourceId', object.sourceId);
+  IsarNative.jsObjectSet(jsObj, 'titles', object.titles);
+  return jsObj;
+}
+
+Favourite _favouriteDeserializeWeb(
+    IsarCollection<Favourite> collection, dynamic jsObj) {
+  final object = Favourite();
+  object.artist = IsarNative.jsObjectGet(jsObj, 'artist');
+  object.author = IsarNative.jsObjectGet(jsObj, 'author');
+  object.covers = (IsarNative.jsObjectGet(jsObj, 'covers') as List?)
+      ?.map((e) => e ?? '')
+      .toList()
+      .cast<String>();
+  object.desc = IsarNative.jsObjectGet(jsObj, 'desc');
+  object.follows = IsarNative.jsObjectGet(jsObj, 'follows');
+  object.id = IsarNative.jsObjectGet(jsObj, 'id');
+  object.image = IsarNative.jsObjectGet(jsObj, 'image') ?? '';
+  object.langFlag = IsarNative.jsObjectGet(jsObj, 'langFlag');
+  object.lastUpdate = IsarNative.jsObjectGet(jsObj, 'lastUpdate') != null
+      ? DateTime.fromMillisecondsSinceEpoch(
+              IsarNative.jsObjectGet(jsObj, 'lastUpdate'),
+              isUtc: true)
+          .toLocal()
+      : null;
+  object.mangaId = IsarNative.jsObjectGet(jsObj, 'mangaId') ?? '';
+  object.mangaStatus = IsarNative.jsObjectGet(jsObj, 'mangaStatus');
+  object.name = IsarNative.jsObjectGet(jsObj, 'name') ?? '';
+  object.newChapterIds =
+      (IsarNative.jsObjectGet(jsObj, 'newChapterIds') as List?)
+              ?.map((e) => e ?? '')
+              .toList()
+              .cast<String>() ??
+          [];
+  object.rating = IsarNative.jsObjectGet(jsObj, 'rating');
+  object.sourceId = IsarNative.jsObjectGet(jsObj, 'sourceId') ?? '';
+  object.titles = (IsarNative.jsObjectGet(jsObj, 'titles') as List?)
+          ?.map((e) => e ?? '')
+          .toList()
+          .cast<String>() ??
+      [];
+  _favouriteAttachLinks(
+      collection, IsarNative.jsObjectGet(jsObj, 'id'), object);
+  return object;
+}
+
+P _favouriteDeserializePropWeb<P>(Object jsObj, String propertyName) {
+  switch (propertyName) {
+    case 'artist':
+      return (IsarNative.jsObjectGet(jsObj, 'artist')) as P;
+    case 'author':
+      return (IsarNative.jsObjectGet(jsObj, 'author')) as P;
+    case 'covers':
+      return ((IsarNative.jsObjectGet(jsObj, 'covers') as List?)
+          ?.map((e) => e ?? '')
+          .toList()
+          .cast<String>()) as P;
+    case 'desc':
+      return (IsarNative.jsObjectGet(jsObj, 'desc')) as P;
+    case 'follows':
+      return (IsarNative.jsObjectGet(jsObj, 'follows')) as P;
+    case 'id':
+      return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
+    case 'image':
+      return (IsarNative.jsObjectGet(jsObj, 'image') ?? '') as P;
+    case 'langFlag':
+      return (IsarNative.jsObjectGet(jsObj, 'langFlag')) as P;
+    case 'lastUpdate':
+      return (IsarNative.jsObjectGet(jsObj, 'lastUpdate') != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+                  IsarNative.jsObjectGet(jsObj, 'lastUpdate'),
+                  isUtc: true)
+              .toLocal()
+          : null) as P;
+    case 'mangaId':
+      return (IsarNative.jsObjectGet(jsObj, 'mangaId') ?? '') as P;
+    case 'mangaStatus':
+      return (IsarNative.jsObjectGet(jsObj, 'mangaStatus')) as P;
+    case 'name':
+      return (IsarNative.jsObjectGet(jsObj, 'name') ?? '') as P;
+    case 'newChapterIds':
+      return ((IsarNative.jsObjectGet(jsObj, 'newChapterIds') as List?)
+              ?.map((e) => e ?? '')
+              .toList()
+              .cast<String>() ??
+          []) as P;
+    case 'rating':
+      return (IsarNative.jsObjectGet(jsObj, 'rating')) as P;
+    case 'sourceId':
+      return (IsarNative.jsObjectGet(jsObj, 'sourceId') ?? '') as P;
+    case 'titles':
+      return ((IsarNative.jsObjectGet(jsObj, 'titles') as List?)
+              ?.map((e) => e ?? '')
+              .toList()
+              .cast<String>() ??
+          []) as P;
+    default:
+      throw 'Illegal propertyName';
+  }
+}
+
+void _favouriteAttachLinks(IsarCollection col, int id, Favourite object) {
+  object.chapters.attach(col, col.isar.chapters, 'chapters', id);
+  object.lastChapterRead.attach(col, col.isar.chapters, 'lastChapterRead', id);
+  object.tagSections.attach(col, col.isar.tagSections, 'tagSections', id);
 }
 
 extension FavouriteQueryWhereSort
     on QueryBuilder<Favourite, Favourite, QWhere> {
   QueryBuilder<Favourite, Favourite, QAfterWhere> anyId() {
-    return addWhereClauseInternal(const WhereClause(indexName: null));
+    return addWhereClauseInternal(const IdWhereClause.any());
   }
 
   QueryBuilder<Favourite, Favourite, QAfterWhere> anyMangaIdSourceId() {
     return addWhereClauseInternal(
-        const WhereClause(indexName: 'mangaId_sourceId'));
+        const IndexWhereClause.any(indexName: 'mangaId_sourceId'));
   }
 }
 
 extension FavouriteQueryWhere
     on QueryBuilder<Favourite, Favourite, QWhereClause> {
-  QueryBuilder<Favourite, Favourite, QAfterWhereClause> idEqualTo(int? id) {
-    return addWhereClauseInternal(WhereClause(
-      indexName: null,
-      lower: [id],
+  QueryBuilder<Favourite, Favourite, QAfterWhereClause> idEqualTo(int id) {
+    return addWhereClauseInternal(IdWhereClause.between(
+      lower: id,
       includeLower: true,
-      upper: [id],
+      upper: id,
       includeUpper: true,
     ));
   }
 
-  QueryBuilder<Favourite, Favourite, QAfterWhereClause> idNotEqualTo(int? id) {
+  QueryBuilder<Favourite, Favourite, QAfterWhereClause> idNotEqualTo(int id) {
     if (whereSortInternal == Sort.asc) {
-      return addWhereClauseInternal(WhereClause(
-        indexName: null,
-        upper: [id],
-        includeUpper: false,
-      )).addWhereClauseInternal(WhereClause(
-        indexName: null,
-        lower: [id],
-        includeLower: false,
-      ));
+      return addWhereClauseInternal(
+        IdWhereClause.lessThan(upper: id, includeUpper: false),
+      ).addWhereClauseInternal(
+        IdWhereClause.greaterThan(lower: id, includeLower: false),
+      );
     } else {
-      return addWhereClauseInternal(WhereClause(
-        indexName: null,
-        lower: [id],
-        includeLower: false,
-      )).addWhereClauseInternal(WhereClause(
-        indexName: null,
-        upper: [id],
-        includeUpper: false,
-      ));
+      return addWhereClauseInternal(
+        IdWhereClause.greaterThan(lower: id, includeLower: false),
+      ).addWhereClauseInternal(
+        IdWhereClause.lessThan(upper: id, includeUpper: false),
+      );
     }
   }
 
-  QueryBuilder<Favourite, Favourite, QAfterWhereClause> idGreaterThan(
-    int? id, {
-    bool include = false,
-  }) {
-    return addWhereClauseInternal(WhereClause(
-      indexName: null,
-      lower: [id],
-      includeLower: include,
-    ));
+  QueryBuilder<Favourite, Favourite, QAfterWhereClause> idGreaterThan(int id,
+      {bool include = false}) {
+    return addWhereClauseInternal(
+      IdWhereClause.greaterThan(lower: id, includeLower: include),
+    );
   }
 
-  QueryBuilder<Favourite, Favourite, QAfterWhereClause> idLessThan(
-    int? id, {
-    bool include = false,
-  }) {
-    return addWhereClauseInternal(WhereClause(
-      indexName: null,
-      upper: [id],
-      includeUpper: include,
-    ));
+  QueryBuilder<Favourite, Favourite, QAfterWhereClause> idLessThan(int id,
+      {bool include = false}) {
+    return addWhereClauseInternal(
+      IdWhereClause.lessThan(upper: id, includeUpper: include),
+    );
   }
 
   QueryBuilder<Favourite, Favourite, QAfterWhereClause> idBetween(
-    int? lowerId,
-    int? upperId, {
+    int lowerId,
+    int upperId, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addWhereClauseInternal(WhereClause(
-      indexName: null,
-      lower: [lowerId],
+    return addWhereClauseInternal(IdWhereClause.between(
+      lower: lowerId,
       includeLower: includeLower,
-      upper: [upperId],
+      upper: upperId,
       includeUpper: includeUpper,
     ));
   }
 
   QueryBuilder<Favourite, Favourite, QAfterWhereClause> mangaIdEqualTo(
       String mangaId) {
-    return addWhereClauseInternal(WhereClause(
+    return addWhereClauseInternal(IndexWhereClause.equalTo(
       indexName: 'mangaId_sourceId',
-      lower: [mangaId],
-      includeLower: true,
-      upper: [mangaId],
-      includeUpper: true,
+      value: [mangaId],
     ));
   }
 
   QueryBuilder<Favourite, Favourite, QAfterWhereClause> mangaIdNotEqualTo(
       String mangaId) {
     if (whereSortInternal == Sort.asc) {
-      return addWhereClauseInternal(WhereClause(
+      return addWhereClauseInternal(IndexWhereClause.lessThan(
         indexName: 'mangaId_sourceId',
         upper: [mangaId],
         includeUpper: false,
-      )).addWhereClauseInternal(WhereClause(
+      )).addWhereClauseInternal(IndexWhereClause.greaterThan(
         indexName: 'mangaId_sourceId',
         lower: [mangaId],
         includeLower: false,
       ));
     } else {
-      return addWhereClauseInternal(WhereClause(
+      return addWhereClauseInternal(IndexWhereClause.greaterThan(
         indexName: 'mangaId_sourceId',
         lower: [mangaId],
         includeLower: false,
-      )).addWhereClauseInternal(WhereClause(
+      )).addWhereClauseInternal(IndexWhereClause.lessThan(
         indexName: 'mangaId_sourceId',
         upper: [mangaId],
         includeUpper: false,
@@ -375,33 +472,30 @@ extension FavouriteQueryWhere
 
   QueryBuilder<Favourite, Favourite, QAfterWhereClause> mangaIdSourceIdEqualTo(
       String mangaId, String sourceId) {
-    return addWhereClauseInternal(WhereClause(
+    return addWhereClauseInternal(IndexWhereClause.equalTo(
       indexName: 'mangaId_sourceId',
-      lower: [mangaId, sourceId],
-      includeLower: true,
-      upper: [mangaId, sourceId],
-      includeUpper: true,
+      value: [mangaId, sourceId],
     ));
   }
 
   QueryBuilder<Favourite, Favourite, QAfterWhereClause>
       mangaIdSourceIdNotEqualTo(String mangaId, String sourceId) {
     if (whereSortInternal == Sort.asc) {
-      return addWhereClauseInternal(WhereClause(
+      return addWhereClauseInternal(IndexWhereClause.lessThan(
         indexName: 'mangaId_sourceId',
         upper: [mangaId, sourceId],
         includeUpper: false,
-      )).addWhereClauseInternal(WhereClause(
+      )).addWhereClauseInternal(IndexWhereClause.greaterThan(
         indexName: 'mangaId_sourceId',
         lower: [mangaId, sourceId],
         includeLower: false,
       ));
     } else {
-      return addWhereClauseInternal(WhereClause(
+      return addWhereClauseInternal(IndexWhereClause.greaterThan(
         indexName: 'mangaId_sourceId',
         lower: [mangaId, sourceId],
         includeLower: false,
-      )).addWhereClauseInternal(WhereClause(
+      )).addWhereClauseInternal(IndexWhereClause.lessThan(
         indexName: 'mangaId_sourceId',
         upper: [mangaId, sourceId],
         includeUpper: false,
@@ -913,7 +1007,7 @@ extension FavouriteQueryFilter
   }
 
   QueryBuilder<Favourite, Favourite, QAfterFilterCondition> idEqualTo(
-      int? value) {
+      int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
       property: 'id',
@@ -922,7 +1016,7 @@ extension FavouriteQueryFilter
   }
 
   QueryBuilder<Favourite, Favourite, QAfterFilterCondition> idGreaterThan(
-    int? value, {
+    int value, {
     bool include = false,
   }) {
     return addFilterConditionInternal(FilterCondition(
@@ -934,7 +1028,7 @@ extension FavouriteQueryFilter
   }
 
   QueryBuilder<Favourite, Favourite, QAfterFilterCondition> idLessThan(
-    int? value, {
+    int value, {
     bool include = false,
   }) {
     return addFilterConditionInternal(FilterCondition(
@@ -946,8 +1040,8 @@ extension FavouriteQueryFilter
   }
 
   QueryBuilder<Favourite, Favourite, QAfterFilterCondition> idBetween(
-    int? lower,
-    int? upper, {
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -1902,6 +1996,36 @@ extension FavouriteQueryFilter
       value: pattern,
       caseSensitive: caseSensitive,
     ));
+  }
+}
+
+extension FavouriteQueryLinks
+    on QueryBuilder<Favourite, Favourite, QFilterCondition> {
+  QueryBuilder<Favourite, Favourite, QAfterFilterCondition> chapters(
+      FilterQuery<Chapter> q) {
+    return linkInternal(
+      isar.chapters,
+      q,
+      'chapters',
+    );
+  }
+
+  QueryBuilder<Favourite, Favourite, QAfterFilterCondition> lastChapterRead(
+      FilterQuery<Chapter> q) {
+    return linkInternal(
+      isar.chapters,
+      q,
+      'lastChapterRead',
+    );
+  }
+
+  QueryBuilder<Favourite, Favourite, QAfterFilterCondition> tagSections(
+      FilterQuery<TagSection> q) {
+    return linkInternal(
+      isar.tagSections,
+      q,
+      'tagSections',
+    );
   }
 }
 

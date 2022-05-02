@@ -12,25 +12,7 @@ part of 'home_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$HomeStateTearOff {
-  const _$HomeStateTearOff();
-
-  _Initial initial() {
-    return const _Initial();
-  }
-
-  _Loaded loaded(List<HomeSection> homeSections) {
-    return _Loaded(
-      homeSections,
-    );
-  }
-}
-
-/// @nodoc
-const $HomeState = _$HomeStateTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$HomeState {
@@ -223,10 +205,15 @@ class __$LoadedCopyWithImpl<$Res> extends _$HomeStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Loaded implements _Loaded {
-  const _$_Loaded(this.homeSections);
+  const _$_Loaded(final List<HomeSection> homeSections)
+      : _homeSections = homeSections;
 
+  final List<HomeSection> _homeSections;
   @override
-  final List<HomeSection> homeSections;
+  List<HomeSection> get homeSections {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_homeSections);
+  }
 
   @override
   String toString() {
@@ -315,9 +302,9 @@ class _$_Loaded implements _Loaded {
 }
 
 abstract class _Loaded implements HomeState {
-  const factory _Loaded(List<HomeSection> homeSections) = _$_Loaded;
+  const factory _Loaded(final List<HomeSection> homeSections) = _$_Loaded;
 
-  List<HomeSection> get homeSections;
+  List<HomeSection> get homeSections => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$LoadedCopyWith<_Loaded> get copyWith => throw _privateConstructorUsedError;
 }

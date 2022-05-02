@@ -12,32 +12,11 @@ part of 'mangalistitem.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 MangaListItem _$MangaListItemFromJson(Map<String, dynamic> json) {
   return _MangaListItem.fromJson(json);
 }
-
-/// @nodoc
-class _$MangaListItemTearOff {
-  const _$MangaListItemTearOff();
-
-  _MangaListItem call(String id, String title, String image, String iconText) {
-    return _MangaListItem(
-      id,
-      title,
-      image,
-      iconText,
-    );
-  }
-
-  MangaListItem fromJson(Map<String, Object?> json) {
-    return MangaListItem.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $MangaListItem = _$MangaListItemTearOff();
 
 /// @nodoc
 mixin _$MangaListItem {
@@ -179,6 +158,7 @@ class _$_MangaListItem implements _MangaListItem {
             const DeepCollectionEquality().equals(other.iconText, iconText));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -199,21 +179,20 @@ class _$_MangaListItem implements _MangaListItem {
 }
 
 abstract class _MangaListItem implements MangaListItem {
-  factory _MangaListItem(
-          String id, String title, String image, String iconText) =
-      _$_MangaListItem;
+  factory _MangaListItem(final String id, final String title,
+      final String image, final String iconText) = _$_MangaListItem;
 
   factory _MangaListItem.fromJson(Map<String, dynamic> json) =
       _$_MangaListItem.fromJson;
 
   @override
-  String get id;
+  String get id => throw _privateConstructorUsedError;
   @override
-  String get title;
+  String get title => throw _privateConstructorUsedError;
   @override
-  String get image;
+  String get image => throw _privateConstructorUsedError;
   @override
-  String get iconText;
+  String get iconText => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$MangaListItemCopyWith<_MangaListItem> get copyWith =>

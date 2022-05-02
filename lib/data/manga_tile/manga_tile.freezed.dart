@@ -12,42 +12,11 @@ part of 'manga_tile.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 MangaTile _$MangaTileFromJson(Map<String, dynamic> json) {
   return _MangaTile.fromJson(json);
 }
-
-/// @nodoc
-class _$MangaTileTearOff {
-  const _$MangaTileTearOff();
-
-  _MangaTile call(
-      {required String id,
-      required IconText title,
-      required String image,
-      IconText? subtitleText,
-      IconText? primaryText,
-      IconText? secondaryText,
-      int? badge}) {
-    return _MangaTile(
-      id: id,
-      title: title,
-      image: image,
-      subtitleText: subtitleText,
-      primaryText: primaryText,
-      secondaryText: secondaryText,
-      badge: badge,
-    );
-  }
-
-  MangaTile fromJson(Map<String, Object?> json) {
-    return MangaTile.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $MangaTile = _$MangaTileTearOff();
 
 /// @nodoc
 mixin _$MangaTile {
@@ -304,6 +273,7 @@ class _$_MangaTile implements _MangaTile {
             const DeepCollectionEquality().equals(other.badge, badge));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -328,31 +298,31 @@ class _$_MangaTile implements _MangaTile {
 
 abstract class _MangaTile implements MangaTile {
   factory _MangaTile(
-      {required String id,
-      required IconText title,
-      required String image,
-      IconText? subtitleText,
-      IconText? primaryText,
-      IconText? secondaryText,
-      int? badge}) = _$_MangaTile;
+      {required final String id,
+      required final IconText title,
+      required final String image,
+      final IconText? subtitleText,
+      final IconText? primaryText,
+      final IconText? secondaryText,
+      final int? badge}) = _$_MangaTile;
 
   factory _MangaTile.fromJson(Map<String, dynamic> json) =
       _$_MangaTile.fromJson;
 
   @override
-  String get id;
+  String get id => throw _privateConstructorUsedError;
   @override
-  IconText get title;
+  IconText get title => throw _privateConstructorUsedError;
   @override
-  String get image;
+  String get image => throw _privateConstructorUsedError;
   @override
-  IconText? get subtitleText;
+  IconText? get subtitleText => throw _privateConstructorUsedError;
   @override
-  IconText? get primaryText;
+  IconText? get primaryText => throw _privateConstructorUsedError;
   @override
-  IconText? get secondaryText;
+  IconText? get secondaryText => throw _privateConstructorUsedError;
   @override
-  int? get badge;
+  int? get badge => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$MangaTileCopyWith<_MangaTile> get copyWith =>

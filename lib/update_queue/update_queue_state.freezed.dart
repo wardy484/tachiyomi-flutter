@@ -12,32 +12,11 @@ part of 'update_queue_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$UpdateQueueStateTearOff {
-  const _$UpdateQueueStateTearOff();
-
-  _updating updating(List<QueuedItem> queue) {
-    return _updating(
-      queue,
-    );
-  }
-
-  _updated updated(List<QueuedItem> queue) {
-    return _updated(
-      queue,
-    );
-  }
-}
-
-/// @nodoc
-const $UpdateQueueState = _$UpdateQueueStateTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$UpdateQueueState {
   List<QueuedItem> get queue => throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(List<QueuedItem> queue) updating,
@@ -146,10 +125,14 @@ class __$updatingCopyWithImpl<$Res> extends _$UpdateQueueStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_updating implements _updating {
-  const _$_updating(this.queue);
+  const _$_updating(final List<QueuedItem> queue) : _queue = queue;
 
+  final List<QueuedItem> _queue;
   @override
-  final List<QueuedItem> queue;
+  List<QueuedItem> get queue {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_queue);
+  }
 
   @override
   String toString() {
@@ -237,10 +220,10 @@ class _$_updating implements _updating {
 }
 
 abstract class _updating implements UpdateQueueState {
-  const factory _updating(List<QueuedItem> queue) = _$_updating;
+  const factory _updating(final List<QueuedItem> queue) = _$_updating;
 
   @override
-  List<QueuedItem> get queue;
+  List<QueuedItem> get queue => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$updatingCopyWith<_updating> get copyWith =>
@@ -281,10 +264,14 @@ class __$updatedCopyWithImpl<$Res> extends _$UpdateQueueStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_updated implements _updated {
-  const _$_updated(this.queue);
+  const _$_updated(final List<QueuedItem> queue) : _queue = queue;
 
+  final List<QueuedItem> _queue;
   @override
-  final List<QueuedItem> queue;
+  List<QueuedItem> get queue {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_queue);
+  }
 
   @override
   String toString() {
@@ -372,10 +359,10 @@ class _$_updated implements _updated {
 }
 
 abstract class _updated implements UpdateQueueState {
-  const factory _updated(List<QueuedItem> queue) = _$_updated;
+  const factory _updated(final List<QueuedItem> queue) = _$_updated;
 
   @override
-  List<QueuedItem> get queue;
+  List<QueuedItem> get queue => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$updatedCopyWith<_updated> get copyWith =>

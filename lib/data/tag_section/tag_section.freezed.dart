@@ -12,32 +12,11 @@ part of 'tag_section.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 TagSection _$TagSectionFromJson(Map<String, dynamic> json) {
   return _TagSection.fromJson(json);
 }
-
-/// @nodoc
-class _$TagSectionTearOff {
-  const _$TagSectionTearOff();
-
-  _TagSection call(
-      {required String id, required String label, required List<Tag> tags}) {
-    return _TagSection(
-      id: id,
-      label: label,
-      tags: tags,
-    );
-  }
-
-  TagSection fromJson(Map<String, Object?> json) {
-    return TagSection.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $TagSection = _$TagSectionTearOff();
 
 /// @nodoc
 mixin _$TagSection {
@@ -135,7 +114,9 @@ class __$TagSectionCopyWithImpl<$Res> extends _$TagSectionCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_TagSection implements _TagSection {
-  _$_TagSection({required this.id, required this.label, required this.tags});
+  _$_TagSection(
+      {required this.id, required this.label, required final List<Tag> tags})
+      : _tags = tags;
 
   factory _$_TagSection.fromJson(Map<String, dynamic> json) =>
       _$$_TagSectionFromJson(json);
@@ -144,8 +125,12 @@ class _$_TagSection implements _TagSection {
   final String id;
   @override
   final String label;
+  final List<Tag> _tags;
   @override
-  final List<Tag> tags;
+  List<Tag> get tags {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_tags);
+  }
 
   @override
   String toString() {
@@ -162,6 +147,7 @@ class _$_TagSection implements _TagSection {
             const DeepCollectionEquality().equals(other.tags, tags));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -182,19 +168,19 @@ class _$_TagSection implements _TagSection {
 
 abstract class _TagSection implements TagSection {
   factory _TagSection(
-      {required String id,
-      required String label,
-      required List<Tag> tags}) = _$_TagSection;
+      {required final String id,
+      required final String label,
+      required final List<Tag> tags}) = _$_TagSection;
 
   factory _TagSection.fromJson(Map<String, dynamic> json) =
       _$_TagSection.fromJson;
 
   @override
-  String get id;
+  String get id => throw _privateConstructorUsedError;
   @override
-  String get label;
+  String get label => throw _privateConstructorUsedError;
   @override
-  List<Tag> get tags;
+  List<Tag> get tags => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$TagSectionCopyWith<_TagSection> get copyWith =>

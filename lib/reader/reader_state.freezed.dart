@@ -12,28 +12,12 @@ part of 'reader_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
-
-/// @nodoc
-class _$ReaderStateTearOff {
-  const _$ReaderStateTearOff();
-
-  _Reading reading(String progress, bool appbarVisible) {
-    return _Reading(
-      progress,
-      appbarVisible,
-    );
-  }
-}
-
-/// @nodoc
-const $ReaderState = _$ReaderStateTearOff();
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
 mixin _$ReaderState {
   String get progress => throw _privateConstructorUsedError;
   bool get appbarVisible => throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String progress, bool appbarVisible) reading,
@@ -235,12 +219,13 @@ class _$_Reading implements _Reading {
 }
 
 abstract class _Reading implements ReaderState {
-  const factory _Reading(String progress, bool appbarVisible) = _$_Reading;
+  const factory _Reading(final String progress, final bool appbarVisible) =
+      _$_Reading;
 
   @override
-  String get progress;
+  String get progress => throw _privateConstructorUsedError;
   @override
-  bool get appbarVisible;
+  bool get appbarVisible => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$ReadingCopyWith<_Reading> get copyWith =>

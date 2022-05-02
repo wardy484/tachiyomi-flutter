@@ -12,33 +12,11 @@ part of 'chapter_details.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 ChapterDetails _$ChapterDetailsFromJson(Map<String, dynamic> json) {
   return _ChapterDetails.fromJson(json);
 }
-
-/// @nodoc
-class _$ChapterDetailsTearOff {
-  const _$ChapterDetailsTearOff();
-
-  _ChapterDetails call(
-      String id, String mangaId, List<String> pages, bool longStrip) {
-    return _ChapterDetails(
-      id,
-      mangaId,
-      pages,
-      longStrip,
-    );
-  }
-
-  ChapterDetails fromJson(Map<String, Object?> json) {
-    return ChapterDetails.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $ChapterDetails = _$ChapterDetailsTearOff();
 
 /// @nodoc
 mixin _$ChapterDetails {
@@ -150,7 +128,9 @@ class __$ChapterDetailsCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$_ChapterDetails implements _ChapterDetails {
-  _$_ChapterDetails(this.id, this.mangaId, this.pages, this.longStrip);
+  _$_ChapterDetails(
+      this.id, this.mangaId, final List<String> pages, this.longStrip)
+      : _pages = pages;
 
   factory _$_ChapterDetails.fromJson(Map<String, dynamic> json) =>
       _$$_ChapterDetailsFromJson(json);
@@ -159,8 +139,13 @@ class _$_ChapterDetails implements _ChapterDetails {
   final String id;
   @override
   final String mangaId;
+  final List<String> _pages;
   @override
-  final List<String> pages;
+  List<String> get pages {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_pages);
+  }
+
   @override
   final bool longStrip;
 
@@ -180,6 +165,7 @@ class _$_ChapterDetails implements _ChapterDetails {
             const DeepCollectionEquality().equals(other.longStrip, longStrip));
   }
 
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -200,21 +186,20 @@ class _$_ChapterDetails implements _ChapterDetails {
 }
 
 abstract class _ChapterDetails implements ChapterDetails {
-  factory _ChapterDetails(
-          String id, String mangaId, List<String> pages, bool longStrip) =
-      _$_ChapterDetails;
+  factory _ChapterDetails(final String id, final String mangaId,
+      final List<String> pages, final bool longStrip) = _$_ChapterDetails;
 
   factory _ChapterDetails.fromJson(Map<String, dynamic> json) =
       _$_ChapterDetails.fromJson;
 
   @override
-  String get id;
+  String get id => throw _privateConstructorUsedError;
   @override
-  String get mangaId;
+  String get mangaId => throw _privateConstructorUsedError;
   @override
-  List<String> get pages;
+  List<String> get pages => throw _privateConstructorUsedError;
   @override
-  bool get longStrip;
+  bool get longStrip => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$ChapterDetailsCopyWith<_ChapterDetails> get copyWith =>

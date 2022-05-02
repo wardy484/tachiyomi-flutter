@@ -6,170 +6,195 @@ part of 'tag_section.dart';
 // IsarCollectionGenerator
 // **************************************************************************
 
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, invalid_use_of_protected_member
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, unused_local_variable
 
 extension GetTagSectionCollection on Isar {
-  IsarCollection<TagSection> get tagSections {
-    return getCollection('TagSection');
+  IsarCollection<TagSection> get tagSections => getCollection();
+}
+
+const TagSectionSchema = CollectionSchema(
+  name: 'TagSection',
+  schema:
+      '{"name":"TagSection","idName":"id","properties":[{"name":"label","type":"String"},{"name":"tagSectionId","type":"String"}],"indexes":[],"links":[{"name":"tags","target":"Tag"}]}',
+  idName: 'id',
+  propertyIds: {'label': 0, 'tagSectionId': 1},
+  listProperties: {},
+  indexIds: {},
+  indexValueTypes: {},
+  linkIds: {'tags': 0},
+  backlinkLinkNames: {},
+  getId: _tagSectionGetId,
+  setId: _tagSectionSetId,
+  getLinks: _tagSectionGetLinks,
+  attachLinks: _tagSectionAttachLinks,
+  serializeNative: _tagSectionSerializeNative,
+  deserializeNative: _tagSectionDeserializeNative,
+  deserializePropNative: _tagSectionDeserializePropNative,
+  serializeWeb: _tagSectionSerializeWeb,
+  deserializeWeb: _tagSectionDeserializeWeb,
+  deserializePropWeb: _tagSectionDeserializePropWeb,
+  version: 3,
+);
+
+int? _tagSectionGetId(TagSection object) {
+  if (object.id == Isar.autoIncrement) {
+    return null;
+  } else {
+    return object.id;
   }
 }
 
-final TagSectionSchema = CollectionSchema(
-  name: 'TagSection',
-  schema:
-      '{"name":"TagSection","properties":[{"name":"label","type":"String"},{"name":"tagSectionId","type":"String"}],"indexes":[],"links":[{"name":"tags","target":"Tag"}]}',
-  adapter: const _TagSectionAdapter(),
-  idName: 'id',
-  propertyIds: {'label': 0, 'tagSectionId': 1},
-  indexIds: {},
-  indexTypes: {},
-  linkIds: {'tags': 0},
-  backlinkIds: {},
-  linkedCollections: ['Tag'],
-  getId: (obj) => obj.id,
-  setId: (obj, id) => obj.id = id,
-  getLinks: (obj) => [obj.tags],
-  version: 1,
-);
+void _tagSectionSetId(TagSection object, int id) {
+  object.id = id;
+}
 
-class _TagSectionAdapter extends IsarTypeAdapter<TagSection> {
-  const _TagSectionAdapter();
+List<IsarLinkBase> _tagSectionGetLinks(TagSection object) {
+  return [object.tags];
+}
 
-  @override
-  void serialize(IsarCollection<TagSection> collection, IsarRawObject rawObj,
-      TagSection object, List<int> offsets, AdapterAlloc alloc) {
-    var dynamicSize = 0;
-    final value0 = object.label;
-    final _label = BinaryWriter.utf8Encoder.convert(value0);
-    dynamicSize += _label.length;
-    final value1 = object.tagSectionId;
-    final _tagSectionId = BinaryWriter.utf8Encoder.convert(value1);
-    dynamicSize += _tagSectionId.length;
-    final size = dynamicSize + 18;
+void _tagSectionSerializeNative(
+    IsarCollection<TagSection> collection,
+    IsarRawObject rawObj,
+    TagSection object,
+    int staticSize,
+    List<int> offsets,
+    AdapterAlloc alloc) {
+  var dynamicSize = 0;
+  final value0 = object.label;
+  final _label = IsarBinaryWriter.utf8Encoder.convert(value0);
+  dynamicSize += (_label.length) as int;
+  final value1 = object.tagSectionId;
+  final _tagSectionId = IsarBinaryWriter.utf8Encoder.convert(value1);
+  dynamicSize += (_tagSectionId.length) as int;
+  final size = staticSize + dynamicSize;
 
-    rawObj.buffer = alloc(size);
-    rawObj.buffer_length = size;
-    final buffer = bufAsBytes(rawObj.buffer, size);
-    final writer = BinaryWriter(buffer, 18);
-    writer.writeBytes(offsets[0], _label);
-    writer.writeBytes(offsets[1], _tagSectionId);
-    attachLinks(collection.isar, object);
+  rawObj.buffer = alloc(size);
+  rawObj.buffer_length = size;
+  final buffer = IsarNative.bufAsBytes(rawObj.buffer, size);
+  final writer = IsarBinaryWriter(buffer, staticSize);
+  writer.writeBytes(offsets[0], _label);
+  writer.writeBytes(offsets[1], _tagSectionId);
+}
+
+TagSection _tagSectionDeserializeNative(IsarCollection<TagSection> collection,
+    int id, IsarBinaryReader reader, List<int> offsets) {
+  final object = TagSection();
+  object.id = id;
+  object.label = reader.readString(offsets[0]);
+  object.tagSectionId = reader.readString(offsets[1]);
+  _tagSectionAttachLinks(collection, id, object);
+  return object;
+}
+
+P _tagSectionDeserializePropNative<P>(
+    int id, IsarBinaryReader reader, int propertyIndex, int offset) {
+  switch (propertyIndex) {
+    case -1:
+      return id as P;
+    case 0:
+      return (reader.readString(offset)) as P;
+    case 1:
+      return (reader.readString(offset)) as P;
+    default:
+      throw 'Illegal propertyIndex';
   }
+}
 
-  @override
-  TagSection deserialize(IsarCollection<TagSection> collection, int id,
-      BinaryReader reader, List<int> offsets) {
-    final object = TagSection();
-    object.id = id;
-    object.label = reader.readString(offsets[0]);
-    object.tagSectionId = reader.readString(offsets[1]);
-    attachLinks(collection.isar, object);
-    return object;
-  }
+dynamic _tagSectionSerializeWeb(
+    IsarCollection<TagSection> collection, TagSection object) {
+  final jsObj = IsarNative.newJsObject();
+  IsarNative.jsObjectSet(jsObj, 'id', object.id);
+  IsarNative.jsObjectSet(jsObj, 'label', object.label);
+  IsarNative.jsObjectSet(jsObj, 'tagSectionId', object.tagSectionId);
+  return jsObj;
+}
 
-  @override
-  P deserializeProperty<P>(
-      int id, BinaryReader reader, int propertyIndex, int offset) {
-    switch (propertyIndex) {
-      case -1:
-        return id as P;
-      case 0:
-        return (reader.readString(offset)) as P;
-      case 1:
-        return (reader.readString(offset)) as P;
-      default:
-        throw 'Illegal propertyIndex';
-    }
-  }
+TagSection _tagSectionDeserializeWeb(
+    IsarCollection<TagSection> collection, dynamic jsObj) {
+  final object = TagSection();
+  object.id = IsarNative.jsObjectGet(jsObj, 'id');
+  object.label = IsarNative.jsObjectGet(jsObj, 'label') ?? '';
+  object.tagSectionId = IsarNative.jsObjectGet(jsObj, 'tagSectionId') ?? '';
+  _tagSectionAttachLinks(
+      collection, IsarNative.jsObjectGet(jsObj, 'id'), object);
+  return object;
+}
 
-  void attachLinks(Isar isar, TagSection object) {
-    object.tags.attach(
-      isar.tagSections,
-      isar.getCollection<Tag>("Tag"),
-      object,
-      "tags",
-      false,
-    );
+P _tagSectionDeserializePropWeb<P>(Object jsObj, String propertyName) {
+  switch (propertyName) {
+    case 'id':
+      return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
+    case 'label':
+      return (IsarNative.jsObjectGet(jsObj, 'label') ?? '') as P;
+    case 'tagSectionId':
+      return (IsarNative.jsObjectGet(jsObj, 'tagSectionId') ?? '') as P;
+    default:
+      throw 'Illegal propertyName';
   }
+}
+
+void _tagSectionAttachLinks(IsarCollection col, int id, TagSection object) {
+  object.tags.attach(col, col.isar.tags, 'tags', id);
 }
 
 extension TagSectionQueryWhereSort
     on QueryBuilder<TagSection, TagSection, QWhere> {
   QueryBuilder<TagSection, TagSection, QAfterWhere> anyId() {
-    return addWhereClauseInternal(const WhereClause(indexName: null));
+    return addWhereClauseInternal(const IdWhereClause.any());
   }
 }
 
 extension TagSectionQueryWhere
     on QueryBuilder<TagSection, TagSection, QWhereClause> {
-  QueryBuilder<TagSection, TagSection, QAfterWhereClause> idEqualTo(int? id) {
-    return addWhereClauseInternal(WhereClause(
-      indexName: null,
-      lower: [id],
+  QueryBuilder<TagSection, TagSection, QAfterWhereClause> idEqualTo(int id) {
+    return addWhereClauseInternal(IdWhereClause.between(
+      lower: id,
       includeLower: true,
-      upper: [id],
+      upper: id,
       includeUpper: true,
     ));
   }
 
-  QueryBuilder<TagSection, TagSection, QAfterWhereClause> idNotEqualTo(
-      int? id) {
+  QueryBuilder<TagSection, TagSection, QAfterWhereClause> idNotEqualTo(int id) {
     if (whereSortInternal == Sort.asc) {
-      return addWhereClauseInternal(WhereClause(
-        indexName: null,
-        upper: [id],
-        includeUpper: false,
-      )).addWhereClauseInternal(WhereClause(
-        indexName: null,
-        lower: [id],
-        includeLower: false,
-      ));
+      return addWhereClauseInternal(
+        IdWhereClause.lessThan(upper: id, includeUpper: false),
+      ).addWhereClauseInternal(
+        IdWhereClause.greaterThan(lower: id, includeLower: false),
+      );
     } else {
-      return addWhereClauseInternal(WhereClause(
-        indexName: null,
-        lower: [id],
-        includeLower: false,
-      )).addWhereClauseInternal(WhereClause(
-        indexName: null,
-        upper: [id],
-        includeUpper: false,
-      ));
+      return addWhereClauseInternal(
+        IdWhereClause.greaterThan(lower: id, includeLower: false),
+      ).addWhereClauseInternal(
+        IdWhereClause.lessThan(upper: id, includeUpper: false),
+      );
     }
   }
 
-  QueryBuilder<TagSection, TagSection, QAfterWhereClause> idGreaterThan(
-    int? id, {
-    bool include = false,
-  }) {
-    return addWhereClauseInternal(WhereClause(
-      indexName: null,
-      lower: [id],
-      includeLower: include,
-    ));
+  QueryBuilder<TagSection, TagSection, QAfterWhereClause> idGreaterThan(int id,
+      {bool include = false}) {
+    return addWhereClauseInternal(
+      IdWhereClause.greaterThan(lower: id, includeLower: include),
+    );
   }
 
-  QueryBuilder<TagSection, TagSection, QAfterWhereClause> idLessThan(
-    int? id, {
-    bool include = false,
-  }) {
-    return addWhereClauseInternal(WhereClause(
-      indexName: null,
-      upper: [id],
-      includeUpper: include,
-    ));
+  QueryBuilder<TagSection, TagSection, QAfterWhereClause> idLessThan(int id,
+      {bool include = false}) {
+    return addWhereClauseInternal(
+      IdWhereClause.lessThan(upper: id, includeUpper: include),
+    );
   }
 
   QueryBuilder<TagSection, TagSection, QAfterWhereClause> idBetween(
-    int? lowerId,
-    int? upperId, {
+    int lowerId,
+    int upperId, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addWhereClauseInternal(WhereClause(
-      indexName: null,
-      lower: [lowerId],
+    return addWhereClauseInternal(IdWhereClause.between(
+      lower: lowerId,
       includeLower: includeLower,
-      upper: [upperId],
+      upper: upperId,
       includeUpper: includeUpper,
     ));
   }
@@ -186,7 +211,7 @@ extension TagSectionQueryFilter
   }
 
   QueryBuilder<TagSection, TagSection, QAfterFilterCondition> idEqualTo(
-      int? value) {
+      int value) {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.eq,
       property: 'id',
@@ -195,7 +220,7 @@ extension TagSectionQueryFilter
   }
 
   QueryBuilder<TagSection, TagSection, QAfterFilterCondition> idGreaterThan(
-    int? value, {
+    int value, {
     bool include = false,
   }) {
     return addFilterConditionInternal(FilterCondition(
@@ -207,7 +232,7 @@ extension TagSectionQueryFilter
   }
 
   QueryBuilder<TagSection, TagSection, QAfterFilterCondition> idLessThan(
-    int? value, {
+    int value, {
     bool include = false,
   }) {
     return addFilterConditionInternal(FilterCondition(
@@ -219,8 +244,8 @@ extension TagSectionQueryFilter
   }
 
   QueryBuilder<TagSection, TagSection, QAfterFilterCondition> idBetween(
-    int? lower,
-    int? upper, {
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -441,6 +466,18 @@ extension TagSectionQueryFilter
       value: pattern,
       caseSensitive: caseSensitive,
     ));
+  }
+}
+
+extension TagSectionQueryLinks
+    on QueryBuilder<TagSection, TagSection, QFilterCondition> {
+  QueryBuilder<TagSection, TagSection, QAfterFilterCondition> tags(
+      FilterQuery<Tag> q) {
+    return linkInternal(
+      isar.tags,
+      q,
+      'tags',
+    );
   }
 }
 
