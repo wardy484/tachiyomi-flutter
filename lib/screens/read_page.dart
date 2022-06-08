@@ -1,3 +1,4 @@
+import 'package:atom_event_bus/atom_event_bus.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/chapter_details/chapter_details_notifier.dart';
@@ -5,7 +6,7 @@ import 'package:fluttiyomi/chapter_details/chapter_details_state.dart';
 import 'package:fluttiyomi/chapter_details/read_chapters_repository.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
-import 'package:fluttiyomi/favourites/favourites_notifier.dart';
+import 'package:fluttiyomi/event_service_provider.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
 import 'package:fluttiyomi/settings/settings_notifier.dart';
@@ -57,17 +58,6 @@ class _ReadPageState extends ConsumerState<ReadPage> {
     ref
         .read(chapterDetailsProvider.notifier)
         .getChapterDetails(widget.mangaId, widget.chapter.id);
-
-    ref.read(readChaptersRepositoryProvider).markAsRead(
-          ref.read(sourceClientProvider).sourceId,
-          widget.chapter.id,
-          widget.mangaId,
-        );
-
-    ref.read(favouritesProvider.notifier).markAsOpened(
-          widget.mangaId,
-          widget.chapter.id,
-        );
   }
 
   tryToScrollToIndex() {
@@ -87,6 +77,9 @@ class _ReadPageState extends ConsumerState<ReadPage> {
     ref.listen(chapterDetailsProvider, (previous, ChapterDetailsState next) {
       next.whenOrNull(
         loaded: (_, chapterDetails) => preloadImages(chapterDetails.pages),
+        precached: (_, chapterDetails) {
+          EventBus.emit(chapterOpenedEvent.createPayload(chapterDetails));
+        },
       );
     });
 
