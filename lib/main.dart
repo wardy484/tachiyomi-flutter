@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/database/database.dart';
-import 'package:fluttiyomi/event_service_provider.dart';
+import 'package:fluttiyomi/events/event_manager.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/router.gr.dart';
 import 'package:fluttiyomi/widgets/refresh_config.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,4 +1,3 @@
-import 'package:atom_event_bus/atom_event_bus.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/chapter_details/chapter_details_notifier.dart';
@@ -6,7 +5,8 @@ import 'package:fluttiyomi/chapter_details/chapter_details_state.dart';
 import 'package:fluttiyomi/chapter_details/read_chapters_repository.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
-import 'package:fluttiyomi/event_service_provider.dart';
+import 'package:fluttiyomi/events/event_definitions.dart';
+import 'package:fluttiyomi/events/event_manager.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
 import 'package:fluttiyomi/settings/settings_notifier.dart';
@@ -78,7 +78,9 @@ class _ReadPageState extends ConsumerState<ReadPage> {
       next.whenOrNull(
         loaded: (_, chapterDetails) => preloadImages(chapterDetails.pages),
         precached: (_, chapterDetails) {
-          EventBus.emit(chapterOpenedEvent.createPayload(chapterDetails));
+          ref.read(eventsProvider).emit(
+                ChapterOpened(chapterDetails),
+              );
         },
       );
     });
