@@ -74,6 +74,7 @@ dependencies:
   firebase_crashlytics: ^2.6.0
   sentry_flutter: ^6.2.2
   event_bus: ^2.0.0
+  flutter_easyloading: ^3.0.5
 
 dev_dependencies:
   auto_route_generator: ^3.2.0

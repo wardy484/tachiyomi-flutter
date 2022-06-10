@@ -20,6 +20,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
+import 'dart:developer' as developer;
 
 class ReadPage extends ConsumerStatefulWidget {
   final String mangaId;
@@ -50,6 +51,9 @@ class _ReadPageState extends ConsumerState<ReadPage> {
   @override
   void initState() {
     super.initState();
+
+    developer.log(
+        "Opening reader, id: ${widget.chapter.id}, mangaId: ${widget.mangaId}");
 
     ref.read(settingsProvider.notifier).loadSettings();
 

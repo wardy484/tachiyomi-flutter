@@ -23,11 +23,12 @@ class MarkChapterAsOpened extends EventHandler<ChapterDetails> {
 
   @override
   void handle(ChapterDetails payload) {
-    developer.log("Marking chapter as opened ${payload.id}");
+    developer.log(
+        "Marking chapter as opened id: ${payload.id}, mangaId: ${payload.mangaId}");
 
     favouritesNotifier.markAsOpened(
-      payload.id,
       payload.mangaId,
+      payload.id,
     );
   }
 }

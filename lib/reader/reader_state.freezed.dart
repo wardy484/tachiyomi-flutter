@@ -76,6 +76,8 @@ abstract class $ReaderStateCopyWith<$Res> {
       int currentIndex,
       bool reversed,
       Chapter? currentChapter});
+
+  $ChapterCopyWith<$Res>? get currentChapter;
 }
 
 /// @nodoc
@@ -117,6 +119,17 @@ class _$ReaderStateCopyWithImpl<$Res> implements $ReaderStateCopyWith<$Res> {
               as Chapter?,
     ));
   }
+
+  @override
+  $ChapterCopyWith<$Res>? get currentChapter {
+    if (_value.currentChapter == null) {
+      return null;
+    }
+
+    return $ChapterCopyWith<$Res>(_value.currentChapter!, (value) {
+      return _then(_value.copyWith(currentChapter: value));
+    });
+  }
 }
 
 /// @nodoc
@@ -130,6 +143,9 @@ abstract class _$ReadingCopyWith<$Res> implements $ReaderStateCopyWith<$Res> {
       int currentIndex,
       bool reversed,
       Chapter? currentChapter});
+
+  @override
+  $ChapterCopyWith<$Res>? get currentChapter;
 }
 
 /// @nodoc

@@ -15,9 +15,9 @@ extension GetSettingCollection on Isar {
 const SettingSchema = CollectionSchema(
   name: 'Setting',
   schema:
-      '{"name":"Setting","idName":"id","properties":[{"name":"lastUpdateCheck","type":"Long"},{"name":"padding","type":"Long"}],"indexes":[],"links":[]}',
+      '{"name":"Setting","idName":"id","properties":[{"name":"lastUpdateCheck","type":"Long"},{"name":"padding","type":"Long"},{"name":"showFps","type":"Bool"}],"indexes":[],"links":[]}',
   idName: 'id',
-  propertyIds: {'lastUpdateCheck': 0, 'padding': 1},
+  propertyIds: {'lastUpdateCheck': 0, 'padding': 1, 'showFps': 2},
   listProperties: {},
   indexIds: {},
   indexValueTypes: {},
@@ -64,6 +64,8 @@ void _settingSerializeNative(
   final _lastUpdateCheck = value0;
   final value1 = object.padding;
   final _padding = value1;
+  final value2 = object.showFps;
+  final _showFps = value2;
   final size = staticSize + dynamicSize;
 
   rawObj.buffer = alloc(size);
@@ -72,6 +74,7 @@ void _settingSerializeNative(
   final writer = IsarBinaryWriter(buffer, staticSize);
   writer.writeDateTime(offsets[0], _lastUpdateCheck);
   writer.writeLong(offsets[1], _padding);
+  writer.writeBool(offsets[2], _showFps);
 }
 
 Setting _settingDeserializeNative(IsarCollection<Setting> collection, int id,
@@ -80,6 +83,7 @@ Setting _settingDeserializeNative(IsarCollection<Setting> collection, int id,
   object.id = id;
   object.lastUpdateCheck = reader.readDateTime(offsets[0]);
   object.padding = reader.readLong(offsets[1]);
+  object.showFps = reader.readBool(offsets[2]);
   return object;
 }
 
@@ -92,6 +96,8 @@ P _settingDeserializePropNative<P>(
       return (reader.readDateTime(offset)) as P;
     case 1:
       return (reader.readLong(offset)) as P;
+    case 2:
+      return (reader.readBool(offset)) as P;
     default:
       throw 'Illegal propertyIndex';
   }
@@ -104,6 +110,7 @@ dynamic _settingSerializeWeb(
   IsarNative.jsObjectSet(jsObj, 'lastUpdateCheck',
       object.lastUpdateCheck.toUtc().millisecondsSinceEpoch);
   IsarNative.jsObjectSet(jsObj, 'padding', object.padding);
+  IsarNative.jsObjectSet(jsObj, 'showFps', object.showFps);
   return jsObj;
 }
 
@@ -120,6 +127,7 @@ Setting _settingDeserializeWeb(
           : DateTime.fromMillisecondsSinceEpoch(0);
   object.padding =
       IsarNative.jsObjectGet(jsObj, 'padding') ?? double.negativeInfinity;
+  object.showFps = IsarNative.jsObjectGet(jsObj, 'showFps') ?? false;
   return object;
 }
 
@@ -137,6 +145,8 @@ P _settingDeserializePropWeb<P>(Object jsObj, String propertyName) {
     case 'padding':
       return (IsarNative.jsObjectGet(jsObj, 'padding') ??
           double.negativeInfinity) as P;
+    case 'showFps':
+      return (IsarNative.jsObjectGet(jsObj, 'showFps') ?? false) as P;
     default:
       throw 'Illegal propertyName';
   }
@@ -358,6 +368,15 @@ extension SettingQueryFilter
       includeUpper: includeUpper,
     ));
   }
+
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> showFpsEqualTo(
+      bool value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'showFps',
+      value: value,
+    ));
+  }
 }
 
 extension SettingQueryLinks
@@ -387,6 +406,14 @@ extension SettingQueryWhereSortBy on QueryBuilder<Setting, Setting, QSortBy> {
   QueryBuilder<Setting, Setting, QAfterSortBy> sortByPaddingDesc() {
     return addSortByInternal('padding', Sort.desc);
   }
+
+  QueryBuilder<Setting, Setting, QAfterSortBy> sortByShowFps() {
+    return addSortByInternal('showFps', Sort.asc);
+  }
+
+  QueryBuilder<Setting, Setting, QAfterSortBy> sortByShowFpsDesc() {
+    return addSortByInternal('showFps', Sort.desc);
+  }
 }
 
 extension SettingQueryWhereSortThenBy
@@ -414,6 +441,14 @@ extension SettingQueryWhereSortThenBy
   QueryBuilder<Setting, Setting, QAfterSortBy> thenByPaddingDesc() {
     return addSortByInternal('padding', Sort.desc);
   }
+
+  QueryBuilder<Setting, Setting, QAfterSortBy> thenByShowFps() {
+    return addSortByInternal('showFps', Sort.asc);
+  }
+
+  QueryBuilder<Setting, Setting, QAfterSortBy> thenByShowFpsDesc() {
+    return addSortByInternal('showFps', Sort.desc);
+  }
 }
 
 extension SettingQueryWhereDistinct
@@ -429,6 +464,10 @@ extension SettingQueryWhereDistinct
   QueryBuilder<Setting, Setting, QDistinct> distinctByPadding() {
     return addDistinctByInternal('padding');
   }
+
+  QueryBuilder<Setting, Setting, QDistinct> distinctByShowFps() {
+    return addDistinctByInternal('showFps');
+  }
 }
 
 extension SettingQueryProperty
@@ -443,5 +482,9 @@ extension SettingQueryProperty
 
   QueryBuilder<Setting, int, QQueryOperations> paddingProperty() {
     return addPropertyNameInternal('padding');
+  }
+
+  QueryBuilder<Setting, bool, QQueryOperations> showFpsProperty() {
+    return addPropertyNameInternal('showFps');
   }
 }

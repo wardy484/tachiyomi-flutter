@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttiyomi/database/database.dart';
+import 'package:fluttiyomi/debug/fps_widget.dart';
 import 'package:fluttiyomi/events/event_manager.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/router.gr.dart';
+import 'package:fluttiyomi/settings/settings_notifier.dart';
 import 'package:fluttiyomi/widgets/refresh_config.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -14,7 +17,7 @@ void main() async {
   container.read(sourceClientProvider.state).state = await SourceClient.init();
 
   await container.read(isarDatabaseProvider).init();
-
+  await container.read(settingsProvider.notifier).loadSettings();
   // await SentryFlutter.init(
   //   (options) {
   //     options.dsn =
@@ -36,23 +39,33 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   final _appRouter = AppRouter();
 
   MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, ref) {
+    bool showFps = ref.watch(settingsProvider).when(
+          initial: () => false,
+          loaded: (settings) => settings.showFps,
+        );
+
     return RefreshConfig(
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title: 'Fluttiyomi',
-        theme: ThemeData(
-          brightness: Brightness.dark,
-          primarySwatch: Colors.blue,
+      child: FPSWidget(
+        show: showFps,
+        child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          title: 'Fluttiyomi',
+          theme: ThemeData(
+            useMaterial3: true,
+            brightness: Brightness.dark,
+            primarySwatch: Colors.blue,
+          ),
+          routerDelegate: _appRouter.delegate(),
+          routeInformationParser: _appRouter.defaultRouteParser(),
+          builder: EasyLoading.init(),
         ),
-        routerDelegate: _appRouter.delegate(),
-        routeInformationParser: _appRouter.defaultRouteParser(),
       ),
     );
   }

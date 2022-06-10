@@ -99,7 +99,11 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
       mangaId,
     );
 
+    print("Marking as opened: $mangaId $chapterId ${_source.sourceId}");
+
+    print("Favourite is: $favourite");
     if (favourite is Favourite) {
+      print("Found favourite, ${favourite.newChapterIds}");
       favourite.newChapterIds.removeWhere((id) => id == chapterId);
       _favourites.update([favourite]);
     }

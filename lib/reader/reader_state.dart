@@ -10,6 +10,6 @@ class ReaderState with _$ReaderState {
     required bool appbarVisible,
     required int currentIndex,
     required bool reversed,
-    Chapter currentChapter,
+    Chapter? currentChapter,
   }) = _Reading;
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:fluttiyomi/settings/settings_notifier.dart';
 import 'package:fluttiyomi/widgets/common/full_page_loading_indicator.dart';
@@ -14,7 +15,9 @@ class SettingsTab extends ConsumerStatefulWidget {
 
 class _SettingsTabState extends ConsumerState<SettingsTab> {
   final _formKey = GlobalKey<FormBuilderState>();
+
   int padding = 0;
+  bool showFps = false;
 
   @override
   void initState() {
@@ -38,23 +41,40 @@ class _SettingsTabState extends ConsumerState<SettingsTab> {
                 key: _formKey,
                 child: Column(
                   children: <Widget>[
-                    FormBuilderTextField(
+                    FormBuilderSlider(
                       name: 'padding',
-                      initialValue: settings.padding.toString(),
+                      initialValue: settings.padding.toDouble(),
                       decoration: const InputDecoration(
                         labelText: 'Pillar box amount',
                       ),
                       onChanged: (newValue) {
                         setState(() {
-                          padding = int.tryParse(newValue ?? "0") ?? 0;
+                          padding = newValue is double ? newValue.toInt() : 0;
                         });
                       },
                       validator: FormBuilderValidators.compose([
                         FormBuilderValidators.required(context),
-                        FormBuilderValidators.numeric(context),
-                        FormBuilderValidators.max(context, 70),
+                        FormBuilderValidators.max(context, 500),
                       ]),
-                      keyboardType: TextInputType.number,
+                      max: 500,
+                      min: 0,
+                      divisions: 20,
+                    ),
+                    FormBuilderSwitch(
+                      name: 'showFps',
+                      title: const Text("Show FPS"),
+                      initialValue: settings.showFps,
+                      decoration: const InputDecoration(
+                        labelText: 'Show FPS',
+                      ),
+                      onChanged: (newValue) {
+                        setState(() {
+                          showFps = newValue is bool ? newValue : false;
+                        });
+                      },
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(context),
+                      ]),
                     ),
                   ],
                 ),
@@ -69,10 +89,18 @@ class _SettingsTabState extends ConsumerState<SettingsTab> {
                       "Save",
                       style: TextStyle(color: Colors.white),
                     ),
-                    onPressed: () {
-                      ref
+                    onPressed: () async {
+                      EasyLoading.show(status: 'Saving...');
+
+                      await ref
                           .read(settingsProvider.notifier)
                           .updatePadding(padding);
+
+                      await ref
+                          .read(settingsProvider.notifier)
+                          .updateShowFps(showFps);
+
+                      EasyLoading.showSuccess('Saved!');
                     },
                   ),
                 ],

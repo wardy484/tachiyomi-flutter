@@ -14,5 +14,7 @@ class Setting {
 
   int padding = 0;
 
+  bool showFps = false;
+
   late DateTime lastUpdateCheck;
 }

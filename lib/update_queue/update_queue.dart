@@ -1,5 +1,6 @@
 import 'package:fluttiyomi/update_queue/update_queue_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'dart:developer' as developer;
 
 final updateQueueProvider =
     StateNotifierProvider<UpdateQueueNotifier, UpdateQueueState>((ref) {
@@ -69,7 +70,7 @@ class UpdateQueueNotifier extends StateNotifier<UpdateQueueState> {
   }
 
   void debug(String action) {
-    print("$action ${queuedUpdates.join(", ")}");
+    developer.log("$action ${queuedUpdates.join(", ")}");
   }
 
   bool _queueContains(String key) {
