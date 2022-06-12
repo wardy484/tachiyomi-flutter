@@ -33,7 +33,7 @@ class UpdateQueueNotifier extends StateNotifier<UpdateQueueState> {
       item,
     ]);
 
-    debug("Added $key,");
+    debug("Added $key to update queue");
 
     return item;
   }
@@ -55,9 +55,9 @@ class UpdateQueueNotifier extends StateNotifier<UpdateQueueState> {
         state = UpdateQueueState.updating(queue);
       }
 
-      debug("Removed $key,");
+      debug("Removed $key from update queue");
     } else {
-      debug("Did not remove $key,");
+      debug("Did not remove $key from update queue");
     }
   }
 

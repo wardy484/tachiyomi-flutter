@@ -14,6 +14,19 @@
 	<string>fluttiyomi</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+	<!-- Google Sign-in Section -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.235165685655-s83uvqn7ll7akhcvdmi4652ib5blou84</string>
+			</array>
+		</dict>
+	</array>
+
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>

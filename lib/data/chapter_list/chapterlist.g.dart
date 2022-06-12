@@ -15,5 +15,5 @@ _$_ChapterList _$$_ChapterListFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$_ChapterListToJson(_$_ChapterList instance) =>
     <String, dynamic>{
-      'chapters': instance.chapters,
+      'chapters': instance.chapters.map((e) => e.toJson()).toList(),
     };

@@ -22,6 +22,6 @@ Map<String, dynamic> _$$_HomeSectionToJson(_$_HomeSection instance) =>
       'id': instance.id,
       'title': instance.title,
       'type': instance.type,
-      'items': instance.items,
+      'items': instance.items?.map((e) => e.toJson()).toList(),
       'view_more': instance.viewMore,
     };

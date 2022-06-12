@@ -15,5 +15,5 @@ _$_SearchResults _$$_SearchResultsFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$_SearchResultsToJson(_$_SearchResults instance) =>
     <String, dynamic>{
-      'results': instance.results,
+      'results': instance.results.map((e) => e.toJson()).toList(),
     };

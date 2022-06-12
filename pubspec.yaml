@@ -75,6 +75,10 @@ dependencies:
   sentry_flutter: ^6.2.2
   event_bus: ^2.0.0
   flutter_easyloading: ^3.0.5
+  firebase_auth: ^3.3.19
+  firebase_core: ^1.17.1
+  google_sign_in: ^5.3.3
+  cloud_firestore: ^3.1.17
 
 dev_dependencies:
   auto_route_generator: ^3.2.0

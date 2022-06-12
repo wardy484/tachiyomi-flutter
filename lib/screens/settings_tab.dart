@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:fluttiyomi/auth/auth_notifier.dart';
 import 'package:fluttiyomi/settings/settings_notifier.dart';
 import 'package:fluttiyomi/widgets/common/full_page_loading_indicator.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -104,7 +105,39 @@ class _SettingsTabState extends ConsumerState<SettingsTab> {
                     },
                   ),
                 ],
-              )
+              ),
+              const SizedBox(height: 8),
+              const Divider(),
+              const SizedBox(height: 8),
+              const Text(
+                "Authentication settings",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              ref.watch(authNotifierProvider).when(
+                    unauthenticated: () =>
+                        const Text("Unauthenticated - somethings gone wrong."),
+                    authenticated: (user) => Text(
+                      "Provider: ${user.providerId} | Name: ${user.name} | Email: ${user.email}",
+                    ),
+                  ),
+              const SizedBox(height: 8),
+              const Divider(),
+              const SizedBox(height: 8),
+              MaterialButton(
+                color: Theme.of(context).colorScheme.primary,
+                child: const Text(
+                  "Link with El Goog",
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () async {
+                  await ref
+                      .read(authNotifierProvider.notifier)
+                      .signInWithGoogle();
+                },
+              ),
             ],
           ),
         );

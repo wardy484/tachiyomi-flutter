@@ -1,4 +1,4 @@
-import 'package:fluttiyomi/database/favourite.dart';
+import 'package:fluttiyomi/favourites/firestore/favourite.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'favourites_state.freezed.dart';

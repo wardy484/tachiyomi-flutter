@@ -19,5 +19,5 @@ Map<String, dynamic> _$$_TagSectionToJson(_$_TagSection instance) =>
     <String, dynamic>{
       'id': instance.id,
       'label': instance.label,
-      'tags': instance.tags,
+      'tags': instance.tags.map((e) => e.toJson()).toList(),
     };

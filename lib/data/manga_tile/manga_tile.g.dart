@@ -25,10 +25,10 @@ _$_MangaTile _$$_MangaTileFromJson(Map<String, dynamic> json) => _$_MangaTile(
 Map<String, dynamic> _$$_MangaTileToJson(_$_MangaTile instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'title': instance.title,
+      'title': instance.title.toJson(),
       'image': instance.image,
-      'subtitleText': instance.subtitleText,
-      'primaryText': instance.primaryText,
-      'secondaryText': instance.secondaryText,
+      'subtitleText': instance.subtitleText?.toJson(),
+      'primaryText': instance.primaryText?.toJson(),
+      'secondaryText': instance.secondaryText?.toJson(),
       'badge': instance.badge,
     };

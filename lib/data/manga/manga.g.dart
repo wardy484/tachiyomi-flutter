@@ -39,7 +39,7 @@ Map<String, dynamic> _$$_MangaToJson(_$_Manga instance) => <String, dynamic>{
       'covers': instance.covers,
       'desc': instance.desc,
       'follows': instance.follows,
-      'tags': instance.tags,
+      'tags': instance.tags?.map((e) => e.toJson()).toList(),
       'lastUpdate': instance.lastUpdate?.toIso8601String(),
       'favourite': instance.favourite,
     };

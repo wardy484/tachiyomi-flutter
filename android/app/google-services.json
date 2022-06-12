@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "235165685655",
+    "project_id": "fluttiyomi",
+    "storage_bucket": "fluttiyomi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:235165685655:android:296af008f5afbb1767d6d2",
+        "android_client_info": {
+          "package_name": "com.example.fluttiyomi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "235165685655-tmjksjfjqhbq4sqlf75hc93l96vsiu82.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz2vvMSQ6Go289kjFV0m8o3IqXchvq2DM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "235165685655-tmjksjfjqhbq4sqlf75hc93l96vsiu82.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "235165685655-l9i4a774u0r8s27g26bp16ao32k7npiq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wardy484.fluttiyomi"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

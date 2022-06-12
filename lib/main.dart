@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fluttiyomi/auth/auth_notifier.dart';
 import 'package:fluttiyomi/database/database.dart';
 import 'package:fluttiyomi/debug/fps_widget.dart';
 import 'package:fluttiyomi/events/event_manager.dart';
@@ -9,15 +10,23 @@ import 'package:fluttiyomi/settings/settings_notifier.dart';
 import 'package:fluttiyomi/widgets/refresh_config.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   final container = ProviderContainer();
   container.read(sourceClientProvider.state).state = await SourceClient.init();
 
   await container.read(isarDatabaseProvider).init();
   await container.read(settingsProvider.notifier).loadSettings();
+
+  await container.read(authNotifierProvider.notifier).signInAnnonymously();
   // await SentryFlutter.init(
   //   (options) {
   //     options.dsn =

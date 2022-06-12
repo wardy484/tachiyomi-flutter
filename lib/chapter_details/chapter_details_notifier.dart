@@ -1,7 +1,7 @@
 import 'package:fluttiyomi/chapter_details/chapter_details_state.dart';
 import 'package:fluttiyomi/chapter_details/read_chapters_repository.dart';
 import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
-import 'package:fluttiyomi/favourites/favourites_repository.dart';
+import 'package:fluttiyomi/favourites/firestore/favourite_repository.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/manga_details/manga_details_notifier.dart';
 import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
@@ -84,7 +84,7 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
             await _favourites.setLastChapterRead(
               _source.sourceId,
               chapterDetails.mangaId,
-              newChapter.id,
+              currentChapter,
             );
 
             _readerProgress.moveProgress(

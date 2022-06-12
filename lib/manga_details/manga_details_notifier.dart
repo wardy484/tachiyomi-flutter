@@ -1,8 +1,9 @@
 import 'package:fluttiyomi/chapter_details/read_chapters_repository.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
-import 'package:fluttiyomi/database/favourite.dart';
-import 'package:fluttiyomi/favourites/favourites_repository.dart';
+import 'package:fluttiyomi/favourites/firestore/favourite.dart';
+import 'package:fluttiyomi/favourites/firestore/favourite_repository.dart';
+
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/manga_details/manga_details_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -67,7 +68,7 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
         chapterList,
       );
     } else {
-      await _favourites.deleteFavourite(_source.src, manga);
+      await _favourites.deleteFavourite(_source.src, manga.id);
     }
 
     state = MangaDetailsState.loaded(

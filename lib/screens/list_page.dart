@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/favourites/widgets/library_appbar.dart';
 import 'package:fluttiyomi/home/pages/home_tab.dart';
-import 'package:fluttiyomi/home/widgets/HomeAppbar.dart';
+import 'package:fluttiyomi/home/widgets/home_appbar.dart';
 import 'package:fluttiyomi/screens/settings_tab.dart';
 import 'package:fluttiyomi/search/widgets/search_appbar.dart';
 import 'package:fluttiyomi/settings/widgets/settings_appbar.dart';

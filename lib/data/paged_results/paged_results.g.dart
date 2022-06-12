@@ -16,6 +16,6 @@ _$_PagedResults _$$_PagedResultsFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$_PagedResultsToJson(_$_PagedResults instance) =>
     <String, dynamic>{
-      'results': instance.results,
+      'results': instance.results.map((e) => e.toJson()).toList(),
       'meta': instance.meta,
     };
