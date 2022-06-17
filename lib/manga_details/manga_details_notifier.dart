@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:fluttiyomi/chapter_details/read_chapters_repository.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
-import 'package:fluttiyomi/favourites/firestore/favourite.dart';
-import 'package:fluttiyomi/favourites/firestore/favourite_repository.dart';
+import 'package:fluttiyomi/favourites/favourite.dart';
+import 'package:fluttiyomi/favourites/favourite_repository.dart';
 
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/manga_details/manga_details_state.dart';
@@ -23,6 +25,7 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
   final SourceClient _source;
   final FavouritesRepository _favourites;
   final ReadChaptersRepository _chapters;
+  StreamSubscription<ChapterList>? _chaptersStream;
 
   MangaDetailsNotifier(
     SourceClient source,
@@ -35,24 +38,38 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
 
   Future<void> getMangaDetails(
     String mangaId,
+    Favourite? favourite,
   ) async {
-    Favourite? favourite = await _favourites.getFavourite(
-      _source.sourceId,
-      mangaId,
-    );
-
     Manga details;
     ChapterList chapters;
 
     if (favourite == null) {
       details = await _source.getMangaDetails(mangaId);
       chapters = await _source.getChapters(mangaId);
+
+      state = MangaDetailsState.loaded(details, chapters);
     } else {
       details = await favourite.toManga();
-      chapters = await favourite.getChapterList();
-    }
 
-    state = MangaDetailsState.loaded(details, chapters);
+      state = MangaDetailsState.loaded(details, ChapterList([]));
+
+      // _chaptersStream = watchChapters(details, mangaId);
+    }
+  }
+
+  StreamSubscription<ChapterList> watchChapters(
+    Manga mangaDetails,
+    String mangaId,
+  ) {
+    return _chapters
+        .watchChapters(_source.sourceId, mangaId)
+        .listen((chapters) {
+      state = MangaDetailsState.loaded(mangaDetails, chapters);
+    });
+  }
+
+  void closeStream() {
+    _chaptersStream?.cancel();
   }
 
   Future<void> toggleFavourite(
@@ -88,8 +105,6 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
       chapterId,
       mangaId,
     );
-
-    getMangaDetails(mangaId);
   }
 
   Future<void> markManyAsRead(
@@ -101,7 +116,5 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
       mangaId,
       chapterIds,
     );
-
-    getMangaDetails(mangaId);
   }
 }

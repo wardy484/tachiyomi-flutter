@@ -125,19 +125,6 @@ class _SettingsTabState extends ConsumerState<SettingsTab> {
                   ),
               const SizedBox(height: 8),
               const Divider(),
-              const SizedBox(height: 8),
-              MaterialButton(
-                color: Theme.of(context).colorScheme.primary,
-                child: const Text(
-                  "Link with El Goog",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () async {
-                  await ref
-                      .read(authNotifierProvider.notifier)
-                      .signInWithGoogle();
-                },
-              ),
             ],
           ),
         );

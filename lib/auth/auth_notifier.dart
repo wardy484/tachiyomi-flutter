@@ -1,6 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttiyomi/auth/auth_repository.dart';
 import 'package:fluttiyomi/auth/auth_state.dart';
-import 'package:fluttiyomi/auth/user.dart';
+import 'package:fluttiyomi/auth/user.dart' as auth_user;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final authNotifierProvider = StateNotifierProvider<AuthNotifier, AuthState>(
@@ -22,7 +23,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
     if (user != null) {
       state = AuthState.authenticated(
-        User(id: user.uid, providerId: "annonymous"),
+        auth_user.User(id: user.uid, providerId: "annonymous"),
       );
     }
   }
@@ -33,7 +34,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
     if (user != null) {
       state = AuthState.authenticated(
-        User(
+        auth_user.User(
           id: user.uid,
           providerId: "Google",
           email: user.email,
@@ -41,5 +42,29 @@ class AuthNotifier extends StateNotifier<AuthState> {
         ),
       );
     }
+  }
+
+  bool isLoggedIn() {
+    return state.when(
+      unauthenticated: () {
+        final user = FirebaseAuth.instance.currentUser;
+
+        if (user != null) {
+          state = AuthState.authenticated(
+            auth_user.User(
+              id: user.uid,
+              providerId: "Google",
+              email: user.email,
+              name: user.displayName,
+            ),
+          );
+
+          return true;
+        }
+
+        return false;
+      },
+      authenticated: (_) => true,
+    );
   }
 }

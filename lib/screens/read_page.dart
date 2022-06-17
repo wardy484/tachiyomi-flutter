@@ -26,7 +26,6 @@ class ReadPage extends ConsumerStatefulWidget {
   final String mangaId;
   final Chapter chapter;
   final ChapterList chapters;
-  final int currentChapter;
   final int? resumeFrom;
 
   const ReadPage({
@@ -34,7 +33,6 @@ class ReadPage extends ConsumerStatefulWidget {
     required this.mangaId,
     required this.chapter,
     required this.chapters,
-    required this.currentChapter,
     this.resumeFrom,
   }) : super(key: key);
 
@@ -55,24 +53,25 @@ class _ReadPageState extends ConsumerState<ReadPage> {
     developer.log(
         "Opening reader, id: ${widget.chapter.id}, mangaId: ${widget.mangaId}");
 
+    ref.read(readerProvider.notifier).setChapter(widget.chapter);
+
     ref.read(settingsProvider.notifier).loadSettings();
 
-    ref.read(readerProvider.notifier).setIndex(widget.currentChapter);
-
-    ref
-        .read(chapterDetailsProvider.notifier)
-        .getChapterDetails(widget.mangaId, widget.chapter.id);
+    ref.read(chapterDetailsProvider.notifier).getChapterDetails(
+          widget.mangaId,
+          widget.chapter,
+        );
   }
 
   tryToScrollToIndex() {
     Future.delayed(const Duration(milliseconds: 20), () {
-      _autoScrollController.scrollToIndex(widget.resumeFrom! - 1);
-      // if the scroller is not properly mounted then the auto scroll will not
-      // scroll there but it also will not error, as such we try at small intervals
-      // until we get scrolling. This seems to be the most efficient way to do it.
-      if (!_autoScrollController.isAutoScrolling) {
-        tryToScrollToIndex();
-      }
+      // _autoScrollController.scrollToIndex(widget.resumeFrom! - 1);
+      // // if the scroller is not properly mounted then the auto scroll will not
+      // // scroll there but it also will not error, as such we try at small intervals
+      // // until we get scrolling. This seems to be the most efficient way to do it.
+      // if (!_autoScrollController.isAutoScrolling) {
+      //   tryToScrollToIndex();
+      // }
     });
   }
 
@@ -80,8 +79,9 @@ class _ReadPageState extends ConsumerState<ReadPage> {
   Widget build(BuildContext context) {
     ref.listen(chapterDetailsProvider, (previous, ChapterDetailsState next) {
       next.whenOrNull(
-        loaded: (_, chapterDetails) => preloadImages(chapterDetails.pages),
-        precached: (_, chapterDetails) {
+        loaded: (_, chapterDetails, __, ___, ____) =>
+            preloadImages(chapterDetails.pages),
+        precached: (_, chapterDetails, __, ___, ____) {
           ref.read(eventsProvider).emit(
                 ChapterOpened(chapterDetails),
               );
@@ -91,12 +91,17 @@ class _ReadPageState extends ConsumerState<ReadPage> {
 
     return ref.watch(chapterDetailsProvider).when(
           initial: () => ReaderLoadingContent(chapter: widget.chapter),
-          loaded: (mangaId, chapterDetails) {
+          loaded: (mangaId, chapterDetails, __, ___, ____) {
             return ReaderLoadingContent(chapter: widget.chapter);
           },
-          precached: (mangaId, chapterDetails) {
-            Chapter chapter =
-                ref.read(chapterDetailsProvider.notifier).getCurrentChapter();
+          precached: (
+            mangaId,
+            chapterDetails,
+            currentChapter,
+            nextChapter,
+            previousChapter,
+          ) {
+            Chapter chapter = widget.chapter;
 
             var pages = chapterDetails.pages;
             var readState = ref.watch(readerProvider);
@@ -121,6 +126,7 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                     child: ReaderLoader(
                       reverse: readState.reversed,
                       child: ListView.builder(
+                        physics: const BouncingScrollPhysics(),
                         controller: _autoScrollController,
                         padding: ref.watch(settingsProvider).when(
                               initial: () => EdgeInsets.zero,
@@ -169,8 +175,8 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                           );
                         },
                       ),
-                      currentChapter: readState.currentIndex + 1,
-                      maxChapters: widget.chapters.length,
+                      nextChapter: nextChapter,
+                      previousChapter: previousChapter,
                     ),
                   ),
                 ),

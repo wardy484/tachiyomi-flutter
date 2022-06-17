@@ -9,7 +9,7 @@ class Chapter with _$Chapter {
     String id,
     String mangaId,
     @JsonKey(name: 'chapNum') double chapterNo,
-    String langCode, // TODO: use enum
+    String langCode,
     String? name,
     String? volume,
     String? group,

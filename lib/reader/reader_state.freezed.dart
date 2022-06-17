@@ -18,26 +18,26 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$ReaderState {
   String get progress => throw _privateConstructorUsedError;
   bool get appbarVisible => throw _privateConstructorUsedError;
-  int get currentIndex => throw _privateConstructorUsedError;
+  double get chapterNumber => throw _privateConstructorUsedError;
   bool get reversed => throw _privateConstructorUsedError;
   Chapter? get currentChapter => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String progress, bool appbarVisible,
-            int currentIndex, bool reversed, Chapter? currentChapter)
+            double chapterNumber, bool reversed, Chapter? currentChapter)
         reading,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String progress, bool appbarVisible, int currentIndex,
+    TResult Function(String progress, bool appbarVisible, double chapterNumber,
             bool reversed, Chapter? currentChapter)?
         reading,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String progress, bool appbarVisible, int currentIndex,
+    TResult Function(String progress, bool appbarVisible, double chapterNumber,
             bool reversed, Chapter? currentChapter)?
         reading,
     required TResult orElse(),
@@ -73,7 +73,7 @@ abstract class $ReaderStateCopyWith<$Res> {
   $Res call(
       {String progress,
       bool appbarVisible,
-      int currentIndex,
+      double chapterNumber,
       bool reversed,
       Chapter? currentChapter});
 
@@ -92,7 +92,7 @@ class _$ReaderStateCopyWithImpl<$Res> implements $ReaderStateCopyWith<$Res> {
   $Res call({
     Object? progress = freezed,
     Object? appbarVisible = freezed,
-    Object? currentIndex = freezed,
+    Object? chapterNumber = freezed,
     Object? reversed = freezed,
     Object? currentChapter = freezed,
   }) {
@@ -105,10 +105,10 @@ class _$ReaderStateCopyWithImpl<$Res> implements $ReaderStateCopyWith<$Res> {
           ? _value.appbarVisible
           : appbarVisible // ignore: cast_nullable_to_non_nullable
               as bool,
-      currentIndex: currentIndex == freezed
-          ? _value.currentIndex
-          : currentIndex // ignore: cast_nullable_to_non_nullable
-              as int,
+      chapterNumber: chapterNumber == freezed
+          ? _value.chapterNumber
+          : chapterNumber // ignore: cast_nullable_to_non_nullable
+              as double,
       reversed: reversed == freezed
           ? _value.reversed
           : reversed // ignore: cast_nullable_to_non_nullable
@@ -140,7 +140,7 @@ abstract class _$ReadingCopyWith<$Res> implements $ReaderStateCopyWith<$Res> {
   $Res call(
       {String progress,
       bool appbarVisible,
-      int currentIndex,
+      double chapterNumber,
       bool reversed,
       Chapter? currentChapter});
 
@@ -161,7 +161,7 @@ class __$ReadingCopyWithImpl<$Res> extends _$ReaderStateCopyWithImpl<$Res>
   $Res call({
     Object? progress = freezed,
     Object? appbarVisible = freezed,
-    Object? currentIndex = freezed,
+    Object? chapterNumber = freezed,
     Object? reversed = freezed,
     Object? currentChapter = freezed,
   }) {
@@ -174,10 +174,10 @@ class __$ReadingCopyWithImpl<$Res> extends _$ReaderStateCopyWithImpl<$Res>
           ? _value.appbarVisible
           : appbarVisible // ignore: cast_nullable_to_non_nullable
               as bool,
-      currentIndex: currentIndex == freezed
-          ? _value.currentIndex
-          : currentIndex // ignore: cast_nullable_to_non_nullable
-              as int,
+      chapterNumber: chapterNumber == freezed
+          ? _value.chapterNumber
+          : chapterNumber // ignore: cast_nullable_to_non_nullable
+              as double,
       reversed: reversed == freezed
           ? _value.reversed
           : reversed // ignore: cast_nullable_to_non_nullable
@@ -196,7 +196,7 @@ class _$_Reading implements _Reading {
   const _$_Reading(
       {required this.progress,
       required this.appbarVisible,
-      required this.currentIndex,
+      required this.chapterNumber,
       required this.reversed,
       this.currentChapter});
 
@@ -205,7 +205,7 @@ class _$_Reading implements _Reading {
   @override
   final bool appbarVisible;
   @override
-  final int currentIndex;
+  final double chapterNumber;
   @override
   final bool reversed;
   @override
@@ -213,7 +213,7 @@ class _$_Reading implements _Reading {
 
   @override
   String toString() {
-    return 'ReaderState.reading(progress: $progress, appbarVisible: $appbarVisible, currentIndex: $currentIndex, reversed: $reversed, currentChapter: $currentChapter)';
+    return 'ReaderState.reading(progress: $progress, appbarVisible: $appbarVisible, chapterNumber: $chapterNumber, reversed: $reversed, currentChapter: $currentChapter)';
   }
 
   @override
@@ -225,7 +225,7 @@ class _$_Reading implements _Reading {
             const DeepCollectionEquality()
                 .equals(other.appbarVisible, appbarVisible) &&
             const DeepCollectionEquality()
-                .equals(other.currentIndex, currentIndex) &&
+                .equals(other.chapterNumber, chapterNumber) &&
             const DeepCollectionEquality().equals(other.reversed, reversed) &&
             const DeepCollectionEquality()
                 .equals(other.currentChapter, currentChapter));
@@ -236,7 +236,7 @@ class _$_Reading implements _Reading {
       runtimeType,
       const DeepCollectionEquality().hash(progress),
       const DeepCollectionEquality().hash(appbarVisible),
-      const DeepCollectionEquality().hash(currentIndex),
+      const DeepCollectionEquality().hash(chapterNumber),
       const DeepCollectionEquality().hash(reversed),
       const DeepCollectionEquality().hash(currentChapter));
 
@@ -249,35 +249,35 @@ class _$_Reading implements _Reading {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String progress, bool appbarVisible,
-            int currentIndex, bool reversed, Chapter? currentChapter)
+            double chapterNumber, bool reversed, Chapter? currentChapter)
         reading,
   }) {
     return reading(
-        progress, appbarVisible, currentIndex, reversed, currentChapter);
+        progress, appbarVisible, chapterNumber, reversed, currentChapter);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String progress, bool appbarVisible, int currentIndex,
+    TResult Function(String progress, bool appbarVisible, double chapterNumber,
             bool reversed, Chapter? currentChapter)?
         reading,
   }) {
     return reading?.call(
-        progress, appbarVisible, currentIndex, reversed, currentChapter);
+        progress, appbarVisible, chapterNumber, reversed, currentChapter);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String progress, bool appbarVisible, int currentIndex,
+    TResult Function(String progress, bool appbarVisible, double chapterNumber,
             bool reversed, Chapter? currentChapter)?
         reading,
     required TResult orElse(),
   }) {
     if (reading != null) {
       return reading(
-          progress, appbarVisible, currentIndex, reversed, currentChapter);
+          progress, appbarVisible, chapterNumber, reversed, currentChapter);
     }
     return orElse();
   }
@@ -315,7 +315,7 @@ abstract class _Reading implements ReaderState {
   const factory _Reading(
       {required final String progress,
       required final bool appbarVisible,
-      required final int currentIndex,
+      required final double chapterNumber,
       required final bool reversed,
       final Chapter? currentChapter}) = _$_Reading;
 
@@ -324,7 +324,7 @@ abstract class _Reading implements ReaderState {
   @override
   bool get appbarVisible => throw _privateConstructorUsedError;
   @override
-  int get currentIndex => throw _privateConstructorUsedError;
+  double get chapterNumber => throw _privateConstructorUsedError;
   @override
   bool get reversed => throw _privateConstructorUsedError;
   @override

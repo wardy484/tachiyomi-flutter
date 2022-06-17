@@ -5,6 +5,12 @@ part 'update_queue_state.freezed.dart';
 
 @freezed
 class UpdateQueueState with _$UpdateQueueState {
-  const factory UpdateQueueState.updating(List<QueuedItem> queue) = _updating;
-  const factory UpdateQueueState.updated(List<QueuedItem> queue) = _updated;
+  const factory UpdateQueueState.updating(
+    List<QueuedItem> queue,
+    int total,
+  ) = _updating;
+  const factory UpdateQueueState.updated(
+    List<QueuedItem> queue,
+    int total,
+  ) = _updated;
 }

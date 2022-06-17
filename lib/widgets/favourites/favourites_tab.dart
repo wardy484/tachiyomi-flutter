@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fluttiyomi/favourites/favourite.dart';
 import 'package:fluttiyomi/favourites/favourites_notifier.dart';
-import 'package:fluttiyomi/favourites/firestore/favourite.dart';
 import 'package:fluttiyomi/widgets/common/full_page_loading_indicator.dart';
 import 'package:fluttiyomi/widgets/common/manga_card.dart';
 import 'package:fluttiyomi/widgets/common/manga_grid.dart';
@@ -14,11 +14,14 @@ class FavouritesTab extends ConsumerStatefulWidget {
 }
 
 class _FavouritesTabState extends ConsumerState<FavouritesTab> {
+  late final FavouritesNotifier _favouritesNotifier;
+
   @override
   void initState() {
     super.initState();
 
-    ref.read(favouritesProvider.notifier).get();
+    _favouritesNotifier = ref.read(favouritesProvider.notifier)
+      ..watchFavourites();
   }
 
   @override
@@ -40,12 +43,21 @@ class _FavouritesTabState extends ConsumerState<FavouritesTab> {
                     mangaId: manga.mangaId,
                     name: manga.name,
                     image: manga.image,
-                    newChapterCount: manga.newChapterIds.length,
+                    newChapterCount:
+                        manga.unreadChapterCount ?? manga.newChapterIds.length,
+                    favourite: manga,
                   );
                 },
               ),
             );
           },
         );
+  }
+
+  @override
+  void dispose() {
+    _favouritesNotifier.closeStream();
+
+    super.dispose();
   }
 }

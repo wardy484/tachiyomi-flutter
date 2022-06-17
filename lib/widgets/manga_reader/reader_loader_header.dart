@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_paging_indicator.dart';
 import 'package:fluttiyomi/widgets/refresh_config.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ReaderLoaderHeader extends StatefulWidget {
-  final int currentChapter;
-  final int maxChapters;
+  final Chapter? nextChapter;
+  final Chapter? previousChapter;
   final bool reverse;
 
   const ReaderLoaderHeader({
     Key? key,
-    required this.currentChapter,
-    required this.maxChapters,
+    required this.nextChapter,
+    required this.previousChapter,
     required this.reverse,
   }) : super(key: key);
 
@@ -44,8 +45,8 @@ class _ReaderLoaderHeaderState extends State<ReaderLoaderHeader>
     return CustomHeader(
       builder: (BuildContext context, RefreshStatus? mode) {
         Widget body;
-        if ((widget.reverse && widget.currentChapter == widget.maxChapters) ||
-            (!widget.reverse && widget.currentChapter == 0)) {
+        if ((widget.reverse && widget.nextChapter == null) ||
+            (!widget.reverse && widget.previousChapter == null)) {
           body = const Text("No more chapters");
         } else if (mode == RefreshStatus.idle) {
           body = ReaderPagingIndicator(
@@ -66,13 +67,13 @@ class _ReaderLoaderHeaderState extends State<ReaderLoaderHeader>
         if (widget.reverse) {
           return RotatedBox(
             quarterTurns: 2,
-            child: Container(
+            child: SizedBox(
               height: 82,
               child: Center(child: body),
             ),
           );
         }
-        return Container(
+        return SizedBox(
           height: 82,
           child: Center(child: body),
         );

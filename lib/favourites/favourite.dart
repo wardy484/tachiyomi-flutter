@@ -29,6 +29,8 @@ class Favourite with _$Favourite {
     Chapter? lastChapterRead,
     required List<Chapter> chapters,
     required List<TagSection> tagSections,
+    required double latestChapterNumber,
+    int? unreadChapterCount,
   }) = _Favourite;
 
   factory Favourite.fromJson(Map<String, dynamic> json) =>
@@ -51,9 +53,5 @@ class Favourite with _$Favourite {
       lastUpdate,
       favourite: true,
     );
-  }
-
-  Future<ChapterList> getChapterList() async {
-    return ChapterList(chapters);
   }
 }

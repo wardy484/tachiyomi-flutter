@@ -21,6 +21,10 @@ class ChapterList with _$ChapterList {
     return chapters[index];
   }
 
+  Chapter getByChapterNumber(double chapterNumber) {
+    return chapters.firstWhere((chapter) => chapter.chapterNo == chapterNumber);
+  }
+
   ChapterList ascending() {
     chapters.sort(
       (a, b) => a.chapterNo.compareTo(b.chapterNo),
@@ -29,10 +33,12 @@ class ChapterList with _$ChapterList {
   }
 
   ChapterList descending() {
-    chapters.sort(
+    final List<Chapter> newList = List.from(chapters);
+    newList.sort(
       (a, b) => b.chapterNo.compareTo(a.chapterNo),
     );
-    return this;
+
+    return copyWith(chapters: newList);
   }
 
   List<Chapter> toList() {

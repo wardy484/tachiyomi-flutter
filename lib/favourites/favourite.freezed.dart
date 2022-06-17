@@ -40,6 +40,8 @@ mixin _$Favourite {
   Chapter? get lastChapterRead => throw _privateConstructorUsedError;
   List<Chapter> get chapters => throw _privateConstructorUsedError;
   List<TagSection> get tagSections => throw _privateConstructorUsedError;
+  double get latestChapterNumber => throw _privateConstructorUsedError;
+  int? get unreadChapterCount => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -71,7 +73,9 @@ abstract class $FavouriteCopyWith<$Res> {
       List<String> newChapterIds,
       Chapter? lastChapterRead,
       List<Chapter> chapters,
-      List<TagSection> tagSections});
+      List<TagSection> tagSections,
+      double latestChapterNumber,
+      int? unreadChapterCount});
 
   $ChapterCopyWith<$Res>? get lastChapterRead;
 }
@@ -106,6 +110,8 @@ class _$FavouriteCopyWithImpl<$Res> implements $FavouriteCopyWith<$Res> {
     Object? lastChapterRead = freezed,
     Object? chapters = freezed,
     Object? tagSections = freezed,
+    Object? latestChapterNumber = freezed,
+    Object? unreadChapterCount = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -188,6 +194,14 @@ class _$FavouriteCopyWithImpl<$Res> implements $FavouriteCopyWith<$Res> {
           ? _value.tagSections
           : tagSections // ignore: cast_nullable_to_non_nullable
               as List<TagSection>,
+      latestChapterNumber: latestChapterNumber == freezed
+          ? _value.latestChapterNumber
+          : latestChapterNumber // ignore: cast_nullable_to_non_nullable
+              as double,
+      unreadChapterCount: unreadChapterCount == freezed
+          ? _value.unreadChapterCount
+          : unreadChapterCount // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 
@@ -229,7 +243,9 @@ abstract class _$FavouriteCopyWith<$Res> implements $FavouriteCopyWith<$Res> {
       List<String> newChapterIds,
       Chapter? lastChapterRead,
       List<Chapter> chapters,
-      List<TagSection> tagSections});
+      List<TagSection> tagSections,
+      double latestChapterNumber,
+      int? unreadChapterCount});
 
   @override
   $ChapterCopyWith<$Res>? get lastChapterRead;
@@ -266,6 +282,8 @@ class __$FavouriteCopyWithImpl<$Res> extends _$FavouriteCopyWithImpl<$Res>
     Object? lastChapterRead = freezed,
     Object? chapters = freezed,
     Object? tagSections = freezed,
+    Object? latestChapterNumber = freezed,
+    Object? unreadChapterCount = freezed,
   }) {
     return _then(_Favourite(
       id: id == freezed
@@ -348,6 +366,14 @@ class __$FavouriteCopyWithImpl<$Res> extends _$FavouriteCopyWithImpl<$Res>
           ? _value.tagSections
           : tagSections // ignore: cast_nullable_to_non_nullable
               as List<TagSection>,
+      latestChapterNumber: latestChapterNumber == freezed
+          ? _value.latestChapterNumber
+          : latestChapterNumber // ignore: cast_nullable_to_non_nullable
+              as double,
+      unreadChapterCount: unreadChapterCount == freezed
+          ? _value.unreadChapterCount
+          : unreadChapterCount // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -375,7 +401,9 @@ class _$_Favourite extends _Favourite {
       required final List<String> newChapterIds,
       this.lastChapterRead,
       required final List<Chapter> chapters,
-      required final List<TagSection> tagSections})
+      required final List<TagSection> tagSections,
+      required this.latestChapterNumber,
+      this.unreadChapterCount})
       : _titles = titles,
         _covers = covers,
         _newChapterIds = newChapterIds,
@@ -454,8 +482,13 @@ class _$_Favourite extends _Favourite {
   }
 
   @override
+  final double latestChapterNumber;
+  @override
+  final int? unreadChapterCount;
+
+  @override
   String toString() {
-    return 'Favourite(id: $id, userId: $userId, sourceId: $sourceId, mangaId: $mangaId, name: $name, titles: $titles, image: $image, rating: $rating, mangaStatus: $mangaStatus, langFlag: $langFlag, author: $author, artist: $artist, covers: $covers, desc: $desc, follows: $follows, lastUpdate: $lastUpdate, newChapterIds: $newChapterIds, lastChapterRead: $lastChapterRead, chapters: $chapters, tagSections: $tagSections)';
+    return 'Favourite(id: $id, userId: $userId, sourceId: $sourceId, mangaId: $mangaId, name: $name, titles: $titles, image: $image, rating: $rating, mangaStatus: $mangaStatus, langFlag: $langFlag, author: $author, artist: $artist, covers: $covers, desc: $desc, follows: $follows, lastUpdate: $lastUpdate, newChapterIds: $newChapterIds, lastChapterRead: $lastChapterRead, chapters: $chapters, tagSections: $tagSections, latestChapterNumber: $latestChapterNumber, unreadChapterCount: $unreadChapterCount)';
   }
 
   @override
@@ -487,7 +520,11 @@ class _$_Favourite extends _Favourite {
                 .equals(other.lastChapterRead, lastChapterRead) &&
             const DeepCollectionEquality().equals(other.chapters, chapters) &&
             const DeepCollectionEquality()
-                .equals(other.tagSections, tagSections));
+                .equals(other.tagSections, tagSections) &&
+            const DeepCollectionEquality()
+                .equals(other.latestChapterNumber, latestChapterNumber) &&
+            const DeepCollectionEquality()
+                .equals(other.unreadChapterCount, unreadChapterCount));
   }
 
   @JsonKey(ignore: true)
@@ -513,7 +550,9 @@ class _$_Favourite extends _Favourite {
         const DeepCollectionEquality().hash(newChapterIds),
         const DeepCollectionEquality().hash(lastChapterRead),
         const DeepCollectionEquality().hash(chapters),
-        const DeepCollectionEquality().hash(tagSections)
+        const DeepCollectionEquality().hash(tagSections),
+        const DeepCollectionEquality().hash(latestChapterNumber),
+        const DeepCollectionEquality().hash(unreadChapterCount)
       ]);
 
   @JsonKey(ignore: true)
@@ -548,7 +587,9 @@ abstract class _Favourite extends Favourite {
       required final List<String> newChapterIds,
       final Chapter? lastChapterRead,
       required final List<Chapter> chapters,
-      required final List<TagSection> tagSections}) = _$_Favourite;
+      required final List<TagSection> tagSections,
+      required final double latestChapterNumber,
+      final int? unreadChapterCount}) = _$_Favourite;
   const _Favourite._() : super._();
 
   factory _Favourite.fromJson(Map<String, dynamic> json) =
@@ -594,6 +635,10 @@ abstract class _Favourite extends Favourite {
   List<Chapter> get chapters => throw _privateConstructorUsedError;
   @override
   List<TagSection> get tagSections => throw _privateConstructorUsedError;
+  @override
+  double get latestChapterNumber => throw _privateConstructorUsedError;
+  @override
+  int? get unreadChapterCount => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$FavouriteCopyWith<_Favourite> get copyWith =>

@@ -19,24 +19,58 @@ mixin _$ChapterDetailsState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(String mangaId, ChapterDetails chapterDetails)
+    required TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)
         loaded,
-    required TResult Function(String mangaId, ChapterDetails chapterDetails)
+    required TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)
         precached,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String mangaId, ChapterDetails chapterDetails)? loaded,
-    TResult Function(String mangaId, ChapterDetails chapterDetails)? precached,
+    TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)?
+        loaded,
+    TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)?
+        precached,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String mangaId, ChapterDetails chapterDetails)? loaded,
-    TResult Function(String mangaId, ChapterDetails chapterDetails)? precached,
+    TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)?
+        loaded,
+    TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)?
+        precached,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -121,9 +155,19 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(String mangaId, ChapterDetails chapterDetails)
+    required TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)
         loaded,
-    required TResult Function(String mangaId, ChapterDetails chapterDetails)
+    required TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)
         precached,
   }) {
     return initial();
@@ -133,8 +177,20 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String mangaId, ChapterDetails chapterDetails)? loaded,
-    TResult Function(String mangaId, ChapterDetails chapterDetails)? precached,
+    TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)?
+        loaded,
+    TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)?
+        precached,
   }) {
     return initial?.call();
   }
@@ -143,8 +199,20 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String mangaId, ChapterDetails chapterDetails)? loaded,
-    TResult Function(String mangaId, ChapterDetails chapterDetails)? precached,
+    TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)?
+        loaded,
+    TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)?
+        precached,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -196,9 +264,17 @@ abstract class _Initial implements ChapterDetailsState {
 abstract class _$LoadedCopyWith<$Res> {
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) then) =
       __$LoadedCopyWithImpl<$Res>;
-  $Res call({String mangaId, ChapterDetails chapterDetails});
+  $Res call(
+      {String mangaId,
+      ChapterDetails chapterDetails,
+      Chapter currentChapter,
+      Chapter? nextChapter,
+      Chapter? previousChapter});
 
   $ChapterDetailsCopyWith<$Res> get chapterDetails;
+  $ChapterCopyWith<$Res> get currentChapter;
+  $ChapterCopyWith<$Res>? get nextChapter;
+  $ChapterCopyWith<$Res>? get previousChapter;
 }
 
 /// @nodoc
@@ -215,6 +291,9 @@ class __$LoadedCopyWithImpl<$Res>
   $Res call({
     Object? mangaId = freezed,
     Object? chapterDetails = freezed,
+    Object? currentChapter = freezed,
+    Object? nextChapter = freezed,
+    Object? previousChapter = freezed,
   }) {
     return _then(_Loaded(
       mangaId == freezed
@@ -225,6 +304,18 @@ class __$LoadedCopyWithImpl<$Res>
           ? _value.chapterDetails
           : chapterDetails // ignore: cast_nullable_to_non_nullable
               as ChapterDetails,
+      currentChapter == freezed
+          ? _value.currentChapter
+          : currentChapter // ignore: cast_nullable_to_non_nullable
+              as Chapter,
+      nextChapter == freezed
+          ? _value.nextChapter
+          : nextChapter // ignore: cast_nullable_to_non_nullable
+              as Chapter?,
+      previousChapter == freezed
+          ? _value.previousChapter
+          : previousChapter // ignore: cast_nullable_to_non_nullable
+              as Chapter?,
     ));
   }
 
@@ -234,21 +325,57 @@ class __$LoadedCopyWithImpl<$Res>
       return _then(_value.copyWith(chapterDetails: value));
     });
   }
+
+  @override
+  $ChapterCopyWith<$Res> get currentChapter {
+    return $ChapterCopyWith<$Res>(_value.currentChapter, (value) {
+      return _then(_value.copyWith(currentChapter: value));
+    });
+  }
+
+  @override
+  $ChapterCopyWith<$Res>? get nextChapter {
+    if (_value.nextChapter == null) {
+      return null;
+    }
+
+    return $ChapterCopyWith<$Res>(_value.nextChapter!, (value) {
+      return _then(_value.copyWith(nextChapter: value));
+    });
+  }
+
+  @override
+  $ChapterCopyWith<$Res>? get previousChapter {
+    if (_value.previousChapter == null) {
+      return null;
+    }
+
+    return $ChapterCopyWith<$Res>(_value.previousChapter!, (value) {
+      return _then(_value.copyWith(previousChapter: value));
+    });
+  }
 }
 
 /// @nodoc
 
 class _$_Loaded implements _Loaded {
-  const _$_Loaded(this.mangaId, this.chapterDetails);
+  const _$_Loaded(this.mangaId, this.chapterDetails, this.currentChapter,
+      this.nextChapter, this.previousChapter);
 
   @override
   final String mangaId;
   @override
   final ChapterDetails chapterDetails;
+  @override
+  final Chapter currentChapter;
+  @override
+  final Chapter? nextChapter;
+  @override
+  final Chapter? previousChapter;
 
   @override
   String toString() {
-    return 'ChapterDetailsState.loaded(mangaId: $mangaId, chapterDetails: $chapterDetails)';
+    return 'ChapterDetailsState.loaded(mangaId: $mangaId, chapterDetails: $chapterDetails, currentChapter: $currentChapter, nextChapter: $nextChapter, previousChapter: $previousChapter)';
   }
 
   @override
@@ -258,14 +385,23 @@ class _$_Loaded implements _Loaded {
             other is _Loaded &&
             const DeepCollectionEquality().equals(other.mangaId, mangaId) &&
             const DeepCollectionEquality()
-                .equals(other.chapterDetails, chapterDetails));
+                .equals(other.chapterDetails, chapterDetails) &&
+            const DeepCollectionEquality()
+                .equals(other.currentChapter, currentChapter) &&
+            const DeepCollectionEquality()
+                .equals(other.nextChapter, nextChapter) &&
+            const DeepCollectionEquality()
+                .equals(other.previousChapter, previousChapter));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(mangaId),
-      const DeepCollectionEquality().hash(chapterDetails));
+      const DeepCollectionEquality().hash(chapterDetails),
+      const DeepCollectionEquality().hash(currentChapter),
+      const DeepCollectionEquality().hash(nextChapter),
+      const DeepCollectionEquality().hash(previousChapter));
 
   @JsonKey(ignore: true)
   @override
@@ -276,34 +412,71 @@ class _$_Loaded implements _Loaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(String mangaId, ChapterDetails chapterDetails)
+    required TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)
         loaded,
-    required TResult Function(String mangaId, ChapterDetails chapterDetails)
+    required TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)
         precached,
   }) {
-    return loaded(mangaId, chapterDetails);
+    return loaded(
+        mangaId, chapterDetails, currentChapter, nextChapter, previousChapter);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String mangaId, ChapterDetails chapterDetails)? loaded,
-    TResult Function(String mangaId, ChapterDetails chapterDetails)? precached,
+    TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)?
+        loaded,
+    TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)?
+        precached,
   }) {
-    return loaded?.call(mangaId, chapterDetails);
+    return loaded?.call(
+        mangaId, chapterDetails, currentChapter, nextChapter, previousChapter);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String mangaId, ChapterDetails chapterDetails)? loaded,
-    TResult Function(String mangaId, ChapterDetails chapterDetails)? precached,
+    TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)?
+        loaded,
+    TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)?
+        precached,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(mangaId, chapterDetails);
+      return loaded(mangaId, chapterDetails, currentChapter, nextChapter,
+          previousChapter);
     }
     return orElse();
   }
@@ -345,10 +518,17 @@ class _$_Loaded implements _Loaded {
 
 abstract class _Loaded implements ChapterDetailsState {
   const factory _Loaded(
-      final String mangaId, final ChapterDetails chapterDetails) = _$_Loaded;
+      final String mangaId,
+      final ChapterDetails chapterDetails,
+      final Chapter currentChapter,
+      final Chapter? nextChapter,
+      final Chapter? previousChapter) = _$_Loaded;
 
   String get mangaId => throw _privateConstructorUsedError;
   ChapterDetails get chapterDetails => throw _privateConstructorUsedError;
+  Chapter get currentChapter => throw _privateConstructorUsedError;
+  Chapter? get nextChapter => throw _privateConstructorUsedError;
+  Chapter? get previousChapter => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$LoadedCopyWith<_Loaded> get copyWith => throw _privateConstructorUsedError;
 }
@@ -358,9 +538,17 @@ abstract class _$precachedCopyWith<$Res> {
   factory _$precachedCopyWith(
           _precached value, $Res Function(_precached) then) =
       __$precachedCopyWithImpl<$Res>;
-  $Res call({String mangaId, ChapterDetails chapterDetails});
+  $Res call(
+      {String mangaId,
+      ChapterDetails chapterDetails,
+      Chapter currentChapter,
+      Chapter? nextChapter,
+      Chapter? previousChapter});
 
   $ChapterDetailsCopyWith<$Res> get chapterDetails;
+  $ChapterCopyWith<$Res> get currentChapter;
+  $ChapterCopyWith<$Res>? get nextChapter;
+  $ChapterCopyWith<$Res>? get previousChapter;
 }
 
 /// @nodoc
@@ -377,6 +565,9 @@ class __$precachedCopyWithImpl<$Res>
   $Res call({
     Object? mangaId = freezed,
     Object? chapterDetails = freezed,
+    Object? currentChapter = freezed,
+    Object? nextChapter = freezed,
+    Object? previousChapter = freezed,
   }) {
     return _then(_precached(
       mangaId == freezed
@@ -387,6 +578,18 @@ class __$precachedCopyWithImpl<$Res>
           ? _value.chapterDetails
           : chapterDetails // ignore: cast_nullable_to_non_nullable
               as ChapterDetails,
+      currentChapter == freezed
+          ? _value.currentChapter
+          : currentChapter // ignore: cast_nullable_to_non_nullable
+              as Chapter,
+      nextChapter == freezed
+          ? _value.nextChapter
+          : nextChapter // ignore: cast_nullable_to_non_nullable
+              as Chapter?,
+      previousChapter == freezed
+          ? _value.previousChapter
+          : previousChapter // ignore: cast_nullable_to_non_nullable
+              as Chapter?,
     ));
   }
 
@@ -396,21 +599,57 @@ class __$precachedCopyWithImpl<$Res>
       return _then(_value.copyWith(chapterDetails: value));
     });
   }
+
+  @override
+  $ChapterCopyWith<$Res> get currentChapter {
+    return $ChapterCopyWith<$Res>(_value.currentChapter, (value) {
+      return _then(_value.copyWith(currentChapter: value));
+    });
+  }
+
+  @override
+  $ChapterCopyWith<$Res>? get nextChapter {
+    if (_value.nextChapter == null) {
+      return null;
+    }
+
+    return $ChapterCopyWith<$Res>(_value.nextChapter!, (value) {
+      return _then(_value.copyWith(nextChapter: value));
+    });
+  }
+
+  @override
+  $ChapterCopyWith<$Res>? get previousChapter {
+    if (_value.previousChapter == null) {
+      return null;
+    }
+
+    return $ChapterCopyWith<$Res>(_value.previousChapter!, (value) {
+      return _then(_value.copyWith(previousChapter: value));
+    });
+  }
 }
 
 /// @nodoc
 
 class _$_precached implements _precached {
-  const _$_precached(this.mangaId, this.chapterDetails);
+  const _$_precached(this.mangaId, this.chapterDetails, this.currentChapter,
+      this.nextChapter, this.previousChapter);
 
   @override
   final String mangaId;
   @override
   final ChapterDetails chapterDetails;
+  @override
+  final Chapter currentChapter;
+  @override
+  final Chapter? nextChapter;
+  @override
+  final Chapter? previousChapter;
 
   @override
   String toString() {
-    return 'ChapterDetailsState.precached(mangaId: $mangaId, chapterDetails: $chapterDetails)';
+    return 'ChapterDetailsState.precached(mangaId: $mangaId, chapterDetails: $chapterDetails, currentChapter: $currentChapter, nextChapter: $nextChapter, previousChapter: $previousChapter)';
   }
 
   @override
@@ -420,14 +659,23 @@ class _$_precached implements _precached {
             other is _precached &&
             const DeepCollectionEquality().equals(other.mangaId, mangaId) &&
             const DeepCollectionEquality()
-                .equals(other.chapterDetails, chapterDetails));
+                .equals(other.chapterDetails, chapterDetails) &&
+            const DeepCollectionEquality()
+                .equals(other.currentChapter, currentChapter) &&
+            const DeepCollectionEquality()
+                .equals(other.nextChapter, nextChapter) &&
+            const DeepCollectionEquality()
+                .equals(other.previousChapter, previousChapter));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(mangaId),
-      const DeepCollectionEquality().hash(chapterDetails));
+      const DeepCollectionEquality().hash(chapterDetails),
+      const DeepCollectionEquality().hash(currentChapter),
+      const DeepCollectionEquality().hash(nextChapter),
+      const DeepCollectionEquality().hash(previousChapter));
 
   @JsonKey(ignore: true)
   @override
@@ -438,34 +686,71 @@ class _$_precached implements _precached {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(String mangaId, ChapterDetails chapterDetails)
+    required TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)
         loaded,
-    required TResult Function(String mangaId, ChapterDetails chapterDetails)
+    required TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)
         precached,
   }) {
-    return precached(mangaId, chapterDetails);
+    return precached(
+        mangaId, chapterDetails, currentChapter, nextChapter, previousChapter);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String mangaId, ChapterDetails chapterDetails)? loaded,
-    TResult Function(String mangaId, ChapterDetails chapterDetails)? precached,
+    TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)?
+        loaded,
+    TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)?
+        precached,
   }) {
-    return precached?.call(mangaId, chapterDetails);
+    return precached?.call(
+        mangaId, chapterDetails, currentChapter, nextChapter, previousChapter);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String mangaId, ChapterDetails chapterDetails)? loaded,
-    TResult Function(String mangaId, ChapterDetails chapterDetails)? precached,
+    TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)?
+        loaded,
+    TResult Function(
+            String mangaId,
+            ChapterDetails chapterDetails,
+            Chapter currentChapter,
+            Chapter? nextChapter,
+            Chapter? previousChapter)?
+        precached,
     required TResult orElse(),
   }) {
     if (precached != null) {
-      return precached(mangaId, chapterDetails);
+      return precached(mangaId, chapterDetails, currentChapter, nextChapter,
+          previousChapter);
     }
     return orElse();
   }
@@ -507,10 +792,17 @@ class _$_precached implements _precached {
 
 abstract class _precached implements ChapterDetailsState {
   const factory _precached(
-      final String mangaId, final ChapterDetails chapterDetails) = _$_precached;
+      final String mangaId,
+      final ChapterDetails chapterDetails,
+      final Chapter currentChapter,
+      final Chapter? nextChapter,
+      final Chapter? previousChapter) = _$_precached;
 
   String get mangaId => throw _privateConstructorUsedError;
   ChapterDetails get chapterDetails => throw _privateConstructorUsedError;
+  Chapter get currentChapter => throw _privateConstructorUsedError;
+  Chapter? get nextChapter => throw _privateConstructorUsedError;
+  Chapter? get previousChapter => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$precachedCopyWith<_precached> get copyWith =>
       throw _privateConstructorUsedError;

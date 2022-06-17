@@ -39,6 +39,8 @@ _$_Favourite _$$_FavouriteFromJson(Map<String, dynamic> json) => _$_Favourite(
       tagSections: (json['tagSections'] as List<dynamic>)
           .map((e) => TagSection.fromJson(e as Map<String, dynamic>))
           .toList(),
+      latestChapterNumber: (json['latestChapterNumber'] as num).toDouble(),
+      unreadChapterCount: json['unreadChapterCount'] as int?,
     );
 
 Map<String, dynamic> _$$_FavouriteToJson(_$_Favourite instance) =>
@@ -63,4 +65,6 @@ Map<String, dynamic> _$$_FavouriteToJson(_$_Favourite instance) =>
       'lastChapterRead': instance.lastChapterRead?.toJson(),
       'chapters': instance.chapters.map((e) => e.toJson()).toList(),
       'tagSections': instance.tagSections.map((e) => e.toJson()).toList(),
+      'latestChapterNumber': instance.latestChapterNumber,
+      'unreadChapterCount': instance.unreadChapterCount,
     };

@@ -1,7 +1,7 @@
 import 'package:fluttiyomi/chapter_details/chapter_details_state.dart';
 import 'package:fluttiyomi/chapter_details/read_chapters_repository.dart';
 import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
-import 'package:fluttiyomi/favourites/firestore/favourite_repository.dart';
+import 'package:fluttiyomi/favourites/favourite_repository.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/manga_details/manga_details_notifier.dart';
 import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
@@ -24,7 +24,6 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
   final SourceClient _source;
   final ReaderNotifier _readerProgress;
   final ReadChaptersRepository _readChapters;
-  final FavouritesRepository _favourites;
   final MangaDetailsNotifier _mangaDetailsNotifier;
 
   ChapterDetailsNotifier(
@@ -36,97 +35,100 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
   )   : _source = source,
         _readerProgress = readerProgress,
         _readChapters = readChapters,
-        _favourites = favourites,
         _mangaDetailsNotifier = mangaDetailsNotifier,
         super(const ChapterDetailsState.initial());
 
   Future<ChapterDetails> getChapterDetails(
     String mangaId,
-    String chapterId,
+    Chapter currentChapter,
   ) async {
     ChapterDetails details = await _source.getChapterDetails(
       mangaId,
-      chapterId,
+      currentChapter.id,
     );
 
-    state = ChapterDetailsState.loaded(mangaId, details);
+    Chapter? nextChapter = await _readChapters.getNextChapter(
+      _source.src,
+      mangaId,
+      currentChapter.chapterNo,
+    );
+
+    Chapter? previousChapter = await _readChapters.getPreviousChapter(
+      _source.src,
+      mangaId,
+      currentChapter.chapterNo,
+    );
+
+    state = ChapterDetailsState.loaded(
+      mangaId,
+      details,
+      currentChapter,
+      nextChapter,
+      previousChapter,
+    );
 
     return details;
   }
 
   Future<void> imagesPrecached() async {
     state.whenOrNull(
-      loaded: (mangaId, details) {
-        state = ChapterDetailsState.precached(mangaId, details);
+      loaded: (mangaId, details, current, next, previous) {
+        state = ChapterDetailsState.precached(
+            mangaId, details, current, next, previous);
       },
     );
   }
 
   Future<void> nextChapter() async {
     await state.whenOrNull(
-      precached: (mangaId, chapterDetails) async {
-        var currentChapterIndex = _readerProgress.state.currentIndex;
-        var newIndex = currentChapterIndex - 1;
+      precached: (
+        mangaId,
+        chapterDetails,
+        currentChapter,
+        nextChapter,
+        previousChapter,
+      ) async {
+        if (nextChapter != null) {
+          await _mangaDetailsNotifier.state.whenOrNull(
+            loaded: (mangaDetails, chapters) async {
+              await getChapterDetails(mangaId, nextChapter);
 
-        await _mangaDetailsNotifier.state.whenOrNull(
-          loaded: (mangaDetails, chapters) async {
-            var newChapter = chapters.get(newIndex);
-            var currentChapter = chapters.get(currentChapterIndex);
-
-            await getChapterDetails(mangaId, newChapter.id);
-
-            await _readChapters.markAsRead(
-              _source.sourceId,
-              currentChapter.id,
-              mangaId,
-            );
-
-            await _favourites.setLastChapterRead(
-              _source.sourceId,
-              chapterDetails.mangaId,
-              currentChapter,
-            );
-
-            _readerProgress.moveProgress(
-              progress: "1",
-              currentIndex: newIndex,
-              chapter: newChapter,
-            );
-          },
-        );
+              _readerProgress.moveProgress(
+                progress: chapterDetails.pages.length.toString(),
+                chapterNumber: nextChapter.chapterNo,
+                chapter: nextChapter,
+              );
+            },
+          );
+        }
       },
     );
   }
 
   Future<void> previousChapter() async {
     await state.whenOrNull(
-      precached: (mangaId, chapterDetails) async {
-        var currentChapterIndex = _readerProgress.state.currentIndex;
-        var newIndex = currentChapterIndex + 1;
+      precached: (
+        mangaId,
+        chapterDetails,
+        currentChapter,
+        nextChapter,
+        previousChapter,
+      ) async {
+        if (previousChapter != null) {
+          await _mangaDetailsNotifier.state.whenOrNull(
+            loaded: (mangaDetails, chapters) async {
+              await getChapterDetails(mangaId, previousChapter);
 
-        await _mangaDetailsNotifier.state.whenOrNull(
-          loaded: (mangaDetails, chapters) async {
-            var newChapter = chapters.get(newIndex);
-
-            await getChapterDetails(mangaId, newChapter.id);
-
-            _readerProgress.moveProgress(
-              progress: chapterDetails.pages.length.toString(),
-              currentIndex: newIndex,
-              reversed: true,
-              chapter: newChapter,
-            );
-          },
-        );
+              _readerProgress.moveProgress(
+                progress: chapterDetails.pages.length.toString(),
+                chapterNumber: previousChapter.chapterNo,
+                reversed: true,
+                chapter: previousChapter,
+              );
+            },
+          );
+        }
       },
     );
-  }
-
-  Chapter getCurrentChapter() {
-    return _mangaDetailsNotifier.state.whenOrNull(
-      loaded: (mangaDetails, chapters) {
-        return chapters.get(_readerProgress.state.currentIndex);
-      },
-    )!;
   }
 }

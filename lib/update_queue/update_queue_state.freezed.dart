@@ -17,22 +17,23 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$UpdateQueueState {
   List<QueuedItem> get queue => throw _privateConstructorUsedError;
+  int get total => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<QueuedItem> queue) updating,
-    required TResult Function(List<QueuedItem> queue) updated,
+    required TResult Function(List<QueuedItem> queue, int total) updating,
+    required TResult Function(List<QueuedItem> queue, int total) updated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<QueuedItem> queue)? updating,
-    TResult Function(List<QueuedItem> queue)? updated,
+    TResult Function(List<QueuedItem> queue, int total)? updating,
+    TResult Function(List<QueuedItem> queue, int total)? updated,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<QueuedItem> queue)? updating,
-    TResult Function(List<QueuedItem> queue)? updated,
+    TResult Function(List<QueuedItem> queue, int total)? updating,
+    TResult Function(List<QueuedItem> queue, int total)? updated,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -66,7 +67,7 @@ abstract class $UpdateQueueStateCopyWith<$Res> {
   factory $UpdateQueueStateCopyWith(
           UpdateQueueState value, $Res Function(UpdateQueueState) then) =
       _$UpdateQueueStateCopyWithImpl<$Res>;
-  $Res call({List<QueuedItem> queue});
+  $Res call({List<QueuedItem> queue, int total});
 }
 
 /// @nodoc
@@ -81,12 +82,17 @@ class _$UpdateQueueStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? queue = freezed,
+    Object? total = freezed,
   }) {
     return _then(_value.copyWith(
       queue: queue == freezed
           ? _value.queue
           : queue // ignore: cast_nullable_to_non_nullable
               as List<QueuedItem>,
+      total: total == freezed
+          ? _value.total
+          : total // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -97,7 +103,7 @@ abstract class _$updatingCopyWith<$Res>
   factory _$updatingCopyWith(_updating value, $Res Function(_updating) then) =
       __$updatingCopyWithImpl<$Res>;
   @override
-  $Res call({List<QueuedItem> queue});
+  $Res call({List<QueuedItem> queue, int total});
 }
 
 /// @nodoc
@@ -112,12 +118,17 @@ class __$updatingCopyWithImpl<$Res> extends _$UpdateQueueStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? queue = freezed,
+    Object? total = freezed,
   }) {
     return _then(_updating(
       queue == freezed
           ? _value.queue
           : queue // ignore: cast_nullable_to_non_nullable
               as List<QueuedItem>,
+      total == freezed
+          ? _value.total
+          : total // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -125,7 +136,7 @@ class __$updatingCopyWithImpl<$Res> extends _$UpdateQueueStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_updating implements _updating {
-  const _$_updating(final List<QueuedItem> queue) : _queue = queue;
+  const _$_updating(final List<QueuedItem> queue, this.total) : _queue = queue;
 
   final List<QueuedItem> _queue;
   @override
@@ -135,8 +146,11 @@ class _$_updating implements _updating {
   }
 
   @override
+  final int total;
+
+  @override
   String toString() {
-    return 'UpdateQueueState.updating(queue: $queue)';
+    return 'UpdateQueueState.updating(queue: $queue, total: $total)';
   }
 
   @override
@@ -144,12 +158,15 @@ class _$_updating implements _updating {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _updating &&
-            const DeepCollectionEquality().equals(other.queue, queue));
+            const DeepCollectionEquality().equals(other.queue, queue) &&
+            const DeepCollectionEquality().equals(other.total, total));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(queue));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(queue),
+      const DeepCollectionEquality().hash(total));
 
   @JsonKey(ignore: true)
   @override
@@ -159,30 +176,30 @@ class _$_updating implements _updating {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<QueuedItem> queue) updating,
-    required TResult Function(List<QueuedItem> queue) updated,
+    required TResult Function(List<QueuedItem> queue, int total) updating,
+    required TResult Function(List<QueuedItem> queue, int total) updated,
   }) {
-    return updating(queue);
+    return updating(queue, total);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<QueuedItem> queue)? updating,
-    TResult Function(List<QueuedItem> queue)? updated,
+    TResult Function(List<QueuedItem> queue, int total)? updating,
+    TResult Function(List<QueuedItem> queue, int total)? updated,
   }) {
-    return updating?.call(queue);
+    return updating?.call(queue, total);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<QueuedItem> queue)? updating,
-    TResult Function(List<QueuedItem> queue)? updated,
+    TResult Function(List<QueuedItem> queue, int total)? updating,
+    TResult Function(List<QueuedItem> queue, int total)? updated,
     required TResult orElse(),
   }) {
     if (updating != null) {
-      return updating(queue);
+      return updating(queue, total);
     }
     return orElse();
   }
@@ -220,10 +237,13 @@ class _$_updating implements _updating {
 }
 
 abstract class _updating implements UpdateQueueState {
-  const factory _updating(final List<QueuedItem> queue) = _$_updating;
+  const factory _updating(final List<QueuedItem> queue, final int total) =
+      _$_updating;
 
   @override
   List<QueuedItem> get queue => throw _privateConstructorUsedError;
+  @override
+  int get total => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$updatingCopyWith<_updating> get copyWith =>
@@ -236,7 +256,7 @@ abstract class _$updatedCopyWith<$Res>
   factory _$updatedCopyWith(_updated value, $Res Function(_updated) then) =
       __$updatedCopyWithImpl<$Res>;
   @override
-  $Res call({List<QueuedItem> queue});
+  $Res call({List<QueuedItem> queue, int total});
 }
 
 /// @nodoc
@@ -251,12 +271,17 @@ class __$updatedCopyWithImpl<$Res> extends _$UpdateQueueStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? queue = freezed,
+    Object? total = freezed,
   }) {
     return _then(_updated(
       queue == freezed
           ? _value.queue
           : queue // ignore: cast_nullable_to_non_nullable
               as List<QueuedItem>,
+      total == freezed
+          ? _value.total
+          : total // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -264,7 +289,7 @@ class __$updatedCopyWithImpl<$Res> extends _$UpdateQueueStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_updated implements _updated {
-  const _$_updated(final List<QueuedItem> queue) : _queue = queue;
+  const _$_updated(final List<QueuedItem> queue, this.total) : _queue = queue;
 
   final List<QueuedItem> _queue;
   @override
@@ -274,8 +299,11 @@ class _$_updated implements _updated {
   }
 
   @override
+  final int total;
+
+  @override
   String toString() {
-    return 'UpdateQueueState.updated(queue: $queue)';
+    return 'UpdateQueueState.updated(queue: $queue, total: $total)';
   }
 
   @override
@@ -283,12 +311,15 @@ class _$_updated implements _updated {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _updated &&
-            const DeepCollectionEquality().equals(other.queue, queue));
+            const DeepCollectionEquality().equals(other.queue, queue) &&
+            const DeepCollectionEquality().equals(other.total, total));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(queue));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(queue),
+      const DeepCollectionEquality().hash(total));
 
   @JsonKey(ignore: true)
   @override
@@ -298,30 +329,30 @@ class _$_updated implements _updated {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<QueuedItem> queue) updating,
-    required TResult Function(List<QueuedItem> queue) updated,
+    required TResult Function(List<QueuedItem> queue, int total) updating,
+    required TResult Function(List<QueuedItem> queue, int total) updated,
   }) {
-    return updated(queue);
+    return updated(queue, total);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(List<QueuedItem> queue)? updating,
-    TResult Function(List<QueuedItem> queue)? updated,
+    TResult Function(List<QueuedItem> queue, int total)? updating,
+    TResult Function(List<QueuedItem> queue, int total)? updated,
   }) {
-    return updated?.call(queue);
+    return updated?.call(queue, total);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<QueuedItem> queue)? updating,
-    TResult Function(List<QueuedItem> queue)? updated,
+    TResult Function(List<QueuedItem> queue, int total)? updating,
+    TResult Function(List<QueuedItem> queue, int total)? updated,
     required TResult orElse(),
   }) {
     if (updated != null) {
-      return updated(queue);
+      return updated(queue, total);
     }
     return orElse();
   }
@@ -359,10 +390,13 @@ class _$_updated implements _updated {
 }
 
 abstract class _updated implements UpdateQueueState {
-  const factory _updated(final List<QueuedItem> queue) = _$_updated;
+  const factory _updated(final List<QueuedItem> queue, final int total) =
+      _$_updated;
 
   @override
   List<QueuedItem> get queue => throw _privateConstructorUsedError;
+  @override
+  int get total => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$updatedCopyWith<_updated> get copyWith =>

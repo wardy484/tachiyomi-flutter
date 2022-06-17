@@ -10,7 +10,7 @@ final updateQueueProvider =
 class UpdateQueueNotifier extends StateNotifier<UpdateQueueState> {
   final List<Function()> _onCompleteHandlers = [];
 
-  UpdateQueueNotifier() : super(const UpdateQueueState.updated([]));
+  UpdateQueueNotifier() : super(const UpdateQueueState.updated([], 0));
 
   QueuedItem addToQueue(
     String key,
@@ -28,10 +28,13 @@ class UpdateQueueNotifier extends StateNotifier<UpdateQueueState> {
       removeFromQueue(key);
     });
 
-    state = UpdateQueueState.updating([
-      ...state.queue,
-      item,
-    ]);
+    state = UpdateQueueState.updating(
+      [
+        ...state.queue,
+        item,
+      ],
+      state.total + 1,
+    );
 
     debug("Added $key to update queue");
 
@@ -44,7 +47,7 @@ class UpdateQueueNotifier extends StateNotifier<UpdateQueueState> {
       queue.removeWhere((e) => e.name == key);
 
       if (queue.isEmpty) {
-        state = const UpdateQueueState.updated([]);
+        state = const UpdateQueueState.updated([], 0);
 
         for (var handler in _onCompleteHandlers) {
           handler();
@@ -52,7 +55,7 @@ class UpdateQueueNotifier extends StateNotifier<UpdateQueueState> {
 
         _onCompleteHandlers.clear();
       } else {
-        state = UpdateQueueState.updating(queue);
+        state = UpdateQueueState.updating(queue, state.total);
       }
 
       debug("Removed $key from update queue");

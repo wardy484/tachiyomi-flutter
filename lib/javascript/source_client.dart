@@ -27,6 +27,7 @@ ChapterList parseChapters(dynamic json) {
 
 class SourceClient {
   final Dio _dio;
+  // ignore: unused_field
   final String _baseUrl;
 
   final String src;

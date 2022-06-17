@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttiyomi/favourites/favourites_notifier.dart';
+import 'package:fluttiyomi/favourites/favourite.dart';
 import 'package:fluttiyomi/router.gr.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -10,12 +10,14 @@ class MangaCard extends ConsumerWidget {
   final String name;
   final String image;
   final int newChapterCount;
+  final Favourite? favourite;
 
   const MangaCard({
     Key? key,
     required this.mangaId,
     required this.name,
     required this.image,
+    required this.favourite,
     this.newChapterCount = 0,
   }) : super(key: key);
 
@@ -27,10 +29,9 @@ class MangaCard extends ConsumerWidget {
           ChaptersRoute(
             mangaId: mangaId,
             mangaName: name,
+            favourite: favourite,
           ),
         );
-
-        await ref.read(favouritesProvider.notifier).get();
       },
       child: Stack(
         alignment: AlignmentDirectional.bottomStart,

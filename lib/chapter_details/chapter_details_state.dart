@@ -1,3 +1,4 @@
+import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -9,10 +10,16 @@ class ChapterDetailsState with _$ChapterDetailsState {
   const factory ChapterDetailsState.loaded(
     String mangaId,
     ChapterDetails chapterDetails,
+    Chapter currentChapter,
+    Chapter? nextChapter,
+    Chapter? previousChapter,
   ) = _Loaded;
 
   const factory ChapterDetailsState.precached(
     String mangaId,
     ChapterDetails chapterDetails,
+    Chapter currentChapter,
+    Chapter? nextChapter,
+    Chapter? previousChapter,
   ) = _precached;
 }

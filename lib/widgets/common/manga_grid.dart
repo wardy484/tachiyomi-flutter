@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/update_queue/update_queue.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MangaGrid extends ConsumerStatefulWidget {
   final int itemCount;
@@ -20,15 +21,10 @@ class MangaGrid extends ConsumerStatefulWidget {
 }
 
 class _MangaGridState extends ConsumerState<MangaGrid> {
-  final RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
+  Future<void> _onRefresh() async {
+    await widget.onRefresh!();
 
-  void _onRefresh() async {
-    widget.onRefresh!();
-
-    ref.read(updateQueueProvider.notifier).setOnComplete(() {
-      _refreshController.refreshCompleted();
-    });
+    ref.read(updateQueueProvider.notifier).setOnComplete(() {});
   }
 
   @override
@@ -40,6 +36,8 @@ class _MangaGridState extends ConsumerState<MangaGrid> {
         if (constraints.maxWidth > 1000) {
           crossAxisCount = 5;
         } else if (constraints.maxWidth > 800) {
+          crossAxisCount = 4;
+        } else if (constraints.maxWidth > 600) {
           crossAxisCount = 4;
         }
 
@@ -59,11 +57,7 @@ class _MangaGridState extends ConsumerState<MangaGrid> {
           return grid;
         }
 
-        return SmartRefresher(
-          enablePullDown: true,
-          enablePullUp: false,
-          header: const ClassicHeader(),
-          controller: _refreshController,
+        return RefreshIndicator(
           onRefresh: _onRefresh,
           child: grid,
         );

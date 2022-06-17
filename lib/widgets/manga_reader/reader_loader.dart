@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/chapter_details/chapter_details_notifier.dart';
+import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_loader_footer.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_loader_header.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -7,15 +8,15 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ReaderLoader extends ConsumerStatefulWidget {
   final Widget child;
-  final int currentChapter;
-  final int maxChapters;
+  final Chapter? nextChapter;
+  final Chapter? previousChapter;
   final bool reverse;
 
   const ReaderLoader({
     Key? key,
     required this.child,
-    required this.currentChapter,
-    required this.maxChapters,
+    required this.nextChapter,
+    required this.previousChapter,
     required this.reverse,
   }) : super(key: key);
 
@@ -29,46 +30,57 @@ class _ReaderLoaderState extends ConsumerState<ReaderLoader> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.currentChapter == 1) {
+    if (widget.nextChapter == null) {
       _refreshController.loadNoData();
     }
 
-    return SmartRefresher(
-      reverse: widget.reverse,
-      controller: _refreshController,
-      enablePullDown: true,
-      enablePullUp: true,
-      header: ReaderLoaderHeader(
-        currentChapter: widget.currentChapter,
-        maxChapters: widget.maxChapters,
+    return ScrollConfiguration(
+      behavior: DisableGlowingOverscrollIndicator(),
+      child: SmartRefresher(
         reverse: widget.reverse,
-      ),
-      footer: ReaderLoaderFooter(
-        currentChapter: widget.currentChapter,
-        maxChapters: widget.maxChapters,
-        reverse: widget.reverse,
-      ),
-      onRefresh: () async {
-        if (widget.reverse) {
-          await ref.read(chapterDetailsProvider.notifier).nextChapter();
-        } else {
-          await ref.read(chapterDetailsProvider.notifier).previousChapter();
-        }
+        controller: _refreshController,
+        enablePullDown: true,
+        enablePullUp: true,
+        header: ReaderLoaderHeader(
+          nextChapter: widget.nextChapter,
+          previousChapter: widget.previousChapter,
+          reverse: widget.reverse,
+        ),
+        footer: ReaderLoaderFooter(
+          nextChapter: widget.nextChapter,
+          previousChapter: widget.previousChapter,
+          reverse: widget.reverse,
+        ),
+        onRefresh: () async {
+          if (widget.reverse) {
+            await ref.read(chapterDetailsProvider.notifier).nextChapter();
+          } else {
+            await ref.read(chapterDetailsProvider.notifier).previousChapter();
+          }
 
-        _refreshController.loadComplete();
-        _refreshController.refreshCompleted();
-      },
-      onLoading: () async {
-        if (!widget.reverse) {
-          await ref.read(chapterDetailsProvider.notifier).nextChapter();
-        } else {
-          await ref.read(chapterDetailsProvider.notifier).previousChapter();
-        }
+          _refreshController.loadComplete();
+          _refreshController.refreshCompleted();
+        },
+        onLoading: () async {
+          if (!widget.reverse) {
+            await ref.read(chapterDetailsProvider.notifier).nextChapter();
+          } else {
+            await ref.read(chapterDetailsProvider.notifier).previousChapter();
+          }
 
-        _refreshController.loadComplete();
-        _refreshController.refreshCompleted();
-      },
-      child: widget.child,
+          _refreshController.loadComplete();
+          _refreshController.refreshCompleted();
+        },
+        child: widget.child,
+      ),
     );
+  }
+}
+
+class DisableGlowingOverscrollIndicator extends ScrollBehavior {
+  @override
+  Widget buildOverscrollIndicator(
+      BuildContext context, Widget child, ScrollableDetails details) {
+    return child;
   }
 }

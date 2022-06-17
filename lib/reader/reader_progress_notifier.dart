@@ -23,24 +23,27 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
   }) : super(const ReaderState.reading(
           progress: "1",
           appbarVisible: true,
-          currentIndex: 0,
+          chapterNumber: 0,
           reversed: false,
         ));
 
-  void setIndex(int index) {
-    state = state.copyWith(currentIndex: index);
+  void setChapter(Chapter chapter) {
+    state = state.copyWith(
+      chapterNumber: chapter.chapterNo,
+      currentChapter: chapter,
+    );
   }
 
   void moveProgress({
     required String progress,
-    int? currentIndex,
+    double? chapterNumber,
     bool reversed = false,
     Chapter? chapter,
   }) {
     state = state.copyWith(
       progress: progress,
-      currentIndex: currentIndex ?? state.currentIndex,
-      reversed: false,
+      chapterNumber: chapterNumber ?? state.chapterNumber,
+      reversed: reversed,
       currentChapter: chapter ?? state.currentChapter,
     );
   }
@@ -69,7 +72,7 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
 
       moveProgress(
         progress: pageNumber.toString(),
-        currentIndex: state.currentIndex,
+        chapterNumber: state.chapterNumber,
       );
 
       return pageNumber;

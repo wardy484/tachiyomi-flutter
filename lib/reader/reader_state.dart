@@ -8,7 +8,7 @@ class ReaderState with _$ReaderState {
   const factory ReaderState.reading({
     required String progress,
     required bool appbarVisible,
-    required int currentIndex,
+    required double chapterNumber,
     required bool reversed,
     Chapter? currentChapter,
   }) = _Reading;

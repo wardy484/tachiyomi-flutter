@@ -24,7 +24,7 @@ mixin _$Chapter {
   String get mangaId => throw _privateConstructorUsedError;
   @JsonKey(name: 'chapNum')
   double get chapterNo => throw _privateConstructorUsedError;
-  String get langCode => throw _privateConstructorUsedError; // TODO: use enum
+  String get langCode => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get volume => throw _privateConstructorUsedError;
   String? get group => throw _privateConstructorUsedError;
@@ -224,7 +224,6 @@ class _$_Chapter implements _Chapter {
   final double chapterNo;
   @override
   final String langCode;
-// TODO: use enum
   @override
   final String? name;
   @override
@@ -312,7 +311,7 @@ abstract class _Chapter implements Chapter {
   double get chapterNo => throw _privateConstructorUsedError;
   @override
   String get langCode => throw _privateConstructorUsedError;
-  @override // TODO: use enum
+  @override
   String? get name => throw _privateConstructorUsedError;
   @override
   String? get volume => throw _privateConstructorUsedError;
