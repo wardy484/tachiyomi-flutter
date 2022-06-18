@@ -36,12 +36,11 @@ mixin _$Favourite {
   String? get desc => throw _privateConstructorUsedError;
   double? get follows => throw _privateConstructorUsedError;
   DateTime? get lastUpdate => throw _privateConstructorUsedError;
-  List<String> get newChapterIds => throw _privateConstructorUsedError;
   Chapter? get lastChapterRead => throw _privateConstructorUsedError;
   List<Chapter> get chapters => throw _privateConstructorUsedError;
   List<TagSection> get tagSections => throw _privateConstructorUsedError;
   double get latestChapterNumber => throw _privateConstructorUsedError;
-  int? get unreadChapterCount => throw _privateConstructorUsedError;
+  int get unreadChapterCount => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -70,12 +69,11 @@ abstract class $FavouriteCopyWith<$Res> {
       String? desc,
       double? follows,
       DateTime? lastUpdate,
-      List<String> newChapterIds,
       Chapter? lastChapterRead,
       List<Chapter> chapters,
       List<TagSection> tagSections,
       double latestChapterNumber,
-      int? unreadChapterCount});
+      int unreadChapterCount});
 
   $ChapterCopyWith<$Res>? get lastChapterRead;
 }
@@ -106,7 +104,6 @@ class _$FavouriteCopyWithImpl<$Res> implements $FavouriteCopyWith<$Res> {
     Object? desc = freezed,
     Object? follows = freezed,
     Object? lastUpdate = freezed,
-    Object? newChapterIds = freezed,
     Object? lastChapterRead = freezed,
     Object? chapters = freezed,
     Object? tagSections = freezed,
@@ -178,10 +175,6 @@ class _$FavouriteCopyWithImpl<$Res> implements $FavouriteCopyWith<$Res> {
           ? _value.lastUpdate
           : lastUpdate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      newChapterIds: newChapterIds == freezed
-          ? _value.newChapterIds
-          : newChapterIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       lastChapterRead: lastChapterRead == freezed
           ? _value.lastChapterRead
           : lastChapterRead // ignore: cast_nullable_to_non_nullable
@@ -201,7 +194,7 @@ class _$FavouriteCopyWithImpl<$Res> implements $FavouriteCopyWith<$Res> {
       unreadChapterCount: unreadChapterCount == freezed
           ? _value.unreadChapterCount
           : unreadChapterCount // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
     ));
   }
 
@@ -240,12 +233,11 @@ abstract class _$FavouriteCopyWith<$Res> implements $FavouriteCopyWith<$Res> {
       String? desc,
       double? follows,
       DateTime? lastUpdate,
-      List<String> newChapterIds,
       Chapter? lastChapterRead,
       List<Chapter> chapters,
       List<TagSection> tagSections,
       double latestChapterNumber,
-      int? unreadChapterCount});
+      int unreadChapterCount});
 
   @override
   $ChapterCopyWith<$Res>? get lastChapterRead;
@@ -278,7 +270,6 @@ class __$FavouriteCopyWithImpl<$Res> extends _$FavouriteCopyWithImpl<$Res>
     Object? desc = freezed,
     Object? follows = freezed,
     Object? lastUpdate = freezed,
-    Object? newChapterIds = freezed,
     Object? lastChapterRead = freezed,
     Object? chapters = freezed,
     Object? tagSections = freezed,
@@ -350,10 +341,6 @@ class __$FavouriteCopyWithImpl<$Res> extends _$FavouriteCopyWithImpl<$Res>
           ? _value.lastUpdate
           : lastUpdate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      newChapterIds: newChapterIds == freezed
-          ? _value.newChapterIds
-          : newChapterIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       lastChapterRead: lastChapterRead == freezed
           ? _value.lastChapterRead
           : lastChapterRead // ignore: cast_nullable_to_non_nullable
@@ -373,7 +360,7 @@ class __$FavouriteCopyWithImpl<$Res> extends _$FavouriteCopyWithImpl<$Res>
       unreadChapterCount: unreadChapterCount == freezed
           ? _value.unreadChapterCount
           : unreadChapterCount // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
     ));
   }
 }
@@ -398,15 +385,13 @@ class _$_Favourite extends _Favourite {
       this.desc,
       this.follows,
       this.lastUpdate,
-      required final List<String> newChapterIds,
       this.lastChapterRead,
       required final List<Chapter> chapters,
       required final List<TagSection> tagSections,
       required this.latestChapterNumber,
-      this.unreadChapterCount})
+      required this.unreadChapterCount})
       : _titles = titles,
         _covers = covers,
-        _newChapterIds = newChapterIds,
         _chapters = chapters,
         _tagSections = tagSections,
         super._();
@@ -458,13 +443,6 @@ class _$_Favourite extends _Favourite {
   final double? follows;
   @override
   final DateTime? lastUpdate;
-  final List<String> _newChapterIds;
-  @override
-  List<String> get newChapterIds {
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_newChapterIds);
-  }
-
   @override
   final Chapter? lastChapterRead;
   final List<Chapter> _chapters;
@@ -484,11 +462,11 @@ class _$_Favourite extends _Favourite {
   @override
   final double latestChapterNumber;
   @override
-  final int? unreadChapterCount;
+  final int unreadChapterCount;
 
   @override
   String toString() {
-    return 'Favourite(id: $id, userId: $userId, sourceId: $sourceId, mangaId: $mangaId, name: $name, titles: $titles, image: $image, rating: $rating, mangaStatus: $mangaStatus, langFlag: $langFlag, author: $author, artist: $artist, covers: $covers, desc: $desc, follows: $follows, lastUpdate: $lastUpdate, newChapterIds: $newChapterIds, lastChapterRead: $lastChapterRead, chapters: $chapters, tagSections: $tagSections, latestChapterNumber: $latestChapterNumber, unreadChapterCount: $unreadChapterCount)';
+    return 'Favourite(id: $id, userId: $userId, sourceId: $sourceId, mangaId: $mangaId, name: $name, titles: $titles, image: $image, rating: $rating, mangaStatus: $mangaStatus, langFlag: $langFlag, author: $author, artist: $artist, covers: $covers, desc: $desc, follows: $follows, lastUpdate: $lastUpdate, lastChapterRead: $lastChapterRead, chapters: $chapters, tagSections: $tagSections, latestChapterNumber: $latestChapterNumber, unreadChapterCount: $unreadChapterCount)';
   }
 
   @override
@@ -514,8 +492,6 @@ class _$_Favourite extends _Favourite {
             const DeepCollectionEquality().equals(other.follows, follows) &&
             const DeepCollectionEquality()
                 .equals(other.lastUpdate, lastUpdate) &&
-            const DeepCollectionEquality()
-                .equals(other.newChapterIds, newChapterIds) &&
             const DeepCollectionEquality()
                 .equals(other.lastChapterRead, lastChapterRead) &&
             const DeepCollectionEquality().equals(other.chapters, chapters) &&
@@ -547,7 +523,6 @@ class _$_Favourite extends _Favourite {
         const DeepCollectionEquality().hash(desc),
         const DeepCollectionEquality().hash(follows),
         const DeepCollectionEquality().hash(lastUpdate),
-        const DeepCollectionEquality().hash(newChapterIds),
         const DeepCollectionEquality().hash(lastChapterRead),
         const DeepCollectionEquality().hash(chapters),
         const DeepCollectionEquality().hash(tagSections),
@@ -584,12 +559,11 @@ abstract class _Favourite extends Favourite {
       final String? desc,
       final double? follows,
       final DateTime? lastUpdate,
-      required final List<String> newChapterIds,
       final Chapter? lastChapterRead,
       required final List<Chapter> chapters,
       required final List<TagSection> tagSections,
       required final double latestChapterNumber,
-      final int? unreadChapterCount}) = _$_Favourite;
+      required final int unreadChapterCount}) = _$_Favourite;
   const _Favourite._() : super._();
 
   factory _Favourite.fromJson(Map<String, dynamic> json) =
@@ -628,8 +602,6 @@ abstract class _Favourite extends Favourite {
   @override
   DateTime? get lastUpdate => throw _privateConstructorUsedError;
   @override
-  List<String> get newChapterIds => throw _privateConstructorUsedError;
-  @override
   Chapter? get lastChapterRead => throw _privateConstructorUsedError;
   @override
   List<Chapter> get chapters => throw _privateConstructorUsedError;
@@ -638,7 +610,7 @@ abstract class _Favourite extends Favourite {
   @override
   double get latestChapterNumber => throw _privateConstructorUsedError;
   @override
-  int? get unreadChapterCount => throw _privateConstructorUsedError;
+  int get unreadChapterCount => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$FavouriteCopyWith<_Favourite> get copyWith =>

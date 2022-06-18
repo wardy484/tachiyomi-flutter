@@ -4,7 +4,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttiyomi/auth/auth_guard.dart';
 import 'package:fluttiyomi/database/database.dart';
 import 'package:fluttiyomi/debug/fps_widget.dart';
-import 'package:fluttiyomi/events/event_manager.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/router.gr.dart';
 import 'package:fluttiyomi/settings/settings_notifier.dart';
@@ -43,7 +42,7 @@ void main() async {
   //   appRunner: () => runApp(MyApp()),
   // );
 
-  container.read(eventsProvider).registerGlobalEvents();
+  // container.read(eventsProvider).registerGlobalEvents();
 
   runApp(
     UncontrolledProviderScope(

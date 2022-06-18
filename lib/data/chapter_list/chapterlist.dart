@@ -25,11 +25,39 @@ class ChapterList with _$ChapterList {
     return chapters.firstWhere((chapter) => chapter.chapterNo == chapterNumber);
   }
 
+  Chapter? getNextChapter(Chapter currentChapter) {
+    final acsending = ascending().toList();
+
+    for (int i = 0; i < acsending.length; i++) {
+      Chapter chapter = acsending[i];
+      if (chapter.chapterNo > currentChapter.chapterNo) {
+        return acsending[i];
+      }
+    }
+    return null;
+  }
+
+  Chapter? getPreviousChapter(Chapter currentChapter) {
+    final acsending = descending().toList();
+
+    for (int i = 0; i < acsending.length; i++) {
+      Chapter chapter = acsending[i];
+
+      if (chapter.chapterNo < currentChapter.chapterNo) {
+        return acsending[i];
+      }
+    }
+    return null;
+  }
+
   ChapterList ascending() {
-    chapters.sort(
+    final List<Chapter> newList = List.from(chapters);
+
+    newList.sort(
       (a, b) => a.chapterNo.compareTo(b.chapterNo),
     );
-    return this;
+
+    return copyWith(chapters: newList);
   }
 
   ChapterList descending() {

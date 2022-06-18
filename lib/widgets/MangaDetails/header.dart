@@ -2,12 +2,11 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
-import 'package:fluttiyomi/widgets/MangaDetails/header_detail.dart';
 import 'package:fluttiyomi/widgets/MangaDetails/manga_image.dart';
 import 'package:fluttiyomi/widgets/MangaDetails/manga_tags.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class Header extends ConsumerWidget {
+class Header extends ConsumerStatefulWidget {
   final Manga manga;
   final Function() onToggleFavourite;
   final Function() onContinuePressed;
@@ -20,9 +19,14 @@ class Header extends ConsumerWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ref) {
+  _HeaderState createState() => _HeaderState();
+}
+
+class _HeaderState extends ConsumerState<Header> {
+  @override
+  Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 14, left: 14, right: 14),
+      padding: const EdgeInsets.only(top: 7, left: 14, right: 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -30,25 +34,39 @@ class Header extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                width: 250,
-                child: MangaImage(url: manga.image),
+                width: 150,
+                child: MangaImage(url: widget.manga.image),
               ),
               const SizedBox(width: 14),
-              Expanded(
+              Center(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    HeaderDetail(label: "Author", value: manga.author),
-                    const SizedBox(height: 24),
-                    HeaderDetail(label: "Artist", value: manga.artist),
-                    const SizedBox(height: 24),
-                    HeaderDetail(label: "Status", value: manga.mangaStatus),
-                    const SizedBox(height: 24),
-                    HeaderDetail(
-                      label: "Source",
-                      value: ref.watch(sourceClientProvider).sourceName,
+                    Text(
+                      widget.manga.titles[0],
+                      style: const TextStyle(
+                        fontSize: 22,
+                      ),
                     ),
+                    const SizedBox(height: 8),
+                    Text(
+                      widget.manga.author == ""
+                          ? "Unknown author"
+                          : widget.manga.author ?? "Unknown author",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[400],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      ref.watch(sourceClientProvider).sourceName,
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[400],
+                      ),
+                    )
                   ],
                 ),
               )
@@ -59,12 +77,12 @@ class Header extends ConsumerWidget {
             children: [
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: onToggleFavourite,
-                  label: manga.favourite
+                  onPressed: widget.onToggleFavourite,
+                  label: widget.manga.favourite
                       ? const Text("In library")
                       : const Text("Save to library"),
                   icon: Icon(
-                    manga.favourite
+                    widget.manga.favourite
                         ? Icons.bookmark
                         : Icons.bookmark_add_outlined,
                   ),
@@ -73,7 +91,7 @@ class Header extends ConsumerWidget {
               const SizedBox(width: 10),
               Expanded(
                 child: ElevatedButton.icon(
-                  onPressed: onContinuePressed,
+                  onPressed: widget.onContinuePressed,
                   label: const Text("Continue"),
                   icon: const Icon(Icons.play_arrow),
                 ),
@@ -87,13 +105,13 @@ class Header extends ConsumerWidget {
           ),
           const SizedBox(height: 7),
           ExpandableText(
-            manga.desc ?? "...",
+            widget.manga.desc ?? "...",
             expandText: "Show more",
             collapseText: "Show less",
             maxLines: 2,
           ),
-          if (manga.tags != null && manga.tags!.isNotEmpty)
-            MangaTags(tagSection: manga.tags!.first),
+          if (widget.manga.tags != null && widget.manga.tags!.isNotEmpty)
+            MangaTags(tagSection: widget.manga.tags!.first),
         ],
       ),
     );

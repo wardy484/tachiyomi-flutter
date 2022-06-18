@@ -27,9 +27,6 @@ _$_Favourite _$$_FavouriteFromJson(Map<String, dynamic> json) => _$_Favourite(
       lastUpdate: json['lastUpdate'] == null
           ? null
           : DateTime.parse(json['lastUpdate'] as String),
-      newChapterIds: (json['newChapterIds'] as List<dynamic>)
-          .map((e) => e as String)
-          .toList(),
       lastChapterRead: json['lastChapterRead'] == null
           ? null
           : Chapter.fromJson(json['lastChapterRead'] as Map<String, dynamic>),
@@ -40,7 +37,7 @@ _$_Favourite _$$_FavouriteFromJson(Map<String, dynamic> json) => _$_Favourite(
           .map((e) => TagSection.fromJson(e as Map<String, dynamic>))
           .toList(),
       latestChapterNumber: (json['latestChapterNumber'] as num).toDouble(),
-      unreadChapterCount: json['unreadChapterCount'] as int?,
+      unreadChapterCount: json['unreadChapterCount'] as int,
     );
 
 Map<String, dynamic> _$$_FavouriteToJson(_$_Favourite instance) =>
@@ -61,7 +58,6 @@ Map<String, dynamic> _$$_FavouriteToJson(_$_Favourite instance) =>
       'desc': instance.desc,
       'follows': instance.follows,
       'lastUpdate': instance.lastUpdate?.toIso8601String(),
-      'newChapterIds': instance.newChapterIds,
       'lastChapterRead': instance.lastChapterRead?.toJson(),
       'chapters': instance.chapters.map((e) => e.toJson()).toList(),
       'tagSections': instance.tagSections.map((e) => e.toJson()).toList(),

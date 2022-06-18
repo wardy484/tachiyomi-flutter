@@ -1,6 +1,7 @@
 import 'package:fluttiyomi/chapter_details/chapter_details_state.dart';
 import 'package:fluttiyomi/chapter_details/read_chapters_repository.dart';
 import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
+import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/favourites/favourite_repository.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/manga_details/manga_details_notifier.dart';
@@ -23,7 +24,6 @@ final chapterDetailsProvider = StateNotifierProvider.autoDispose<
 class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
   final SourceClient _source;
   final ReaderNotifier _readerProgress;
-  final ReadChaptersRepository _readChapters;
   final MangaDetailsNotifier _mangaDetailsNotifier;
 
   ChapterDetailsNotifier(
@@ -34,34 +34,27 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
     MangaDetailsNotifier mangaDetailsNotifier,
   )   : _source = source,
         _readerProgress = readerProgress,
-        _readChapters = readChapters,
         _mangaDetailsNotifier = mangaDetailsNotifier,
         super(const ChapterDetailsState.initial());
 
   Future<ChapterDetails> getChapterDetails(
     String mangaId,
     Chapter currentChapter,
+    ChapterList chapterList,
   ) async {
     ChapterDetails details = await _source.getChapterDetails(
       mangaId,
       currentChapter.id,
     );
 
-    Chapter? nextChapter = await _readChapters.getNextChapter(
-      _source.src,
-      mangaId,
-      currentChapter.chapterNo,
-    );
+    Chapter? nextChapter = chapterList.getNextChapter(currentChapter);
 
-    Chapter? previousChapter = await _readChapters.getPreviousChapter(
-      _source.src,
-      mangaId,
-      currentChapter.chapterNo,
-    );
+    Chapter? previousChapter = chapterList.getPreviousChapter(currentChapter);
 
     state = ChapterDetailsState.loaded(
       mangaId,
       details,
+      chapterList,
       currentChapter,
       nextChapter,
       previousChapter,
@@ -72,9 +65,9 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
 
   Future<void> imagesPrecached() async {
     state.whenOrNull(
-      loaded: (mangaId, details, current, next, previous) {
+      loaded: (mangaId, details, chapterList, current, next, previous) {
         state = ChapterDetailsState.precached(
-            mangaId, details, current, next, previous);
+            mangaId, details, chapterList, current, next, previous);
       },
     );
   }
@@ -84,14 +77,19 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
       precached: (
         mangaId,
         chapterDetails,
+        chapterList,
         currentChapter,
         nextChapter,
         previousChapter,
       ) async {
         if (nextChapter != null) {
           await _mangaDetailsNotifier.state.whenOrNull(
-            loaded: (mangaDetails, chapters) async {
-              await getChapterDetails(mangaId, nextChapter);
+            loaded: (mangaDetails, chapters, favourite) async {
+              await getChapterDetails(
+                mangaId,
+                nextChapter,
+                chapterList,
+              );
 
               _readerProgress.moveProgress(
                 progress: chapterDetails.pages.length.toString(),
@@ -110,14 +108,15 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
       precached: (
         mangaId,
         chapterDetails,
+        chapterList,
         currentChapter,
         nextChapter,
         previousChapter,
       ) async {
         if (previousChapter != null) {
           await _mangaDetailsNotifier.state.whenOrNull(
-            loaded: (mangaDetails, chapters) async {
-              await getChapterDetails(mangaId, previousChapter);
+            loaded: (mangaDetails, chapters, favourite) async {
+              await getChapterDetails(mangaId, previousChapter, chapterList);
 
               _readerProgress.moveProgress(
                 progress: chapterDetails.pages.length.toString(),

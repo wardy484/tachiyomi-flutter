@@ -61,7 +61,8 @@ class AppRouter extends _i5.RootStackRouter {
               mangaId: args.mangaId,
               chapter: args.chapter,
               chapters: args.chapters,
-              resumeFrom: args.resumeFrom));
+              resumeFrom: args.resumeFrom,
+              favourite: args.favourite));
     }
   };
 
@@ -154,7 +155,8 @@ class ReadRoute extends _i5.PageRouteInfo<ReadRouteArgs> {
       required String mangaId,
       required _i9.Chapter chapter,
       required _i10.ChapterList chapters,
-      int? resumeFrom})
+      int? resumeFrom,
+      _i8.Favourite? favourite})
       : super(ReadRoute.name,
             path: '/read/:mangaId',
             args: ReadRouteArgs(
@@ -162,7 +164,8 @@ class ReadRoute extends _i5.PageRouteInfo<ReadRouteArgs> {
                 mangaId: mangaId,
                 chapter: chapter,
                 chapters: chapters,
-                resumeFrom: resumeFrom));
+                resumeFrom: resumeFrom,
+                favourite: favourite));
 
   static const String name = 'ReadRoute';
 }
@@ -173,7 +176,8 @@ class ReadRouteArgs {
       required this.mangaId,
       required this.chapter,
       required this.chapters,
-      this.resumeFrom});
+      this.resumeFrom,
+      this.favourite});
 
   final _i6.Key? key;
 
@@ -185,8 +189,10 @@ class ReadRouteArgs {
 
   final int? resumeFrom;
 
+  final _i8.Favourite? favourite;
+
   @override
   String toString() {
-    return 'ReadRouteArgs{key: $key, mangaId: $mangaId, chapter: $chapter, chapters: $chapters, resumeFrom: $resumeFrom}';
+    return 'ReadRouteArgs{key: $key, mangaId: $mangaId, chapter: $chapter, chapters: $chapters, resumeFrom: $resumeFrom, favourite: $favourite}';
   }
 }

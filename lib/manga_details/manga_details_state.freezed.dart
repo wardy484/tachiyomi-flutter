@@ -19,19 +19,23 @@ mixin _$MangaDetailsState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(Manga details, ChapterList chapters) loaded,
+    required TResult Function(
+            Manga details, ChapterList chapters, Favourite? favourite)
+        loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(Manga details, ChapterList chapters)? loaded,
+    TResult Function(Manga details, ChapterList chapters, Favourite? favourite)?
+        loaded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(Manga details, ChapterList chapters)? loaded,
+    TResult Function(Manga details, ChapterList chapters, Favourite? favourite)?
+        loaded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -112,7 +116,9 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(Manga details, ChapterList chapters) loaded,
+    required TResult Function(
+            Manga details, ChapterList chapters, Favourite? favourite)
+        loaded,
   }) {
     return initial();
   }
@@ -121,7 +127,8 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(Manga details, ChapterList chapters)? loaded,
+    TResult Function(Manga details, ChapterList chapters, Favourite? favourite)?
+        loaded,
   }) {
     return initial?.call();
   }
@@ -130,7 +137,8 @@ class _$_Initial implements _Initial {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(Manga details, ChapterList chapters)? loaded,
+    TResult Function(Manga details, ChapterList chapters, Favourite? favourite)?
+        loaded,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -179,10 +187,11 @@ abstract class _Initial implements MangaDetailsState {
 abstract class _$LoadedCopyWith<$Res> {
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) then) =
       __$LoadedCopyWithImpl<$Res>;
-  $Res call({Manga details, ChapterList chapters});
+  $Res call({Manga details, ChapterList chapters, Favourite? favourite});
 
   $MangaCopyWith<$Res> get details;
   $ChapterListCopyWith<$Res> get chapters;
+  $FavouriteCopyWith<$Res>? get favourite;
 }
 
 /// @nodoc
@@ -198,6 +207,7 @@ class __$LoadedCopyWithImpl<$Res> extends _$MangaDetailsStateCopyWithImpl<$Res>
   $Res call({
     Object? details = freezed,
     Object? chapters = freezed,
+    Object? favourite = freezed,
   }) {
     return _then(_Loaded(
       details == freezed
@@ -208,6 +218,10 @@ class __$LoadedCopyWithImpl<$Res> extends _$MangaDetailsStateCopyWithImpl<$Res>
           ? _value.chapters
           : chapters // ignore: cast_nullable_to_non_nullable
               as ChapterList,
+      favourite == freezed
+          ? _value.favourite
+          : favourite // ignore: cast_nullable_to_non_nullable
+              as Favourite?,
     ));
   }
 
@@ -224,21 +238,34 @@ class __$LoadedCopyWithImpl<$Res> extends _$MangaDetailsStateCopyWithImpl<$Res>
       return _then(_value.copyWith(chapters: value));
     });
   }
+
+  @override
+  $FavouriteCopyWith<$Res>? get favourite {
+    if (_value.favourite == null) {
+      return null;
+    }
+
+    return $FavouriteCopyWith<$Res>(_value.favourite!, (value) {
+      return _then(_value.copyWith(favourite: value));
+    });
+  }
 }
 
 /// @nodoc
 
 class _$_Loaded implements _Loaded {
-  const _$_Loaded(this.details, this.chapters);
+  const _$_Loaded(this.details, this.chapters, this.favourite);
 
   @override
   final Manga details;
   @override
   final ChapterList chapters;
+  @override
+  final Favourite? favourite;
 
   @override
   String toString() {
-    return 'MangaDetailsState.loaded(details: $details, chapters: $chapters)';
+    return 'MangaDetailsState.loaded(details: $details, chapters: $chapters, favourite: $favourite)';
   }
 
   @override
@@ -247,14 +274,16 @@ class _$_Loaded implements _Loaded {
         (other.runtimeType == runtimeType &&
             other is _Loaded &&
             const DeepCollectionEquality().equals(other.details, details) &&
-            const DeepCollectionEquality().equals(other.chapters, chapters));
+            const DeepCollectionEquality().equals(other.chapters, chapters) &&
+            const DeepCollectionEquality().equals(other.favourite, favourite));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(details),
-      const DeepCollectionEquality().hash(chapters));
+      const DeepCollectionEquality().hash(chapters),
+      const DeepCollectionEquality().hash(favourite));
 
   @JsonKey(ignore: true)
   @override
@@ -265,29 +294,33 @@ class _$_Loaded implements _Loaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(Manga details, ChapterList chapters) loaded,
+    required TResult Function(
+            Manga details, ChapterList chapters, Favourite? favourite)
+        loaded,
   }) {
-    return loaded(details, chapters);
+    return loaded(details, chapters, favourite);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(Manga details, ChapterList chapters)? loaded,
+    TResult Function(Manga details, ChapterList chapters, Favourite? favourite)?
+        loaded,
   }) {
-    return loaded?.call(details, chapters);
+    return loaded?.call(details, chapters, favourite);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(Manga details, ChapterList chapters)? loaded,
+    TResult Function(Manga details, ChapterList chapters, Favourite? favourite)?
+        loaded,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(details, chapters);
+      return loaded(details, chapters, favourite);
     }
     return orElse();
   }
@@ -325,11 +358,12 @@ class _$_Loaded implements _Loaded {
 }
 
 abstract class _Loaded implements MangaDetailsState {
-  const factory _Loaded(final Manga details, final ChapterList chapters) =
-      _$_Loaded;
+  const factory _Loaded(final Manga details, final ChapterList chapters,
+      final Favourite? favourite) = _$_Loaded;
 
   Manga get details => throw _privateConstructorUsedError;
   ChapterList get chapters => throw _privateConstructorUsedError;
+  Favourite? get favourite => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$LoadedCopyWith<_Loaded> get copyWith => throw _privateConstructorUsedError;
 }

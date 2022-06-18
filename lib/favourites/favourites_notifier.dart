@@ -11,7 +11,6 @@ import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/settings/settings_repository.dart';
 import 'package:fluttiyomi/update_queue/update_queue.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:fluttiyomi/extensions/list.dart';
 
 final favouritesProvider =
     StateNotifierProvider<FavouritesNotifier, FavouritesState>(
@@ -80,33 +79,7 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
     );
   }
 
-  Future<void> markAsOpened(String mangaId, String chapterId) async {
-    Favourite? favourite = await _favourites.getFavourite(
-      _source.sourceId,
-      mangaId,
-    );
-
-    if (favourite is Favourite) {
-      favourite = favourite.copyWith(
-        newChapterIds:
-            favourite.newChapterIds.where((id) => id != chapterId).toList(),
-      );
-      _favourites.update([favourite]);
-    }
-  }
-
-  Future<void> markManyAsOpened(
-    String mangaId,
-    List<String> chapterIds,
-  ) async {
-    _favourites.markManyAsOpened(
-      _source.sourceId,
-      mangaId,
-      chapterIds,
-    );
-  }
-
-  Future<List<String>> getLatestChapters(Favourite favourite) async {
+  Future<void> getLatestChapters(Favourite favourite) async {
     log('Fetching latest chapters for ${favourite.mangaId}');
 
     ChapterList chapterList = await _source.getChapters(favourite.mangaId);
@@ -118,27 +91,16 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
 
     await _favourites.addChapters(favourite, newChapters);
 
-    final latestChapterIds = newChapters.map((chapter) => chapter.id).toList();
-
-    final List<String> newChaptersIds = [
-      ...favourite.newChapterIds,
-      ...latestChapterIds,
-    ];
-
     final newChapterList = ChapterList(newChapters);
 
     if (newChapters.isNotEmpty) {
       final newFavourite = favourite.copyWith(
-        newChapterIds: newChaptersIds.unique(),
         latestChapterNumber:
             newChapterList.descending().toList().first.chapterNo,
+        unreadChapterCount: favourite.calculateUnreadChapterCount(),
       );
       _favourites.update([newFavourite]);
     }
-
-    _favourites.setUnreadChapters(_source.src, favourite.mangaId);
-
-    return latestChapterIds;
   }
 
   Future<LastReadChapter> getLastReadChapter(String mangaId) async {
@@ -161,22 +123,12 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
 
   List<Favourite> _sortAndGroupFavourites(List<Favourite> favourites) {
     final withNewChapters = favourites.where((favourite) {
-      final unreadCount = favourite.unreadChapterCount;
-
-      if (unreadCount != null) {
-        return unreadCount > 0;
-      }
-
-      return favourite.newChapterIds.isNotEmpty;
+      return favourite.unreadChapterCount > 0;
     }).toList()
       ..sort((a, b) => a.name.compareTo(b.name));
 
     final withNoNewChapters = favourites.where((favourite) {
-      if (favourite.unreadChapterCount != null) {
-        return favourite.unreadChapterCount == 0;
-      }
-
-      return favourite.newChapterIds.isEmpty;
+      return favourite.unreadChapterCount < 1;
     }).toList()
       ..sort((a, b) => a.name.compareTo(b.name));
 
@@ -189,13 +141,13 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
     return state.when(
       initial: () => null,
       loaded: (favourites, updating) {
-        try {
-          return favourites.firstWhere(
-            (favourite) => favourite.mangaId == mangaId,
-          );
-        } catch (e) {
-          return null;
+        for (var favourite in favourites) {
+          if (favourite.mangaId == mangaId) {
+            return favourite;
+          }
         }
+
+        return null;
       },
     );
   }

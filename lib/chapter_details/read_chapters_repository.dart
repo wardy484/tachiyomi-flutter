@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttiyomi/auth/auth_repository.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
+import 'package:fluttiyomi/favourites/favourite.dart';
 import 'package:fluttiyomi/favourites/favourite_repository.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -30,150 +31,94 @@ class ReadChaptersRepository {
         _favouritesRepository = favouritesRepository;
 
   Future<ChapterList> getChapters(
-    String sourceId,
-    String mangaId,
+    Favourite favourite,
   ) async {
-    log("READ: Getting chapters for $mangaId from $sourceId");
-
-    final chapters = await db
-        .collection('favourites')
-        .doc(buildDocId(sourceId, mangaId))
-        .collection('chapters')
-        .orderBy('chapNum', descending: true)
-        .get();
-
-    return ChapterList(chapters.docs
-        .map(
-          (doc) => Chapter.fromJson(doc.data()),
-        )
-        .toList());
-  }
-
-  Query<Chapter> getChaptersQuery(
-    String sourceId,
-    String mangaId,
-  ) {
-    return db
-        .collection('favourites')
-        .doc(buildDocId(sourceId, mangaId))
-        .collection('chapters')
-        .orderBy('chapNum', descending: true)
-        .withConverter<Chapter>(
-          fromFirestore: (snapshot, _) => Chapter.fromJson(snapshot.data()!),
-          toFirestore: (chapter, _) => chapter.toJson(),
-        );
-  }
-
-  Future<Chapter?> getPreviousChapter(
-    String sourceId,
-    String mangaId,
-    double chapNum,
-  ) async {
-    final chapter = await db
-        .collection('favourites')
-        .doc(buildDocId(sourceId, mangaId))
-        .collection('chapters')
-        .orderBy('chapNum', descending: true)
-        .where('chapNum', isLessThan: chapNum)
-        .withConverter<Chapter>(
-          fromFirestore: (snapshot, _) => Chapter.fromJson(snapshot.data()!),
-          toFirestore: (chapter, _) => chapter.toJson(),
-        )
-        .limit(1)
-        .get();
-
-    if (chapter.docs.isEmpty) {
-      return null;
-    }
-
-    return chapter.docs.first.data();
-  }
-
-  Future<Chapter?> getNextChapter(
-    String sourceId,
-    String mangaId,
-    double chapNum,
-  ) async {
-    final chapter = await db
-        .collection('favourites')
-        .doc(buildDocId(sourceId, mangaId))
-        .collection('chapters')
-        .orderBy('chapNum')
-        .where('chapNum', isGreaterThan: chapNum)
-        .withConverter<Chapter>(
-          fromFirestore: (snapshot, _) => Chapter.fromJson(snapshot.data()!),
-          toFirestore: (chapter, _) => chapter.toJson(),
-        )
-        .limit(1)
-        .get();
-
-    if (chapter.docs.isEmpty) {
-      return null;
-    }
-
-    return chapter.docs.first.data();
-  }
-
-  Stream<ChapterList> watchChapters(
-    String sourceId,
-    String mangaId,
-  ) {
-    return db
-        .collection('favourites')
-        .doc(buildDocId(sourceId, mangaId))
-        .collection('chapters')
-        .orderBy('chapNum', descending: true)
-        .snapshots()
-        .map((snapshot) {
-      log("READ: Read chapters from stream");
-
-      final chapters = snapshot.docs.map((doc) {
-        return Chapter.fromJson(doc.data());
-      }).toList();
-
-      return ChapterList(chapters);
-    });
+    return ChapterList(favourite.chapters);
   }
 
   Future<void> markAsRead(
-    String sourceId,
-    String chapterId,
-    String mangaId,
+    Favourite favourite,
+    double chapterNumber,
   ) async {
-    log("WRITE: Marking chapter $chapterId as read from $sourceId");
+    log("WRITE: Marking chapter $chapterNumber as read from ${favourite.sourceId}");
 
-    db
-        .collection('favourites')
-        .doc(buildDocId(sourceId, mangaId))
-        .collection('chapters')
-        .doc(chapterId)
-        .update({"read": true});
+    log("Refreshing favourite ${favourite.id}");
+    Favourite? freshFavourite = await _favouritesRepository.getFavourite(
+      favourite.sourceId,
+      favourite.mangaId,
+    );
 
-    _favouritesRepository.setUnreadChapters(sourceId, mangaId);
+    if (freshFavourite == null) {
+      log("Favourite not found ${favourite.sourceId}/${favourite.mangaId}");
+      return;
+    }
+
+    List<Chapter> chapters = freshFavourite.chapters.toList();
+
+    for (var i = 0; i < chapters.length; i++) {
+      if (chapters[i].chapterNo == chapterNumber) {
+        chapters[i] = chapters[i].copyWith(
+          read: true,
+        );
+        break;
+      }
+    }
+
+    freshFavourite = freshFavourite.copyWith(
+      chapters: chapters,
+      unreadChapterCount: calculateUnreadChapterCount(chapters),
+    );
+
+    _favouritesRepository.update([freshFavourite]);
   }
 
   Future<void> markManyAsRead(
-    String sourceId,
-    String mangaId,
-    List<String> chapterIds,
+    Favourite favourite,
+    List<double> chapterNumbers,
   ) async {
-    for (var chapterId in chapterIds) {
-      log("WRITE: Marking chapter $chapterId as read from $sourceId");
+    log("WRITE: Marking many chapters $chapterNumbers as read from ${favourite.sourceId}");
 
-      db
-          .collection('favourites')
-          .doc(buildDocId(sourceId, mangaId))
-          .collection('chapters')
-          .doc(chapterId)
-          .update({"read": true});
+    log("Refreshing favourite ${favourite.id}");
+    Favourite? freshFavourite = await _favouritesRepository.getFavourite(
+      favourite.sourceId,
+      favourite.mangaId,
+    );
 
-      _favouritesRepository.setUnreadChapters(sourceId, mangaId);
+    if (freshFavourite == null) {
+      log("Favourite not found ${favourite.sourceId}/${favourite.mangaId}");
+      return;
     }
+
+    List<Chapter> chapters = freshFavourite.chapters.toList();
+
+    for (var i = 0; i < chapters.length; i++) {
+      if (chapterNumbers.contains(chapters[i].chapterNo)) {
+        chapters[i] = chapters[i].copyWith(
+          read: true,
+        );
+      }
+    }
+
+    freshFavourite = freshFavourite.copyWith(
+      chapters: chapters,
+      unreadChapterCount: calculateUnreadChapterCount(chapters),
+    );
+
+    _favouritesRepository.update([freshFavourite]);
+  }
+
+  int calculateUnreadChapterCount(List<Chapter> chapters) {
+    int unreadChapterCount = 0;
+    for (var chapter in chapters) {
+      if (!chapter.read) {
+        unreadChapterCount++;
+      }
+    }
+    return unreadChapterCount;
   }
 
   Future<void> setLastPage(
-    String sourceId,
-    String mangaId,
+    Favourite favourite,
     String chapterId,
     int pageNumber,
   ) async {
@@ -181,14 +126,27 @@ class ReadChaptersRepository {
       return;
     }
 
-    log("WRITE: Setting last page to $pageNumber for $mangaId on $chapterId from $sourceId");
+    log("WRITE: Setting last page to $pageNumber for ${favourite.mangaId} on $chapterId from ${favourite.sourceId}");
 
-    db
-        .collection('favourites')
-        .doc(buildDocId(sourceId, mangaId))
-        .collection('chapters')
-        .doc(chapterId)
-        .update({"page": pageNumber});
+    // TODO: Implement a better lastPage read system
+    // and probably read system
+
+    // final chapters = favourite.chapters;
+
+    // for (var i = 0; i < chapters.length; i++) {
+    //   if (chapters[i].id == chapterId) {
+    //     chapters[i] = chapters[i].copyWith(
+    //       page: pageNumber,
+    //     );
+    //     break;
+    //   }
+    // }
+
+    // favourite = favourite.copyWith(
+    //   chapters: chapters,
+    // );
+
+    // _favouritesRepository.update([favourite]);
   }
 
   String buildDocId(String sourceId, String mangaId) {

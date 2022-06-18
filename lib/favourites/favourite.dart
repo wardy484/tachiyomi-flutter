@@ -25,18 +25,17 @@ class Favourite with _$Favourite {
     String? desc,
     double? follows,
     DateTime? lastUpdate,
-    required List<String> newChapterIds,
     Chapter? lastChapterRead,
     required List<Chapter> chapters,
     required List<TagSection> tagSections,
     required double latestChapterNumber,
-    int? unreadChapterCount,
+    required int unreadChapterCount,
   }) = _Favourite;
 
   factory Favourite.fromJson(Map<String, dynamic> json) =>
       _$FavouriteFromJson(json);
 
-  Future<Manga> toManga() async {
+  Manga toManga() {
     return Manga(
       mangaId,
       titles,
@@ -53,5 +52,9 @@ class Favourite with _$Favourite {
       lastUpdate,
       favourite: true,
     );
+  }
+
+  int calculateUnreadChapterCount() {
+    return chapters.where((chapter) => chapter.read != true).toList().length;
   }
 }

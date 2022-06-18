@@ -23,7 +23,6 @@ class FavouritesRepository {
     required FirebaseFirestore firestore,
     required AuthRepository authRepository,
   })  : db = firestore,
-        // ignore: prefer_initializing_formals
         _authRepository = authRepository;
 
   Stream<List<Favourite>> watchFavourites() {
@@ -38,11 +37,32 @@ class FavouritesRepository {
         return Favourite.fromJson({
           ...doc.data(),
           "id": doc.id,
-          "chapters": doc.data()["chapters"].map((chapter) {
-            return Chapter.fromJson(chapter);
-          }).toList(),
         });
       }).toList();
+    });
+  }
+
+  Stream<Favourite?> watchFavourite(
+    String sourceId,
+    String mangaId,
+  ) {
+    return db
+        .collection("favourites")
+        .doc(buildDocId(sourceId, mangaId))
+        .snapshots()
+        .map((snapshot) {
+      log("READ: Got favourite $sourceId/$mangaId");
+
+      final data = snapshot.data();
+
+      if (data == null) {
+        return null;
+      }
+
+      return Favourite.fromJson({
+        ...data,
+        "id": snapshot.id,
+      });
     });
   }
 
@@ -65,20 +85,15 @@ class FavouritesRepository {
 
     log("READ: Getting chapters for favourite $mangaId from $sourceId");
 
-    final chapters = await db
-        .collection('favourites')
-        .doc(buildDocId(sourceId, mangaId))
-        .collection('chapters')
-        .orderBy('chapNum', descending: true)
-        .get();
-
     final data = favourite.data();
 
     return data != null
         ? Favourite.fromJson({
-            "id": favourite.id,
             ...data,
-            "chapters": chapters.docs.map((doc) => doc.data()).toList(),
+            "id": favourite.id,
+            // "chapters": data["chapters"].map((chapter) {
+            //   return Chapter.fromJson(chapter);
+            // }).toList(),
           })
         : null;
   }
@@ -89,7 +104,7 @@ class FavouritesRepository {
     return "${userId}_${sourceId}_$mangaId";
   }
 
-  Future<void> addFavourite(
+  Future<Favourite> addFavourite(
     String sourceId,
     String name,
     Manga manga,
@@ -98,6 +113,7 @@ class FavouritesRepository {
     final docId = buildDocId(sourceId, manga.id);
 
     log("WRITE: Adding favourite $manga.id from $sourceId");
+
     final latestChapterNumber =
         chapterList.descending().toList().first.chapterNo;
 
@@ -130,59 +146,44 @@ class FavouritesRepository {
           }).toList() ??
           [],
       "latestChapterNumber": latestChapterNumber,
+      "unreadChapterCount": chapterList.length,
     });
 
-    log("Adding chapters (${chapterList.chapters.length}) for favourite $manga.id from $sourceId");
-
-    for (var chapter in chapterList.chapters) {
-      log("WRITE: Adding chapter ${chapter.chapterNo} for favourite $manga.id from $sourceId");
-
-      db
-          .collection('favourites')
-          .doc(docId)
-          .collection('chapters')
-          .doc(chapter.id)
-          .set(chapter.toJson());
-    }
+    return await getFavourite(sourceId, manga.id) as Favourite;
   }
 
   Future<void> setUnreadChapters(
-    String sourceId,
-    String mangaId,
+    Favourite favourite,
   ) async {
-    final docId = buildDocId(sourceId, mangaId);
+    final docId = buildDocId(favourite.sourceId, favourite.mangaId);
 
-    log("WRITE: Setting unread chapters for favourite $mangaId from $sourceId");
+    final unreadChapters = favourite.chapters
+        .where((chapter) => chapter.read != true)
+        .toList()
+        .length;
 
-    final chapters = await db
-        .collection('favourites')
-        .doc(buildDocId(sourceId, mangaId))
-        .collection('chapters')
-        .orderBy('chapNum', descending: true)
-        .where('read', isEqualTo: false)
-        .get();
-
-    final chapterlist = ChapterList(chapters.docs
-        .map(
-          (doc) => Chapter.fromJson(doc.data()),
-        )
-        .toList());
+    log("WRITE: Setting unread chapters for favourite $favourite.mangaId from $favourite.sourceId, unread chapters: $unreadChapters");
 
     db.collection('favourites').doc(docId).update({
-      "unreadChapterCount": chapterlist.length,
+      "unreadChapterCount": unreadChapters,
     });
   }
 
   Future<void> addChapters(
     Favourite favourite,
-    List<Chapter> chapters,
+    List<Chapter> newChapters,
   ) async {
-    if (chapters.isEmpty) {
+    if (newChapters.isEmpty) {
       log("No new chapters to add to favourite mangaId: ${favourite.mangaId}, sourceId: ${favourite.sourceId}");
       return;
     }
 
-    log("Adding ${chapters.length} new chapters to favourite mangaId: ${favourite.mangaId}, sourceId: ${favourite.sourceId}");
+    log("Adding ${newChapters.length} new chapters to favourite mangaId: ${favourite.mangaId}, sourceId: ${favourite.sourceId}");
+
+    final List<Chapter> chapters = [
+      ...favourite.chapters,
+      ...newChapters,
+    ];
 
     for (var chapter in chapters) {
       log("WRITE: Adding chapter ${chapter.chapterNo} to favourite mangaId: ${favourite.mangaId}, sourceId: ${favourite.sourceId}");
@@ -225,19 +226,6 @@ class FavouritesRepository {
         .collection('favourites')
         .doc(buildDocId(sourceId, mangaId))
         .delete();
-  }
-
-  Future<void> markManyAsOpened(
-    String sourceId,
-    String mangaId,
-    List<String> chapterIds,
-  ) async {
-    log("WRITE: Marking $chapterIds as opened for mangaId: $mangaId, sourceId: $sourceId");
-
-    await db
-        .collection('favourites')
-        .doc(buildDocId(sourceId, mangaId))
-        .update({"newChapterIds": FieldValue.arrayRemove(chapterIds)});
   }
 
   Future<void> setLastChapterRead(

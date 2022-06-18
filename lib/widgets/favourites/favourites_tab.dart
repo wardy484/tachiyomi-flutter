@@ -43,8 +43,7 @@ class _FavouritesTabState extends ConsumerState<FavouritesTab> {
                     mangaId: manga.mangaId,
                     name: manga.name,
                     image: manga.image,
-                    newChapterCount:
-                        manga.unreadChapterCount ?? manga.newChapterIds.length,
+                    newChapterCount: manga.unreadChapterCount,
                     favourite: manga,
                   );
                 },

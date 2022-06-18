@@ -5,9 +5,7 @@ import 'package:fluttiyomi/chapter_details/chapter_details_state.dart';
 import 'package:fluttiyomi/chapter_details/read_chapters_repository.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
-import 'package:fluttiyomi/events/event_definitions.dart';
-import 'package:fluttiyomi/events/event_manager.dart';
-import 'package:fluttiyomi/javascript/source_client.dart';
+import 'package:fluttiyomi/favourites/favourite.dart';
 import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
 import 'package:fluttiyomi/settings/settings_notifier.dart';
 import 'package:fluttiyomi/widgets/manga_page.dart';
@@ -27,6 +25,7 @@ class ReadPage extends ConsumerStatefulWidget {
   final Chapter chapter;
   final ChapterList chapters;
   final int? resumeFrom;
+  final Favourite? favourite;
 
   const ReadPage({
     Key? key,
@@ -34,6 +33,7 @@ class ReadPage extends ConsumerStatefulWidget {
     required this.chapter,
     required this.chapters,
     this.resumeFrom,
+    this.favourite,
   }) : super(key: key);
 
   @override
@@ -60,6 +60,7 @@ class _ReadPageState extends ConsumerState<ReadPage> {
     ref.read(chapterDetailsProvider.notifier).getChapterDetails(
           widget.mangaId,
           widget.chapter,
+          widget.chapters,
         );
   }
 
@@ -79,24 +80,31 @@ class _ReadPageState extends ConsumerState<ReadPage> {
   Widget build(BuildContext context) {
     ref.listen(chapterDetailsProvider, (previous, ChapterDetailsState next) {
       next.whenOrNull(
-        loaded: (_, chapterDetails, __, ___, ____) =>
+        loaded: (_, chapterDetails, _____, __, ___, ____) =>
             preloadImages(chapterDetails.pages),
-        precached: (_, chapterDetails, __, ___, ____) {
-          ref.read(eventsProvider).emit(
-                ChapterOpened(chapterDetails),
-              );
+        precached: (_, chapterDetails, _____, currentChapter, ___, ____) {
+          if (widget.favourite != null) {
+            ref
+                .read(readChaptersRepositoryProvider)
+                .markAsRead(widget.favourite!, currentChapter.chapterNo);
+          }
+
+          if (!ref.read(readerProvider).appbarVisible) {
+            ref.read(readerProvider.notifier).hideAppbar();
+          }
         },
       );
     });
 
     return ref.watch(chapterDetailsProvider).when(
           initial: () => ReaderLoadingContent(chapter: widget.chapter),
-          loaded: (mangaId, chapterDetails, __, ___, ____) {
+          loaded: (mangaId, chapterDetails, _____, __, ___, ____) {
             return ReaderLoadingContent(chapter: widget.chapter);
           },
           precached: (
             mangaId,
             chapterDetails,
+            chapterList,
             currentChapter,
             nextChapter,
             previousChapter,
@@ -126,6 +134,7 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                     child: ReaderLoader(
                       reverse: readState.reversed,
                       child: ListView.builder(
+                        shrinkWrap: true,
                         physics: const BouncingScrollPhysics(),
                         controller: _autoScrollController,
                         padding: ref.watch(settingsProvider).when(
@@ -134,7 +143,6 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                                 horizontal: settings.padding.toDouble(),
                               ),
                             ),
-                        shrinkWrap: true,
                         reverse: readState.reversed,
                         itemCount: pages.length,
                         itemBuilder: (context, index) {
@@ -162,14 +170,15 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                                       readState.reversed,
                                     );
 
-                                ref
-                                    .read(readChaptersRepositoryProvider)
-                                    .setLastPage(
-                                      ref.read(sourceClientProvider).sourceId,
-                                      mangaId,
-                                      widget.chapter.id,
-                                      pageNumber,
-                                    );
+                                if (widget.favourite != null) {
+                                  ref
+                                      .read(readChaptersRepositoryProvider)
+                                      .setLastPage(
+                                        widget.favourite!,
+                                        chapter.id,
+                                        pageNumber,
+                                      );
+                                }
                               },
                             ),
                           );

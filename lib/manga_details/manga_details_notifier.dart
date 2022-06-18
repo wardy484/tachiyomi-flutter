@@ -25,7 +25,7 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
   final SourceClient _source;
   final FavouritesRepository _favourites;
   final ReadChaptersRepository _chapters;
-  StreamSubscription<ChapterList>? _chaptersStream;
+  StreamSubscription<Favourite?>? _favouriteSubscription;
 
   MangaDetailsNotifier(
     SourceClient source,
@@ -43,33 +43,45 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
     Manga details;
     ChapterList chapters;
 
+    favourite ??= await _favourites.getFavourite(
+      _source.src,
+      mangaId,
+    );
+
     if (favourite == null) {
       details = await _source.getMangaDetails(mangaId);
       chapters = await _source.getChapters(mangaId);
 
-      state = MangaDetailsState.loaded(details, chapters);
+      state = MangaDetailsState.loaded(details, chapters, null);
     } else {
-      details = await favourite.toManga();
-
-      state = MangaDetailsState.loaded(details, ChapterList([]));
-
-      // _chaptersStream = watchChapters(details, mangaId);
+      _favouriteSubscription = watchFavourite(_source.src, mangaId);
     }
   }
 
-  StreamSubscription<ChapterList> watchChapters(
-    Manga mangaDetails,
+  StreamSubscription<Favourite?> watchFavourite(
+    String sourceId,
     String mangaId,
   ) {
-    return _chapters
-        .watchChapters(_source.sourceId, mangaId)
-        .listen((chapters) {
-      state = MangaDetailsState.loaded(mangaDetails, chapters);
+    return _favourites
+        .watchFavourite(sourceId, mangaId)
+        .listen((favourite) async {
+      if (favourite == null) {
+        final details = await _source.getMangaDetails(mangaId);
+        final chapters = await _source.getChapters(mangaId);
+
+        state = MangaDetailsState.loaded(details, chapters, null);
+      } else {
+        state = MangaDetailsState.loaded(
+          favourite.toManga(),
+          ChapterList(favourite.chapters),
+          favourite,
+        );
+      }
     });
   }
 
   void closeStream() {
-    _chaptersStream?.cancel();
+    _favouriteSubscription?.cancel();
   }
 
   Future<void> toggleFavourite(
@@ -78,43 +90,47 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
     ChapterList chapterList,
   ) async {
     if (!manga.favourite) {
-      await _favourites.addFavourite(
+      final favourite = await _favourites.addFavourite(
         _source.sourceId,
         mangaName,
         manga,
         chapterList,
       );
+
+      state = MangaDetailsState.loaded(
+        manga.copyWith(
+          favourite: !manga.favourite,
+        ),
+        chapterList,
+        favourite,
+      );
     } else {
       await _favourites.deleteFavourite(_source.src, manga.id);
-    }
 
-    state = MangaDetailsState.loaded(
-      manga.copyWith(
-        favourite: !manga.favourite,
-      ),
-      chapterList,
-    );
+      state = MangaDetailsState.loaded(
+        manga.copyWith(
+          favourite: !manga.favourite,
+        ),
+        chapterList,
+        null,
+      );
+    }
   }
 
   Future<void> markAsRead(
-    String chapterId,
-    String mangaId,
+    Favourite favourite,
+    double chapterNumber,
   ) async {
-    await _chapters.markAsRead(
-      _source.src,
-      chapterId,
-      mangaId,
-    );
+    await _chapters.markAsRead(favourite, chapterNumber);
   }
 
   Future<void> markManyAsRead(
-    String mangaId,
-    List<String> chapterIds,
+    Favourite favourite,
+    List<double> chpaterNumbers,
   ) async {
     await _chapters.markManyAsRead(
-      _source.src,
-      mangaId,
-      chapterIds,
+      favourite,
+      chpaterNumbers,
     );
   }
 }
