@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:fluttiyomi/chapter_details/read_chapters_repository.dart';
+import 'package:fluttiyomi/auth/auth_repository.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/favourites/favourite.dart';
@@ -16,7 +16,7 @@ final mangaDetailsNotifierProvider =
     return MangaDetailsNotifier(
       ref.read(sourceClientProvider),
       ref.read(favouritesRepositoryProvider),
-      ref.read(readChaptersRepositoryProvider),
+      ref.read(authRepositoryProvider),
     );
   },
 );
@@ -24,16 +24,16 @@ final mangaDetailsNotifierProvider =
 class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
   final SourceClient _source;
   final FavouritesRepository _favourites;
-  final ReadChaptersRepository _chapters;
+  final AuthRepository _auth;
   StreamSubscription<Favourite?>? _favouriteSubscription;
 
   MangaDetailsNotifier(
     SourceClient source,
     FavouritesRepository favourites,
-    ReadChaptersRepository chapters,
+    AuthRepository auth,
   )   : _source = source,
         _favourites = favourites,
-        _chapters = chapters,
+        _auth = auth,
         super(const MangaDetailsState.initial());
 
   Future<void> getMangaDetails(
@@ -44,6 +44,7 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
     ChapterList chapters;
 
     favourite ??= await _favourites.getFavourite(
+      _auth.getCurrentUser(),
       _source.src,
       mangaId,
     );
@@ -63,7 +64,11 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
     String mangaId,
   ) {
     return _favourites
-        .watchFavourite(sourceId, mangaId)
+        .watchFavourite(
+      _auth.getCurrentUser(),
+      sourceId,
+      mangaId,
+    )
         .listen((favourite) async {
       if (favourite == null) {
         final details = await _source.getMangaDetails(mangaId);
@@ -91,6 +96,7 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
   ) async {
     if (!manga.favourite) {
       final favourite = await _favourites.addFavourite(
+        _auth.getCurrentUser(),
         _source.sourceId,
         mangaName,
         manga,
@@ -105,7 +111,11 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
         favourite,
       );
     } else {
-      await _favourites.deleteFavourite(_source.src, manga.id);
+      await _favourites.deleteFavourite(
+        _auth.getCurrentUser(),
+        _source.src,
+        manga.id,
+      );
 
       state = MangaDetailsState.loaded(
         manga.copyWith(
@@ -121,14 +131,19 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
     Favourite favourite,
     double chapterNumber,
   ) async {
-    await _chapters.markAsRead(favourite, chapterNumber);
+    await _favourites.markAsRead(
+      _auth.getCurrentUser(),
+      favourite,
+      chapterNumber,
+    );
   }
 
   Future<void> markManyAsRead(
     Favourite favourite,
     List<double> chpaterNumbers,
   ) async {
-    await _chapters.markManyAsRead(
+    await _favourites.markManyAsRead(
+      _auth.getCurrentUser(),
       favourite,
       chpaterNumbers,
     );

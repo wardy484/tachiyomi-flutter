@@ -2,10 +2,10 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/chapter_details/chapter_details_notifier.dart';
 import 'package:fluttiyomi/chapter_details/chapter_details_state.dart';
-import 'package:fluttiyomi/chapter_details/read_chapters_repository.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/favourites/favourite.dart';
+import 'package:fluttiyomi/manga_details/manga_details_notifier.dart';
 import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
 import 'package:fluttiyomi/settings/settings_notifier.dart';
 import 'package:fluttiyomi/widgets/manga_page.dart';
@@ -85,7 +85,7 @@ class _ReadPageState extends ConsumerState<ReadPage> {
         precached: (_, chapterDetails, _____, currentChapter, ___, ____) {
           if (widget.favourite != null) {
             ref
-                .read(readChaptersRepositoryProvider)
+                .read(mangaDetailsNotifierProvider.notifier)
                 .markAsRead(widget.favourite!, currentChapter.chapterNo);
           }
 
@@ -162,7 +162,7 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                                   return;
                                 }
 
-                                int pageNumber = ref
+                                ref
                                     .read(readerProvider.notifier)
                                     .moveProgressForVisibilityInfo(
                                       visibilityInfo,
@@ -171,13 +171,14 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                                     );
 
                                 if (widget.favourite != null) {
-                                  ref
-                                      .read(readChaptersRepositoryProvider)
-                                      .setLastPage(
-                                        widget.favourite!,
-                                        chapter.id,
-                                        pageNumber,
-                                      );
+                                  // TODO: Maintain state for read and emit last page on exit
+                                  // ref
+                                  //     .read(readChaptersRepositoryProvider)
+                                  //     .setLastPage(
+                                  //       widget.favourite!,
+                                  //       chapter.id,
+                                  //       pageNumber,
+                                  //     );
                                 }
                               },
                             ),

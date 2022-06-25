@@ -1,5 +1,4 @@
 import 'package:flutter/services.dart';
-import 'package:fluttiyomi/chapter_details/read_chapters_repository.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/reader/reader_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -10,17 +9,12 @@ const VISIBILITY_THRESHOLD = 70;
 
 final readerProvider =
     StateNotifierProvider.autoDispose<ReaderNotifier, ReaderState>((ref) {
-  return ReaderNotifier(
-    chapters: ref.watch(readChaptersRepositoryProvider),
-  );
+  return ReaderNotifier();
 });
 
 class ReaderNotifier extends StateNotifier<ReaderState> {
-  final ReadChaptersRepository chapters;
-
-  ReaderNotifier({
-    required this.chapters,
-  }) : super(const ReaderState.reading(
+  ReaderNotifier()
+      : super(const ReaderState.reading(
           progress: "1",
           appbarVisible: true,
           chapterNumber: 0,

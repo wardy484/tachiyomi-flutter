@@ -1,5 +1,4 @@
 import 'package:fluttiyomi/chapter_details/chapter_details_state.dart';
-import 'package:fluttiyomi/chapter_details/read_chapters_repository.dart';
 import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/favourites/favourite_repository.dart';
@@ -15,7 +14,6 @@ final chapterDetailsProvider = StateNotifierProvider.autoDispose<
   return ChapterDetailsNotifier(
     ref.watch(sourceClientProvider),
     ref.watch(readerProvider.notifier),
-    ref.watch(readChaptersRepositoryProvider),
     ref.watch(favouritesRepositoryProvider),
     ref.watch(mangaDetailsNotifierProvider.notifier),
   );
@@ -29,7 +27,6 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
   ChapterDetailsNotifier(
     SourceClient source,
     ReaderNotifier readerProgress,
-    ReadChaptersRepository readChapters,
     FavouritesRepository favourites,
     MangaDetailsNotifier mangaDetailsNotifier,
   )   : _source = source,

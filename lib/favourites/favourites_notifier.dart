@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
+import 'package:fluttiyomi/auth/auth_repository.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/favourites/favourite.dart';
@@ -20,6 +21,7 @@ final favouritesProvider =
       ref.watch(settingsRepositoryProvider),
       ref.watch(sourceClientProvider.state).state,
       ref.watch(updateQueueProvider.notifier),
+      ref.watch(authRepositoryProvider),
     );
   },
 );
@@ -29,6 +31,7 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
   final SettingsRepository _settings;
   final SourceClient _source;
   final UpdateQueueNotifier _updateQueue;
+  final AuthRepository _auth;
   StreamSubscription<List<Favourite>?>? _favouritesStream;
 
   FavouritesNotifier(
@@ -36,16 +39,20 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
     SettingsRepository settings,
     SourceClient source,
     UpdateQueueNotifier updateQueue,
+    AuthRepository auth,
   )   : _favourites = favourites,
         _settings = settings,
         _source = source,
         _updateQueue = updateQueue,
+        _auth = auth,
         super(const FavouritesState.initial());
 
   Future<void> watchFavourites() async {
     log("READ: Watching favourites");
 
-    _favouritesStream = _favourites.watchFavourites().listen((favourites) {
+    _favouritesStream = _favourites
+        .watchFavourites(_auth.getCurrentUser())
+        .listen((favourites) {
       log("READ: Favourites listener triggered");
 
       state = FavouritesState.loaded(
@@ -106,12 +113,16 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
         unreadChapterCount: completeChapterList.unreadChapters(),
         chapters: completeChapterList.descending().toList(),
       );
-      _favourites.update([newFavourite]);
+      _favourites.update(
+        _auth.getCurrentUser(),
+        [newFavourite],
+      );
     }
   }
 
   Future<LastReadChapter> getLastReadChapter(String mangaId) async {
     var favourite = await _favourites.getFavourite(
+      _auth.getCurrentUser(),
       _source.sourceId,
       mangaId,
     );

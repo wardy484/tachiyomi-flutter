@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttiyomi/auth/auth_repository.dart';
+import 'package:fluttiyomi/auth/user.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
@@ -17,18 +18,16 @@ final favouritesRepositoryProvider = Provider((ref) {
 
 class FavouritesRepository {
   final FirebaseFirestore db;
-  final AuthRepository _authRepository;
 
   FavouritesRepository({
     required FirebaseFirestore firestore,
     required AuthRepository authRepository,
-  })  : db = firestore,
-        _authRepository = authRepository;
+  }) : db = firestore;
 
-  Stream<List<Favourite>> watchFavourites() {
+  Stream<List<Favourite>> watchFavourites(User user) {
     return db
         .collection("favourites")
-        .where("userId", isEqualTo: _authRepository.getCurrentUser().id)
+        .where("userId", isEqualTo: user.id)
         .snapshots()
         .map((snapshot) {
       log("READ: Got favourites");
@@ -43,12 +42,11 @@ class FavouritesRepository {
   }
 
   Stream<Favourite?> watchFavourite(
+    User user,
     String sourceId,
     String mangaId,
   ) {
-    return db
-        .collection("favourites")
-        .doc(buildDocId(sourceId, mangaId))
+    return _favouriteDocumentQuery(user, sourceId, mangaId)
         .snapshots()
         .map((snapshot) {
       log("READ: Got favourite $sourceId/$mangaId");
@@ -66,22 +64,26 @@ class FavouritesRepository {
     });
   }
 
-  Future<bool> isFavourite(String sourceId, String mangaId) async {
+  Future<bool> isFavourite(
+    User user,
+    String sourceId,
+    String mangaId,
+  ) async {
     log("READ: Checking if manga is favourite $mangaId from $sourceId");
-    final favourites = await db
-        .collection('favourites')
-        .doc(buildDocId(sourceId, mangaId))
-        .get();
+    final favourites =
+        await _favouriteDocumentQuery(user, sourceId, mangaId).get();
 
     return favourites.exists;
   }
 
-  Future<Favourite?> getFavourite(String sourceId, String mangaId) async {
+  Future<Favourite?> getFavourite(
+      User user, String sourceId, String mangaId) async {
     log("READ: Getting favourite $mangaId from $sourceId");
-    final favourite = await db
-        .collection('favourites')
-        .doc(buildDocId(sourceId, mangaId))
-        .get();
+    final favourite = await _favouriteDocumentQuery(
+      user,
+      sourceId,
+      mangaId,
+    ).get();
 
     log("READ: Getting chapters for favourite $mangaId from $sourceId");
 
@@ -91,26 +93,18 @@ class FavouritesRepository {
         ? Favourite.fromJson({
             ...data,
             "id": favourite.id,
-            // "chapters": data["chapters"].map((chapter) {
-            //   return Chapter.fromJson(chapter);
-            // }).toList(),
           })
         : null;
   }
 
-  String buildDocId(String sourceId, String mangaId) {
-    final userId = _authRepository.getCurrentUser().id;
-
-    return "${userId}_${sourceId}_$mangaId";
-  }
-
   Future<Favourite> addFavourite(
+    User user,
     String sourceId,
     String name,
     Manga manga,
     ChapterList chapterList,
   ) async {
-    final docId = buildDocId(sourceId, manga.id);
+    final docId = _buildFavouriteDocId(user, sourceId, manga.id);
 
     log("WRITE: Adding favourite $manga.id from $sourceId");
 
@@ -119,7 +113,7 @@ class FavouritesRepository {
 
     db.collection("favourites").doc(docId).set({
       "mangaId": manga.id,
-      "userId": _authRepository.getCurrentUser().id,
+      "userId": user.id,
       "sourceId": sourceId,
       "name": name,
       "image": manga.image,
@@ -149,27 +143,10 @@ class FavouritesRepository {
       "unreadChapterCount": chapterList.length,
     });
 
-    return await getFavourite(sourceId, manga.id) as Favourite;
+    return await getFavourite(user, sourceId, manga.id) as Favourite;
   }
 
-  Future<void> setUnreadChapters(
-    Favourite favourite,
-  ) async {
-    final docId = buildDocId(favourite.sourceId, favourite.mangaId);
-
-    final unreadChapters = favourite.chapters
-        .where((chapter) => chapter.read != true)
-        .toList()
-        .length;
-
-    log("WRITE: Setting unread chapters for favourite $favourite.mangaId from $favourite.sourceId, unread chapters: $unreadChapters");
-
-    db.collection('favourites').doc(docId).update({
-      "unreadChapterCount": unreadChapters,
-    });
-  }
-
-  Future<void> update(List<Favourite> favourites) async {
+  Future<void> update(User user, List<Favourite> favourites) async {
     final List<Future> futures = [];
 
     log("About to update ${favourites.length} favourites");
@@ -177,10 +154,11 @@ class FavouritesRepository {
     for (final favourite in favourites) {
       log("WRITE: Updating favourite ${favourite.mangaId} from ${favourite.sourceId}");
 
-      final future = db
-          .collection("favourites")
-          .doc(buildDocId(favourite.sourceId, favourite.mangaId))
-          .update(favourite.toJson());
+      final future = _favouriteDocumentQuery(
+        user,
+        favourite.sourceId,
+        favourite.mangaId,
+      ).update(favourite.toJson());
 
       futures.add(future);
     }
@@ -188,41 +166,145 @@ class FavouritesRepository {
     await Future.wait(futures);
   }
 
+  Future<void> markAsRead(
+    User user,
+    Favourite favourite,
+    double chapterNumber,
+  ) async {
+    log("WRITE: Marking chapter $chapterNumber as read from ${favourite.sourceId}");
+
+    log("Refreshing favourite ${favourite.id}");
+    Favourite? freshFavourite = await getFavourite(
+      user,
+      favourite.sourceId,
+      favourite.mangaId,
+    );
+
+    if (freshFavourite == null) {
+      log("Favourite not found ${favourite.sourceId}/${favourite.mangaId}");
+      return;
+    }
+
+    List<Chapter> chapters = freshFavourite.chapters.toList();
+
+    for (var i = 0; i < chapters.length; i++) {
+      if (chapters[i].chapterNo == chapterNumber) {
+        chapters[i] = chapters[i].copyWith(
+          read: true,
+        );
+        break;
+      }
+    }
+
+    freshFavourite = freshFavourite.copyWith(
+      chapters: chapters,
+      unreadChapterCount: _calculateUnreadChapterCount(chapters),
+    );
+
+    update(user, [freshFavourite]);
+  }
+
+  Future<void> markManyAsRead(
+    User user,
+    Favourite favourite,
+    List<double> chapterNumbers,
+  ) async {
+    log("WRITE: Marking many chapters $chapterNumbers as read from ${favourite.sourceId}");
+
+    log("Refreshing favourite ${favourite.id}");
+    Favourite? freshFavourite = await getFavourite(
+      user,
+      favourite.sourceId,
+      favourite.mangaId,
+    );
+
+    if (freshFavourite == null) {
+      log("Favourite not found ${favourite.sourceId}/${favourite.mangaId}");
+      return;
+    }
+
+    List<Chapter> chapters = freshFavourite.chapters.toList();
+
+    for (var i = 0; i < chapters.length; i++) {
+      if (chapterNumbers.contains(chapters[i].chapterNo)) {
+        chapters[i] = chapters[i].copyWith(
+          read: true,
+        );
+      }
+    }
+
+    freshFavourite = freshFavourite.copyWith(
+      chapters: chapters,
+      unreadChapterCount: _calculateUnreadChapterCount(chapters),
+    );
+
+    update(user, [freshFavourite]);
+  }
+
+  Future<void> setLastPage(
+    User user,
+    Favourite favourite,
+    String chapterId,
+    int pageNumber,
+  ) async {
+    if (pageNumber == 0) {
+      return;
+    }
+
+    log("WRITE: Setting last page to $pageNumber for ${favourite.mangaId} on $chapterId from ${favourite.sourceId}");
+
+    // TODO: Implement a better lastPage read system
+    // and probably read system
+
+    // final chapters = favourite.chapters;
+
+    // for (var i = 0; i < chapters.length; i++) {
+    //   if (chapters[i].id == chapterId) {
+    //     chapters[i] = chapters[i].copyWith(
+    //       page: pageNumber,
+    //     );
+    //     break;
+    //   }
+    // }
+
+    // favourite = favourite.copyWith(
+    //   chapters: chapters,
+    // );
+
+    // _favouritesRepository.update([favourite]);
+  }
+
   Future<void> deleteFavourite(
+    User user,
     String sourceId,
     String mangaId,
   ) async {
     log("WRITE: Deleting favourite mangaId: $mangaId, sourceId: $sourceId");
 
-    await db
+    await _favouriteDocumentQuery(user, sourceId, mangaId).delete();
+  }
+
+  DocumentReference<Map<String, dynamic>> _favouriteDocumentQuery(
+    User user,
+    String sourceId,
+    String mangaId,
+  ) {
+    return db
         .collection('favourites')
-        .doc(buildDocId(sourceId, mangaId))
-        .delete();
+        .doc(_buildFavouriteDocId(user, sourceId, mangaId));
   }
 
-  Future<void> setLastChapterRead(
-    String sourceId,
-    String mangaId,
-    Chapter chapter,
-  ) async {
-    log("WRITE: Updating last read chapter for mangaId: $mangaId, sourceId: $sourceId");
-
-    await db
-        .collection("favourites")
-        .doc(buildDocId(sourceId, mangaId))
-        .update({"lastChapterRead": chapter.toJson()});
+  String _buildFavouriteDocId(User user, String sourceId, String mangaId) {
+    return "${user.id}_${sourceId}_$mangaId";
   }
 
-  Future<void> setLatestChapter(
-    String sourceId,
-    String mangaId,
-    double latestChapterNumber,
-  ) async {
-    log("WRITE: Updating latestChapterNumber for mangaId: $mangaId, sourceId: $sourceId");
-
-    await db
-        .collection("favourites")
-        .doc(buildDocId(sourceId, mangaId))
-        .update({"latestChapterNumber": latestChapterNumber});
+  int _calculateUnreadChapterCount(List<Chapter> chapters) {
+    int unreadChapterCount = 0;
+    for (var chapter in chapters) {
+      if (!chapter.read) {
+        unreadChapterCount++;
+      }
+    }
+    return unreadChapterCount;
   }
 }
