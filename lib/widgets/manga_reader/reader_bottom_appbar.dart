@@ -13,7 +13,7 @@ class ReaderBottomAppBar extends ConsumerWidget {
   Widget build(BuildContext context, ref) {
     return AnimatedOpacity(
       opacity: ref.watch(readerProvider).appbarVisible ? 0 : 1,
-      duration: const Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 300),
       child: BottomAppBar(
         color: Colors.black.withOpacity(0.9),
         elevation: 0,

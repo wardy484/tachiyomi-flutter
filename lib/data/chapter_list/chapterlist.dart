@@ -72,4 +72,14 @@ class ChapterList with _$ChapterList {
   List<Chapter> toList() {
     return chapters;
   }
+
+  int unreadChapters() {
+    int unreadChapterCount = 0;
+    for (var chapter in chapters) {
+      if (!chapter.read) {
+        unreadChapterCount++;
+      }
+    }
+    return unreadChapterCount;
+  }
 }

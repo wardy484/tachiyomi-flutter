@@ -18,7 +18,7 @@ class ReaderAppBar extends ConsumerWidget with PreferredSizeWidget {
   Widget build(BuildContext context, ref) {
     return AnimatedOpacity(
       opacity: ref.watch(readerProvider).appbarVisible ? 0 : 1,
-      duration: const Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 300),
       child: AppBar(
         title: Text(
           chapter.name ?? "Chapter ${chapter.chapterNo}",

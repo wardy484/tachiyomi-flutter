@@ -82,22 +82,29 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
   Future<void> getLatestChapters(Favourite favourite) async {
     log('Fetching latest chapters for ${favourite.mangaId}');
 
+    // Do not hit sources if we've got lots of chapters left to read
+    if (favourite.unreadChapterCount > 5) return;
+
     ChapterList chapterList = await _source.getChapters(favourite.mangaId);
 
     List<Chapter> newChapters = await compute(_filterNewChapters, {
-      "latestChapterNumber": favourite.latestChapterNumber,
-      "chapterList": chapterList
+      "savedChapters": ChapterList(favourite.chapters),
+      "chapterList": chapterList,
     });
-
-    await _favourites.addChapters(favourite, newChapters);
 
     final newChapterList = ChapterList(newChapters);
 
     if (newChapters.isNotEmpty) {
+      final completeChapterList = ChapterList([
+        ...favourite.chapters,
+        ...newChapters,
+      ]);
+
       final newFavourite = favourite.copyWith(
         latestChapterNumber:
             newChapterList.descending().toList().first.chapterNo,
-        unreadChapterCount: favourite.calculateUnreadChapterCount(),
+        unreadChapterCount: completeChapterList.unreadChapters(),
+        chapters: completeChapterList.descending().toList(),
       );
       _favourites.update([newFavourite]);
     }
@@ -173,10 +180,13 @@ class LastReadChapter {
 
 // External function so it can be run in an isolate
 List<Chapter> _filterNewChapters(Map args) {
-  double latestChapterNumber = args["latestChapterNumber"];
+  ChapterList savedChapters = args["savedChapters"] as ChapterList;
   ChapterList remoteChapters = args['chapterList'] as ChapterList;
 
   if (remoteChapters.length < 1) return [];
+
+  final latestChapterNumber =
+      savedChapters.descending().toList().first.chapterNo;
 
   return remoteChapters
       .toList()

@@ -7,6 +7,7 @@ import 'package:fluttiyomi/search/widgets/search_appbar.dart';
 import 'package:fluttiyomi/settings/widgets/settings_appbar.dart';
 import 'package:fluttiyomi/widgets/favourites/favourites_tab.dart';
 import 'package:fluttiyomi/widgets/search/search_screen.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ListPage extends ConsumerStatefulWidget {
@@ -48,15 +49,15 @@ class _ListPageState extends ConsumerState<ListPage> {
         showUnselectedLabels: false,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.bookmark),
+            icon: FaIcon(FontAwesomeIcons.bookBookmark),
             label: 'Bookmarked',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
+            icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
             label: 'Search',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.book),
+            icon: FaIcon(FontAwesomeIcons.compass),
             label: 'Search',
           ),
           BottomNavigationBarItem(

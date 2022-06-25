@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttiyomi/auth/user.dart' as local_user;
@@ -34,7 +36,9 @@ class AuthRepository {
       // Once signed in, return the UserCredential
       return await FirebaseAuth.instance
           .signInWithCredential(credential)
-          .catchError((error, stackTrace) => null);
+          .catchError((error, stackTrace) {
+        log("Error authenticating");
+      });
     } catch (e) {
       if (e is PlatformException) {
         switch (e.code) {

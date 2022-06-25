@@ -73,7 +73,7 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
       } else {
         state = MangaDetailsState.loaded(
           favourite.toManga(),
-          ChapterList(favourite.chapters),
+          ChapterList(favourite.chapters).descending(),
           favourite,
         );
       }

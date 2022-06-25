@@ -169,34 +169,6 @@ class FavouritesRepository {
     });
   }
 
-  Future<void> addChapters(
-    Favourite favourite,
-    List<Chapter> newChapters,
-  ) async {
-    if (newChapters.isEmpty) {
-      log("No new chapters to add to favourite mangaId: ${favourite.mangaId}, sourceId: ${favourite.sourceId}");
-      return;
-    }
-
-    log("Adding ${newChapters.length} new chapters to favourite mangaId: ${favourite.mangaId}, sourceId: ${favourite.sourceId}");
-
-    final List<Chapter> chapters = [
-      ...favourite.chapters,
-      ...newChapters,
-    ];
-
-    for (var chapter in chapters) {
-      log("WRITE: Adding chapter ${chapter.chapterNo} to favourite mangaId: ${favourite.mangaId}, sourceId: ${favourite.sourceId}");
-
-      await db
-          .collection('favourites')
-          .doc(buildDocId(favourite.sourceId, favourite.mangaId))
-          .collection('chapters')
-          .doc(chapter.id)
-          .set(chapter.toJson());
-    }
-  }
-
   Future<void> update(List<Favourite> favourites) async {
     final List<Future> futures = [];
 
