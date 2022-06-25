@@ -12,7 +12,7 @@ class ChapterDetailsState with _$ChapterDetailsState {
     String mangaId,
     ChapterDetails chapterDetails,
     ChapterList chapterList,
-    Chapter currentChapter,
+    List<Chapter> currentChapters,
     Chapter? nextChapter,
     Chapter? previousChapter,
   ) = _Loaded;
@@ -21,7 +21,7 @@ class ChapterDetailsState with _$ChapterDetailsState {
     String mangaId,
     ChapterDetails chapterDetails,
     ChapterList chapterList,
-    Chapter currentChapter,
+    List<Chapter> currentChapters,
     Chapter? nextChapter,
     Chapter? previousChapter,
   ) = _precached;

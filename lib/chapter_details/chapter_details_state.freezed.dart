@@ -23,7 +23,7 @@ mixin _$ChapterDetailsState {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)
         loaded,
@@ -31,7 +31,7 @@ mixin _$ChapterDetailsState {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)
         precached,
@@ -44,7 +44,7 @@ mixin _$ChapterDetailsState {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)?
         loaded,
@@ -52,7 +52,7 @@ mixin _$ChapterDetailsState {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)?
         precached,
@@ -65,7 +65,7 @@ mixin _$ChapterDetailsState {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)?
         loaded,
@@ -73,7 +73,7 @@ mixin _$ChapterDetailsState {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)?
         precached,
@@ -165,7 +165,7 @@ class _$_Initial implements _Initial {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)
         loaded,
@@ -173,7 +173,7 @@ class _$_Initial implements _Initial {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)
         precached,
@@ -189,7 +189,7 @@ class _$_Initial implements _Initial {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)?
         loaded,
@@ -197,7 +197,7 @@ class _$_Initial implements _Initial {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)?
         precached,
@@ -213,7 +213,7 @@ class _$_Initial implements _Initial {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)?
         loaded,
@@ -221,7 +221,7 @@ class _$_Initial implements _Initial {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)?
         precached,
@@ -280,13 +280,12 @@ abstract class _$LoadedCopyWith<$Res> {
       {String mangaId,
       ChapterDetails chapterDetails,
       ChapterList chapterList,
-      Chapter currentChapter,
+      List<Chapter> currentChapters,
       Chapter? nextChapter,
       Chapter? previousChapter});
 
   $ChapterDetailsCopyWith<$Res> get chapterDetails;
   $ChapterListCopyWith<$Res> get chapterList;
-  $ChapterCopyWith<$Res> get currentChapter;
   $ChapterCopyWith<$Res>? get nextChapter;
   $ChapterCopyWith<$Res>? get previousChapter;
 }
@@ -306,7 +305,7 @@ class __$LoadedCopyWithImpl<$Res>
     Object? mangaId = freezed,
     Object? chapterDetails = freezed,
     Object? chapterList = freezed,
-    Object? currentChapter = freezed,
+    Object? currentChapters = freezed,
     Object? nextChapter = freezed,
     Object? previousChapter = freezed,
   }) {
@@ -323,10 +322,10 @@ class __$LoadedCopyWithImpl<$Res>
           ? _value.chapterList
           : chapterList // ignore: cast_nullable_to_non_nullable
               as ChapterList,
-      currentChapter == freezed
-          ? _value.currentChapter
-          : currentChapter // ignore: cast_nullable_to_non_nullable
-              as Chapter,
+      currentChapters == freezed
+          ? _value.currentChapters
+          : currentChapters // ignore: cast_nullable_to_non_nullable
+              as List<Chapter>,
       nextChapter == freezed
           ? _value.nextChapter
           : nextChapter // ignore: cast_nullable_to_non_nullable
@@ -349,13 +348,6 @@ class __$LoadedCopyWithImpl<$Res>
   $ChapterListCopyWith<$Res> get chapterList {
     return $ChapterListCopyWith<$Res>(_value.chapterList, (value) {
       return _then(_value.copyWith(chapterList: value));
-    });
-  }
-
-  @override
-  $ChapterCopyWith<$Res> get currentChapter {
-    return $ChapterCopyWith<$Res>(_value.currentChapter, (value) {
-      return _then(_value.copyWith(currentChapter: value));
     });
   }
 
@@ -385,8 +377,14 @@ class __$LoadedCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Loaded implements _Loaded {
-  const _$_Loaded(this.mangaId, this.chapterDetails, this.chapterList,
-      this.currentChapter, this.nextChapter, this.previousChapter);
+  const _$_Loaded(
+      this.mangaId,
+      this.chapterDetails,
+      this.chapterList,
+      final List<Chapter> currentChapters,
+      this.nextChapter,
+      this.previousChapter)
+      : _currentChapters = currentChapters;
 
   @override
   final String mangaId;
@@ -394,8 +392,13 @@ class _$_Loaded implements _Loaded {
   final ChapterDetails chapterDetails;
   @override
   final ChapterList chapterList;
+  final List<Chapter> _currentChapters;
   @override
-  final Chapter currentChapter;
+  List<Chapter> get currentChapters {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_currentChapters);
+  }
+
   @override
   final Chapter? nextChapter;
   @override
@@ -403,7 +406,7 @@ class _$_Loaded implements _Loaded {
 
   @override
   String toString() {
-    return 'ChapterDetailsState.loaded(mangaId: $mangaId, chapterDetails: $chapterDetails, chapterList: $chapterList, currentChapter: $currentChapter, nextChapter: $nextChapter, previousChapter: $previousChapter)';
+    return 'ChapterDetailsState.loaded(mangaId: $mangaId, chapterDetails: $chapterDetails, chapterList: $chapterList, currentChapters: $currentChapters, nextChapter: $nextChapter, previousChapter: $previousChapter)';
   }
 
   @override
@@ -417,7 +420,7 @@ class _$_Loaded implements _Loaded {
             const DeepCollectionEquality()
                 .equals(other.chapterList, chapterList) &&
             const DeepCollectionEquality()
-                .equals(other.currentChapter, currentChapter) &&
+                .equals(other.currentChapters, currentChapters) &&
             const DeepCollectionEquality()
                 .equals(other.nextChapter, nextChapter) &&
             const DeepCollectionEquality()
@@ -430,7 +433,7 @@ class _$_Loaded implements _Loaded {
       const DeepCollectionEquality().hash(mangaId),
       const DeepCollectionEquality().hash(chapterDetails),
       const DeepCollectionEquality().hash(chapterList),
-      const DeepCollectionEquality().hash(currentChapter),
+      const DeepCollectionEquality().hash(currentChapters),
       const DeepCollectionEquality().hash(nextChapter),
       const DeepCollectionEquality().hash(previousChapter));
 
@@ -447,7 +450,7 @@ class _$_Loaded implements _Loaded {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)
         loaded,
@@ -455,12 +458,12 @@ class _$_Loaded implements _Loaded {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)
         precached,
   }) {
-    return loaded(mangaId, chapterDetails, chapterList, currentChapter,
+    return loaded(mangaId, chapterDetails, chapterList, currentChapters,
         nextChapter, previousChapter);
   }
 
@@ -472,7 +475,7 @@ class _$_Loaded implements _Loaded {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)?
         loaded,
@@ -480,12 +483,12 @@ class _$_Loaded implements _Loaded {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)?
         precached,
   }) {
-    return loaded?.call(mangaId, chapterDetails, chapterList, currentChapter,
+    return loaded?.call(mangaId, chapterDetails, chapterList, currentChapters,
         nextChapter, previousChapter);
   }
 
@@ -497,7 +500,7 @@ class _$_Loaded implements _Loaded {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)?
         loaded,
@@ -505,14 +508,14 @@ class _$_Loaded implements _Loaded {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)?
         precached,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(mangaId, chapterDetails, chapterList, currentChapter,
+      return loaded(mangaId, chapterDetails, chapterList, currentChapters,
           nextChapter, previousChapter);
     }
     return orElse();
@@ -558,14 +561,14 @@ abstract class _Loaded implements ChapterDetailsState {
       final String mangaId,
       final ChapterDetails chapterDetails,
       final ChapterList chapterList,
-      final Chapter currentChapter,
+      final List<Chapter> currentChapters,
       final Chapter? nextChapter,
       final Chapter? previousChapter) = _$_Loaded;
 
   String get mangaId => throw _privateConstructorUsedError;
   ChapterDetails get chapterDetails => throw _privateConstructorUsedError;
   ChapterList get chapterList => throw _privateConstructorUsedError;
-  Chapter get currentChapter => throw _privateConstructorUsedError;
+  List<Chapter> get currentChapters => throw _privateConstructorUsedError;
   Chapter? get nextChapter => throw _privateConstructorUsedError;
   Chapter? get previousChapter => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -581,13 +584,12 @@ abstract class _$precachedCopyWith<$Res> {
       {String mangaId,
       ChapterDetails chapterDetails,
       ChapterList chapterList,
-      Chapter currentChapter,
+      List<Chapter> currentChapters,
       Chapter? nextChapter,
       Chapter? previousChapter});
 
   $ChapterDetailsCopyWith<$Res> get chapterDetails;
   $ChapterListCopyWith<$Res> get chapterList;
-  $ChapterCopyWith<$Res> get currentChapter;
   $ChapterCopyWith<$Res>? get nextChapter;
   $ChapterCopyWith<$Res>? get previousChapter;
 }
@@ -607,7 +609,7 @@ class __$precachedCopyWithImpl<$Res>
     Object? mangaId = freezed,
     Object? chapterDetails = freezed,
     Object? chapterList = freezed,
-    Object? currentChapter = freezed,
+    Object? currentChapters = freezed,
     Object? nextChapter = freezed,
     Object? previousChapter = freezed,
   }) {
@@ -624,10 +626,10 @@ class __$precachedCopyWithImpl<$Res>
           ? _value.chapterList
           : chapterList // ignore: cast_nullable_to_non_nullable
               as ChapterList,
-      currentChapter == freezed
-          ? _value.currentChapter
-          : currentChapter // ignore: cast_nullable_to_non_nullable
-              as Chapter,
+      currentChapters == freezed
+          ? _value.currentChapters
+          : currentChapters // ignore: cast_nullable_to_non_nullable
+              as List<Chapter>,
       nextChapter == freezed
           ? _value.nextChapter
           : nextChapter // ignore: cast_nullable_to_non_nullable
@@ -650,13 +652,6 @@ class __$precachedCopyWithImpl<$Res>
   $ChapterListCopyWith<$Res> get chapterList {
     return $ChapterListCopyWith<$Res>(_value.chapterList, (value) {
       return _then(_value.copyWith(chapterList: value));
-    });
-  }
-
-  @override
-  $ChapterCopyWith<$Res> get currentChapter {
-    return $ChapterCopyWith<$Res>(_value.currentChapter, (value) {
-      return _then(_value.copyWith(currentChapter: value));
     });
   }
 
@@ -686,8 +681,14 @@ class __$precachedCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_precached implements _precached {
-  const _$_precached(this.mangaId, this.chapterDetails, this.chapterList,
-      this.currentChapter, this.nextChapter, this.previousChapter);
+  const _$_precached(
+      this.mangaId,
+      this.chapterDetails,
+      this.chapterList,
+      final List<Chapter> currentChapters,
+      this.nextChapter,
+      this.previousChapter)
+      : _currentChapters = currentChapters;
 
   @override
   final String mangaId;
@@ -695,8 +696,13 @@ class _$_precached implements _precached {
   final ChapterDetails chapterDetails;
   @override
   final ChapterList chapterList;
+  final List<Chapter> _currentChapters;
   @override
-  final Chapter currentChapter;
+  List<Chapter> get currentChapters {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_currentChapters);
+  }
+
   @override
   final Chapter? nextChapter;
   @override
@@ -704,7 +710,7 @@ class _$_precached implements _precached {
 
   @override
   String toString() {
-    return 'ChapterDetailsState.precached(mangaId: $mangaId, chapterDetails: $chapterDetails, chapterList: $chapterList, currentChapter: $currentChapter, nextChapter: $nextChapter, previousChapter: $previousChapter)';
+    return 'ChapterDetailsState.precached(mangaId: $mangaId, chapterDetails: $chapterDetails, chapterList: $chapterList, currentChapters: $currentChapters, nextChapter: $nextChapter, previousChapter: $previousChapter)';
   }
 
   @override
@@ -718,7 +724,7 @@ class _$_precached implements _precached {
             const DeepCollectionEquality()
                 .equals(other.chapterList, chapterList) &&
             const DeepCollectionEquality()
-                .equals(other.currentChapter, currentChapter) &&
+                .equals(other.currentChapters, currentChapters) &&
             const DeepCollectionEquality()
                 .equals(other.nextChapter, nextChapter) &&
             const DeepCollectionEquality()
@@ -731,7 +737,7 @@ class _$_precached implements _precached {
       const DeepCollectionEquality().hash(mangaId),
       const DeepCollectionEquality().hash(chapterDetails),
       const DeepCollectionEquality().hash(chapterList),
-      const DeepCollectionEquality().hash(currentChapter),
+      const DeepCollectionEquality().hash(currentChapters),
       const DeepCollectionEquality().hash(nextChapter),
       const DeepCollectionEquality().hash(previousChapter));
 
@@ -748,7 +754,7 @@ class _$_precached implements _precached {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)
         loaded,
@@ -756,12 +762,12 @@ class _$_precached implements _precached {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)
         precached,
   }) {
-    return precached(mangaId, chapterDetails, chapterList, currentChapter,
+    return precached(mangaId, chapterDetails, chapterList, currentChapters,
         nextChapter, previousChapter);
   }
 
@@ -773,7 +779,7 @@ class _$_precached implements _precached {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)?
         loaded,
@@ -781,13 +787,13 @@ class _$_precached implements _precached {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)?
         precached,
   }) {
-    return precached?.call(mangaId, chapterDetails, chapterList, currentChapter,
-        nextChapter, previousChapter);
+    return precached?.call(mangaId, chapterDetails, chapterList,
+        currentChapters, nextChapter, previousChapter);
   }
 
   @override
@@ -798,7 +804,7 @@ class _$_precached implements _precached {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)?
         loaded,
@@ -806,14 +812,14 @@ class _$_precached implements _precached {
             String mangaId,
             ChapterDetails chapterDetails,
             ChapterList chapterList,
-            Chapter currentChapter,
+            List<Chapter> currentChapters,
             Chapter? nextChapter,
             Chapter? previousChapter)?
         precached,
     required TResult orElse(),
   }) {
     if (precached != null) {
-      return precached(mangaId, chapterDetails, chapterList, currentChapter,
+      return precached(mangaId, chapterDetails, chapterList, currentChapters,
           nextChapter, previousChapter);
     }
     return orElse();
@@ -859,14 +865,14 @@ abstract class _precached implements ChapterDetailsState {
       final String mangaId,
       final ChapterDetails chapterDetails,
       final ChapterList chapterList,
-      final Chapter currentChapter,
+      final List<Chapter> currentChapters,
       final Chapter? nextChapter,
       final Chapter? previousChapter) = _$_precached;
 
   String get mangaId => throw _privateConstructorUsedError;
   ChapterDetails get chapterDetails => throw _privateConstructorUsedError;
   ChapterList get chapterList => throw _privateConstructorUsedError;
-  Chapter get currentChapter => throw _privateConstructorUsedError;
+  List<Chapter> get currentChapters => throw _privateConstructorUsedError;
   Chapter? get nextChapter => throw _privateConstructorUsedError;
   Chapter? get previousChapter => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)

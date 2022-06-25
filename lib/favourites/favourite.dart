@@ -57,4 +57,14 @@ class Favourite with _$Favourite {
   int calculateUnreadChapterCount() {
     return chapters.where((chapter) => chapter.read != true).toList().length;
   }
+
+  Chapter? getChapter(double chapterNumber) {
+    for (var chapter in chapters) {
+      if (chapter.chapterNo == chapterNumber) {
+        return chapter;
+      }
+    }
+
+    return null;
+  }
 }

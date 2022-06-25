@@ -16,6 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ReaderState {
+  PageDetails get currentPage => throw _privateConstructorUsedError;
   String get progress => throw _privateConstructorUsedError;
   bool get appbarVisible => throw _privateConstructorUsedError;
   double get chapterNumber => throw _privateConstructorUsedError;
@@ -23,22 +24,37 @@ mixin _$ReaderState {
   Chapter? get currentChapter => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String progress, bool appbarVisible,
-            double chapterNumber, bool reversed, Chapter? currentChapter)
+    required TResult Function(
+            PageDetails currentPage,
+            String progress,
+            bool appbarVisible,
+            double chapterNumber,
+            bool reversed,
+            Chapter? currentChapter)
         reading,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String progress, bool appbarVisible, double chapterNumber,
-            bool reversed, Chapter? currentChapter)?
+    TResult Function(
+            PageDetails currentPage,
+            String progress,
+            bool appbarVisible,
+            double chapterNumber,
+            bool reversed,
+            Chapter? currentChapter)?
         reading,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String progress, bool appbarVisible, double chapterNumber,
-            bool reversed, Chapter? currentChapter)?
+    TResult Function(
+            PageDetails currentPage,
+            String progress,
+            bool appbarVisible,
+            double chapterNumber,
+            bool reversed,
+            Chapter? currentChapter)?
         reading,
     required TResult orElse(),
   }) =>
@@ -71,7 +87,8 @@ abstract class $ReaderStateCopyWith<$Res> {
           ReaderState value, $Res Function(ReaderState) then) =
       _$ReaderStateCopyWithImpl<$Res>;
   $Res call(
-      {String progress,
+      {PageDetails currentPage,
+      String progress,
       bool appbarVisible,
       double chapterNumber,
       bool reversed,
@@ -90,6 +107,7 @@ class _$ReaderStateCopyWithImpl<$Res> implements $ReaderStateCopyWith<$Res> {
 
   @override
   $Res call({
+    Object? currentPage = freezed,
     Object? progress = freezed,
     Object? appbarVisible = freezed,
     Object? chapterNumber = freezed,
@@ -97,6 +115,10 @@ class _$ReaderStateCopyWithImpl<$Res> implements $ReaderStateCopyWith<$Res> {
     Object? currentChapter = freezed,
   }) {
     return _then(_value.copyWith(
+      currentPage: currentPage == freezed
+          ? _value.currentPage
+          : currentPage // ignore: cast_nullable_to_non_nullable
+              as PageDetails,
       progress: progress == freezed
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
@@ -138,7 +160,8 @@ abstract class _$ReadingCopyWith<$Res> implements $ReaderStateCopyWith<$Res> {
       __$ReadingCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String progress,
+      {PageDetails currentPage,
+      String progress,
       bool appbarVisible,
       double chapterNumber,
       bool reversed,
@@ -159,6 +182,7 @@ class __$ReadingCopyWithImpl<$Res> extends _$ReaderStateCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? currentPage = freezed,
     Object? progress = freezed,
     Object? appbarVisible = freezed,
     Object? chapterNumber = freezed,
@@ -166,6 +190,10 @@ class __$ReadingCopyWithImpl<$Res> extends _$ReaderStateCopyWithImpl<$Res>
     Object? currentChapter = freezed,
   }) {
     return _then(_Reading(
+      currentPage: currentPage == freezed
+          ? _value.currentPage
+          : currentPage // ignore: cast_nullable_to_non_nullable
+              as PageDetails,
       progress: progress == freezed
           ? _value.progress
           : progress // ignore: cast_nullable_to_non_nullable
@@ -194,12 +222,15 @@ class __$ReadingCopyWithImpl<$Res> extends _$ReaderStateCopyWithImpl<$Res>
 
 class _$_Reading implements _Reading {
   const _$_Reading(
-      {required this.progress,
+      {required this.currentPage,
+      required this.progress,
       required this.appbarVisible,
       required this.chapterNumber,
       required this.reversed,
       this.currentChapter});
 
+  @override
+  final PageDetails currentPage;
   @override
   final String progress;
   @override
@@ -213,7 +244,7 @@ class _$_Reading implements _Reading {
 
   @override
   String toString() {
-    return 'ReaderState.reading(progress: $progress, appbarVisible: $appbarVisible, chapterNumber: $chapterNumber, reversed: $reversed, currentChapter: $currentChapter)';
+    return 'ReaderState.reading(currentPage: $currentPage, progress: $progress, appbarVisible: $appbarVisible, chapterNumber: $chapterNumber, reversed: $reversed, currentChapter: $currentChapter)';
   }
 
   @override
@@ -221,6 +252,8 @@ class _$_Reading implements _Reading {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Reading &&
+            const DeepCollectionEquality()
+                .equals(other.currentPage, currentPage) &&
             const DeepCollectionEquality().equals(other.progress, progress) &&
             const DeepCollectionEquality()
                 .equals(other.appbarVisible, appbarVisible) &&
@@ -234,6 +267,7 @@ class _$_Reading implements _Reading {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(currentPage),
       const DeepCollectionEquality().hash(progress),
       const DeepCollectionEquality().hash(appbarVisible),
       const DeepCollectionEquality().hash(chapterNumber),
@@ -248,36 +282,51 @@ class _$_Reading implements _Reading {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String progress, bool appbarVisible,
-            double chapterNumber, bool reversed, Chapter? currentChapter)
+    required TResult Function(
+            PageDetails currentPage,
+            String progress,
+            bool appbarVisible,
+            double chapterNumber,
+            bool reversed,
+            Chapter? currentChapter)
         reading,
   }) {
-    return reading(
-        progress, appbarVisible, chapterNumber, reversed, currentChapter);
+    return reading(currentPage, progress, appbarVisible, chapterNumber,
+        reversed, currentChapter);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String progress, bool appbarVisible, double chapterNumber,
-            bool reversed, Chapter? currentChapter)?
+    TResult Function(
+            PageDetails currentPage,
+            String progress,
+            bool appbarVisible,
+            double chapterNumber,
+            bool reversed,
+            Chapter? currentChapter)?
         reading,
   }) {
-    return reading?.call(
-        progress, appbarVisible, chapterNumber, reversed, currentChapter);
+    return reading?.call(currentPage, progress, appbarVisible, chapterNumber,
+        reversed, currentChapter);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String progress, bool appbarVisible, double chapterNumber,
-            bool reversed, Chapter? currentChapter)?
+    TResult Function(
+            PageDetails currentPage,
+            String progress,
+            bool appbarVisible,
+            double chapterNumber,
+            bool reversed,
+            Chapter? currentChapter)?
         reading,
     required TResult orElse(),
   }) {
     if (reading != null) {
-      return reading(
-          progress, appbarVisible, chapterNumber, reversed, currentChapter);
+      return reading(currentPage, progress, appbarVisible, chapterNumber,
+          reversed, currentChapter);
     }
     return orElse();
   }
@@ -313,12 +362,15 @@ class _$_Reading implements _Reading {
 
 abstract class _Reading implements ReaderState {
   const factory _Reading(
-      {required final String progress,
+      {required final PageDetails currentPage,
+      required final String progress,
       required final bool appbarVisible,
       required final double chapterNumber,
       required final bool reversed,
       final Chapter? currentChapter}) = _$_Reading;
 
+  @override
+  PageDetails get currentPage => throw _privateConstructorUsedError;
   @override
   String get progress => throw _privateConstructorUsedError;
   @override

@@ -1,21 +1,30 @@
 import 'package:flutter/services.dart';
+import 'package:fluttiyomi/auth/auth_repository.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
+import 'package:fluttiyomi/favourites/favourite.dart';
+import 'package:fluttiyomi/favourites/favourite_repository.dart';
 import 'package:fluttiyomi/reader/reader_state.dart';
+import 'package:fluttiyomi/screens/read_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:visibility_detector/visibility_detector.dart';
-
-// ignore: constant_identifier_names
-const VISIBILITY_THRESHOLD = 70;
 
 final readerProvider =
     StateNotifierProvider.autoDispose<ReaderNotifier, ReaderState>((ref) {
-  return ReaderNotifier();
+  return ReaderNotifier(
+    favourites: ref.read(favouritesRepositoryProvider),
+    auth: ref.read(authRepositoryProvider),
+  );
 });
 
 class ReaderNotifier extends StateNotifier<ReaderState> {
-  ReaderNotifier()
-      : super(const ReaderState.reading(
-          progress: "1",
+  final FavouritesRepository favourites;
+  final AuthRepository auth;
+
+  ReaderNotifier({
+    required this.favourites,
+    required this.auth,
+  }) : super(ReaderState.reading(
+          currentPage: PageDetails(0, 0),
+          progress: "0",
           appbarVisible: true,
           chapterNumber: 0,
           reversed: false,
@@ -29,12 +38,14 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
   }
 
   void moveProgress({
+    required PageDetails pageDetails,
     required String progress,
     double? chapterNumber,
     bool reversed = false,
     Chapter? chapter,
   }) {
     state = state.copyWith(
+      currentPage: pageDetails,
       progress: progress,
       chapterNumber: chapterNumber ?? state.chapterNumber,
       reversed: reversed,
@@ -42,37 +53,38 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
     );
   }
 
-  int moveProgressForVisibilityInfo(
-    VisibilityInfo visibilityInfo,
+  int updateCurrentPage(
+    PageDetails pageDetails,
     int maxPages,
     bool reversed,
+    double chapterNumber,
   ) {
-    var visiblePercentage = visibilityInfo.visibleFraction * 100;
+    int pageNumber = pageDetails.pageNumber;
 
-    if (visiblePercentage > VISIBILITY_THRESHOLD) {
-      final indexMatcher = RegExp(r'[0-9]+');
-      String progress = indexMatcher
-              .firstMatch(
-                visibilityInfo.key.toString(),
-              )!
-              .group(0) ??
-          "";
-
-      int pageNumber = int.parse(progress);
-
-      if (reversed) {
-        pageNumber = maxPages - (pageNumber - 1);
-      }
-
-      moveProgress(
-        progress: pageNumber.toString(),
-        chapterNumber: state.chapterNumber,
-      );
-
-      return pageNumber;
+    if (reversed) {
+      pageNumber = maxPages - (pageNumber - 1);
     }
 
-    return 0;
+    if (chapterNumber != state.chapterNumber) {
+      final Favourite? favourite = pageDetails.favourite;
+      final Chapter? chapter = pageDetails.favourite?.getChapter(chapterNumber);
+
+      if (favourite != null && chapter != null && chapter.read == false) {
+        favourites.markAsRead(
+          auth.getCurrentUser(),
+          favourite,
+          [chapterNumber],
+        );
+      }
+    }
+
+    moveProgress(
+      pageDetails: pageDetails,
+      progress: pageNumber.toString(),
+      chapterNumber: state.chapterNumber,
+    );
+
+    return pageNumber;
   }
 
   void toggleVisibility() {

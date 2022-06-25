@@ -7,6 +7,7 @@ import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/favourites/favourite.dart';
 import 'package:fluttiyomi/manga_details/manga_details_notifier.dart';
 import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
+import 'package:fluttiyomi/reader/reader_state.dart';
 import 'package:fluttiyomi/settings/settings_notifier.dart';
 import 'package:fluttiyomi/widgets/manga_page.dart';
 import 'package:fluttiyomi/widgets/manga_reader/reader_appbar.dart';
@@ -19,6 +20,9 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
 import 'dart:developer' as developer;
+
+// ignore: constant_identifier_names
+const VISIBILITY_THRESHOLD = 70;
 
 class ReadPage extends ConsumerStatefulWidget {
   final String mangaId;
@@ -61,6 +65,7 @@ class _ReadPageState extends ConsumerState<ReadPage> {
           widget.mangaId,
           widget.chapter,
           widget.chapters,
+          false,
         );
   }
 
@@ -82,11 +87,13 @@ class _ReadPageState extends ConsumerState<ReadPage> {
       next.whenOrNull(
         loaded: (_, chapterDetails, _____, __, ___, ____) =>
             preloadImages(chapterDetails.pages),
-        precached: (_, chapterDetails, _____, currentChapter, ___, ____) {
-          if (widget.favourite != null) {
+        precached: (_, chapterDetails, _____, currentChapters, ___, ____) {
+          if (widget.favourite != null &&
+              currentChapters.length == 1 &&
+              currentChapters[0].read == false) {
             ref
                 .read(mangaDetailsNotifierProvider.notifier)
-                .markAsRead(widget.favourite!, currentChapter.chapterNo);
+                .markAsRead(widget.favourite!, currentChapters[0].chapterNo);
           }
 
           if (!ref.read(readerProvider).appbarVisible) {
@@ -109,7 +116,7 @@ class _ReadPageState extends ConsumerState<ReadPage> {
             nextChapter,
             previousChapter,
           ) {
-            Chapter chapter = widget.chapter;
+            Chapter chapter = currentChapter[currentChapter.length - 1];
 
             var pages = chapterDetails.pages;
             var readState = ref.watch(readerProvider);
@@ -134,6 +141,8 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                     child: ReaderLoader(
                       reverse: readState.reversed,
                       child: ListView.builder(
+                        cacheExtent:
+                            MediaQuery.of(context).size.height * pages.length,
                         shrinkWrap: true,
                         physics: const BouncingScrollPhysics(),
                         controller: _autoScrollController,
@@ -148,12 +157,18 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                         itemBuilder: (context, index) {
                           var item = pages[index];
 
+                          if (item == "page-break") {
+                            return const SizedBox(height: 100);
+                          }
+
                           return AutoScrollTag(
                             key: ValueKey(index),
                             index: index,
                             controller: _autoScrollController,
                             child: VisibilityDetector(
-                              key: Key("Page-${index + 1}"),
+                              key: Key(
+                                "page:${index + 1}|chapter:${chapter.chapterNo}",
+                              ),
                               child: MangaPage(imagePath: item),
                               onVisibilityChanged: (visibilityInfo) {
                                 // App crashes without this, seems to get called after popping screen off
@@ -162,12 +177,58 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                                   return;
                                 }
 
+                                final visiblePercentage =
+                                    visibilityInfo.visibleFraction * 100;
+
+                                if (visiblePercentage < VISIBILITY_THRESHOLD) {
+                                  return;
+                                }
+
+                                final pageDetails = _parsePageKey(
+                                  visibilityInfo.key.toString(),
+                                );
+
+                                ref.read(readerProvider).when(
+                                  reading: (
+                                    currentPageDetails,
+                                    progress,
+                                    appbarVisible,
+                                    chapterNumber,
+                                    reversed,
+                                    currentChapter,
+                                  ) {
+                                    final progressPercentage =
+                                        (pageDetails.pageNumber /
+                                                chapterDetails.pages.length) *
+                                            100;
+
+                                    developer
+                                        .log("Progress: $progressPercentage");
+
+                                    if (progressPercentage > 70) {
+                                      ref
+                                          .read(chapterDetailsProvider.notifier)
+                                          .getChapterDetails(
+                                            mangaId,
+                                            chapter,
+                                            chapterList,
+                                            true,
+                                          );
+                                    }
+                                  },
+                                );
+
+                                if (widget.favourite != null) {
+                                  pageDetails.setFavourite(widget.favourite);
+                                }
+
                                 ref
                                     .read(readerProvider.notifier)
-                                    .moveProgressForVisibilityInfo(
-                                      visibilityInfo,
+                                    .updateCurrentPage(
+                                      pageDetails,
                                       pages.length,
                                       readState.reversed,
+                                      pageDetails.chapterNumber,
                                     );
 
                                 if (widget.favourite != null) {
@@ -192,6 +253,7 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                 ),
                 bottomNavigationBar: ReaderBottomAppBar(
                   numberOfPages: chapterDetails.pages.length,
+                  chapter: chapter,
                 ),
               ),
             );
@@ -224,5 +286,27 @@ class _ReadPageState extends ConsumerState<ReadPage> {
     if (widget.resumeFrom != null) {
       tryToScrollToIndex();
     }
+  }
+
+  _parsePageKey(String pageKey) {
+    final parts = pageKey.split("|");
+    final pageNumberParts = parts[0].split(":");
+    final chapterParts = parts[1].split(":")[1].split("'");
+    final chapterNumber = double.parse(chapterParts[0]);
+    final pageNumber = int.parse(pageNumberParts[1]);
+
+    return PageDetails(chapterNumber, pageNumber);
+  }
+}
+
+class PageDetails {
+  final double chapterNumber;
+  final int pageNumber;
+  Favourite? favourite;
+
+  PageDetails(this.chapterNumber, this.pageNumber);
+
+  void setFavourite(Favourite favourite) {
+    this.favourite = favourite;
   }
 }

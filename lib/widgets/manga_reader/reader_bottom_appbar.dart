@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/chapter_details/chapter_details_notifier.dart';
+import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
+import 'package:fluttiyomi/screens/read_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReaderBottomAppBar extends ConsumerWidget {
+  final Chapter chapter;
   final int numberOfPages;
 
-  const ReaderBottomAppBar({Key? key, required this.numberOfPages})
-      : super(key: key);
+  const ReaderBottomAppBar({
+    Key? key,
+    required this.numberOfPages,
+    required this.chapter,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context, ref) {
@@ -25,7 +31,8 @@ class ReaderBottomAppBar extends ConsumerWidget {
               child: StatefulBuilder(
                 builder: (context, state) {
                   String progress = ref.watch(readerProvider).when(
-                        reading: (index, _, __, ___, ____) => index,
+                        reading: (pageDetails, progress, _, __, ___, ____) =>
+                            progress,
                       );
 
                   return Text(
@@ -43,6 +50,7 @@ class ReaderBottomAppBar extends ConsumerWidget {
                   icon: const Icon(Icons.arrow_back_ios),
                   onPressed: () {
                     ref.read(readerProvider.notifier).moveProgress(
+                          pageDetails: PageDetails(chapter.chapterNo, 0),
                           progress: "1",
                         );
 
@@ -53,6 +61,7 @@ class ReaderBottomAppBar extends ConsumerWidget {
                   icon: const Icon(Icons.arrow_forward_ios),
                   onPressed: () {
                     ref.read(readerProvider.notifier).moveProgress(
+                          pageDetails: PageDetails(chapter.chapterNo, 0),
                           progress: "1",
                         );
 

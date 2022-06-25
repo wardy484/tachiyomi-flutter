@@ -5,6 +5,7 @@ import 'package:fluttiyomi/favourites/favourite_repository.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/manga_details/manga_details_notifier.dart';
 import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
+import 'package:fluttiyomi/screens/read_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../data/chapter/chapter.dart';
@@ -38,26 +39,79 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
     String mangaId,
     Chapter currentChapter,
     ChapterList chapterList,
+    bool append,
   ) async {
-    ChapterDetails details = await _source.getChapterDetails(
-      mangaId,
-      currentChapter.id,
+    return state.whenOrNull(
+      initial: () async {
+        ChapterDetails details = await _source.getChapterDetails(
+          mangaId,
+          currentChapter.id,
+        );
+
+        Chapter? nextChapter = chapterList.getNextChapter(currentChapter);
+        Chapter? previousChapter =
+            chapterList.getPreviousChapter(currentChapter);
+
+        state = ChapterDetailsState.loaded(
+          mangaId,
+          details,
+          chapterList,
+          [currentChapter],
+          nextChapter,
+          previousChapter,
+        );
+
+        return details;
+      },
+      precached:
+          (mangaId, details, chapterList, current, next, previous) async {
+        if (next != null) {
+          currentChapter = next;
+
+          ChapterDetails newDetails = await _source.getChapterDetails(
+            mangaId,
+            currentChapter.id,
+          );
+
+          Chapter? nextChapter = chapterList.getNextChapter(currentChapter);
+          Chapter? previousChapter =
+              chapterList.getPreviousChapter(currentChapter);
+
+          ChapterDetails extendedDetails = details.copyWith(pages: [
+            ...details.pages,
+            "page-break",
+            ...newDetails.pages,
+          ]);
+
+          state = ChapterDetailsState.precached(
+            mangaId,
+            extendedDetails,
+            chapterList,
+            [
+              ...current,
+              next,
+            ],
+            nextChapter,
+            previousChapter,
+          );
+
+          return extendedDetails;
+        }
+
+        return details;
+      },
+    )!;
+    // TODO: get rid of that bang operator....
+  }
+
+  Future<void> preloadNextChapter() async {
+    state.whenOrNull(
+      precached: (mangaId, details, chapterList, current, next, previous) {
+        if (next != null) {
+          getChapterDetails(mangaId, next, chapterList, false);
+        }
+      },
     );
-
-    Chapter? nextChapter = chapterList.getNextChapter(currentChapter);
-
-    Chapter? previousChapter = chapterList.getPreviousChapter(currentChapter);
-
-    state = ChapterDetailsState.loaded(
-      mangaId,
-      details,
-      chapterList,
-      currentChapter,
-      nextChapter,
-      previousChapter,
-    );
-
-    return details;
   }
 
   Future<void> imagesPrecached() async {
@@ -86,9 +140,11 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
                 mangaId,
                 nextChapter,
                 chapterList,
+                false,
               );
 
               _readerProgress.moveProgress(
+                pageDetails: PageDetails(nextChapter.chapterNo, 0),
                 progress: chapterDetails.pages.length.toString(),
                 chapterNumber: nextChapter.chapterNo,
                 chapter: nextChapter,
@@ -113,9 +169,11 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
         if (previousChapter != null) {
           await _mangaDetailsNotifier.state.whenOrNull(
             loaded: (mangaDetails, chapters, favourite) async {
-              await getChapterDetails(mangaId, previousChapter, chapterList);
+              await getChapterDetails(
+                  mangaId, previousChapter, chapterList, false);
 
               _readerProgress.moveProgress(
+                pageDetails: PageDetails(previousChapter.chapterNo, 0),
                 progress: chapterDetails.pages.length.toString(),
                 chapterNumber: previousChapter.chapterNo,
                 reversed: true,
