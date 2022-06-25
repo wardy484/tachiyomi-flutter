@@ -134,18 +134,18 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
     await _favourites.markAsRead(
       _auth.getCurrentUser(),
       favourite,
-      chapterNumber,
+      [chapterNumber],
     );
   }
 
   Future<void> markManyAsRead(
     Favourite favourite,
-    List<double> chpaterNumbers,
+    List<double> chapterNumbers,
   ) async {
-    await _favourites.markManyAsRead(
+    await _favourites.markAsRead(
       _auth.getCurrentUser(),
       favourite,
-      chpaterNumbers,
+      chapterNumbers,
     );
   }
 }

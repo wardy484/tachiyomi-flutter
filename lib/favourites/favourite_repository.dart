@@ -169,44 +169,6 @@ class FavouritesRepository {
   Future<void> markAsRead(
     User user,
     Favourite favourite,
-    double chapterNumber,
-  ) async {
-    log("WRITE: Marking chapter $chapterNumber as read from ${favourite.sourceId}");
-
-    log("Refreshing favourite ${favourite.id}");
-    Favourite? freshFavourite = await getFavourite(
-      user,
-      favourite.sourceId,
-      favourite.mangaId,
-    );
-
-    if (freshFavourite == null) {
-      log("Favourite not found ${favourite.sourceId}/${favourite.mangaId}");
-      return;
-    }
-
-    List<Chapter> chapters = freshFavourite.chapters.toList();
-
-    for (var i = 0; i < chapters.length; i++) {
-      if (chapters[i].chapterNo == chapterNumber) {
-        chapters[i] = chapters[i].copyWith(
-          read: true,
-        );
-        break;
-      }
-    }
-
-    freshFavourite = freshFavourite.copyWith(
-      chapters: chapters,
-      unreadChapterCount: _calculateUnreadChapterCount(chapters),
-    );
-
-    update(user, [freshFavourite]);
-  }
-
-  Future<void> markManyAsRead(
-    User user,
-    Favourite favourite,
     List<double> chapterNumbers,
   ) async {
     log("WRITE: Marking many chapters $chapterNumbers as read from ${favourite.sourceId}");
