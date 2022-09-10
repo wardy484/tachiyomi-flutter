@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
@@ -26,11 +27,11 @@ ChapterList parseChapters(dynamic json) {
 }
 
 class SourceClient {
-  final Dio _dio;
+  late Dio _dio;
   // ignore: unused_field
-  final String _baseUrl;
+  late String _baseUrl;
 
-  final String src;
+  late String src;
 
   get sourceId {
     return src;
@@ -40,14 +41,24 @@ class SourceClient {
     return "Readm";
   }
 
-  SourceClient(String baseUrl)
-      : _baseUrl = baseUrl,
-        src = "readm",
-        _dio = Dio(
-          BaseOptions(
-            baseUrl: baseUrl,
-          ),
-        );
+  SourceClient(String baseUrl) {
+    _baseUrl = baseUrl;
+    src = "readm";
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: baseUrl,
+      ),
+    );
+
+    _dio.interceptors.add(
+      DioCacheManager(
+        CacheConfig(
+          baseUrl: baseUrl,
+          defaultMaxAge: Duration.zero,
+        ),
+      ).interceptor,
+    );
+  }
 
   static Future<SourceClient> init({
     String baseUrl = "https://manga-source-proxy.vercel.app/",
@@ -87,6 +98,7 @@ class SourceClient {
 
     var response = await _dio.get(
       "/manga/$decodedMangaId/chapters/$decodedChapterId",
+      options: buildCacheOptions(const Duration(days: 365)),
     );
 
     return ChapterDetails.fromJson(response.data);

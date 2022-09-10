@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fluttiyomi/chapter_details/chapter_details_notifier.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
+import 'package:fluttiyomi/downloads/download_notifier.dart';
 import 'package:fluttiyomi/favourites/favourite.dart';
 import 'package:fluttiyomi/manga_details/manga_details_notifier.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -88,6 +90,22 @@ class ChapterOptions extends ConsumerWidget {
                   Navigator.pop(context);
                 },
                 icon: const FaIcon(FontAwesomeIcons.checkDouble),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: IconButton(
+                iconSize: 30,
+                onPressed: () async {
+                  if (favourite != null) {
+                    ref
+                        .read(downloadProvider.notifier)
+                        .addDownload(favourite!.toManga(), chapter);
+                  }
+
+                  Navigator.pop(context);
+                },
+                icon: const FaIcon(FontAwesomeIcons.download),
               ),
             ),
             // IconButton(

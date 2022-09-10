@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fluttiyomi/auth/auth_repository.dart';
 import 'package:fluttiyomi/auth/user.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
@@ -12,7 +11,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 final favouritesRepositoryProvider = Provider((ref) {
   return FavouritesRepository(
     firestore: FirebaseFirestore.instance,
-    authRepository: ref.read(authRepositoryProvider),
   );
 });
 
@@ -21,7 +19,6 @@ class FavouritesRepository {
 
   FavouritesRepository({
     required FirebaseFirestore firestore,
-    required AuthRepository authRepository,
   }) : db = firestore;
 
   Stream<List<Favourite>> watchFavourites(User user) {
@@ -79,11 +76,18 @@ class FavouritesRepository {
   Future<Favourite?> getFavourite(
       User user, String sourceId, String mangaId) async {
     log("READ: Getting favourite $mangaId from $sourceId");
-    final favourite = await _favouriteDocumentQuery(
-      user,
-      sourceId,
-      mangaId,
-    ).get();
+    DocumentSnapshot<Map<String, dynamic>> favourite;
+
+    try {
+      favourite = await _favouriteDocumentQuery(
+        user,
+        sourceId,
+        mangaId,
+      ).get();
+    } catch (e) {
+      log("READ: Error getting favourite $mangaId from $sourceId");
+      return null;
+    }
 
     log("READ: Getting chapters for favourite $mangaId from $sourceId");
 

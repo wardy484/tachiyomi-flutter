@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:fluttiyomi/auth/auth_repository.dart';
+import 'package:fluttiyomi/chapter_updates/chapter_updates.dart';
+import 'package:fluttiyomi/chapter_updates/repositories/chapter_updates_repository.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/favourites/favourite.dart';
@@ -17,6 +19,7 @@ final mangaDetailsNotifierProvider =
       ref.read(sourceClientProvider),
       ref.read(favouritesRepositoryProvider),
       ref.read(authRepositoryProvider),
+      ref.read(chapterUpdatesRepositoryProvider),
     );
   },
 );
@@ -25,15 +28,19 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
   final SourceClient _source;
   final FavouritesRepository _favourites;
   final AuthRepository _auth;
+  final ChapterUpdatesRepository _chapterUpdates;
+
   StreamSubscription<Favourite?>? _favouriteSubscription;
 
   MangaDetailsNotifier(
     SourceClient source,
     FavouritesRepository favourites,
     AuthRepository auth,
+    ChapterUpdatesRepository chapterUpdates,
   )   : _source = source,
         _favourites = favourites,
         _auth = auth,
+        _chapterUpdates = chapterUpdates,
         super(const MangaDetailsState.initial());
 
   Future<void> getMangaDetails(
@@ -44,7 +51,7 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
     ChapterList chapters;
 
     favourite ??= await _favourites.getFavourite(
-      _auth.getCurrentUser(),
+      _auth.currentUser,
       _source.src,
       mangaId,
     );
@@ -65,7 +72,7 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
   ) {
     return _favourites
         .watchFavourite(
-      _auth.getCurrentUser(),
+      _auth.currentUser,
       sourceId,
       mangaId,
     )
@@ -96,11 +103,17 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
   ) async {
     if (!manga.favourite) {
       final favourite = await _favourites.addFavourite(
-        _auth.getCurrentUser(),
+        _auth.currentUser,
         _source.sourceId,
         mangaName,
         manga,
         chapterList,
+      );
+
+      _chapterUpdates.addChapterUpdates(
+        _auth.currentUser,
+        favourite,
+        favourite.chapters,
       );
 
       state = MangaDetailsState.loaded(
@@ -111,19 +124,32 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
         favourite,
       );
     } else {
-      await _favourites.deleteFavourite(
-        _auth.getCurrentUser(),
+      final favourite = await _favourites.getFavourite(
+        _auth.currentUser,
         _source.src,
         manga.id,
       );
 
-      state = MangaDetailsState.loaded(
-        manga.copyWith(
-          favourite: !manga.favourite,
-        ),
-        chapterList,
-        null,
-      );
+      if (favourite != null) {
+        _chapterUpdates.deleteChapterUpdates(
+          _auth.currentUser,
+          favourite,
+        );
+
+        await _favourites.deleteFavourite(
+          _auth.currentUser,
+          _source.src,
+          manga.id,
+        );
+
+        state = MangaDetailsState.loaded(
+          manga.copyWith(
+            favourite: !manga.favourite,
+          ),
+          chapterList,
+          null,
+        );
+      }
     }
   }
 
@@ -131,21 +157,45 @@ class MangaDetailsNotifier extends StateNotifier<MangaDetailsState> {
     Favourite favourite,
     double chapterNumber,
   ) async {
-    await _favourites.markAsRead(
-      _auth.getCurrentUser(),
+    List<Future> futures = [];
+
+    futures.add(_favourites.markAsRead(
+      _auth.currentUser,
       favourite,
       [chapterNumber],
+    ));
+
+    futures.add(
+      _chapterUpdates.markAsRead(
+        _auth.currentUser,
+        favourite,
+        [chapterNumber],
+      ),
     );
+
+    await Future.wait(futures);
   }
 
   Future<void> markManyAsRead(
     Favourite favourite,
     List<double> chapterNumbers,
   ) async {
-    await _favourites.markAsRead(
-      _auth.getCurrentUser(),
+    List<Future> futures = [];
+
+    futures.add(_favourites.markAsRead(
+      _auth.currentUser,
       favourite,
       chapterNumbers,
+    ));
+
+    futures.add(
+      _chapterUpdates.markAsRead(
+        _auth.currentUser,
+        favourite,
+        chapterNumbers,
+      ),
     );
+
+    await Future.wait(futures);
   }
 }

@@ -82,4 +82,8 @@ class ChapterList with _$ChapterList {
     }
     return unreadChapterCount;
   }
+
+  bool contains(Chapter chapter) {
+    return chapters.contains(chapter);
+  }
 }

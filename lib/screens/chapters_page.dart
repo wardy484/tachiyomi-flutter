@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:cupertino_will_pop_scope/cupertino_will_pop_scope.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/favourites/favourite.dart';
 import 'package:fluttiyomi/favourites/favourites_notifier.dart';
@@ -107,8 +108,9 @@ class _ChaptersPageState extends ConsumerState<ChaptersPage> {
                               0, 0, rect.width, rect.height - 50));
                         },
                         blendMode: BlendMode.dstIn,
-                        child: Image.network(
+                        child: ExtendedImage.network(
                           manga.image,
+                          cache: true,
                           fit: BoxFit.cover,
                         ),
                       ),

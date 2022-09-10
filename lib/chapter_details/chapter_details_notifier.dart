@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:extended_image/extended_image.dart';
+import 'package:flutter/material.dart';
 import 'package:fluttiyomi/chapter_details/chapter_details_state.dart';
 import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';

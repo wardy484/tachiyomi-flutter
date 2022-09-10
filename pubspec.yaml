@@ -83,6 +83,10 @@ dependencies:
   cloud_functions: ^3.2.17
   flutter_svg: ^1.1.0
   font_awesome_flutter: ^10.1.0
+  grouped_list: ^5.1.2
+  dio_http_cache:
+      git: https://github.com/danilof/dio-http-cache
+  flutter_isolate: ^2.0.2
 
 dev_dependencies:
   auto_route_generator: ^4.0.0

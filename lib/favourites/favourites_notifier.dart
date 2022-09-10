@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:fluttiyomi/auth/auth_repository.dart';
+import 'package:fluttiyomi/chapter_updates/repositories/chapter_updates_repository.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/favourites/favourite.dart';
@@ -22,6 +23,7 @@ final favouritesProvider =
       ref.watch(sourceClientProvider.state).state,
       ref.watch(updateQueueProvider.notifier),
       ref.watch(authRepositoryProvider),
+      ref.watch(chapterUpdatesRepositoryProvider),
     );
   },
 );
@@ -32,6 +34,7 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
   final SourceClient _source;
   final UpdateQueueNotifier _updateQueue;
   final AuthRepository _auth;
+  final ChapterUpdatesRepository _chapterUpdatesRepository;
   StreamSubscription<List<Favourite>?>? _favouritesStream;
 
   FavouritesNotifier(
@@ -40,19 +43,20 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
     SourceClient source,
     UpdateQueueNotifier updateQueue,
     AuthRepository auth,
+    ChapterUpdatesRepository chapterUpdatesRepository,
   )   : _favourites = favourites,
         _settings = settings,
         _source = source,
         _updateQueue = updateQueue,
         _auth = auth,
+        _chapterUpdatesRepository = chapterUpdatesRepository,
         super(const FavouritesState.initial());
 
   Future<void> watchFavourites() async {
     log("READ: Watching favourites");
 
-    _favouritesStream = _favourites
-        .watchFavourites(_auth.getCurrentUser())
-        .listen((favourites) {
+    _favouritesStream =
+        _favourites.watchFavourites(_auth.currentUser).listen((favourites) {
       log("READ: Favourites listener triggered");
 
       state = FavouritesState.loaded(
@@ -113,16 +117,23 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
         unreadChapterCount: completeChapterList.unreadChapters(),
         chapters: completeChapterList.descending().toList(),
       );
+
       _favourites.update(
-        _auth.getCurrentUser(),
+        _auth.currentUser,
         [newFavourite],
+      );
+
+      _chapterUpdatesRepository.addChapterUpdates(
+        _auth.currentUser,
+        favourite,
+        newChapters,
       );
     }
   }
 
   Future<LastReadChapter> getLastReadChapter(String mangaId) async {
     var favourite = await _favourites.getFavourite(
-      _auth.getCurrentUser(),
+      _auth.currentUser,
       _source.sourceId,
       mangaId,
     );
@@ -196,11 +207,11 @@ List<Chapter> _filterNewChapters(Map args) {
 
   if (remoteChapters.length < 1) return [];
 
-  final latestChapterNumber =
-      savedChapters.descending().toList().first.chapterNo;
+  final newChapters = remoteChapters.toList().where((chapter) {
+    return !savedChapters.toList().where((savedChapter) {
+      return savedChapter.chapterNo == chapter.chapterNo;
+    }).isNotEmpty;
+  }).toList();
 
-  return remoteChapters
-      .toList()
-      .where((chapter) => chapter.chapterNo > latestChapterNumber)
-      .toList();
+  return newChapters;
 }
