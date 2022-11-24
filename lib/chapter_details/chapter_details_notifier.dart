@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:extended_image/extended_image.dart';
-import 'package:flutter/material.dart';
 import 'package:fluttiyomi/chapter_details/chapter_details_state.dart';
 import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
@@ -57,20 +55,21 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
             chapterList.getPreviousChapter(currentChapter);
 
         state = ChapterDetailsState.loaded(
-          mangaId,
-          details,
-          chapterList,
-          [currentChapter],
-          nextChapter,
-          previousChapter,
+          ChapterDetailsContent(
+            mangaId: mangaId,
+            chapterDetails: details,
+            chapterList: chapterList,
+            currentChapters: [currentChapter],
+            nextChapter: nextChapter,
+            previousChapter: previousChapter,
+          ),
         );
 
         return details;
       },
-      precached:
-          (mangaId, details, chapterList, current, next, previous) async {
-        if (next != null) {
-          currentChapter = next;
+      precached: (content) async {
+        if (content.nextChapter != null) {
+          currentChapter = content.nextChapter!;
 
           ChapterDetails newDetails = await _source.getChapterDetails(
             mangaId,
@@ -81,28 +80,31 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
           Chapter? previousChapter =
               chapterList.getPreviousChapter(currentChapter);
 
-          ChapterDetails extendedDetails = details.copyWith(pages: [
-            ...details.pages,
+          ChapterDetails extendedDetails =
+              content.chapterDetails.copyWith(pages: [
+            ...content.chapterDetails.pages,
             "page-break",
             ...newDetails.pages,
           ]);
 
           state = ChapterDetailsState.precached(
-            mangaId,
-            extendedDetails,
-            chapterList,
-            [
-              ...current,
-              next,
-            ],
-            nextChapter,
-            previousChapter,
+            ChapterDetailsContent(
+              mangaId: mangaId,
+              chapterDetails: extendedDetails,
+              chapterList: chapterList,
+              currentChapters: [
+                ...content.currentChapters,
+                content.nextChapter!,
+              ],
+              nextChapter: nextChapter,
+              previousChapter: previousChapter,
+            ),
           );
 
           return extendedDetails;
         }
 
-        return details;
+        return content.chapterDetails;
       },
     )!;
     // TODO: get rid of that bang operator....
@@ -110,9 +112,14 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
 
   Future<void> preloadNextChapter() async {
     state.whenOrNull(
-      precached: (mangaId, details, chapterList, current, next, previous) {
-        if (next != null) {
-          getChapterDetails(mangaId, next, chapterList, false);
+      precached: (content) {
+        if (content.nextChapter != null) {
+          getChapterDetails(
+            content.mangaId,
+            content.nextChapter!,
+            content.chapterList,
+            false,
+          );
         }
       },
     );
@@ -120,9 +127,8 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
 
   Future<void> imagesPrecached() async {
     state.whenOrNull(
-      loaded: (mangaId, details, chapterList, current, next, previous) {
-        state = ChapterDetailsState.precached(
-            mangaId, details, chapterList, current, next, previous);
+      loaded: (content) {
+        state = ChapterDetailsState.precached(content);
       },
     );
   }
@@ -130,28 +136,23 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
   Future<void> nextChapter() async {
     await state.whenOrNull(
       precached: (
-        mangaId,
-        chapterDetails,
-        chapterList,
-        currentChapter,
-        nextChapter,
-        previousChapter,
+        content,
       ) async {
-        if (nextChapter != null) {
+        if (content.nextChapter != null) {
           await _mangaDetailsNotifier.state.whenOrNull(
             loaded: (mangaDetails, chapters, favourite) async {
               await getChapterDetails(
-                mangaId,
-                nextChapter,
-                chapterList,
+                content.mangaId,
+                content.nextChapter!,
+                content.chapterList,
                 false,
               );
 
               _readerProgress.moveProgress(
-                pageDetails: PageDetails(nextChapter.chapterNo, 0),
-                progress: chapterDetails.pages.length.toString(),
-                chapterNumber: nextChapter.chapterNo,
-                chapter: nextChapter,
+                pageDetails: PageDetails(content.nextChapter!.chapterNo, 0),
+                progress: content.chapterDetails.pages.length.toString(),
+                chapterNumber: content.nextChapter!.chapterNo,
+                chapter: content.nextChapter,
               );
             },
           );
@@ -162,26 +163,23 @@ class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
 
   Future<void> previousChapter() async {
     await state.whenOrNull(
-      precached: (
-        mangaId,
-        chapterDetails,
-        chapterList,
-        currentChapter,
-        nextChapter,
-        previousChapter,
-      ) async {
-        if (previousChapter != null) {
+      precached: (content) async {
+        if (content.previousChapter != null) {
           await _mangaDetailsNotifier.state.whenOrNull(
             loaded: (mangaDetails, chapters, favourite) async {
               await getChapterDetails(
-                  mangaId, previousChapter, chapterList, false);
+                content.mangaId,
+                content.previousChapter!,
+                content.chapterList,
+                false,
+              );
 
               _readerProgress.moveProgress(
-                pageDetails: PageDetails(previousChapter.chapterNo, 0),
-                progress: chapterDetails.pages.length.toString(),
-                chapterNumber: previousChapter.chapterNo,
+                pageDetails: PageDetails(content.previousChapter!.chapterNo, 0),
+                progress: content.chapterDetails.pages.length.toString(),
+                chapterNumber: content.previousChapter!.chapterNo,
                 reversed: true,
-                chapter: previousChapter,
+                chapter: content.previousChapter,
               );
             },
           );

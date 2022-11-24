@@ -1,8 +1,8 @@
 import 'dart:isolate';
 
 import 'package:flutter_isolate/flutter_isolate.dart';
+import 'package:fluttiyomi/database/download.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'models/download.dart';
 
 part 'download_state.freezed.dart';
 

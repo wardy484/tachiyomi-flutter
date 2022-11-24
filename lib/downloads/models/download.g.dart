@@ -23,4 +23,5 @@ const _$DownloadStatusEnumMap = {
   DownloadStatus.pending: 'pending',
   DownloadStatus.downloading: 'downloading',
   DownloadStatus.complete: 'complete',
+  DownloadStatus.error: 'error',
 };

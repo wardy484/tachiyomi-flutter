@@ -9,20 +9,22 @@ part 'chapter_details_state.freezed.dart';
 class ChapterDetailsState with _$ChapterDetailsState {
   const factory ChapterDetailsState.initial() = _Initial;
   const factory ChapterDetailsState.loaded(
-    String mangaId,
-    ChapterDetails chapterDetails,
-    ChapterList chapterList,
-    List<Chapter> currentChapters,
-    Chapter? nextChapter,
-    Chapter? previousChapter,
+    ChapterDetailsContent content,
   ) = _Loaded;
 
   const factory ChapterDetailsState.precached(
-    String mangaId,
-    ChapterDetails chapterDetails,
-    ChapterList chapterList,
-    List<Chapter> currentChapters,
-    Chapter? nextChapter,
-    Chapter? previousChapter,
+    ChapterDetailsContent content,
   ) = _precached;
+}
+
+@freezed
+class ChapterDetailsContent with _$ChapterDetailsContent {
+  factory ChapterDetailsContent({
+    required String mangaId,
+    required ChapterDetails chapterDetails,
+    required ChapterList chapterList,
+    required List<Chapter> currentChapters,
+    required Chapter? nextChapter,
+    required Chapter? previousChapter,
+  }) = _ChapterDetailsContent;
 }

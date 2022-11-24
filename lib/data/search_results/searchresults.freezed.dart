@@ -59,33 +59,33 @@ class _$SearchResultsCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$SearchResultsCopyWith<$Res>
+abstract class _$$_SearchResultsCopyWith<$Res>
     implements $SearchResultsCopyWith<$Res> {
-  factory _$SearchResultsCopyWith(
-          _SearchResults value, $Res Function(_SearchResults) then) =
-      __$SearchResultsCopyWithImpl<$Res>;
+  factory _$$_SearchResultsCopyWith(
+          _$_SearchResults value, $Res Function(_$_SearchResults) then) =
+      __$$_SearchResultsCopyWithImpl<$Res>;
   @override
   $Res call({List<MangaListItem> results});
 }
 
 /// @nodoc
-class __$SearchResultsCopyWithImpl<$Res>
+class __$$_SearchResultsCopyWithImpl<$Res>
     extends _$SearchResultsCopyWithImpl<$Res>
-    implements _$SearchResultsCopyWith<$Res> {
-  __$SearchResultsCopyWithImpl(
-      _SearchResults _value, $Res Function(_SearchResults) _then)
-      : super(_value, (v) => _then(v as _SearchResults));
+    implements _$$_SearchResultsCopyWith<$Res> {
+  __$$_SearchResultsCopyWithImpl(
+      _$_SearchResults _value, $Res Function(_$_SearchResults) _then)
+      : super(_value, (v) => _then(v as _$_SearchResults));
 
   @override
-  _SearchResults get _value => super._value as _SearchResults;
+  _$_SearchResults get _value => super._value as _$_SearchResults;
 
   @override
   $Res call({
     Object? results = freezed,
   }) {
-    return _then(_SearchResults(
+    return _then(_$_SearchResults(
       results == freezed
-          ? _value.results
+          ? _value._results
           : results // ignore: cast_nullable_to_non_nullable
               as List<MangaListItem>,
     ));
@@ -118,19 +118,19 @@ class _$_SearchResults extends _SearchResults {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _SearchResults &&
-            const DeepCollectionEquality().equals(other.results, results));
+            other is _$_SearchResults &&
+            const DeepCollectionEquality().equals(other._results, _results));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(results));
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_results));
 
   @JsonKey(ignore: true)
   @override
-  _$SearchResultsCopyWith<_SearchResults> get copyWith =>
-      __$SearchResultsCopyWithImpl<_SearchResults>(this, _$identity);
+  _$$_SearchResultsCopyWith<_$_SearchResults> get copyWith =>
+      __$$_SearchResultsCopyWithImpl<_$_SearchResults>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -146,9 +146,9 @@ abstract class _SearchResults extends SearchResults {
       _$_SearchResults.fromJson;
 
   @override
-  List<MangaListItem> get results => throw _privateConstructorUsedError;
+  List<MangaListItem> get results;
   @override
   @JsonKey(ignore: true)
-  _$SearchResultsCopyWith<_SearchResults> get copyWith =>
+  _$$_SearchResultsCopyWith<_$_SearchResults> get copyWith =>
       throw _privateConstructorUsedError;
 }

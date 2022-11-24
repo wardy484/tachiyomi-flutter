@@ -84,40 +84,32 @@ class _ReadPageState extends ConsumerState<ReadPage> {
   Widget build(BuildContext context) {
     ref.listen(chapterDetailsProvider, (previous, ChapterDetailsState next) {
       next.whenOrNull(
-        loaded: (_, chapterDetails, _____, __, ___, ____) =>
-            preloadImages(chapterDetails.pages),
-        precached: (_, chapterDetails, _____, currentChapters, ___, ____) {
+        loaded: (content) => preloadImages(content.chapterDetails.pages),
+        precached: (content) {
           if (widget.favourite != null &&
-              currentChapters.length == 1 &&
-              currentChapters[0].read == false) {
-            ref
-                .read(mangaDetailsNotifierProvider.notifier)
-                .markAsRead(widget.favourite!, currentChapters[0].chapterNo);
+              content.currentChapters.length == 1 &&
+              content.currentChapters[0].read == false) {
+            ref.read(mangaDetailsNotifierProvider.notifier).markAsRead(
+                  widget.favourite!,
+                  content.currentChapters[0].chapterNo,
+                );
           }
 
-          if (!ref.read(readerProvider).appbarVisible) {
-            ref.read(readerProvider.notifier).hideAppbar();
-          }
+          ref.read(readerProvider.notifier).hideAppbar();
         },
       );
     });
 
     return ref.watch(chapterDetailsProvider).when(
           initial: () => ReaderLoadingContent(chapter: widget.chapter),
-          loaded: (mangaId, chapterDetails, _____, __, ___, ____) {
+          loaded: (content) {
             return ReaderLoadingContent(chapter: widget.chapter);
           },
-          precached: (
-            mangaId,
-            chapterDetails,
-            chapterList,
-            currentChapter,
-            nextChapter,
-            previousChapter,
-          ) {
-            Chapter chapter = currentChapter[currentChapter.length - 1];
+          precached: (content) {
+            Chapter chapter =
+                content.currentChapters[content.currentChapters.length - 1];
 
-            var pages = chapterDetails.pages;
+            var pages = content.chapterDetails.pages;
             var readState = ref.watch(readerProvider);
 
             if (readState.reversed) {
@@ -139,119 +131,123 @@ class _ReadPageState extends ConsumerState<ReadPage> {
                   child: ScrollingViewer(
                     child: ReaderLoader(
                       reverse: readState.reversed,
-                      child: ListView.builder(
-                        cacheExtent:
-                            MediaQuery.of(context).size.height * pages.length,
-                        shrinkWrap: true,
+                      child: SingleChildScrollView(
                         physics: const BouncingScrollPhysics(),
-                        controller: _autoScrollController,
-                        padding: ref.watch(settingsProvider).when(
-                              initial: () => EdgeInsets.zero,
-                              loaded: (settings) => EdgeInsets.symmetric(
-                                horizontal: settings.padding.toDouble(),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          controller: _autoScrollController,
+                          padding: ref.watch(settingsProvider).when(
+                                initial: () => EdgeInsets.zero,
+                                loaded: (settings) => EdgeInsets.symmetric(
+                                  horizontal: settings.padding.toDouble(),
+                                ),
                               ),
-                            ),
-                        reverse: readState.reversed,
-                        itemCount: pages.length,
-                        itemBuilder: (context, index) {
-                          var item = pages[index];
+                          reverse: readState.reversed,
+                          itemCount: pages.length,
+                          itemBuilder: (context, index) {
+                            var item = pages[index];
 
-                          if (item == "page-break") {
-                            return const SizedBox(height: 100);
-                          }
+                            if (item == "page-break") {
+                              return const SizedBox(height: 100);
+                            }
 
-                          return AutoScrollTag(
-                            key: ValueKey(index),
-                            index: index,
-                            controller: _autoScrollController,
-                            child: VisibilityDetector(
-                              key: Key(
-                                "page:${index + 1}|chapter:${chapter.chapterNo}",
+                            return AutoScrollTag(
+                              key: ValueKey(index),
+                              index: index,
+                              controller: _autoScrollController,
+                              child: VisibilityDetector(
+                                key: Key(
+                                  "page:${index + 1}|chapter:${chapter.chapterNo}",
+                                ),
+                                child: MangaPage(imagePath: item),
+                                onVisibilityChanged: (visibilityInfo) {
+                                  // App crashes without this, seems to get called after popping screen off
+                                  // of stack.
+                                  if (visibilityInfo.visibleFraction == 0) {
+                                    return;
+                                  }
+
+                                  final visiblePercentage =
+                                      visibilityInfo.visibleFraction * 100;
+
+                                  if (visiblePercentage <
+                                      VISIBILITY_THRESHOLD) {
+                                    return;
+                                  }
+
+                                  final pageDetails = _parsePageKey(
+                                    visibilityInfo.key.toString(),
+                                  );
+
+                                  ref.read(readerProvider).when(
+                                    reading: (
+                                      currentPageDetails,
+                                      progress,
+                                      appbarVisible,
+                                      chapterNumber,
+                                      reversed,
+                                      currentChapter,
+                                    ) {
+                                      final progressPercentage =
+                                          (pageDetails.pageNumber /
+                                                  content.chapterDetails.pages
+                                                      .length) *
+                                              100;
+
+                                      developer
+                                          .log("Progress: $progressPercentage");
+
+                                      if (progressPercentage > 70) {
+                                        ref
+                                            .read(
+                                                chapterDetailsProvider.notifier)
+                                            .getChapterDetails(
+                                              content.mangaId,
+                                              chapter,
+                                              content.chapterList,
+                                              true,
+                                            );
+                                      }
+                                    },
+                                  );
+
+                                  if (widget.favourite != null) {
+                                    pageDetails.setFavourite(widget.favourite);
+                                  }
+
+                                  ref
+                                      .read(readerProvider.notifier)
+                                      .updateCurrentPage(
+                                        pageDetails,
+                                        pages.length,
+                                        readState.reversed,
+                                        pageDetails.chapterNumber,
+                                      );
+
+                                  if (widget.favourite != null) {
+                                    // TODO: Maintain state for read and emit last page on exit
+                                    // ref
+                                    //     .read(readChaptersRepositoryProvider)
+                                    //     .setLastPage(
+                                    //       widget.favourite!,
+                                    //       chapter.id,
+                                    //       pageNumber,
+                                    //     );
+                                  }
+                                },
                               ),
-                              child: MangaPage(imagePath: item),
-                              onVisibilityChanged: (visibilityInfo) {
-                                // App crashes without this, seems to get called after popping screen off
-                                // of stack.
-                                if (visibilityInfo.visibleFraction == 0) {
-                                  return;
-                                }
-
-                                final visiblePercentage =
-                                    visibilityInfo.visibleFraction * 100;
-
-                                if (visiblePercentage < VISIBILITY_THRESHOLD) {
-                                  return;
-                                }
-
-                                final pageDetails = _parsePageKey(
-                                  visibilityInfo.key.toString(),
-                                );
-
-                                ref.read(readerProvider).when(
-                                  reading: (
-                                    currentPageDetails,
-                                    progress,
-                                    appbarVisible,
-                                    chapterNumber,
-                                    reversed,
-                                    currentChapter,
-                                  ) {
-                                    final progressPercentage =
-                                        (pageDetails.pageNumber /
-                                                chapterDetails.pages.length) *
-                                            100;
-
-                                    developer
-                                        .log("Progress: $progressPercentage");
-
-                                    if (progressPercentage > 70) {
-                                      ref
-                                          .read(chapterDetailsProvider.notifier)
-                                          .getChapterDetails(
-                                            mangaId,
-                                            chapter,
-                                            chapterList,
-                                            true,
-                                          );
-                                    }
-                                  },
-                                );
-
-                                if (widget.favourite != null) {
-                                  pageDetails.setFavourite(widget.favourite);
-                                }
-
-                                ref
-                                    .read(readerProvider.notifier)
-                                    .updateCurrentPage(
-                                      pageDetails,
-                                      pages.length,
-                                      readState.reversed,
-                                      pageDetails.chapterNumber,
-                                    );
-
-                                if (widget.favourite != null) {
-                                  // TODO: Maintain state for read and emit last page on exit
-                                  // ref
-                                  //     .read(readChaptersRepositoryProvider)
-                                  //     .setLastPage(
-                                  //       widget.favourite!,
-                                  //       chapter.id,
-                                  //       pageNumber,
-                                  //     );
-                                }
-                              },
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
-                      nextChapter: nextChapter,
-                      previousChapter: previousChapter,
+                      nextChapter: content.nextChapter,
+                      previousChapter: content.previousChapter,
                     ),
                   ),
                 ),
                 bottomNavigationBar: ReaderBottomAppBar(
-                  numberOfPages: chapterDetails.pages.length,
+                  numberOfPages: content.chapterDetails.pages.length,
                   chapter: chapter,
                 ),
               ),

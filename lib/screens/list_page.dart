@@ -35,10 +35,10 @@ class _ListPageState extends ConsumerState<ListPage> {
       // ),
       appBar: <PreferredSizeWidget>[
         const LibraryAppbar(),
-        AppBar(
-          centerTitle: false,
-          title: const Text("Chapter updates"),
-        ),
+        // AppBar(
+        //   centerTitle: false,
+        //   title: const Text("Chapter updates"),
+        // ),
         const SearchAppbar(),
         const HomeAppbar(),
         const SettingsAppbar(),
@@ -49,7 +49,7 @@ class _ListPageState extends ConsumerState<ListPage> {
       ].elementAt(_selectedIndex),
       body: [
         const FavouritesTab(),
-        const ChapterUpdatesPage(),
+        // const ChapterUpdatesPage(),
         const SearchTab(),
         const HomeTab(),
         const SettingsTab(),
@@ -63,10 +63,10 @@ class _ListPageState extends ConsumerState<ListPage> {
             icon: FaIcon(FontAwesomeIcons.bookBookmark),
             label: 'Bookmarked',
           ),
-          BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.fire),
-            label: 'Chapter updates',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: FaIcon(FontAwesomeIcons.fire),
+          //   label: 'Chapter updates',
+          // ),
           BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
             label: 'Search',

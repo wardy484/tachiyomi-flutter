@@ -105,25 +105,26 @@ class _$DownloadStateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$DownloadingCopyWith<$Res>
+abstract class _$$_DownloadingCopyWith<$Res>
     implements $DownloadStateCopyWith<$Res> {
-  factory _$DownloadingCopyWith(
-          _Downloading value, $Res Function(_Downloading) then) =
-      __$DownloadingCopyWithImpl<$Res>;
+  factory _$$_DownloadingCopyWith(
+          _$_Downloading value, $Res Function(_$_Downloading) then) =
+      __$$_DownloadingCopyWithImpl<$Res>;
   @override
   $Res call(
       {List<Download> downloads, FlutterIsolate? isolate, SendPort? sendPort});
 }
 
 /// @nodoc
-class __$DownloadingCopyWithImpl<$Res> extends _$DownloadStateCopyWithImpl<$Res>
-    implements _$DownloadingCopyWith<$Res> {
-  __$DownloadingCopyWithImpl(
-      _Downloading _value, $Res Function(_Downloading) _then)
-      : super(_value, (v) => _then(v as _Downloading));
+class __$$_DownloadingCopyWithImpl<$Res>
+    extends _$DownloadStateCopyWithImpl<$Res>
+    implements _$$_DownloadingCopyWith<$Res> {
+  __$$_DownloadingCopyWithImpl(
+      _$_Downloading _value, $Res Function(_$_Downloading) _then)
+      : super(_value, (v) => _then(v as _$_Downloading));
 
   @override
-  _Downloading get _value => super._value as _Downloading;
+  _$_Downloading get _value => super._value as _$_Downloading;
 
   @override
   $Res call({
@@ -131,9 +132,9 @@ class __$DownloadingCopyWithImpl<$Res> extends _$DownloadStateCopyWithImpl<$Res>
     Object? isolate = freezed,
     Object? sendPort = freezed,
   }) {
-    return _then(_Downloading(
+    return _then(_$_Downloading(
       downloads: downloads == freezed
-          ? _value.downloads
+          ? _value._downloads
           : downloads // ignore: cast_nullable_to_non_nullable
               as List<Download>,
       isolate: isolate == freezed
@@ -176,8 +177,9 @@ class _$_Downloading implements _Downloading {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Downloading &&
-            const DeepCollectionEquality().equals(other.downloads, downloads) &&
+            other is _$_Downloading &&
+            const DeepCollectionEquality()
+                .equals(other._downloads, _downloads) &&
             const DeepCollectionEquality().equals(other.isolate, isolate) &&
             const DeepCollectionEquality().equals(other.sendPort, sendPort));
   }
@@ -185,14 +187,14 @@ class _$_Downloading implements _Downloading {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(downloads),
+      const DeepCollectionEquality().hash(_downloads),
       const DeepCollectionEquality().hash(isolate),
       const DeepCollectionEquality().hash(sendPort));
 
   @JsonKey(ignore: true)
   @override
-  _$DownloadingCopyWith<_Downloading> get copyWith =>
-      __$DownloadingCopyWithImpl<_Downloading>(this, _$identity);
+  _$$_DownloadingCopyWith<_$_Downloading> get copyWith =>
+      __$$_DownloadingCopyWithImpl<_$_Downloading>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -264,13 +266,13 @@ abstract class _Downloading implements DownloadState {
       final SendPort? sendPort}) = _$_Downloading;
 
   @override
-  List<Download> get downloads => throw _privateConstructorUsedError;
+  List<Download> get downloads;
   @override
-  FlutterIsolate? get isolate => throw _privateConstructorUsedError;
+  FlutterIsolate? get isolate;
   @override
-  SendPort? get sendPort => throw _privateConstructorUsedError;
+  SendPort? get sendPort;
   @override
   @JsonKey(ignore: true)
-  _$DownloadingCopyWith<_Downloading> get copyWith =>
+  _$$_DownloadingCopyWith<_$_Downloading> get copyWith =>
       throw _privateConstructorUsedError;
 }

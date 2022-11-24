@@ -211,10 +211,10 @@ class _$FavouriteCopyWithImpl<$Res> implements $FavouriteCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$FavouriteCopyWith<$Res> implements $FavouriteCopyWith<$Res> {
-  factory _$FavouriteCopyWith(
-          _Favourite value, $Res Function(_Favourite) then) =
-      __$FavouriteCopyWithImpl<$Res>;
+abstract class _$$_FavouriteCopyWith<$Res> implements $FavouriteCopyWith<$Res> {
+  factory _$$_FavouriteCopyWith(
+          _$_Favourite value, $Res Function(_$_Favourite) then) =
+      __$$_FavouriteCopyWithImpl<$Res>;
   @override
   $Res call(
       {String id,
@@ -244,13 +244,14 @@ abstract class _$FavouriteCopyWith<$Res> implements $FavouriteCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$FavouriteCopyWithImpl<$Res> extends _$FavouriteCopyWithImpl<$Res>
-    implements _$FavouriteCopyWith<$Res> {
-  __$FavouriteCopyWithImpl(_Favourite _value, $Res Function(_Favourite) _then)
-      : super(_value, (v) => _then(v as _Favourite));
+class __$$_FavouriteCopyWithImpl<$Res> extends _$FavouriteCopyWithImpl<$Res>
+    implements _$$_FavouriteCopyWith<$Res> {
+  __$$_FavouriteCopyWithImpl(
+      _$_Favourite _value, $Res Function(_$_Favourite) _then)
+      : super(_value, (v) => _then(v as _$_Favourite));
 
   @override
-  _Favourite get _value => super._value as _Favourite;
+  _$_Favourite get _value => super._value as _$_Favourite;
 
   @override
   $Res call({
@@ -276,7 +277,7 @@ class __$FavouriteCopyWithImpl<$Res> extends _$FavouriteCopyWithImpl<$Res>
     Object? latestChapterNumber = freezed,
     Object? unreadChapterCount = freezed,
   }) {
-    return _then(_Favourite(
+    return _then(_$_Favourite(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -298,7 +299,7 @@ class __$FavouriteCopyWithImpl<$Res> extends _$FavouriteCopyWithImpl<$Res>
           : name // ignore: cast_nullable_to_non_nullable
               as String,
       titles: titles == freezed
-          ? _value.titles
+          ? _value._titles
           : titles // ignore: cast_nullable_to_non_nullable
               as List<String>,
       image: image == freezed
@@ -326,7 +327,7 @@ class __$FavouriteCopyWithImpl<$Res> extends _$FavouriteCopyWithImpl<$Res>
           : artist // ignore: cast_nullable_to_non_nullable
               as String?,
       covers: covers == freezed
-          ? _value.covers
+          ? _value._covers
           : covers // ignore: cast_nullable_to_non_nullable
               as List<String>?,
       desc: desc == freezed
@@ -346,11 +347,11 @@ class __$FavouriteCopyWithImpl<$Res> extends _$FavouriteCopyWithImpl<$Res>
           : lastChapterRead // ignore: cast_nullable_to_non_nullable
               as Chapter?,
       chapters: chapters == freezed
-          ? _value.chapters
+          ? _value._chapters
           : chapters // ignore: cast_nullable_to_non_nullable
               as List<Chapter>,
       tagSections: tagSections == freezed
-          ? _value.tagSections
+          ? _value._tagSections
           : tagSections // ignore: cast_nullable_to_non_nullable
               as List<TagSection>,
       latestChapterNumber: latestChapterNumber == freezed
@@ -473,13 +474,13 @@ class _$_Favourite extends _Favourite {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Favourite &&
+            other is _$_Favourite &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.userId, userId) &&
             const DeepCollectionEquality().equals(other.sourceId, sourceId) &&
             const DeepCollectionEquality().equals(other.mangaId, mangaId) &&
             const DeepCollectionEquality().equals(other.name, name) &&
-            const DeepCollectionEquality().equals(other.titles, titles) &&
+            const DeepCollectionEquality().equals(other._titles, _titles) &&
             const DeepCollectionEquality().equals(other.image, image) &&
             const DeepCollectionEquality().equals(other.rating, rating) &&
             const DeepCollectionEquality()
@@ -487,16 +488,16 @@ class _$_Favourite extends _Favourite {
             const DeepCollectionEquality().equals(other.langFlag, langFlag) &&
             const DeepCollectionEquality().equals(other.author, author) &&
             const DeepCollectionEquality().equals(other.artist, artist) &&
-            const DeepCollectionEquality().equals(other.covers, covers) &&
+            const DeepCollectionEquality().equals(other._covers, _covers) &&
             const DeepCollectionEquality().equals(other.desc, desc) &&
             const DeepCollectionEquality().equals(other.follows, follows) &&
             const DeepCollectionEquality()
                 .equals(other.lastUpdate, lastUpdate) &&
             const DeepCollectionEquality()
                 .equals(other.lastChapterRead, lastChapterRead) &&
-            const DeepCollectionEquality().equals(other.chapters, chapters) &&
+            const DeepCollectionEquality().equals(other._chapters, _chapters) &&
             const DeepCollectionEquality()
-                .equals(other.tagSections, tagSections) &&
+                .equals(other._tagSections, _tagSections) &&
             const DeepCollectionEquality()
                 .equals(other.latestChapterNumber, latestChapterNumber) &&
             const DeepCollectionEquality()
@@ -512,28 +513,28 @@ class _$_Favourite extends _Favourite {
         const DeepCollectionEquality().hash(sourceId),
         const DeepCollectionEquality().hash(mangaId),
         const DeepCollectionEquality().hash(name),
-        const DeepCollectionEquality().hash(titles),
+        const DeepCollectionEquality().hash(_titles),
         const DeepCollectionEquality().hash(image),
         const DeepCollectionEquality().hash(rating),
         const DeepCollectionEquality().hash(mangaStatus),
         const DeepCollectionEquality().hash(langFlag),
         const DeepCollectionEquality().hash(author),
         const DeepCollectionEquality().hash(artist),
-        const DeepCollectionEquality().hash(covers),
+        const DeepCollectionEquality().hash(_covers),
         const DeepCollectionEquality().hash(desc),
         const DeepCollectionEquality().hash(follows),
         const DeepCollectionEquality().hash(lastUpdate),
         const DeepCollectionEquality().hash(lastChapterRead),
-        const DeepCollectionEquality().hash(chapters),
-        const DeepCollectionEquality().hash(tagSections),
+        const DeepCollectionEquality().hash(_chapters),
+        const DeepCollectionEquality().hash(_tagSections),
         const DeepCollectionEquality().hash(latestChapterNumber),
         const DeepCollectionEquality().hash(unreadChapterCount)
       ]);
 
   @JsonKey(ignore: true)
   @override
-  _$FavouriteCopyWith<_Favourite> get copyWith =>
-      __$FavouriteCopyWithImpl<_Favourite>(this, _$identity);
+  _$$_FavouriteCopyWith<_$_Favourite> get copyWith =>
+      __$$_FavouriteCopyWithImpl<_$_Favourite>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -570,49 +571,49 @@ abstract class _Favourite extends Favourite {
       _$_Favourite.fromJson;
 
   @override
-  String get id => throw _privateConstructorUsedError;
+  String get id;
   @override
-  String get userId => throw _privateConstructorUsedError;
+  String get userId;
   @override
-  String get sourceId => throw _privateConstructorUsedError;
+  String get sourceId;
   @override
-  String get mangaId => throw _privateConstructorUsedError;
+  String get mangaId;
   @override
-  String get name => throw _privateConstructorUsedError;
+  String get name;
   @override
-  List<String> get titles => throw _privateConstructorUsedError;
+  List<String> get titles;
   @override
-  String get image => throw _privateConstructorUsedError;
+  String get image;
   @override
-  double? get rating => throw _privateConstructorUsedError;
+  double? get rating;
   @override
-  String? get mangaStatus => throw _privateConstructorUsedError;
+  String? get mangaStatus;
   @override
-  String? get langFlag => throw _privateConstructorUsedError;
+  String? get langFlag;
   @override
-  String? get author => throw _privateConstructorUsedError;
+  String? get author;
   @override
-  String? get artist => throw _privateConstructorUsedError;
+  String? get artist;
   @override
-  List<String>? get covers => throw _privateConstructorUsedError;
+  List<String>? get covers;
   @override
-  String? get desc => throw _privateConstructorUsedError;
+  String? get desc;
   @override
-  double? get follows => throw _privateConstructorUsedError;
+  double? get follows;
   @override
-  DateTime? get lastUpdate => throw _privateConstructorUsedError;
+  DateTime? get lastUpdate;
   @override
-  Chapter? get lastChapterRead => throw _privateConstructorUsedError;
+  Chapter? get lastChapterRead;
   @override
-  List<Chapter> get chapters => throw _privateConstructorUsedError;
+  List<Chapter> get chapters;
   @override
-  List<TagSection> get tagSections => throw _privateConstructorUsedError;
+  List<TagSection> get tagSections;
   @override
-  double get latestChapterNumber => throw _privateConstructorUsedError;
+  double get latestChapterNumber;
   @override
-  int get unreadChapterCount => throw _privateConstructorUsedError;
+  int get unreadChapterCount;
   @override
   @JsonKey(ignore: true)
-  _$FavouriteCopyWith<_Favourite> get copyWith =>
+  _$$_FavouriteCopyWith<_$_Favourite> get copyWith =>
       throw _privateConstructorUsedError;
 }

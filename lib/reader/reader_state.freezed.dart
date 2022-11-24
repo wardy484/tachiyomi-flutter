@@ -155,9 +155,10 @@ class _$ReaderStateCopyWithImpl<$Res> implements $ReaderStateCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$ReadingCopyWith<$Res> implements $ReaderStateCopyWith<$Res> {
-  factory _$ReadingCopyWith(_Reading value, $Res Function(_Reading) then) =
-      __$ReadingCopyWithImpl<$Res>;
+abstract class _$$_ReadingCopyWith<$Res> implements $ReaderStateCopyWith<$Res> {
+  factory _$$_ReadingCopyWith(
+          _$_Reading value, $Res Function(_$_Reading) then) =
+      __$$_ReadingCopyWithImpl<$Res>;
   @override
   $Res call(
       {PageDetails currentPage,
@@ -172,13 +173,13 @@ abstract class _$ReadingCopyWith<$Res> implements $ReaderStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$ReadingCopyWithImpl<$Res> extends _$ReaderStateCopyWithImpl<$Res>
-    implements _$ReadingCopyWith<$Res> {
-  __$ReadingCopyWithImpl(_Reading _value, $Res Function(_Reading) _then)
-      : super(_value, (v) => _then(v as _Reading));
+class __$$_ReadingCopyWithImpl<$Res> extends _$ReaderStateCopyWithImpl<$Res>
+    implements _$$_ReadingCopyWith<$Res> {
+  __$$_ReadingCopyWithImpl(_$_Reading _value, $Res Function(_$_Reading) _then)
+      : super(_value, (v) => _then(v as _$_Reading));
 
   @override
-  _Reading get _value => super._value as _Reading;
+  _$_Reading get _value => super._value as _$_Reading;
 
   @override
   $Res call({
@@ -189,7 +190,7 @@ class __$ReadingCopyWithImpl<$Res> extends _$ReaderStateCopyWithImpl<$Res>
     Object? reversed = freezed,
     Object? currentChapter = freezed,
   }) {
-    return _then(_Reading(
+    return _then(_$_Reading(
       currentPage: currentPage == freezed
           ? _value.currentPage
           : currentPage // ignore: cast_nullable_to_non_nullable
@@ -251,7 +252,7 @@ class _$_Reading implements _Reading {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Reading &&
+            other is _$_Reading &&
             const DeepCollectionEquality()
                 .equals(other.currentPage, currentPage) &&
             const DeepCollectionEquality().equals(other.progress, progress) &&
@@ -276,8 +277,8 @@ class _$_Reading implements _Reading {
 
   @JsonKey(ignore: true)
   @override
-  _$ReadingCopyWith<_Reading> get copyWith =>
-      __$ReadingCopyWithImpl<_Reading>(this, _$identity);
+  _$$_ReadingCopyWith<_$_Reading> get copyWith =>
+      __$$_ReadingCopyWithImpl<_$_Reading>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -370,19 +371,19 @@ abstract class _Reading implements ReaderState {
       final Chapter? currentChapter}) = _$_Reading;
 
   @override
-  PageDetails get currentPage => throw _privateConstructorUsedError;
+  PageDetails get currentPage;
   @override
-  String get progress => throw _privateConstructorUsedError;
+  String get progress;
   @override
-  bool get appbarVisible => throw _privateConstructorUsedError;
+  bool get appbarVisible;
   @override
-  double get chapterNumber => throw _privateConstructorUsedError;
+  double get chapterNumber;
   @override
-  bool get reversed => throw _privateConstructorUsedError;
+  bool get reversed;
   @override
-  Chapter? get currentChapter => throw _privateConstructorUsedError;
+  Chapter? get currentChapter;
   @override
   @JsonKey(ignore: true)
-  _$ReadingCopyWith<_Reading> get copyWith =>
+  _$$_ReadingCopyWith<_$_Reading> get copyWith =>
       throw _privateConstructorUsedError;
 }

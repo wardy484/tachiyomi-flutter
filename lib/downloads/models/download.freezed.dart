@@ -86,9 +86,10 @@ class _$DownloadCopyWithImpl<$Res> implements $DownloadCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$DownloadCopyWith<$Res> implements $DownloadCopyWith<$Res> {
-  factory _$DownloadCopyWith(_Download value, $Res Function(_Download) then) =
-      __$DownloadCopyWithImpl<$Res>;
+abstract class _$$_DownloadCopyWith<$Res> implements $DownloadCopyWith<$Res> {
+  factory _$$_DownloadCopyWith(
+          _$_Download value, $Res Function(_$_Download) then) =
+      __$$_DownloadCopyWithImpl<$Res>;
   @override
   $Res call({Manga manga, Chapter chapter, DownloadStatus status});
 
@@ -99,13 +100,14 @@ abstract class _$DownloadCopyWith<$Res> implements $DownloadCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$DownloadCopyWithImpl<$Res> extends _$DownloadCopyWithImpl<$Res>
-    implements _$DownloadCopyWith<$Res> {
-  __$DownloadCopyWithImpl(_Download _value, $Res Function(_Download) _then)
-      : super(_value, (v) => _then(v as _Download));
+class __$$_DownloadCopyWithImpl<$Res> extends _$DownloadCopyWithImpl<$Res>
+    implements _$$_DownloadCopyWith<$Res> {
+  __$$_DownloadCopyWithImpl(
+      _$_Download _value, $Res Function(_$_Download) _then)
+      : super(_value, (v) => _then(v as _$_Download));
 
   @override
-  _Download get _value => super._value as _Download;
+  _$_Download get _value => super._value as _$_Download;
 
   @override
   $Res call({
@@ -113,7 +115,7 @@ class __$DownloadCopyWithImpl<$Res> extends _$DownloadCopyWithImpl<$Res>
     Object? chapter = freezed,
     Object? status = freezed,
   }) {
-    return _then(_Download(
+    return _then(_$_Download(
       manga: manga == freezed
           ? _value.manga
           : manga // ignore: cast_nullable_to_non_nullable
@@ -155,7 +157,7 @@ class _$_Download implements _Download {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Download &&
+            other is _$_Download &&
             const DeepCollectionEquality().equals(other.manga, manga) &&
             const DeepCollectionEquality().equals(other.chapter, chapter) &&
             const DeepCollectionEquality().equals(other.status, status));
@@ -171,8 +173,8 @@ class _$_Download implements _Download {
 
   @JsonKey(ignore: true)
   @override
-  _$DownloadCopyWith<_Download> get copyWith =>
-      __$DownloadCopyWithImpl<_Download>(this, _$identity);
+  _$$_DownloadCopyWith<_$_Download> get copyWith =>
+      __$$_DownloadCopyWithImpl<_$_Download>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -189,13 +191,13 @@ abstract class _Download implements Download {
   factory _Download.fromJson(Map<String, dynamic> json) = _$_Download.fromJson;
 
   @override
-  Manga get manga => throw _privateConstructorUsedError;
+  Manga get manga;
   @override
-  Chapter get chapter => throw _privateConstructorUsedError;
+  Chapter get chapter;
   @override
-  DownloadStatus get status => throw _privateConstructorUsedError;
+  DownloadStatus get status;
   @override
   @JsonKey(ignore: true)
-  _$DownloadCopyWith<_Download> get copyWith =>
+  _$$_DownloadCopyWith<_$_Download> get copyWith =>
       throw _privateConstructorUsedError;
 }

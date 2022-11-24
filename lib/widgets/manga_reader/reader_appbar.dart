@@ -17,7 +17,7 @@ class ReaderAppBar extends ConsumerWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context, ref) {
     return AnimatedOpacity(
-      opacity: ref.watch(readerProvider).appbarVisible ? 0 : 1,
+      opacity: ref.watch(readerProvider).appbarVisible ? 1 : 0,
       duration: const Duration(milliseconds: 300),
       child: AppBar(
         title: Text(

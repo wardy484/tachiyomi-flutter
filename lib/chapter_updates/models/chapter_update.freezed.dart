@@ -102,11 +102,11 @@ class _$ChapterUpdateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$ChapterUpdateCopyWith<$Res>
+abstract class _$$_ChapterUpdateCopyWith<$Res>
     implements $ChapterUpdateCopyWith<$Res> {
-  factory _$ChapterUpdateCopyWith(
-          _ChapterUpdate value, $Res Function(_ChapterUpdate) then) =
-      __$ChapterUpdateCopyWithImpl<$Res>;
+  factory _$$_ChapterUpdateCopyWith(
+          _$_ChapterUpdate value, $Res Function(_$_ChapterUpdate) then) =
+      __$$_ChapterUpdateCopyWithImpl<$Res>;
   @override
   $Res call(
       {String sourceId,
@@ -119,15 +119,15 @@ abstract class _$ChapterUpdateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$ChapterUpdateCopyWithImpl<$Res>
+class __$$_ChapterUpdateCopyWithImpl<$Res>
     extends _$ChapterUpdateCopyWithImpl<$Res>
-    implements _$ChapterUpdateCopyWith<$Res> {
-  __$ChapterUpdateCopyWithImpl(
-      _ChapterUpdate _value, $Res Function(_ChapterUpdate) _then)
-      : super(_value, (v) => _then(v as _ChapterUpdate));
+    implements _$$_ChapterUpdateCopyWith<$Res> {
+  __$$_ChapterUpdateCopyWithImpl(
+      _$_ChapterUpdate _value, $Res Function(_$_ChapterUpdate) _then)
+      : super(_value, (v) => _then(v as _$_ChapterUpdate));
 
   @override
-  _ChapterUpdate get _value => super._value as _ChapterUpdate;
+  _$_ChapterUpdate get _value => super._value as _$_ChapterUpdate;
 
   @override
   $Res call({
@@ -139,7 +139,7 @@ class __$ChapterUpdateCopyWithImpl<$Res>
     Object? addedAt = freezed,
     Object? read = freezed,
   }) {
-    return _then(_ChapterUpdate(
+    return _then(_$_ChapterUpdate(
       sourceId: sourceId == freezed
           ? _value.sourceId
           : sourceId // ignore: cast_nullable_to_non_nullable
@@ -211,7 +211,7 @@ class _$_ChapterUpdate implements _ChapterUpdate {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _ChapterUpdate &&
+            other is _$_ChapterUpdate &&
             const DeepCollectionEquality().equals(other.sourceId, sourceId) &&
             const DeepCollectionEquality().equals(other.mangaId, mangaId) &&
             const DeepCollectionEquality()
@@ -236,8 +236,8 @@ class _$_ChapterUpdate implements _ChapterUpdate {
 
   @JsonKey(ignore: true)
   @override
-  _$ChapterUpdateCopyWith<_ChapterUpdate> get copyWith =>
-      __$ChapterUpdateCopyWithImpl<_ChapterUpdate>(this, _$identity);
+  _$$_ChapterUpdateCopyWith<_$_ChapterUpdate> get copyWith =>
+      __$$_ChapterUpdateCopyWithImpl<_$_ChapterUpdate>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -259,21 +259,21 @@ abstract class _ChapterUpdate implements ChapterUpdate {
       _$_ChapterUpdate.fromJson;
 
   @override
-  String get sourceId => throw _privateConstructorUsedError;
+  String get sourceId;
   @override
-  String get mangaId => throw _privateConstructorUsedError;
+  String get mangaId;
   @override
-  double get chapterNumber => throw _privateConstructorUsedError;
+  double get chapterNumber;
   @override
-  String get imagePath => throw _privateConstructorUsedError;
+  String get imagePath;
   @override
-  String get name => throw _privateConstructorUsedError;
+  String get name;
   @override
-  DateTime get addedAt => throw _privateConstructorUsedError;
+  DateTime get addedAt;
   @override
-  bool get read => throw _privateConstructorUsedError;
+  bool get read;
   @override
   @JsonKey(ignore: true)
-  _$ChapterUpdateCopyWith<_ChapterUpdate> get copyWith =>
+  _$$_ChapterUpdateCopyWith<_$_ChapterUpdate> get copyWith =>
       throw _privateConstructorUsedError;
 }

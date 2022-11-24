@@ -77,25 +77,25 @@ class _$MangaListItemCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$MangaListItemCopyWith<$Res>
+abstract class _$$_MangaListItemCopyWith<$Res>
     implements $MangaListItemCopyWith<$Res> {
-  factory _$MangaListItemCopyWith(
-          _MangaListItem value, $Res Function(_MangaListItem) then) =
-      __$MangaListItemCopyWithImpl<$Res>;
+  factory _$$_MangaListItemCopyWith(
+          _$_MangaListItem value, $Res Function(_$_MangaListItem) then) =
+      __$$_MangaListItemCopyWithImpl<$Res>;
   @override
   $Res call({String id, String title, String image, String iconText});
 }
 
 /// @nodoc
-class __$MangaListItemCopyWithImpl<$Res>
+class __$$_MangaListItemCopyWithImpl<$Res>
     extends _$MangaListItemCopyWithImpl<$Res>
-    implements _$MangaListItemCopyWith<$Res> {
-  __$MangaListItemCopyWithImpl(
-      _MangaListItem _value, $Res Function(_MangaListItem) _then)
-      : super(_value, (v) => _then(v as _MangaListItem));
+    implements _$$_MangaListItemCopyWith<$Res> {
+  __$$_MangaListItemCopyWithImpl(
+      _$_MangaListItem _value, $Res Function(_$_MangaListItem) _then)
+      : super(_value, (v) => _then(v as _$_MangaListItem));
 
   @override
-  _MangaListItem get _value => super._value as _MangaListItem;
+  _$_MangaListItem get _value => super._value as _$_MangaListItem;
 
   @override
   $Res call({
@@ -104,7 +104,7 @@ class __$MangaListItemCopyWithImpl<$Res>
     Object? image = freezed,
     Object? iconText = freezed,
   }) {
-    return _then(_MangaListItem(
+    return _then(_$_MangaListItem(
       id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -151,7 +151,7 @@ class _$_MangaListItem implements _MangaListItem {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _MangaListItem &&
+            other is _$_MangaListItem &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.title, title) &&
             const DeepCollectionEquality().equals(other.image, image) &&
@@ -169,8 +169,8 @@ class _$_MangaListItem implements _MangaListItem {
 
   @JsonKey(ignore: true)
   @override
-  _$MangaListItemCopyWith<_MangaListItem> get copyWith =>
-      __$MangaListItemCopyWithImpl<_MangaListItem>(this, _$identity);
+  _$$_MangaListItemCopyWith<_$_MangaListItem> get copyWith =>
+      __$$_MangaListItemCopyWithImpl<_$_MangaListItem>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -186,15 +186,15 @@ abstract class _MangaListItem implements MangaListItem {
       _$_MangaListItem.fromJson;
 
   @override
-  String get id => throw _privateConstructorUsedError;
+  String get id;
   @override
-  String get title => throw _privateConstructorUsedError;
+  String get title;
   @override
-  String get image => throw _privateConstructorUsedError;
+  String get image;
   @override
-  String get iconText => throw _privateConstructorUsedError;
+  String get iconText;
   @override
   @JsonKey(ignore: true)
-  _$MangaListItemCopyWith<_MangaListItem> get copyWith =>
+  _$$_MangaListItemCopyWith<_$_MangaListItem> get copyWith =>
       throw _privateConstructorUsedError;
 }

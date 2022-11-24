@@ -25,6 +25,10 @@ class ChapterList with _$ChapterList {
     return chapters.firstWhere((chapter) => chapter.chapterNo == chapterNumber);
   }
 
+  Chapter getByChapterId(String chapterId) {
+    return chapters.firstWhere((chapter) => chapter.id == chapterId);
+  }
+
   Chapter? getNextChapter(Chapter currentChapter) {
     final acsending = ascending().toList();
 

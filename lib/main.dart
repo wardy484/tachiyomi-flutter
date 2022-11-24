@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttiyomi/auth/auth_guard.dart';
 import 'package:fluttiyomi/database/database.dart';
 import 'package:fluttiyomi/debug/fps_widget.dart';
+import 'package:fluttiyomi/downloads/download_notifier.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/router.gr.dart';
 import 'package:fluttiyomi/settings/settings_notifier.dart';
@@ -30,6 +31,8 @@ void main() async {
 
   await container.read(isarDatabaseProvider).init();
   await container.read(settingsProvider.notifier).loadSettings();
+
+  container.read(downloadProvider.notifier).startDownloadQueue();
 
   // await SentryFlutter.init(
   //   (options) {
@@ -85,7 +88,7 @@ class _MyAppState extends ConsumerState<MyApp> {
           debugShowCheckedModeBanner: false,
           title: 'Fluttiyomi',
           theme: ThemeData(
-            // useMaterial3: true,
+            useMaterial3: true,
             brightness: Brightness.dark,
             primarySwatch: Colors.blue,
           ),

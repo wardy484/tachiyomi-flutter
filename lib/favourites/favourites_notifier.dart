@@ -6,6 +6,7 @@ import 'package:fluttiyomi/auth/auth_repository.dart';
 import 'package:fluttiyomi/chapter_updates/repositories/chapter_updates_repository.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
+import 'package:fluttiyomi/downloads/download_notifier.dart';
 import 'package:fluttiyomi/favourites/favourite.dart';
 import 'package:fluttiyomi/favourites/favourite_repository.dart';
 import 'package:fluttiyomi/favourites/favourites_state.dart';
@@ -24,6 +25,7 @@ final favouritesProvider =
       ref.watch(updateQueueProvider.notifier),
       ref.watch(authRepositoryProvider),
       ref.watch(chapterUpdatesRepositoryProvider),
+      ref.watch(downloadProvider.notifier),
     );
   },
 );
@@ -35,6 +37,7 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
   final UpdateQueueNotifier _updateQueue;
   final AuthRepository _auth;
   final ChapterUpdatesRepository _chapterUpdatesRepository;
+  final DownloadNotifier _downloadNotifier;
   StreamSubscription<List<Favourite>?>? _favouritesStream;
 
   FavouritesNotifier(
@@ -44,12 +47,14 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
     UpdateQueueNotifier updateQueue,
     AuthRepository auth,
     ChapterUpdatesRepository chapterUpdatesRepository,
+    DownloadNotifier downloadNotifier,
   )   : _favourites = favourites,
         _settings = settings,
         _source = source,
         _updateQueue = updateQueue,
         _auth = auth,
         _chapterUpdatesRepository = chapterUpdatesRepository,
+        _downloadNotifier = downloadNotifier,
         super(const FavouritesState.initial());
 
   Future<void> watchFavourites() async {
@@ -128,6 +133,10 @@ class FavouritesNotifier extends StateNotifier<FavouritesState> {
         favourite,
         newChapters,
       );
+
+      for (var chapter in newChapters) {
+        _downloadNotifier.addDownload(favourite.toManga(), chapter);
+      }
     }
   }
 

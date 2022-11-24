@@ -64,37 +64,38 @@ class _$PagedResultsCopyWithImpl<$Res> implements $PagedResultsCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$PagedResultsCopyWith<$Res>
+abstract class _$$_PagedResultsCopyWith<$Res>
     implements $PagedResultsCopyWith<$Res> {
-  factory _$PagedResultsCopyWith(
-          _PagedResults value, $Res Function(_PagedResults) then) =
-      __$PagedResultsCopyWithImpl<$Res>;
+  factory _$$_PagedResultsCopyWith(
+          _$_PagedResults value, $Res Function(_$_PagedResults) then) =
+      __$$_PagedResultsCopyWithImpl<$Res>;
   @override
   $Res call({List<MangaTile> results, Map<dynamic, dynamic>? meta});
 }
 
 /// @nodoc
-class __$PagedResultsCopyWithImpl<$Res> extends _$PagedResultsCopyWithImpl<$Res>
-    implements _$PagedResultsCopyWith<$Res> {
-  __$PagedResultsCopyWithImpl(
-      _PagedResults _value, $Res Function(_PagedResults) _then)
-      : super(_value, (v) => _then(v as _PagedResults));
+class __$$_PagedResultsCopyWithImpl<$Res>
+    extends _$PagedResultsCopyWithImpl<$Res>
+    implements _$$_PagedResultsCopyWith<$Res> {
+  __$$_PagedResultsCopyWithImpl(
+      _$_PagedResults _value, $Res Function(_$_PagedResults) _then)
+      : super(_value, (v) => _then(v as _$_PagedResults));
 
   @override
-  _PagedResults get _value => super._value as _PagedResults;
+  _$_PagedResults get _value => super._value as _$_PagedResults;
 
   @override
   $Res call({
     Object? results = freezed,
     Object? meta = freezed,
   }) {
-    return _then(_PagedResults(
+    return _then(_$_PagedResults(
       results: results == freezed
-          ? _value.results
+          ? _value._results
           : results // ignore: cast_nullable_to_non_nullable
               as List<MangaTile>,
       meta: meta == freezed
-          ? _value.meta
+          ? _value._meta
           : meta // ignore: cast_nullable_to_non_nullable
               as Map<dynamic, dynamic>?,
     ));
@@ -138,22 +139,22 @@ class _$_PagedResults implements _PagedResults {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _PagedResults &&
-            const DeepCollectionEquality().equals(other.results, results) &&
-            const DeepCollectionEquality().equals(other.meta, meta));
+            other is _$_PagedResults &&
+            const DeepCollectionEquality().equals(other._results, _results) &&
+            const DeepCollectionEquality().equals(other._meta, _meta));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(results),
-      const DeepCollectionEquality().hash(meta));
+      const DeepCollectionEquality().hash(_results),
+      const DeepCollectionEquality().hash(_meta));
 
   @JsonKey(ignore: true)
   @override
-  _$PagedResultsCopyWith<_PagedResults> get copyWith =>
-      __$PagedResultsCopyWithImpl<_PagedResults>(this, _$identity);
+  _$$_PagedResultsCopyWith<_$_PagedResults> get copyWith =>
+      __$$_PagedResultsCopyWithImpl<_$_PagedResults>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -170,11 +171,11 @@ abstract class _PagedResults implements PagedResults {
       _$_PagedResults.fromJson;
 
   @override
-  List<MangaTile> get results => throw _privateConstructorUsedError;
+  List<MangaTile> get results;
   @override
-  Map<dynamic, dynamic>? get meta => throw _privateConstructorUsedError;
+  Map<dynamic, dynamic>? get meta;
   @override
   @JsonKey(ignore: true)
-  _$PagedResultsCopyWith<_PagedResults> get copyWith =>
+  _$$_PagedResultsCopyWith<_$_PagedResults> get copyWith =>
       throw _privateConstructorUsedError;
 }

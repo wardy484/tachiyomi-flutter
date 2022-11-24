@@ -59,33 +59,33 @@ class _$ChapterUpdateListCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$ChapterUpdateListCopyWith<$Res>
+abstract class _$$_ChapterUpdateListCopyWith<$Res>
     implements $ChapterUpdateListCopyWith<$Res> {
-  factory _$ChapterUpdateListCopyWith(
-          _ChapterUpdateList value, $Res Function(_ChapterUpdateList) then) =
-      __$ChapterUpdateListCopyWithImpl<$Res>;
+  factory _$$_ChapterUpdateListCopyWith(_$_ChapterUpdateList value,
+          $Res Function(_$_ChapterUpdateList) then) =
+      __$$_ChapterUpdateListCopyWithImpl<$Res>;
   @override
   $Res call({List<ChapterUpdate> chapterUpdates});
 }
 
 /// @nodoc
-class __$ChapterUpdateListCopyWithImpl<$Res>
+class __$$_ChapterUpdateListCopyWithImpl<$Res>
     extends _$ChapterUpdateListCopyWithImpl<$Res>
-    implements _$ChapterUpdateListCopyWith<$Res> {
-  __$ChapterUpdateListCopyWithImpl(
-      _ChapterUpdateList _value, $Res Function(_ChapterUpdateList) _then)
-      : super(_value, (v) => _then(v as _ChapterUpdateList));
+    implements _$$_ChapterUpdateListCopyWith<$Res> {
+  __$$_ChapterUpdateListCopyWithImpl(
+      _$_ChapterUpdateList _value, $Res Function(_$_ChapterUpdateList) _then)
+      : super(_value, (v) => _then(v as _$_ChapterUpdateList));
 
   @override
-  _ChapterUpdateList get _value => super._value as _ChapterUpdateList;
+  _$_ChapterUpdateList get _value => super._value as _$_ChapterUpdateList;
 
   @override
   $Res call({
     Object? chapterUpdates = freezed,
   }) {
-    return _then(_ChapterUpdateList(
+    return _then(_$_ChapterUpdateList(
       chapterUpdates: chapterUpdates == freezed
-          ? _value.chapterUpdates
+          ? _value._chapterUpdates
           : chapterUpdates // ignore: cast_nullable_to_non_nullable
               as List<ChapterUpdate>,
     ));
@@ -119,20 +119,21 @@ class _$_ChapterUpdateList extends _ChapterUpdateList {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _ChapterUpdateList &&
+            other is _$_ChapterUpdateList &&
             const DeepCollectionEquality()
-                .equals(other.chapterUpdates, chapterUpdates));
+                .equals(other._chapterUpdates, _chapterUpdates));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(chapterUpdates));
+      runtimeType, const DeepCollectionEquality().hash(_chapterUpdates));
 
   @JsonKey(ignore: true)
   @override
-  _$ChapterUpdateListCopyWith<_ChapterUpdateList> get copyWith =>
-      __$ChapterUpdateListCopyWithImpl<_ChapterUpdateList>(this, _$identity);
+  _$$_ChapterUpdateListCopyWith<_$_ChapterUpdateList> get copyWith =>
+      __$$_ChapterUpdateListCopyWithImpl<_$_ChapterUpdateList>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -150,9 +151,9 @@ abstract class _ChapterUpdateList extends ChapterUpdateList {
       _$_ChapterUpdateList.fromJson;
 
   @override
-  List<ChapterUpdate> get chapterUpdates => throw _privateConstructorUsedError;
+  List<ChapterUpdate> get chapterUpdates;
   @override
   @JsonKey(ignore: true)
-  _$ChapterUpdateListCopyWith<_ChapterUpdateList> get copyWith =>
+  _$$_ChapterUpdateListCopyWith<_$_ChapterUpdateList> get copyWith =>
       throw _privateConstructorUsedError;
 }

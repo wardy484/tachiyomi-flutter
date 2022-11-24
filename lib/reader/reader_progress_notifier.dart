@@ -107,11 +107,11 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
 
   void hideAppbar() {
     state = state.copyWith(appbarVisible: false);
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   }
 
   void showAppbar() {
     state = state.copyWith(appbarVisible: true);
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
 }

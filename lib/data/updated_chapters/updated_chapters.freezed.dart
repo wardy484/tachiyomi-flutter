@@ -59,33 +59,33 @@ class _$UpdatedChaptersCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$UpdatedChaptersCopyWith<$Res>
+abstract class _$$_UpdatedChaptersCopyWith<$Res>
     implements $UpdatedChaptersCopyWith<$Res> {
-  factory _$UpdatedChaptersCopyWith(
-          _UpdatedChapters value, $Res Function(_UpdatedChapters) then) =
-      __$UpdatedChaptersCopyWithImpl<$Res>;
+  factory _$$_UpdatedChaptersCopyWith(
+          _$_UpdatedChapters value, $Res Function(_$_UpdatedChapters) then) =
+      __$$_UpdatedChaptersCopyWithImpl<$Res>;
   @override
   $Res call({List<String> ids});
 }
 
 /// @nodoc
-class __$UpdatedChaptersCopyWithImpl<$Res>
+class __$$_UpdatedChaptersCopyWithImpl<$Res>
     extends _$UpdatedChaptersCopyWithImpl<$Res>
-    implements _$UpdatedChaptersCopyWith<$Res> {
-  __$UpdatedChaptersCopyWithImpl(
-      _UpdatedChapters _value, $Res Function(_UpdatedChapters) _then)
-      : super(_value, (v) => _then(v as _UpdatedChapters));
+    implements _$$_UpdatedChaptersCopyWith<$Res> {
+  __$$_UpdatedChaptersCopyWithImpl(
+      _$_UpdatedChapters _value, $Res Function(_$_UpdatedChapters) _then)
+      : super(_value, (v) => _then(v as _$_UpdatedChapters));
 
   @override
-  _UpdatedChapters get _value => super._value as _UpdatedChapters;
+  _$_UpdatedChapters get _value => super._value as _$_UpdatedChapters;
 
   @override
   $Res call({
     Object? ids = freezed,
   }) {
-    return _then(_UpdatedChapters(
+    return _then(_$_UpdatedChapters(
       ids: ids == freezed
-          ? _value.ids
+          ? _value._ids
           : ids // ignore: cast_nullable_to_non_nullable
               as List<String>,
     ));
@@ -116,19 +116,19 @@ class _$_UpdatedChapters implements _UpdatedChapters {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _UpdatedChapters &&
-            const DeepCollectionEquality().equals(other.ids, ids));
+            other is _$_UpdatedChapters &&
+            const DeepCollectionEquality().equals(other._ids, _ids));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(ids));
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_ids));
 
   @JsonKey(ignore: true)
   @override
-  _$UpdatedChaptersCopyWith<_UpdatedChapters> get copyWith =>
-      __$UpdatedChaptersCopyWithImpl<_UpdatedChapters>(this, _$identity);
+  _$$_UpdatedChaptersCopyWith<_$_UpdatedChapters> get copyWith =>
+      __$$_UpdatedChaptersCopyWithImpl<_$_UpdatedChapters>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -144,9 +144,9 @@ abstract class _UpdatedChapters implements UpdatedChapters {
       _$_UpdatedChapters.fromJson;
 
   @override
-  List<String> get ids => throw _privateConstructorUsedError;
+  List<String> get ids;
   @override
   @JsonKey(ignore: true)
-  _$UpdatedChaptersCopyWith<_UpdatedChapters> get copyWith =>
+  _$$_UpdatedChaptersCopyWith<_$_UpdatedChapters> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -98,31 +98,34 @@ class _$UpdateQueueStateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$updatingCopyWith<$Res>
+abstract class _$$_updatingCopyWith<$Res>
     implements $UpdateQueueStateCopyWith<$Res> {
-  factory _$updatingCopyWith(_updating value, $Res Function(_updating) then) =
-      __$updatingCopyWithImpl<$Res>;
+  factory _$$_updatingCopyWith(
+          _$_updating value, $Res Function(_$_updating) then) =
+      __$$_updatingCopyWithImpl<$Res>;
   @override
   $Res call({List<QueuedItem> queue, int total});
 }
 
 /// @nodoc
-class __$updatingCopyWithImpl<$Res> extends _$UpdateQueueStateCopyWithImpl<$Res>
-    implements _$updatingCopyWith<$Res> {
-  __$updatingCopyWithImpl(_updating _value, $Res Function(_updating) _then)
-      : super(_value, (v) => _then(v as _updating));
+class __$$_updatingCopyWithImpl<$Res>
+    extends _$UpdateQueueStateCopyWithImpl<$Res>
+    implements _$$_updatingCopyWith<$Res> {
+  __$$_updatingCopyWithImpl(
+      _$_updating _value, $Res Function(_$_updating) _then)
+      : super(_value, (v) => _then(v as _$_updating));
 
   @override
-  _updating get _value => super._value as _updating;
+  _$_updating get _value => super._value as _$_updating;
 
   @override
   $Res call({
     Object? queue = freezed,
     Object? total = freezed,
   }) {
-    return _then(_updating(
+    return _then(_$_updating(
       queue == freezed
-          ? _value.queue
+          ? _value._queue
           : queue // ignore: cast_nullable_to_non_nullable
               as List<QueuedItem>,
       total == freezed
@@ -157,21 +160,21 @@ class _$_updating implements _updating {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _updating &&
-            const DeepCollectionEquality().equals(other.queue, queue) &&
+            other is _$_updating &&
+            const DeepCollectionEquality().equals(other._queue, _queue) &&
             const DeepCollectionEquality().equals(other.total, total));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(queue),
+      const DeepCollectionEquality().hash(_queue),
       const DeepCollectionEquality().hash(total));
 
   @JsonKey(ignore: true)
   @override
-  _$updatingCopyWith<_updating> get copyWith =>
-      __$updatingCopyWithImpl<_updating>(this, _$identity);
+  _$$_updatingCopyWith<_$_updating> get copyWith =>
+      __$$_updatingCopyWithImpl<_$_updating>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -241,41 +244,43 @@ abstract class _updating implements UpdateQueueState {
       _$_updating;
 
   @override
-  List<QueuedItem> get queue => throw _privateConstructorUsedError;
+  List<QueuedItem> get queue;
   @override
-  int get total => throw _privateConstructorUsedError;
+  int get total;
   @override
   @JsonKey(ignore: true)
-  _$updatingCopyWith<_updating> get copyWith =>
+  _$$_updatingCopyWith<_$_updating> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$updatedCopyWith<$Res>
+abstract class _$$_updatedCopyWith<$Res>
     implements $UpdateQueueStateCopyWith<$Res> {
-  factory _$updatedCopyWith(_updated value, $Res Function(_updated) then) =
-      __$updatedCopyWithImpl<$Res>;
+  factory _$$_updatedCopyWith(
+          _$_updated value, $Res Function(_$_updated) then) =
+      __$$_updatedCopyWithImpl<$Res>;
   @override
   $Res call({List<QueuedItem> queue, int total});
 }
 
 /// @nodoc
-class __$updatedCopyWithImpl<$Res> extends _$UpdateQueueStateCopyWithImpl<$Res>
-    implements _$updatedCopyWith<$Res> {
-  __$updatedCopyWithImpl(_updated _value, $Res Function(_updated) _then)
-      : super(_value, (v) => _then(v as _updated));
+class __$$_updatedCopyWithImpl<$Res>
+    extends _$UpdateQueueStateCopyWithImpl<$Res>
+    implements _$$_updatedCopyWith<$Res> {
+  __$$_updatedCopyWithImpl(_$_updated _value, $Res Function(_$_updated) _then)
+      : super(_value, (v) => _then(v as _$_updated));
 
   @override
-  _updated get _value => super._value as _updated;
+  _$_updated get _value => super._value as _$_updated;
 
   @override
   $Res call({
     Object? queue = freezed,
     Object? total = freezed,
   }) {
-    return _then(_updated(
+    return _then(_$_updated(
       queue == freezed
-          ? _value.queue
+          ? _value._queue
           : queue // ignore: cast_nullable_to_non_nullable
               as List<QueuedItem>,
       total == freezed
@@ -310,21 +315,21 @@ class _$_updated implements _updated {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _updated &&
-            const DeepCollectionEquality().equals(other.queue, queue) &&
+            other is _$_updated &&
+            const DeepCollectionEquality().equals(other._queue, _queue) &&
             const DeepCollectionEquality().equals(other.total, total));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(queue),
+      const DeepCollectionEquality().hash(_queue),
       const DeepCollectionEquality().hash(total));
 
   @JsonKey(ignore: true)
   @override
-  _$updatedCopyWith<_updated> get copyWith =>
-      __$updatedCopyWithImpl<_updated>(this, _$identity);
+  _$$_updatedCopyWith<_$_updated> get copyWith =>
+      __$$_updatedCopyWithImpl<_$_updated>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -394,11 +399,11 @@ abstract class _updated implements UpdateQueueState {
       _$_updated;
 
   @override
-  List<QueuedItem> get queue => throw _privateConstructorUsedError;
+  List<QueuedItem> get queue;
   @override
-  int get total => throw _privateConstructorUsedError;
+  int get total;
   @override
   @JsonKey(ignore: true)
-  _$updatedCopyWith<_updated> get copyWith =>
+  _$$_updatedCopyWith<_$_updated> get copyWith =>
       throw _privateConstructorUsedError;
 }

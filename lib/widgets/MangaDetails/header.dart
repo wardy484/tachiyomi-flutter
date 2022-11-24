@@ -38,7 +38,7 @@ class _HeaderState extends ConsumerState<Header> {
                 child: MangaImage(url: widget.manga.image),
               ),
               const SizedBox(width: 14),
-              Center(
+              Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,7 +69,7 @@ class _HeaderState extends ConsumerState<Header> {
                     )
                   ],
                 ),
-              )
+              ),
             ],
           ),
           const SizedBox(height: 7),

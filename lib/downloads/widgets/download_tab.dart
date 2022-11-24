@@ -1,25 +1,41 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_advanced_networkimage_2/provider.dart';
+import 'package:fluttiyomi/auth/auth_notifier.dart';
 import 'package:fluttiyomi/chapter_updates/chapter_updates.dart';
+import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/downloads/download_notifier.dart';
 import 'package:fluttiyomi/downloads/models/download_status.dart';
+import 'package:fluttiyomi/favourites/favourite_repository.dart';
+import 'package:fluttiyomi/javascript/source_client.dart';
+import 'package:fluttiyomi/router.gr.dart';
+import 'package:fluttiyomi/widgets/common/context_menu.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class DownloadsTab extends ConsumerWidget {
+class DownloadsTab extends ConsumerStatefulWidget {
   const DownloadsTab({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, ref) {
+  _DownloadsTabState createState() => _DownloadsTabState();
+}
+
+class _DownloadsTabState extends ConsumerState<DownloadsTab> {
+  @override
+  void initState() {
+    super.initState();
+
+    ref.read(downloadProvider.notifier).openDownloadStream();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 7),
       child: ref.watch(downloadProvider).when(
             download: (downloads, _, __) => ListView.builder(
               itemCount: downloads.length,
               itemBuilder: (context, index) {
                 final download = downloads[index];
-                final chapter = download.chapter;
-                final manga = download.manga;
-                final name = manga.titles[0];
 
                 return ListTile(
                   leading: SizedBox(
@@ -28,15 +44,76 @@ class DownloadsTab extends ConsumerWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(4),
                       child: ExtendedImage.network(
-                        manga.image,
+                        download.image,
                         cache: true,
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                  title: Text(name),
-                  subtitle: Text(chapter.name.toString()),
+                  title: Text(download.mangaName),
+                  subtitle: Text(download.chapterId),
                   trailing: Text(getStatus(download.status)),
+                  onTap: () async {
+                    if (download.status != DownloadStatus.complete) {
+                      return;
+                    }
+
+                    ref.read(authNotifierProvider).whenOrNull(
+                      authenticated: (user) async {
+                        final favourite = await ref
+                            .read(favouritesRepositoryProvider)
+                            .getFavourite(
+                              user,
+                              ref.read(sourceClientProvider).src,
+                              download.mangaId,
+                            );
+
+                        if (favourite != null) {
+                          final chapters = ChapterList(favourite.chapters);
+                          final chapter = chapters.getByChapterId(
+                            download.chapterId,
+                          );
+
+                          await AutoRouter.of(context).push(
+                            ReadRoute(
+                              mangaId: download.mangaId,
+                              chapter: chapter,
+                              chapters: chapters,
+                              favourite: favourite,
+                            ),
+                          );
+                        }
+                      },
+                    );
+                  },
+                  onLongPress: () {
+                    showDialog<void>(
+                      context: context,
+                      barrierDismissible: true,
+                      builder: (BuildContext context) {
+                        return ContextMenu(
+                          children: [
+                            ContextMenuItem(
+                              icon: FontAwesomeIcons.arrowsRotate,
+                              onPressed: () {
+                                ref
+                                    .read(downloadProvider.notifier)
+                                    .retryDownload(download);
+                              },
+                            ),
+                            ContextMenuItem(
+                              icon: FontAwesomeIcons.trash,
+                              onPressed: () {
+                                ref
+                                    .read(downloadProvider.notifier)
+                                    .deleteDownload(download);
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                 );
               },
             ),
@@ -52,6 +129,8 @@ class DownloadsTab extends ConsumerWidget {
         return "Pending";
       case DownloadStatus.complete:
         return "Completed";
+      case DownloadStatus.error:
+        return "Error";
     }
   }
 }
