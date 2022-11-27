@@ -6,7 +6,6 @@ import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/favourites/data/favourite.dart';
-import 'package:fluttiyomi/favourites/presentation/favourites_list_controller.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final favouritesRepositoryProvider = Provider((ref) {

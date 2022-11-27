@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttiyomi/auth/auth_guard.dart';
 import 'package:fluttiyomi/database/database.dart';
-import 'package:fluttiyomi/debug/fps_widget.dart';
 import 'package:fluttiyomi/downloads/download_notifier.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/router.gr.dart';
@@ -45,8 +44,6 @@ void main() async {
   //   appRunner: () => runApp(MyApp()),
   // );
 
-  // container.read(eventsProvider).registerGlobalEvents();
-
   runApp(
     UncontrolledProviderScope(
       container: container,
@@ -76,26 +73,18 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    bool showFps = ref.watch(settingsProvider).when(
-          initial: () => false,
-          loaded: (settings) => settings.showFps,
-        );
-
     return RefreshConfig(
-      child: FPSWidget(
-        show: showFps,
-        child: MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          title: 'Fluttiyomi',
-          theme: ThemeData(
-            useMaterial3: true,
-            brightness: Brightness.dark,
-            primarySwatch: Colors.blue,
-          ),
-          routerDelegate: _appRouter.delegate(),
-          routeInformationParser: _appRouter.defaultRouteParser(),
-          builder: EasyLoading.init(),
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        title: 'Fluttiyomi',
+        theme: ThemeData(
+          useMaterial3: true,
+          brightness: Brightness.dark,
+          primarySwatch: Colors.blue,
         ),
+        routerDelegate: _appRouter.delegate(),
+        routeInformationParser: _appRouter.defaultRouteParser(),
+        builder: EasyLoading.init(),
       ),
     );
   }

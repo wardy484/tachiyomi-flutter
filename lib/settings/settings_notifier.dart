@@ -25,8 +25,4 @@ class SettingsNotifier extends StateNotifier<SettingsState> {
   Future<void> updatePadding(int amount) async {
     settingsRepository.updatePadding(amount);
   }
-
-  Future<void> updateShowFps(bool showFps) async {
-    settingsRepository.updateShowFps(showFps);
-  }
 }

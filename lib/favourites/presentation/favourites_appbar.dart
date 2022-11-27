@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/favourites/presentation/favourite_updates_controller.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';

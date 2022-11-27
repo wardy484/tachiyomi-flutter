@@ -22,6 +22,7 @@ class FavouriteUpdateQueueController extends _$FavouriteUpdateQueueController {
   @override
   Queue build() => Queue(maxItems: 0, items: []);
 
+  // TODO: For all that is holy get this off the main thread
   void addManyToQueue(List<Favourite> favourites) {
     for (var favourite in favourites) {
       addToQueue(favourite);

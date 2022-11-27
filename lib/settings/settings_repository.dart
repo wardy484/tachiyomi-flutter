@@ -68,17 +68,4 @@ class SettingsRepository {
 
     return settings;
   }
-
-  Future<Setting> updateShowFps(
-    bool showFps,
-  ) async {
-    final settings = await getGlobalSettings();
-    settings.showFps = showFps;
-
-    await _database.writeTxn((_) async {
-      await _settings.put(settings, replaceOnConflict: true);
-    });
-
-    return settings;
-  }
 }

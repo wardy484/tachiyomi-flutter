@@ -3,7 +3,7 @@ import 'package:fluttiyomi/favourites/presentation/favourite_updates_controller.
 import 'package:fluttiyomi/manga_details/presentation/manga_details_controller.dart';
 import 'package:fluttiyomi/manga_details/presentation/chapter_options.dart';
 import 'package:fluttiyomi/manga_details/presentation/manga_details_header.dart';
-import 'package:fluttiyomi/widgets/chapter_list_item.dart';
+import 'package:fluttiyomi/manga_details/presentation/chapter_list_item.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MangaDetailsPage extends ConsumerStatefulWidget {
@@ -98,110 +98,3 @@ class _MangaDetailsPageState extends ConsumerState<MangaDetailsPage> {
     );
   }
 }
-
-// class ChapterListView extends StatelessWidget {
-//   final ChapterList chapters;
-//   final Favourite favourite;
-
-//   const ChapterListView({
-//     Key? key,
-//     required this.chapters,
-//     required this.favourite,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView.separated(
-//       separatorBuilder: (_, __) => const Divider(height: 1),
-//       itemCount: chapters.length,
-//       itemBuilder: (context, index) {
-//         final chapter = chapters.get(index - 1);
-
-//         return GestureDetector(
-//           onLongPress: () {
-//             showDialog<void>(
-//               context: context,
-//               barrierDismissible: true,
-//               builder: (BuildContext context) {
-//                 return ChapterOptions(
-//                   favourite: favourite,
-//                   chapter: chapter,
-//                   chapterList: chapters,
-//                 );
-//               },
-//             );
-//           },
-//           child: ChapterListItem(
-//             chapter: chapter,
-//             onTap: () async {
-//               await AutoRouter.of(context).push(
-//                 ReadRoute(
-//                   mangaId: favourite.mangaId,
-//                   chapter: chapter,
-//                   chapters: chapters,
-//                   favourite: favourite,
-//                 ),
-//               );
-//             },
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
-
-// class ChapterListWidget extends ConsumerWidget {
-//   final String mangaId;
-//   final ChapterList chapters;
-//   final Favourite? favourite;
-
-//   const ChapterListWidget({
-//     Key? key,
-//     required this.mangaId,
-//     required this.chapters,
-//     required this.favourite,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context, WidgetRef ref) {
-//     return ListView.separated(
-//       physics: const BouncingScrollPhysics(),
-//       separatorBuilder: (context, index) => const Divider(
-//         height: 1,
-//       ),
-//       itemCount: chapters.length + 1,
-//       itemBuilder: (context, index) {
-//         final chapter = chapters.get(index - 1);
-
-//         return GestureDetector(
-//           onLongPress: () {
-//             showDialog<void>(
-//               context: context,
-//               barrierDismissible: true,
-//               builder: (BuildContext context) {
-//                 return ChapterOptions(
-//                   favourite: favourite,
-//                   chapter: chapter,
-//                   chapterList: chapters,
-//                 );
-//               },
-//             );
-//           },
-//           child: ChapterListItem(
-//             chapter: chapter,
-//             onTap: () async {
-//               await AutoRouter.of(context).push(
-//                 ReadRoute(
-//                   mangaId: mangaId,
-//                   chapter: chapter,
-//                   chapters: chapters,
-//                   favourite: favourite,
-//                 ),
-//               );
-//             },
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }

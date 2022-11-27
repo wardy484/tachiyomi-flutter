@@ -18,7 +18,6 @@ class _SettingsTabState extends ConsumerState<SettingsTab> {
   final _formKey = GlobalKey<FormBuilderState>();
 
   int padding = 0;
-  bool showFps = false;
 
   @override
   void initState() {
@@ -61,22 +60,6 @@ class _SettingsTabState extends ConsumerState<SettingsTab> {
                       min: 0,
                       divisions: 20,
                     ),
-                    FormBuilderSwitch(
-                      name: 'showFps',
-                      title: const Text("Show FPS"),
-                      initialValue: settings.showFps,
-                      decoration: const InputDecoration(
-                        labelText: 'Show FPS',
-                      ),
-                      onChanged: (newValue) {
-                        setState(() {
-                          showFps = newValue is bool ? newValue : false;
-                        });
-                      },
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(context),
-                      ]),
-                    ),
                   ],
                 ),
               ),
@@ -96,10 +79,6 @@ class _SettingsTabState extends ConsumerState<SettingsTab> {
                       await ref
                           .read(settingsProvider.notifier)
                           .updatePadding(padding);
-
-                      await ref
-                          .read(settingsProvider.notifier)
-                          .updateShowFps(showFps);
 
                       EasyLoading.showSuccess('Saved!');
                     },
