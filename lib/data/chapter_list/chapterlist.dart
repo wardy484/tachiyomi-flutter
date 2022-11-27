@@ -90,4 +90,15 @@ class ChapterList with _$ChapterList {
   bool contains(Chapter chapter) {
     return chapters.contains(chapter);
   }
+
+  get isEmpty {
+    return chapters.isEmpty;
+  }
+
+  ChapterList append(List<Chapter> newChapters) {
+    return ChapterList([
+      ...newChapters,
+      ...chapters,
+    ]);
+  }
 }

@@ -1,9 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:fluttiyomi/auth/auth_repository.dart';
-import 'package:fluttiyomi/chapter_updates/repositories/chapter_updates_repository.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
-import 'package:fluttiyomi/favourites/favourite.dart';
-import 'package:fluttiyomi/favourites/favourite_repository.dart';
+import 'package:fluttiyomi/favourites/data/favourite.dart';
+import 'package:fluttiyomi/favourites/data/favourite_repository.dart';
 import 'package:fluttiyomi/reader/reader_state.dart';
 import 'package:fluttiyomi/screens/read_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -13,19 +12,16 @@ final readerProvider =
   return ReaderNotifier(
     favourites: ref.read(favouritesRepositoryProvider),
     auth: ref.read(authRepositoryProvider),
-    chapterUpdates: ref.read(chapterUpdatesRepositoryProvider),
   );
 });
 
 class ReaderNotifier extends StateNotifier<ReaderState> {
   final FavouritesRepository favourites;
   final AuthRepository auth;
-  final ChapterUpdatesRepository chapterUpdates;
 
   ReaderNotifier({
     required this.favourites,
     required this.auth,
-    required this.chapterUpdates,
   }) : super(ReaderState.reading(
           currentPage: PageDetails(0, 0),
           progress: "0",
@@ -75,12 +71,6 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
 
       if (favourite != null && chapter != null && chapter.read == false) {
         favourites.markAsRead(
-          auth.currentUser,
-          favourite,
-          [chapterNumber],
-        );
-
-        chapterUpdates.markAsRead(
           auth.currentUser,
           favourite,
           [chapterNumber],

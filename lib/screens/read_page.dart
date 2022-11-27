@@ -4,8 +4,7 @@ import 'package:fluttiyomi/chapter_details/chapter_details_notifier.dart';
 import 'package:fluttiyomi/chapter_details/chapter_details_state.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
-import 'package:fluttiyomi/favourites/favourite.dart';
-import 'package:fluttiyomi/manga_details/manga_details_notifier.dart';
+import 'package:fluttiyomi/favourites/data/favourite.dart';
 import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
 import 'package:fluttiyomi/settings/settings_notifier.dart';
 import 'package:fluttiyomi/widgets/manga_page.dart';
@@ -89,10 +88,11 @@ class _ReadPageState extends ConsumerState<ReadPage> {
           if (widget.favourite != null &&
               content.currentChapters.length == 1 &&
               content.currentChapters[0].read == false) {
-            ref.read(mangaDetailsNotifierProvider.notifier).markAsRead(
-                  widget.favourite!,
-                  content.currentChapters[0].chapterNo,
-                );
+            // TODO: mark as read in a service
+            // ref.read(mangaDetailsNotifierProvider.notifier).markAsRead(
+            //       widget.favourite!,
+            //       content.currentChapters[0].chapterNo,
+            //     );
           }
 
           ref.read(readerProvider.notifier).hideAppbar();

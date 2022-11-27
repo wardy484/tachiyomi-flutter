@@ -5,15 +5,17 @@ import 'dart:isolate';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_isolate/flutter_isolate.dart';
-import 'package:fluttiyomi/chapter_updates/chapter_updates.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
+import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/database/database.dart';
 import 'package:fluttiyomi/database/download.dart';
 import 'package:fluttiyomi/downloads/download_state.dart';
 import 'package:fluttiyomi/downloads/models/download_status.dart';
 import 'package:fluttiyomi/downloads/repository/download_repository.dart';
+import 'package:fluttiyomi/favourites/data/favourite.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final downloadProvider =
     StateNotifierProvider<DownloadNotifier, DownloadState>((ref) {
@@ -33,6 +35,14 @@ class DownloadNotifier extends StateNotifier<DownloadState> {
     downloads.watchAll().listen((event) {
       state = DownloadState.download(downloads: event);
     });
+  }
+
+  void downloadNewChapters(Favourite favourite, ChapterList newChaptersList) {
+    final manga = favourite.toManga();
+
+    for (var chapter in newChaptersList.chapters) {
+      addDownload(manga, chapter);
+    }
   }
 
   void addDownload(Manga manga, Chapter chapter) async {

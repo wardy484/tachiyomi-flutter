@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttiyomi/favourites/favourite.dart';
-import 'package:fluttiyomi/favourites/favourites_notifier.dart';
 import 'package:fluttiyomi/home/home_notifier.dart';
 import 'package:fluttiyomi/widgets/common/full_page_loading_indicator.dart';
 import 'package:fluttiyomi/widgets/common/manga_card.dart';
@@ -59,17 +57,12 @@ class _HomeTabState extends ConsumerState<HomeTab> {
                           itemBuilder: (context, index) {
                             var manga = section.items![index];
 
-                            Favourite? favourite = ref
-                                .read(favouritesProvider.notifier)
-                                .getFavouriteByMangaId(manga.id);
-
                             return SizedBox(
                               width: 170,
                               child: MangaCard(
                                 mangaId: manga.id,
                                 name: manga.title.text,
                                 image: manga.image,
-                                favourite: favourite,
                               ),
                             );
                           },

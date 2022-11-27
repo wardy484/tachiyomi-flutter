@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fluttiyomi/chapter_updates/chapter_updates.dart';
 import 'package:fluttiyomi/downloads/widgets/download_tab.dart';
-import 'package:fluttiyomi/favourites/widgets/library_appbar.dart';
+import 'package:fluttiyomi/favourites/presentation/favourites_appbar.dart';
 import 'package:fluttiyomi/home/pages/home_tab.dart';
 import 'package:fluttiyomi/home/widgets/home_appbar.dart';
 import 'package:fluttiyomi/screens/settings_tab.dart';
@@ -10,6 +9,7 @@ import 'package:fluttiyomi/settings/widgets/settings_appbar.dart';
 import 'package:fluttiyomi/widgets/favourites/favourites_tab.dart';
 import 'package:fluttiyomi/widgets/search/search_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ListPage extends ConsumerStatefulWidget {
   const ListPage({Key? key}) : super(key: key);
@@ -34,7 +34,7 @@ class _ListPageState extends ConsumerState<ListPage> {
       //   ),
       // ),
       appBar: <PreferredSizeWidget>[
-        const LibraryAppbar(),
+        const FavouritesAppbar(),
         // AppBar(
         //   centerTitle: false,
         //   title: const Text("Chapter updates"),

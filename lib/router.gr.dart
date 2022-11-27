@@ -11,52 +11,47 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i6;
-import 'package:flutter/material.dart' as _i7;
+import 'package:auto_route/auto_route.dart' as _i5;
+import 'package:flutter/material.dart' as _i6;
 
-import 'auth/auth_guard.dart' as _i8;
+import 'auth/auth_guard.dart' as _i7;
 import 'auth/screens/login_page.dart' as _i1;
-import 'chapter_updates/chapter_updates.dart' as _i5;
-import 'data/chapter/chapter.dart' as _i10;
-import 'data/chapter_list/chapterlist.dart' as _i11;
-import 'favourites/favourite.dart' as _i9;
-import 'screens/chapters_page.dart' as _i3;
+import 'data/chapter/chapter.dart' as _i8;
+import 'data/chapter_list/chapterlist.dart' as _i9;
+import 'favourites/data/favourite.dart' as _i10;
+import 'manga_details/presentation/manga_details_page.dart' as _i3;
 import 'screens/list_page.dart' as _i2;
 import 'screens/read_page.dart' as _i4;
 
-class AppRouter extends _i6.RootStackRouter {
+class AppRouter extends _i5.RootStackRouter {
   AppRouter(
-      {_i7.GlobalKey<_i7.NavigatorState>? navigatorKey,
+      {_i6.GlobalKey<_i6.NavigatorState>? navigatorKey,
       required this.authGuard})
       : super(navigatorKey);
 
-  final _i8.AuthGuard authGuard;
+  final _i7.AuthGuard authGuard;
 
   @override
-  final Map<String, _i6.PageFactory> pagesMap = {
+  final Map<String, _i5.PageFactory> pagesMap = {
     LoginRoute.name: (routeData) {
       final args = routeData.argsAs<LoginRouteArgs>();
-      return _i6.MaterialPageX<dynamic>(
+      return _i5.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i1.LoginPage(key: args.key, onLogin: args.onLogin));
     },
     ListRoute.name: (routeData) {
-      return _i6.MaterialPageX<dynamic>(
+      return _i5.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i2.ListPage());
     },
-    ChaptersRoute.name: (routeData) {
-      final args = routeData.argsAs<ChaptersRouteArgs>();
-      return _i6.MaterialPageX<dynamic>(
+    MangaDetailsRoute.name: (routeData) {
+      final args = routeData.argsAs<MangaDetailsRouteArgs>();
+      return _i5.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i3.ChaptersPage(
-              key: args.key,
-              mangaId: args.mangaId,
-              mangaName: args.mangaName,
-              favourite: args.favourite));
+          child: _i3.MangaDetailsPage(key: args.key, id: args.id));
     },
     ReadRoute.name: (routeData) {
       final args = routeData.argsAs<ReadRouteArgs>();
-      return _i6.MaterialPageX<dynamic>(
+      return _i5.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i4.ReadPage(
               key: args.key,
@@ -65,28 +60,22 @@ class AppRouter extends _i6.RootStackRouter {
               chapters: args.chapters,
               resumeFrom: args.resumeFrom,
               favourite: args.favourite));
-    },
-    ChaperUpdatesRoute.name: (routeData) {
-      return _i6.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i5.ChaperUpdatesPage());
     }
   };
 
   @override
-  List<_i6.RouteConfig> get routes => [
-        _i6.RouteConfig(LoginRoute.name, path: '/login'),
-        _i6.RouteConfig(ListRoute.name, path: '/', guards: [authGuard]),
-        _i6.RouteConfig(ChaptersRoute.name,
-            path: '/chapters/:mangaName/:mangaId'),
-        _i6.RouteConfig(ReadRoute.name, path: '/read/:mangaId'),
-        _i6.RouteConfig(ChaperUpdatesRoute.name, path: '/chapter-updates')
+  List<_i5.RouteConfig> get routes => [
+        _i5.RouteConfig(LoginRoute.name, path: '/login'),
+        _i5.RouteConfig(ListRoute.name, path: '/', guards: [authGuard]),
+        _i5.RouteConfig(MangaDetailsRoute.name, path: '/manga/:id/details'),
+        _i5.RouteConfig(ReadRoute.name, path: '/read/:mangaId')
       ];
 }
 
 /// generated route for
 /// [_i1.LoginPage]
-class LoginRoute extends _i6.PageRouteInfo<LoginRouteArgs> {
-  LoginRoute({_i7.Key? key, required void Function() onLogin})
+class LoginRoute extends _i5.PageRouteInfo<LoginRouteArgs> {
+  LoginRoute({_i6.Key? key, required void Function() onLogin})
       : super(LoginRoute.name,
             path: '/login', args: LoginRouteArgs(key: key, onLogin: onLogin));
 
@@ -96,7 +85,7 @@ class LoginRoute extends _i6.PageRouteInfo<LoginRouteArgs> {
 class LoginRouteArgs {
   const LoginRouteArgs({this.key, required this.onLogin});
 
-  final _i7.Key? key;
+  final _i6.Key? key;
 
   final void Function() onLogin;
 
@@ -108,62 +97,46 @@ class LoginRouteArgs {
 
 /// generated route for
 /// [_i2.ListPage]
-class ListRoute extends _i6.PageRouteInfo<void> {
+class ListRoute extends _i5.PageRouteInfo<void> {
   const ListRoute() : super(ListRoute.name, path: '/');
 
   static const String name = 'ListRoute';
 }
 
 /// generated route for
-/// [_i3.ChaptersPage]
-class ChaptersRoute extends _i6.PageRouteInfo<ChaptersRouteArgs> {
-  ChaptersRoute(
-      {_i7.Key? key,
-      required String mangaId,
-      required String mangaName,
-      required _i9.Favourite? favourite})
-      : super(ChaptersRoute.name,
-            path: '/chapters/:mangaName/:mangaId',
-            args: ChaptersRouteArgs(
-                key: key,
-                mangaId: mangaId,
-                mangaName: mangaName,
-                favourite: favourite));
+/// [_i3.MangaDetailsPage]
+class MangaDetailsRoute extends _i5.PageRouteInfo<MangaDetailsRouteArgs> {
+  MangaDetailsRoute({_i6.Key? key, required String id})
+      : super(MangaDetailsRoute.name,
+            path: '/manga/:id/details',
+            args: MangaDetailsRouteArgs(key: key, id: id));
 
-  static const String name = 'ChaptersRoute';
+  static const String name = 'MangaDetailsRoute';
 }
 
-class ChaptersRouteArgs {
-  const ChaptersRouteArgs(
-      {this.key,
-      required this.mangaId,
-      required this.mangaName,
-      required this.favourite});
+class MangaDetailsRouteArgs {
+  const MangaDetailsRouteArgs({this.key, required this.id});
 
-  final _i7.Key? key;
+  final _i6.Key? key;
 
-  final String mangaId;
-
-  final String mangaName;
-
-  final _i9.Favourite? favourite;
+  final String id;
 
   @override
   String toString() {
-    return 'ChaptersRouteArgs{key: $key, mangaId: $mangaId, mangaName: $mangaName, favourite: $favourite}';
+    return 'MangaDetailsRouteArgs{key: $key, id: $id}';
   }
 }
 
 /// generated route for
 /// [_i4.ReadPage]
-class ReadRoute extends _i6.PageRouteInfo<ReadRouteArgs> {
+class ReadRoute extends _i5.PageRouteInfo<ReadRouteArgs> {
   ReadRoute(
-      {_i7.Key? key,
+      {_i6.Key? key,
       required String mangaId,
-      required _i10.Chapter chapter,
-      required _i11.ChapterList chapters,
+      required _i8.Chapter chapter,
+      required _i9.ChapterList chapters,
       int? resumeFrom,
-      _i9.Favourite? favourite})
+      _i10.Favourite? favourite})
       : super(ReadRoute.name,
             path: '/read/:mangaId',
             args: ReadRouteArgs(
@@ -186,29 +159,20 @@ class ReadRouteArgs {
       this.resumeFrom,
       this.favourite});
 
-  final _i7.Key? key;
+  final _i6.Key? key;
 
   final String mangaId;
 
-  final _i10.Chapter chapter;
+  final _i8.Chapter chapter;
 
-  final _i11.ChapterList chapters;
+  final _i9.ChapterList chapters;
 
   final int? resumeFrom;
 
-  final _i9.Favourite? favourite;
+  final _i10.Favourite? favourite;
 
   @override
   String toString() {
     return 'ReadRouteArgs{key: $key, mangaId: $mangaId, chapter: $chapter, chapters: $chapters, resumeFrom: $resumeFrom, favourite: $favourite}';
   }
-}
-
-/// generated route for
-/// [_i5.ChaperUpdatesPage]
-class ChaperUpdatesRoute extends _i6.PageRouteInfo<void> {
-  const ChaperUpdatesRoute()
-      : super(ChaperUpdatesRoute.name, path: '/chapter-updates');
-
-  static const String name = 'ChaperUpdatesRoute';
 }

@@ -1,7 +1,7 @@
-import 'package:fluttiyomi/chapter_updates/chapter_updates.dart';
 import 'package:fluttiyomi/database/database.dart';
 import 'package:fluttiyomi/database/download.dart';
 import 'package:fluttiyomi/downloads/models/download_status.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
 final downloadRepositoryProvider = Provider<DownloadRepository>((ref) {

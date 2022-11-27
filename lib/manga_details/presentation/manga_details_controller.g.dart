@@ -1,0 +1,121 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'manga_details_controller.dart';
+
+// **************************************************************************
+// RiverpodGenerator
+// **************************************************************************
+
+// ignore_for_file: avoid_private_typedef_functions, non_constant_identifier_names, subtype_of_sealed_class, invalid_use_of_internal_member, unused_element, constant_identifier_names, unnecessary_raw_strings, library_private_types_in_public_api
+
+/// Copied from Dart SDK
+class _SystemHash {
+  _SystemHash._();
+
+  static int combine(int hash, int value) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + value);
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
+    return hash ^ (hash >> 6);
+  }
+
+  static int finish(int hash) {
+    // ignore: parameter_assignments
+    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
+    // ignore: parameter_assignments
+    hash = hash ^ (hash >> 11);
+    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
+  }
+}
+
+String $MangaDetailsControllerHash() =>
+    r'73af7b175cd004ca434546072bfbb057dc7de149';
+
+/// See also [MangaDetailsController].
+class MangaDetailsControllerProvider
+    extends AutoDisposeAsyncNotifierProviderImpl<MangaDetailsController,
+        MangaDetailsState> {
+  MangaDetailsControllerProvider(
+    this.mangaId,
+  ) : super(
+          () => MangaDetailsController()..mangaId = mangaId,
+          from: mangaDetailsControllerProvider,
+          name: r'mangaDetailsControllerProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : $MangaDetailsControllerHash,
+        );
+
+  final String mangaId;
+
+  @override
+  bool operator ==(Object other) {
+    return other is MangaDetailsControllerProvider && other.mangaId == mangaId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, mangaId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+
+  @override
+  FutureOr<MangaDetailsState> runNotifierBuild(
+    covariant _$MangaDetailsController notifier,
+  ) {
+    return notifier.build(
+      mangaId,
+    );
+  }
+}
+
+typedef MangaDetailsControllerRef
+    = AutoDisposeAsyncNotifierProviderRef<MangaDetailsState>;
+
+/// See also [MangaDetailsController].
+final mangaDetailsControllerProvider = MangaDetailsControllerFamily();
+
+class MangaDetailsControllerFamily
+    extends Family<AsyncValue<MangaDetailsState>> {
+  MangaDetailsControllerFamily();
+
+  MangaDetailsControllerProvider call(
+    String mangaId,
+  ) {
+    return MangaDetailsControllerProvider(
+      mangaId,
+    );
+  }
+
+  @override
+  AutoDisposeAsyncNotifierProviderImpl<MangaDetailsController,
+      MangaDetailsState> getProviderOverride(
+    covariant MangaDetailsControllerProvider provider,
+  ) {
+    return call(
+      provider.mangaId,
+    );
+  }
+
+  @override
+  List<ProviderOrFamily>? get allTransitiveDependencies => null;
+
+  @override
+  List<ProviderOrFamily>? get dependencies => null;
+
+  @override
+  String? get name => r'mangaDetailsControllerProvider';
+}
+
+abstract class _$MangaDetailsController
+    extends BuildlessAutoDisposeAsyncNotifier<MangaDetailsState> {
+  late final String mangaId;
+
+  FutureOr<MangaDetailsState> build(
+    String mangaId,
+  );
+}

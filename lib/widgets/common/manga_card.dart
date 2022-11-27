@@ -1,7 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttiyomi/favourites/favourite.dart';
 import 'package:fluttiyomi/router.gr.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -10,14 +9,12 @@ class MangaCard extends ConsumerWidget {
   final String name;
   final String image;
   final int newChapterCount;
-  final Favourite? favourite;
 
   const MangaCard({
     Key? key,
     required this.mangaId,
     required this.name,
     required this.image,
-    required this.favourite,
     this.newChapterCount = 0,
   }) : super(key: key);
 
@@ -26,10 +23,8 @@ class MangaCard extends ConsumerWidget {
     return GestureDetector(
       onTap: () async {
         await AutoRouter.of(context).push(
-          ChaptersRoute(
-            mangaId: mangaId,
-            mangaName: name,
-            favourite: favourite,
+          MangaDetailsRoute(
+            id: mangaId,
           ),
         );
       },
@@ -55,28 +50,6 @@ class MangaCard extends ConsumerWidget {
                 ? MainAxisAlignment.spaceBetween
                 : MainAxisAlignment.end,
             children: [
-              if (newChapterCount > 0)
-                Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                          color: Colors.orange,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 6,
-                            horizontal: 8,
-                          ),
-                          child: Text(newChapterCount.toString()),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
               Container(
                 width: double.infinity,
                 decoration: BoxDecoration(

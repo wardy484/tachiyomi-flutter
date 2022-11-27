@@ -5,12 +5,14 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class ChapterListItem extends StatelessWidget {
   final Chapter chapter;
-  final Function() onTap;
+  final Function()? onTap;
+  final VoidCallback onLongPress;
 
   const ChapterListItem({
     Key? key,
     required this.chapter,
     required this.onTap,
+    required this.onLongPress,
   }) : super(key: key);
 
   @override
@@ -26,6 +28,7 @@ class ChapterListItem extends StatelessWidget {
 
     return GestureDetector(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: ListTile(
         textColor: chapter.read ? Colors.grey : Colors.white,
         title: Text(

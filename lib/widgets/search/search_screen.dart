@@ -1,7 +1,5 @@
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttiyomi/favourites/favourite.dart';
-import 'package:fluttiyomi/favourites/favourites_notifier.dart';
 import 'package:fluttiyomi/search/search_notifier.dart';
 import 'package:fluttiyomi/widgets/common/full_page_loading_indicator.dart';
 import 'package:fluttiyomi/widgets/common/manga_card.dart';
@@ -51,15 +49,11 @@ class _SearchTabState extends ConsumerState<SearchTab> {
                     itemCount: results.results.length,
                     itemBuilder: (context, index) {
                       var manga = results.results[index];
-                      Favourite? favourite = ref
-                          .read(favouritesProvider.notifier)
-                          .getFavouriteByMangaId(manga.id);
 
                       return MangaCard(
                         mangaId: manga.id,
                         name: manga.title.text,
                         image: manga.image,
-                        favourite: favourite,
                       );
                     },
                   ),

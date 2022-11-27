@@ -18,7 +18,8 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.14.4 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
+  flutter: ">=3.3.8"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -45,7 +46,7 @@ dependencies:
   visibility_detector: ^0.2.2
   scrollable_positioned_list: ^0.2.3
   flutter_hooks: ^0.18.0
-  hooks_riverpod: ^1.0.3
+  hooks_riverpod: ^2.1.1
   path_provider: ^2.0.0
   path: ^1.8.0
   easy_debounce: ^2.0.1
@@ -87,6 +88,11 @@ dependencies:
   dio_http_cache:
       git: https://github.com/danilof/dio-http-cache
   flutter_isolate: ^2.0.2
+  flutter_animate: ^1.0.0
+  riverpod_annotation: ^1.0.6
+  riverpod_generator: ^1.0.6
+  collection: ^1.16.0
+  async: ^2.9.0
 
 dev_dependencies:
   auto_route_generator: ^4.0.0
@@ -96,6 +102,8 @@ dev_dependencies:
   freezed: ^2.0.1
   isar_generator: 2.5.0
 
+dependency_overrides:
+  analyzer: ">=4.2.0 <5.0.0"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
