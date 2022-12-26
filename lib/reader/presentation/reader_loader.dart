@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/chapter_details/chapter_details_notifier.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
-import 'package:fluttiyomi/widgets/manga_reader/reader_loader_footer.dart';
-import 'package:fluttiyomi/widgets/manga_reader/reader_loader_header.dart';
+import 'package:fluttiyomi/reader/presentation/reader_loader_footer.dart';
+import 'package:fluttiyomi/reader/presentation/reader_loader_header.dart';
+import 'package:fluttiyomi/reader/presentation/reader_pages_controller.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ReaderLoader extends ConsumerStatefulWidget {
+  final String mangaId;
+  final Chapter currentChapter;
   final Widget child;
-  final Chapter? nextChapter;
-  final Chapter? previousChapter;
   final bool reverse;
 
   const ReaderLoader({
     Key? key,
     required this.child,
-    required this.nextChapter,
-    required this.previousChapter,
     required this.reverse,
+    required this.mangaId,
+    required this.currentChapter,
   }) : super(key: key);
 
   @override
@@ -30,9 +31,7 @@ class _ReaderLoaderState extends ConsumerState<ReaderLoader> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.nextChapter == null) {
-      _refreshController.loadNoData();
-    }
+    // TODO: figure out how to get no data state wihtout reloading whole widget
 
     return ScrollConfiguration(
       behavior: DisableGlowingOverscrollIndicator(),
@@ -42,13 +41,13 @@ class _ReaderLoaderState extends ConsumerState<ReaderLoader> {
         enablePullDown: true,
         enablePullUp: true,
         header: ReaderLoaderHeader(
-          nextChapter: widget.nextChapter,
-          previousChapter: widget.previousChapter,
+          mangaId: widget.mangaId,
+          currentChapter: widget.currentChapter,
           reverse: widget.reverse,
         ),
         footer: ReaderLoaderFooter(
-          nextChapter: widget.nextChapter,
-          previousChapter: widget.previousChapter,
+          mangaId: widget.mangaId,
+          currentChapter: widget.currentChapter,
           reverse: widget.reverse,
         ),
         onRefresh: () async {
@@ -72,6 +71,7 @@ class _ReaderLoaderState extends ConsumerState<ReaderLoader> {
           _refreshController.refreshCompleted();
         },
         child: widget.child,
+        cacheExtent: 5000,
       ),
     );
   }

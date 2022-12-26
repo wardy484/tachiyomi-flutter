@@ -26,7 +26,8 @@ void main() async {
   );
 
   final container = ProviderContainer();
-  container.read(sourceClientProvider.state).state = await SourceClient.init();
+  container.read(sourceClientProvider.notifier).state =
+      await SourceClient.init();
 
   await container.read(isarDatabaseProvider).init();
   await container.read(settingsProvider.notifier).loadSettings();

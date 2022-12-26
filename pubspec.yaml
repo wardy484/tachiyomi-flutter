@@ -44,12 +44,12 @@ dependencies:
   expandable_text: 2.2.0
   pull_to_refresh: ^2.0.0
   visibility_detector: ^0.2.2
-  scrollable_positioned_list: ^0.2.3
+  scrollable_positioned_list: ^0.3.5
   flutter_hooks: ^0.18.0
   hooks_riverpod: ^2.1.1
   path_provider: ^2.0.0
   path: ^1.8.0
-  easy_debounce: ^2.0.1
+  easy_debounce: ^2.0.2
   isar: ^2.5.0
   isar_flutter_libs: ^2.5.0
   flutter_advanced_networkimage_2: ^2.0.1
@@ -59,7 +59,7 @@ dependencies:
   timeago: ^3.2.2
   intl: ^0.17.0
   cupertino_will_pop_scope: ^1.2.0
-  extended_image: ^6.0.1
+  extended_image: ^6.3.4
   image_downloader: ^0.31.0
   loadany: ^1.0.0
   flutter_easyrefresh: ^2.2.1
@@ -93,6 +93,11 @@ dependencies:
   riverpod_generator: ^1.0.6
   collection: ^1.16.0
   async: ^2.9.0
+  fullscreen: ^1.0.3
+  flutter_cache_manager: ^3.3.0
+  image_size_getter_http_input: ^2.0.0
+  image_size_getter: ^2.1.2
+  transparent_image: ^2.0.0
 
 dev_dependencies:
   auto_route_generator: ^4.0.0

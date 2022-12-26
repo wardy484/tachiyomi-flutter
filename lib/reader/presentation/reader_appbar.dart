@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
-import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
+import 'package:fluttiyomi/reader/presentation/reader_appbar_controller.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReaderAppBar extends ConsumerWidget with PreferredSizeWidget {
@@ -17,7 +17,7 @@ class ReaderAppBar extends ConsumerWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context, ref) {
     return AnimatedOpacity(
-      opacity: ref.watch(readerProvider).appbarVisible ? 1 : 0,
+      opacity: ref.watch(readerAppbarControllerProvider) ? 1 : 0,
       duration: const Duration(milliseconds: 300),
       child: AppBar(
         title: Text(

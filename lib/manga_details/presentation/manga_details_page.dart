@@ -1,9 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/favourites/presentation/favourite_updates_controller.dart';
 import 'package:fluttiyomi/manga_details/presentation/manga_details_controller.dart';
 import 'package:fluttiyomi/manga_details/presentation/chapter_options.dart';
 import 'package:fluttiyomi/manga_details/presentation/manga_details_header.dart';
 import 'package:fluttiyomi/manga_details/presentation/chapter_list_item.dart';
+import 'package:fluttiyomi/router.gr.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MangaDetailsPage extends ConsumerStatefulWidget {
@@ -55,12 +57,14 @@ class _MangaDetailsPageState extends ConsumerState<MangaDetailsPage> {
                           return ChapterListItem(
                               chapter: chapter,
                               onTap: () {
-                                // context.router.push(
-                                //   ChapterRoute(
-                                //     mangaId: widget.id,
-                                //     chapterId: chapter.id,
-                                //   ),
-                                // );
+                                AutoRouter.of(context).push(
+                                  ReaderRoute(
+                                    mangaId: widget.id,
+                                    chapter: chapter,
+                                    chapterIndex:
+                                        mangaDetails.chapters.indexOf(chapter),
+                                  ),
+                                );
                               },
                               onLongPress: () {
                                 if (mangaDetails.favourite != null) {

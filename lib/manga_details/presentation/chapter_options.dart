@@ -22,6 +22,14 @@ class ChapterOptions extends ConsumerWidget {
     return ContextMenu(
       children: [
         ContextMenuItem(
+          icon: FontAwesomeIcons.solidCircleUp,
+          onPressed: () {
+            ref
+                .read(favouritesServiceProvider)
+                .markChapterAsUnread(favourite, chapter.chapterNo);
+          },
+        ),
+        ContextMenuItem(
           icon: FontAwesomeIcons.check,
           onPressed: () {
             ref

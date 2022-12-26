@@ -160,6 +160,31 @@ class FavouritesRepository {
     update(user, [favourite]);
   }
 
+  Future<void> markAsUnread(
+    User user,
+    Favourite favourite,
+    List<double> chapterNumbers,
+  ) async {
+    log("WRITE: Marking many chapters $chapterNumbers as unread from ${favourite.sourceId}");
+
+    List<Chapter> chapters = favourite.chapters.toList();
+
+    for (var i = 0; i < chapters.length; i++) {
+      if (chapterNumbers.contains(chapters[i].chapterNo)) {
+        chapters[i] = chapters[i].copyWith(
+          read: false,
+        );
+      }
+    }
+
+    favourite = favourite.copyWith(
+      chapters: chapters,
+      unreadChapterCount: _calculateUnreadChapterCount(chapters),
+    );
+
+    update(user, [favourite]);
+  }
+
   Future<void> setLastPage(
     User user,
     Favourite favourite,

@@ -3,7 +3,7 @@ import 'package:fluttiyomi/auth/auth_guard.dart';
 import 'package:fluttiyomi/auth/screens/login_page.dart';
 import 'package:fluttiyomi/manga_details/presentation/manga_details_page.dart';
 import 'package:fluttiyomi/app_page.dart';
-import 'package:fluttiyomi/screens/read_page.dart';
+import 'package:fluttiyomi/reader/presentation/reader_page.dart';
 
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
@@ -26,7 +26,7 @@ import 'package:fluttiyomi/screens/read_page.dart';
     ),
     AutoRoute(
       path: '/read/:mangaId',
-      page: ReadPage,
+      page: ReaderPage,
     ),
   ],
 )

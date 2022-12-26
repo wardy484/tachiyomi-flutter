@@ -75,11 +75,10 @@ class _DownloadsTabState extends ConsumerState<DownloadsTab> {
                           );
 
                           await AutoRouter.of(context).push(
-                            ReadRoute(
+                            ReaderRoute(
                               mangaId: download.mangaId,
                               chapter: chapter,
-                              chapters: chapters,
-                              favourite: favourite,
+                              chapterIndex: chapters.indexOf(chapter),
                             ),
                           );
                         }

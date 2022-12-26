@@ -130,6 +130,7 @@ processDownload(
       );
     }).toList();
 
+    // TODO: Update downloader to update DefaultCacheManager
     List<Future> futures = [];
 
     for (var i = 0; i < images.length; i++) {

@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:fluttiyomi/chapter_details/chapter_details_notifier.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
-import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
-import 'package:fluttiyomi/screens/read_page.dart';
+import 'package:fluttiyomi/reader/presentation/reader_appbar_controller.dart';
+import 'package:fluttiyomi/reader/presentation/reader_pages_controller.dart';
+import 'package:fluttiyomi/reader/presentation/reader_progress_controller.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReaderBottomAppBar extends ConsumerWidget {
+  final String mangaId;
   final Chapter chapter;
   final int numberOfPages;
+  final int currentPage;
+  final void Function(Chapter chapter) onChapterChanged;
 
   const ReaderBottomAppBar({
     Key? key,
+    required this.mangaId,
     required this.numberOfPages,
     required this.chapter,
+    required this.currentPage,
+    required this.onChapterChanged,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, ref) {
     return AnimatedOpacity(
-      opacity: ref.watch(readerProvider).appbarVisible ? 1 : 0,
+      opacity: ref.watch(readerAppbarControllerProvider) ? 1 : 0,
       duration: const Duration(milliseconds: 300),
       child: BottomAppBar(
         color: Colors.black.withOpacity(0.9),
@@ -30,13 +36,12 @@ class ReaderBottomAppBar extends ConsumerWidget {
               padding: const EdgeInsets.only(left: 14),
               child: StatefulBuilder(
                 builder: (context, state) {
-                  String progress = ref.watch(readerProvider).when(
-                        reading: (pageDetails, progress, _, __, ___, ____) =>
-                            progress,
-                      );
+                  int totalPages =
+                      ref.watch(readerPagesControllerProvider(mangaId)).length;
 
                   return Text(
-                    "$progress/$numberOfPages",
+                    "$currentPage/$totalPages",
+                    // "0/0",
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -49,23 +54,31 @@ class ReaderBottomAppBar extends ConsumerWidget {
                 IconButton(
                   icon: const Icon(Icons.arrow_back_ios),
                   onPressed: () {
-                    ref.read(readerProvider.notifier).moveProgress(
-                          pageDetails: PageDetails(chapter.chapterNo, 0),
-                          progress: "1",
-                        );
+                    final newChapter = ref
+                        .read(readerUpcomingChaptersControllerProvider(
+                          mangaId,
+                          chapter,
+                        ))
+                        .previousChapter;
 
-                    ref.read(chapterDetailsProvider.notifier).previousChapter();
+                    if (newChapter != null) {
+                      onChapterChanged(newChapter);
+                    }
                   },
                 ),
                 IconButton(
                   icon: const Icon(Icons.arrow_forward_ios),
                   onPressed: () {
-                    ref.read(readerProvider.notifier).moveProgress(
-                          pageDetails: PageDetails(chapter.chapterNo, 0),
-                          progress: "1",
-                        );
+                    final newChapter = ref
+                        .read(readerUpcomingChaptersControllerProvider(
+                          mangaId,
+                          chapter,
+                        ))
+                        .nextChapter;
 
-                    ref.read(chapterDetailsProvider.notifier).nextChapter();
+                    if (newChapter != null) {
+                      onChapterChanged(newChapter);
+                    }
                   },
                 ),
               ],

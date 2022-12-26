@@ -18,10 +18,8 @@ import 'app_page.dart' as _i2;
 import 'auth/auth_guard.dart' as _i7;
 import 'auth/screens/login_page.dart' as _i1;
 import 'data/chapter/chapter.dart' as _i8;
-import 'data/chapter_list/chapterlist.dart' as _i9;
-import 'favourites/data/favourite.dart' as _i10;
 import 'manga_details/presentation/manga_details_page.dart' as _i3;
-import 'screens/read_page.dart' as _i4;
+import 'reader/presentation/reader_page.dart' as _i4;
 
 class AppRouter extends _i5.RootStackRouter {
   AppRouter(
@@ -49,17 +47,15 @@ class AppRouter extends _i5.RootStackRouter {
           routeData: routeData,
           child: _i3.MangaDetailsPage(key: args.key, id: args.id));
     },
-    ReadRoute.name: (routeData) {
-      final args = routeData.argsAs<ReadRouteArgs>();
+    ReaderRoute.name: (routeData) {
+      final args = routeData.argsAs<ReaderRouteArgs>();
       return _i5.MaterialPageX<dynamic>(
           routeData: routeData,
-          child: _i4.ReadPage(
+          child: _i4.ReaderPage(
               key: args.key,
               mangaId: args.mangaId,
               chapter: args.chapter,
-              chapters: args.chapters,
-              resumeFrom: args.resumeFrom,
-              favourite: args.favourite));
+              chapterIndex: args.chapterIndex));
     }
   };
 
@@ -68,7 +64,7 @@ class AppRouter extends _i5.RootStackRouter {
         _i5.RouteConfig(LoginRoute.name, path: '/login'),
         _i5.RouteConfig(AppRoute.name, path: '/', guards: [authGuard]),
         _i5.RouteConfig(MangaDetailsRoute.name, path: '/manga/:id/details'),
-        _i5.RouteConfig(ReadRoute.name, path: '/read/:mangaId')
+        _i5.RouteConfig(ReaderRoute.name, path: '/read/:mangaId')
       ];
 }
 
@@ -128,36 +124,30 @@ class MangaDetailsRouteArgs {
 }
 
 /// generated route for
-/// [_i4.ReadPage]
-class ReadRoute extends _i5.PageRouteInfo<ReadRouteArgs> {
-  ReadRoute(
+/// [_i4.ReaderPage]
+class ReaderRoute extends _i5.PageRouteInfo<ReaderRouteArgs> {
+  ReaderRoute(
       {_i6.Key? key,
       required String mangaId,
       required _i8.Chapter chapter,
-      required _i9.ChapterList chapters,
-      int? resumeFrom,
-      _i10.Favourite? favourite})
-      : super(ReadRoute.name,
+      required int chapterIndex})
+      : super(ReaderRoute.name,
             path: '/read/:mangaId',
-            args: ReadRouteArgs(
+            args: ReaderRouteArgs(
                 key: key,
                 mangaId: mangaId,
                 chapter: chapter,
-                chapters: chapters,
-                resumeFrom: resumeFrom,
-                favourite: favourite));
+                chapterIndex: chapterIndex));
 
-  static const String name = 'ReadRoute';
+  static const String name = 'ReaderRoute';
 }
 
-class ReadRouteArgs {
-  const ReadRouteArgs(
+class ReaderRouteArgs {
+  const ReaderRouteArgs(
       {this.key,
       required this.mangaId,
       required this.chapter,
-      required this.chapters,
-      this.resumeFrom,
-      this.favourite});
+      required this.chapterIndex});
 
   final _i6.Key? key;
 
@@ -165,14 +155,10 @@ class ReadRouteArgs {
 
   final _i8.Chapter chapter;
 
-  final _i9.ChapterList chapters;
-
-  final int? resumeFrom;
-
-  final _i10.Favourite? favourite;
+  final int chapterIndex;
 
   @override
   String toString() {
-    return 'ReadRouteArgs{key: $key, mangaId: $mangaId, chapter: $chapter, chapters: $chapters, resumeFrom: $resumeFrom, favourite: $favourite}';
+    return 'ReaderRouteArgs{key: $key, mangaId: $mangaId, chapter: $chapter, chapterIndex: $chapterIndex}';
   }
 }

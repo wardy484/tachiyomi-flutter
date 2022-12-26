@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
-import 'package:fluttiyomi/widgets/manga_reader/reader_paging_indicator.dart';
+import 'package:fluttiyomi/reader/presentation/reader_paging_indicator.dart';
+import 'package:fluttiyomi/reader/presentation/reader_progress_controller.dart';
 import 'package:fluttiyomi/widgets/refresh_config.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class ReaderLoaderHeader extends StatefulWidget {
-  final Chapter? nextChapter;
-  final Chapter? previousChapter;
+class ReaderLoaderHeader extends ConsumerStatefulWidget {
   final bool reverse;
+  final String mangaId;
+  final Chapter currentChapter;
 
   const ReaderLoaderHeader({
     Key? key,
-    required this.nextChapter,
-    required this.previousChapter,
     required this.reverse,
+    required this.mangaId,
+    required this.currentChapter,
   }) : super(key: key);
 
   @override
   _ReaderLoaderHeaderState createState() => _ReaderLoaderHeaderState();
 }
 
-class _ReaderLoaderHeaderState extends State<ReaderLoaderHeader>
+class _ReaderLoaderHeaderState extends ConsumerState<ReaderLoaderHeader>
     with TickerProviderStateMixin {
   late AnimationController controller;
 
@@ -42,11 +44,16 @@ class _ReaderLoaderHeaderState extends State<ReaderLoaderHeader>
 
   @override
   Widget build(BuildContext context) {
+    final upcomingChapters = ref.watch(readerUpcomingChaptersControllerProvider(
+      widget.mangaId,
+      widget.currentChapter,
+    ));
+
     return CustomHeader(
       builder: (BuildContext context, RefreshStatus? mode) {
         Widget body;
-        if ((widget.reverse && widget.nextChapter == null) ||
-            (!widget.reverse && widget.previousChapter == null)) {
+        if ((widget.reverse && upcomingChapters.nextChapter == null) ||
+            (!widget.reverse && upcomingChapters.previousChapter == null)) {
           body = const Text("No more chapters");
         } else if (mode == RefreshStatus.idle) {
           body = ReaderPagingIndicator(

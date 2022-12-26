@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
-import 'package:fluttiyomi/widgets/manga_reader/reader_paging_indicator.dart';
+import 'package:fluttiyomi/reader/presentation/reader_paging_indicator.dart';
+import 'package:fluttiyomi/reader/presentation/reader_progress_controller.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class ReaderLoaderFooter extends StatefulWidget {
-  final Chapter? nextChapter;
-  final Chapter? previousChapter;
+class ReaderLoaderFooter extends ConsumerStatefulWidget {
+  final String mangaId;
+  final Chapter currentChapter;
   final bool reverse;
 
   const ReaderLoaderFooter({
     Key? key,
-    required this.nextChapter,
-    required this.previousChapter,
+    required this.mangaId,
+    required this.currentChapter,
     required this.reverse,
   }) : super(key: key);
 
@@ -19,7 +21,7 @@ class ReaderLoaderFooter extends StatefulWidget {
   _ReaderLoaderFooterState createState() => _ReaderLoaderFooterState();
 }
 
-class _ReaderLoaderFooterState extends State<ReaderLoaderFooter>
+class _ReaderLoaderFooterState extends ConsumerState<ReaderLoaderFooter>
     with TickerProviderStateMixin {
   late AnimationController controller;
 
@@ -41,12 +43,17 @@ class _ReaderLoaderFooterState extends State<ReaderLoaderFooter>
 
   @override
   Widget build(BuildContext context) {
+    final upcomingChapters = ref.watch(readerUpcomingChaptersControllerProvider(
+      widget.mangaId,
+      widget.currentChapter,
+    ));
+
     return CustomFooter(
       height: widget.reverse ? 90 : 60,
       builder: (BuildContext context, LoadStatus? mode) {
         Widget body;
-        if ((widget.reverse && widget.previousChapter == null) ||
-            (!widget.reverse && widget.nextChapter == null)) {
+        if ((widget.reverse && upcomingChapters.previousChapter == null) ||
+            (!widget.reverse && upcomingChapters.nextChapter == null)) {
           body = const Text("No more chapters");
         } else if (mode == LoadStatus.idle) {
           body = ReaderPagingIndicator(

@@ -1,10 +1,9 @@
-import 'package:flutter/services.dart';
 import 'package:fluttiyomi/auth/auth_repository.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/favourites/data/favourite.dart';
 import 'package:fluttiyomi/favourites/data/favourite_repository.dart';
-import 'package:fluttiyomi/reader/reader_state.dart';
-import 'package:fluttiyomi/screens/read_page.dart';
+import 'package:fluttiyomi/reader/presentation/reader_page.dart';
+import 'package:fluttiyomi/reader/presentation/reader_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final readerProvider =
@@ -25,7 +24,6 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
   }) : super(ReaderState.reading(
           currentPage: PageDetails(0, 0),
           progress: "0",
-          appbarVisible: true,
           chapterNumber: 0,
           reversed: false,
         ));
@@ -85,23 +83,5 @@ class ReaderNotifier extends StateNotifier<ReaderState> {
     );
 
     return pageNumber;
-  }
-
-  void toggleVisibility() {
-    if (state.appbarVisible) {
-      hideAppbar();
-    } else {
-      showAppbar();
-    }
-  }
-
-  void hideAppbar() {
-    state = state.copyWith(appbarVisible: false);
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-  }
-
-  void showAppbar() {
-    state = state.copyWith(appbarVisible: true);
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   }
 }

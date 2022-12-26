@@ -51,6 +51,17 @@ class FavouritesService {
     );
   }
 
+  void markChapterAsUnread(Favourite favourite, double chapterNumber) async {
+    final favouritesRepository = ref.watch(favouritesRepositoryProvider);
+    final user = ref.watch(authRepositoryProvider).currentUser;
+
+    favouritesRepository.markAsUnread(
+      user,
+      favourite,
+      [chapterNumber],
+    );
+  }
+
   void markAllPriorChaptersAsRead(
     Favourite favourite,
     double chapterNumber,

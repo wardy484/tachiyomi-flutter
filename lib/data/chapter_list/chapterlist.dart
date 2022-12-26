@@ -21,6 +21,10 @@ class ChapterList with _$ChapterList {
     return chapters[index];
   }
 
+  int indexOf(Chapter chapter) {
+    return chapters.indexOf(chapter);
+  }
+
   Chapter getByChapterNumber(double chapterNumber) {
     return chapters.firstWhere((chapter) => chapter.chapterNo == chapterNumber);
   }

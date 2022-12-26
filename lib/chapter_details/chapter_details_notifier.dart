@@ -5,7 +5,6 @@ import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/favourites/data/favourite_repository.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
-import 'package:fluttiyomi/reader/reader_progress_notifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../data/chapter/chapter.dart';
@@ -14,21 +13,17 @@ final chapterDetailsProvider = StateNotifierProvider.autoDispose<
     ChapterDetailsNotifier, ChapterDetailsState>((ref) {
   return ChapterDetailsNotifier(
     ref.watch(sourceClientProvider),
-    ref.watch(readerProvider.notifier),
     ref.watch(favouritesRepositoryProvider),
   );
 });
 
 class ChapterDetailsNotifier extends StateNotifier<ChapterDetailsState> {
   final SourceClient _source;
-  final ReaderNotifier _readerProgress;
 
   ChapterDetailsNotifier(
     SourceClient source,
-    ReaderNotifier readerProgress,
     FavouritesRepository favourites,
   )   : _source = source,
-        _readerProgress = readerProgress,
         super(const ChapterDetailsState.initial());
 
   Future<ChapterDetails> getChapterDetails(
