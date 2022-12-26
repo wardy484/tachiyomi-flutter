@@ -179,20 +179,21 @@ class ReaderPage extends HookConsumerWidget {
       return;
     }
 
+    if (!currentChapter.value.read) {
+      log("READ PAGE: Marking chapter as read: ${chapter.chapterNo}");
+      markChapterAsRead(ref, chapter);
+    }
+
     if (upcomingChapters.hasNextChapter) {
       log("READ PAGE: Fetching next chapter, current chapter: ${currentChapter.value.id} ");
 
       loadedChapterIds.value.add(chapter.id);
       currentChapter.value = upcomingChapters.nextChapter!;
 
-      if (!currentChapter.value.read) {
-        log("READ PAGE: Marking chapter as read: ${chapter.chapterNo}");
-        markChapterAsRead(ref, chapter);
-      }
+      final pagesController =
+          ref.read(readerPagesControllerProvider(mangaId).notifier);
 
-      await ref
-          .read(readerPagesControllerProvider(mangaId).notifier)
-          .appendChapterPages(upcomingChapters.nextChapter!);
+      await pagesController.appendChapterPages(upcomingChapters.nextChapter!);
 
       loadedChapterIds.value.add(upcomingChapters.nextChapter!.id);
     }

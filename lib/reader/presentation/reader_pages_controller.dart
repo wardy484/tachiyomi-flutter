@@ -62,6 +62,7 @@ class ReaderPagesController extends _$ReaderPagesController {
     );
 
     final precachedPages = await _precacheImages(chapter, chapterDetails.pages);
+
     state = [...state, ...precachedPages];
 
     ref.read(readerIsAppendingProvider.notifier).state = false;
