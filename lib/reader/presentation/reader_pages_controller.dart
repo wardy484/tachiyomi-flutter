@@ -49,21 +49,40 @@ class ReaderPagesController extends _$ReaderPagesController {
       chapterDetailsProvider(mangaId, chapter.id).future,
     );
 
-    state = await _precacheImages(chapter, chapterDetails.pages);
+    state = await _precacheImages(
+      chapter,
+      chapterDetails.pages,
+    );
 
     ref.read(readerLoadingControllerProvider.notifier).loaded();
   }
 
-  Future<void> appendChapterPages(Chapter chapter) async {
+  Future<void> appendChapterPages(
+    Chapter previousChapter,
+    Chapter chapter,
+  ) async {
     ref.read(readerIsAppendingProvider.notifier).state = true;
 
     final chapterDetails = await ref.watch(
       chapterDetailsProvider(mangaId, chapter.id).future,
     );
 
-    final precachedPages = await _precacheImages(chapter, chapterDetails.pages);
+    final precachedPages = await _precacheImages(
+      chapter,
+      chapterDetails.pages,
+    );
 
-    state = [...state, ...precachedPages];
+    state = [
+      ...state,
+      ReaderPage(
+        url: "page-break",
+        chapter: chapter,
+        previousChapter: previousChapter,
+        totalPages: chapterDetails.pages.length,
+        pageNumber: 0,
+      ),
+      ...precachedPages,
+    ];
 
     ref.read(readerIsAppendingProvider.notifier).state = false;
   }
@@ -72,10 +91,15 @@ class ReaderPagesController extends _$ReaderPagesController {
     Chapter chapter,
     List<String> pages,
   ) async {
-    FutureGroup futures = FutureGroup<FileInfo>();
+    final FutureGroup futures = FutureGroup<FileInfo>();
+    final CacheManager cacheManager = DefaultCacheManager();
 
     for (final page in pages) {
-      futures.add(DefaultCacheManager().downloadFile(page));
+      final file = await cacheManager.getFileFromCache(page);
+
+      if (file == null) {
+        futures.add(cacheManager.downloadFile(page));
+      }
     }
 
     futures.close();
@@ -84,13 +108,17 @@ class ReaderPagesController extends _$ReaderPagesController {
     return _buildReaderPages(chapter, pages);
   }
 
-  List<ReaderPage> _buildReaderPages(Chapter chapter, List<String> pages) {
+  List<ReaderPage> _buildReaderPages(
+    Chapter chapter,
+    List<String> pages,
+  ) {
     final List<ReaderPage> readerPages = [];
 
     for (int i = 0; i < pages.length; i++) {
       readerPages.add(ReaderPage(
         url: pages[i],
         chapter: chapter,
+        totalPages: pages.length,
         pageNumber: i + 1,
       ));
     }
@@ -102,6 +130,8 @@ class ReaderPagesController extends _$ReaderPagesController {
 class ReaderPage {
   final String url;
   final Chapter chapter;
+  final Chapter? previousChapter;
+  final int totalPages;
   final int pageNumber;
   final double? width;
   final double? height;
@@ -109,6 +139,8 @@ class ReaderPage {
   ReaderPage({
     required this.url,
     required this.chapter,
+    this.previousChapter,
+    required this.totalPages,
     required this.pageNumber,
     this.width,
     this.height,

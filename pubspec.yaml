@@ -98,6 +98,8 @@ dependencies:
   image_size_getter_http_input: ^2.0.0
   image_size_getter: ^2.1.2
   transparent_image: ^2.0.0
+  workmanager: ^0.5.1
+  dio_logger: ^4.0.8+8
 
 dev_dependencies:
   auto_route_generator: ^4.0.0

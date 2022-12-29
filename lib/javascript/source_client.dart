@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
+import 'package:dio_logger/dio_logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
@@ -58,6 +59,8 @@ class SourceClient {
         ),
       ).interceptor,
     );
+
+    _dio.interceptors.add(dioLoggerInterceptor);
   }
 
   static Future<SourceClient> init({

@@ -318,6 +318,13 @@ packages:
       url: "https://github.com/danilof/dio-http-cache"
     source: git
     version: "0.3.0"
+  dio_logger:
+    dependency: "direct main"
+    description:
+      name: dio_logger
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.8+8"
   dropdown_search:
     dependency: transitive
     description:
@@ -1519,6 +1526,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.6.1"
+  workmanager:
+    dependency: "direct main"
+    description:
+      name: workmanager
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.1"
   xdg_directories:
     dependency: transitive
     description:
