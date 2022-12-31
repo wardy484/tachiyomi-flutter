@@ -14,7 +14,7 @@ class Database {
     final dir = await getApplicationSupportDirectory();
 
     _isarDatabase = await Isar.open(
-      schemas: [
+      [
         SettingSchema,
         DownloadSchema,
       ],

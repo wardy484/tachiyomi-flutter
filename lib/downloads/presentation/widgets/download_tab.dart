@@ -3,8 +3,9 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/auth/auth_notifier.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
-import 'package:fluttiyomi/downloads/download_notifier.dart';
-import 'package:fluttiyomi/downloads/models/download_status.dart';
+import 'package:fluttiyomi/downloads/data/download_repository.dart';
+import 'package:fluttiyomi/downloads/data/download_status.dart';
+import 'package:fluttiyomi/downloads/presentation/download_notifier.dart';
 import 'package:fluttiyomi/favourites/data/favourite_repository.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/router.gr.dart';
@@ -21,18 +22,11 @@ class DownloadsTab extends ConsumerStatefulWidget {
 
 class _DownloadsTabState extends ConsumerState<DownloadsTab> {
   @override
-  void initState() {
-    super.initState();
-
-    ref.read(downloadProvider.notifier).openDownloadStream();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 7),
-      child: ref.watch(downloadProvider).when(
-            download: (downloads, _, __) => ListView.builder(
+      child: ref.watch(allDownloadsProvider).when(
+            data: (downloads) => ListView.builder(
               itemCount: downloads.length,
               itemBuilder: (context, index) {
                 final download = downloads[index];
@@ -63,7 +57,7 @@ class _DownloadsTabState extends ConsumerState<DownloadsTab> {
                         final favourite = await ref
                             .read(favouritesRepositoryProvider)
                             .getFavourite(
-                              user,
+                              user.id,
                               ref.read(sourceClientProvider).src,
                               download.mangaId,
                             );
@@ -78,7 +72,6 @@ class _DownloadsTabState extends ConsumerState<DownloadsTab> {
                             ReaderRoute(
                               mangaId: download.mangaId,
                               chapter: chapter,
-                              chapterIndex: chapters.indexOf(chapter),
                             ),
                           );
                         }
@@ -115,6 +108,12 @@ class _DownloadsTabState extends ConsumerState<DownloadsTab> {
                   },
                 );
               },
+            ),
+            loading: () => const Center(
+              child: CircularProgressIndicator(),
+            ),
+            error: (error, stack) => Center(
+              child: Text(error.toString()),
             ),
           ),
     );

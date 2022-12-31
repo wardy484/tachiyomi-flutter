@@ -1,9 +1,8 @@
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
 import 'package:fluttiyomi/auth/auth_repository.dart';
-import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
-import 'package:fluttiyomi/downloads/download_notifier.dart';
+import 'package:fluttiyomi/data/source_data.dart';
+import 'package:fluttiyomi/downloads/application/download_service.dart';
 import 'package:fluttiyomi/favourites/data/favourite.dart';
 import 'package:fluttiyomi/favourites/data/favourite_repository.dart';
 import 'package:fluttiyomi/javascript/source_client.dart';
@@ -16,21 +15,34 @@ class FavouritesUpdateService {
     required this.ref,
   });
 
-  Future<void> getLatestChapters(Favourite favourite) async {
-    log('Fetching latest chapters for ${favourite.mangaId}');
+  Future<List<Chapter>> getLatestChapters(Favourite favourite) async {
+    log('Fetching latest chapters for ${favourite.name}');
 
     final sourceClient = ref.watch(sourceClientProvider);
 
-    if (favourite.unreadChapterCount > 5) return;
+    log("Check if ${favourite.name} has too many unread chapters ");
+    if (favourite.unreadChapterCount > 7) {
+      log('Skipping ${favourite.name} because it has too many unread chapters');
+      return [];
+    }
+
+    log("Getting chapters for ${favourite.name} (${favourite.mangaId})");
 
     ChapterList chapterList = await sourceClient.getChapters(favourite.mangaId);
 
-    ChapterList newChapterList = await compute(_filterNewChapters, {
+    log('Got ${chapterList.length} chapters for ${favourite.name}, already had ${favourite.chapters.length}');
+
+    ChapterList newChapterList = _filterNewChapters({
       "savedChapters": ChapterList(favourite.chapters),
       "chapterList": chapterList,
     });
 
-    if (newChapterList.isEmpty) return;
+    if (newChapterList.isEmpty) {
+      log('No new chapters for ${favourite.name}');
+      return [];
+    }
+
+    log('Got ${newChapterList.length} new chapters for ${favourite.name}');
 
     final latestChapter = newChapterList.descending().toList().first;
     final completeChapterList = newChapterList.append(favourite.chapters);
@@ -41,14 +53,35 @@ class FavouritesUpdateService {
       chapters: completeChapterList.descending().toList(),
     );
 
+    log('Updating ${favourite.name} with ${newChapterList.length} new chapters');
+
     ref.read(favouritesRepositoryProvider).update(
       ref.watch(authRepositoryProvider).currentUser,
       [newFavourite],
     );
 
-    ref
-        .read(downloadProvider.notifier)
-        .downloadNewChapters(favourite, newChapterList);
+    log("Notifying download provider of new chapters for ${favourite.name}");
+    ref.read(downloadServiceProvider).downloadChaptersInBackground(
+          favourite.toManga(),
+          newChapterList.chapters,
+        );
+
+    return newChapterList.chapters;
+  }
+
+  ChapterList _filterNewChapters(Map args) {
+    ChapterList savedChapters = args["savedChapters"] as ChapterList;
+    ChapterList remoteChapters = args['chapterList'] as ChapterList;
+
+    if (remoteChapters.length < 1) return ChapterList([]);
+
+    final newChapters = remoteChapters.toList().where((chapter) {
+      return !savedChapters.toList().where((savedChapter) {
+        return savedChapter.chapterNo == chapter.chapterNo;
+      }).isNotEmpty;
+    }).toList();
+
+    return ChapterList(newChapters);
   }
 }
 
@@ -56,19 +89,3 @@ final favouritesUpdateServiceProvider =
     Provider<FavouritesUpdateService>((ref) {
   return FavouritesUpdateService(ref: ref);
 });
-
-// External function so it can be run in an isolate
-ChapterList _filterNewChapters(Map args) {
-  ChapterList savedChapters = args["savedChapters"] as ChapterList;
-  ChapterList remoteChapters = args['chapterList'] as ChapterList;
-
-  if (remoteChapters.length < 1) return ChapterList([]);
-
-  final newChapters = remoteChapters.toList().where((chapter) {
-    return !savedChapters.toList().where((savedChapter) {
-      return savedChapter.chapterNo == chapter.chapterNo;
-    }).isNotEmpty;
-  }).toList();
-
-  return ChapterList(newChapters);
-}

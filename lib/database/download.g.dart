@@ -6,110 +6,109 @@ part of 'download.dart';
 // IsarCollectionGenerator
 // **************************************************************************
 
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, unused_local_variable
+// coverage:ignore-file
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
 
 extension GetDownloadCollection on Isar {
-  IsarCollection<Download> get downloads => getCollection();
+  IsarCollection<Download> get downloads => this.collection();
 }
 
 const DownloadSchema = CollectionSchema(
-  name: 'Download',
-  schema:
-      '{"name":"Download","idName":"id","properties":[{"name":"chapterId","type":"String"},{"name":"chapterName","type":"String"},{"name":"createdAt","type":"Long"},{"name":"image","type":"String"},{"name":"mangaId","type":"String"},{"name":"mangaName","type":"String"},{"name":"status","type":"Long"},{"name":"updatedAt","type":"Long"}],"indexes":[],"links":[]}',
-  idName: 'id',
-  propertyIds: {
-    'chapterId': 0,
-    'chapterName': 1,
-    'createdAt': 2,
-    'image': 3,
-    'mangaId': 4,
-    'mangaName': 5,
-    'status': 6,
-    'updatedAt': 7
+  name: r'Download',
+  id: 5905484153212786579,
+  properties: {
+    r'chapterId': PropertySchema(
+      id: 0,
+      name: r'chapterId',
+      type: IsarType.string,
+    ),
+    r'chapterName': PropertySchema(
+      id: 1,
+      name: r'chapterName',
+      type: IsarType.string,
+    ),
+    r'createdAt': PropertySchema(
+      id: 2,
+      name: r'createdAt',
+      type: IsarType.dateTime,
+    ),
+    r'image': PropertySchema(
+      id: 3,
+      name: r'image',
+      type: IsarType.string,
+    ),
+    r'mangaId': PropertySchema(
+      id: 4,
+      name: r'mangaId',
+      type: IsarType.string,
+    ),
+    r'mangaName': PropertySchema(
+      id: 5,
+      name: r'mangaName',
+      type: IsarType.string,
+    ),
+    r'status': PropertySchema(
+      id: 6,
+      name: r'status',
+      type: IsarType.byte,
+      enumMap: _DownloadstatusEnumValueMap,
+    ),
+    r'updatedAt': PropertySchema(
+      id: 7,
+      name: r'updatedAt',
+      type: IsarType.dateTime,
+    )
   },
-  listProperties: {},
-  indexIds: {},
-  indexValueTypes: {},
-  linkIds: {},
-  backlinkLinkNames: {},
+  estimateSize: _downloadEstimateSize,
+  serialize: _downloadSerialize,
+  deserialize: _downloadDeserialize,
+  deserializeProp: _downloadDeserializeProp,
+  idName: r'id',
+  indexes: {},
+  links: {},
+  embeddedSchemas: {},
   getId: _downloadGetId,
-  setId: _downloadSetId,
   getLinks: _downloadGetLinks,
-  attachLinks: _downloadAttachLinks,
-  serializeNative: _downloadSerializeNative,
-  deserializeNative: _downloadDeserializeNative,
-  deserializePropNative: _downloadDeserializePropNative,
-  serializeWeb: _downloadSerializeWeb,
-  deserializeWeb: _downloadDeserializeWeb,
-  deserializePropWeb: _downloadDeserializePropWeb,
-  version: 3,
+  attach: _downloadAttach,
+  version: '3.0.5',
 );
 
-int? _downloadGetId(Download object) {
-  if (object.id == Isar.autoIncrement) {
-    return null;
-  } else {
-    return object.id;
-  }
+int _downloadEstimateSize(
+  Download object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  bytesCount += 3 + object.chapterId.length * 3;
+  bytesCount += 3 + object.chapterName.length * 3;
+  bytesCount += 3 + object.image.length * 3;
+  bytesCount += 3 + object.mangaId.length * 3;
+  bytesCount += 3 + object.mangaName.length * 3;
+  return bytesCount;
 }
 
-void _downloadSetId(Download object, int id) {
-  object.id = id;
+void _downloadSerialize(
+  Download object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeString(offsets[0], object.chapterId);
+  writer.writeString(offsets[1], object.chapterName);
+  writer.writeDateTime(offsets[2], object.createdAt);
+  writer.writeString(offsets[3], object.image);
+  writer.writeString(offsets[4], object.mangaId);
+  writer.writeString(offsets[5], object.mangaName);
+  writer.writeByte(offsets[6], object.status.index);
+  writer.writeDateTime(offsets[7], object.updatedAt);
 }
 
-List<IsarLinkBase> _downloadGetLinks(Download object) {
-  return [];
-}
-
-const _downloadDownloadStatusConverter = DownloadStatusConverter();
-
-void _downloadSerializeNative(
-    IsarCollection<Download> collection,
-    IsarRawObject rawObj,
-    Download object,
-    int staticSize,
-    List<int> offsets,
-    AdapterAlloc alloc) {
-  var dynamicSize = 0;
-  final value0 = object.chapterId;
-  final _chapterId = IsarBinaryWriter.utf8Encoder.convert(value0);
-  dynamicSize += (_chapterId.length) as int;
-  final value1 = object.chapterName;
-  final _chapterName = IsarBinaryWriter.utf8Encoder.convert(value1);
-  dynamicSize += (_chapterName.length) as int;
-  final value2 = object.createdAt;
-  final _createdAt = value2;
-  final value3 = object.image;
-  final _image = IsarBinaryWriter.utf8Encoder.convert(value3);
-  dynamicSize += (_image.length) as int;
-  final value4 = object.mangaId;
-  final _mangaId = IsarBinaryWriter.utf8Encoder.convert(value4);
-  dynamicSize += (_mangaId.length) as int;
-  final value5 = object.mangaName;
-  final _mangaName = IsarBinaryWriter.utf8Encoder.convert(value5);
-  dynamicSize += (_mangaName.length) as int;
-  final value6 = _downloadDownloadStatusConverter.toIsar(object.status);
-  final _status = value6;
-  final value7 = object.updatedAt;
-  final _updatedAt = value7;
-  final size = staticSize + dynamicSize;
-
-  rawObj.buffer = alloc(size);
-  rawObj.buffer_length = size;
-  final buffer = IsarNative.bufAsBytes(rawObj.buffer, size);
-  final writer = IsarBinaryWriter(buffer, staticSize);
-  writer.writeBytes(offsets[0], _chapterId);
-  writer.writeBytes(offsets[1], _chapterName);
-  writer.writeDateTime(offsets[2], _createdAt);
-  writer.writeBytes(offsets[3], _image);
-  writer.writeBytes(offsets[4], _mangaId);
-  writer.writeBytes(offsets[5], _mangaName);
-  writer.writeLong(offsets[6], _status);
-  writer.writeDateTime(offsets[7], _updatedAt);
-}
-
-Download _downloadDeserializeNative(IsarCollection<Download> collection, int id,
-    IsarBinaryReader reader, List<int> offsets) {
+Download _downloadDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
   final object = Download();
   object.chapterId = reader.readString(offsets[0]);
   object.chapterName = reader.readString(offsets[1]);
@@ -119,16 +118,19 @@ Download _downloadDeserializeNative(IsarCollection<Download> collection, int id,
   object.mangaId = reader.readString(offsets[4]);
   object.mangaName = reader.readString(offsets[5]);
   object.status =
-      _downloadDownloadStatusConverter.fromIsar(reader.readLong(offsets[6]));
+      _DownloadstatusValueEnumMap[reader.readByteOrNull(offsets[6])] ??
+          DownloadStatus.pending;
   object.updatedAt = reader.readDateTime(offsets[7]);
   return object;
 }
 
-P _downloadDeserializePropNative<P>(
-    int id, IsarBinaryReader reader, int propertyIndex, int offset) {
-  switch (propertyIndex) {
-    case -1:
-      return id as P;
+P _downloadDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
     case 0:
       return (reader.readString(offset)) as P;
     case 1:
@@ -142,156 +144,112 @@ P _downloadDeserializePropNative<P>(
     case 5:
       return (reader.readString(offset)) as P;
     case 6:
-      return (_downloadDownloadStatusConverter
-          .fromIsar(reader.readLong(offset))) as P;
+      return (_DownloadstatusValueEnumMap[reader.readByteOrNull(offset)] ??
+          DownloadStatus.pending) as P;
     case 7:
       return (reader.readDateTime(offset)) as P;
     default:
-      throw 'Illegal propertyIndex';
+      throw IsarError('Unknown property with id $propertyId');
   }
 }
 
-dynamic _downloadSerializeWeb(
-    IsarCollection<Download> collection, Download object) {
-  final jsObj = IsarNative.newJsObject();
-  IsarNative.jsObjectSet(jsObj, 'chapterId', object.chapterId);
-  IsarNative.jsObjectSet(jsObj, 'chapterName', object.chapterName);
-  IsarNative.jsObjectSet(
-      jsObj, 'createdAt', object.createdAt.toUtc().millisecondsSinceEpoch);
-  IsarNative.jsObjectSet(jsObj, 'id', object.id);
-  IsarNative.jsObjectSet(jsObj, 'image', object.image);
-  IsarNative.jsObjectSet(jsObj, 'mangaId', object.mangaId);
-  IsarNative.jsObjectSet(jsObj, 'mangaName', object.mangaName);
-  IsarNative.jsObjectSet(
-      jsObj, 'status', _downloadDownloadStatusConverter.toIsar(object.status));
-  IsarNative.jsObjectSet(
-      jsObj, 'updatedAt', object.updatedAt.toUtc().millisecondsSinceEpoch);
-  return jsObj;
+const _DownloadstatusEnumValueMap = {
+  'pending': 0,
+  'downloading': 1,
+  'complete': 2,
+  'error': 3,
+};
+const _DownloadstatusValueEnumMap = {
+  0: DownloadStatus.pending,
+  1: DownloadStatus.downloading,
+  2: DownloadStatus.complete,
+  3: DownloadStatus.error,
+};
+
+Id _downloadGetId(Download object) {
+  return object.id ?? Isar.autoIncrement;
 }
 
-Download _downloadDeserializeWeb(
-    IsarCollection<Download> collection, dynamic jsObj) {
-  final object = Download();
-  object.chapterId = IsarNative.jsObjectGet(jsObj, 'chapterId') ?? '';
-  object.chapterName = IsarNative.jsObjectGet(jsObj, 'chapterName') ?? '';
-  object.createdAt = IsarNative.jsObjectGet(jsObj, 'createdAt') != null
-      ? DateTime.fromMillisecondsSinceEpoch(
-              IsarNative.jsObjectGet(jsObj, 'createdAt'),
-              isUtc: true)
-          .toLocal()
-      : DateTime.fromMillisecondsSinceEpoch(0);
-  object.id = IsarNative.jsObjectGet(jsObj, 'id');
-  object.image = IsarNative.jsObjectGet(jsObj, 'image') ?? '';
-  object.mangaId = IsarNative.jsObjectGet(jsObj, 'mangaId') ?? '';
-  object.mangaName = IsarNative.jsObjectGet(jsObj, 'mangaName') ?? '';
-  object.status = _downloadDownloadStatusConverter.fromIsar(
-      IsarNative.jsObjectGet(jsObj, 'status') ?? double.negativeInfinity);
-  object.updatedAt = IsarNative.jsObjectGet(jsObj, 'updatedAt') != null
-      ? DateTime.fromMillisecondsSinceEpoch(
-              IsarNative.jsObjectGet(jsObj, 'updatedAt'),
-              isUtc: true)
-          .toLocal()
-      : DateTime.fromMillisecondsSinceEpoch(0);
-  return object;
+List<IsarLinkBase<dynamic>> _downloadGetLinks(Download object) {
+  return [];
 }
 
-P _downloadDeserializePropWeb<P>(Object jsObj, String propertyName) {
-  switch (propertyName) {
-    case 'chapterId':
-      return (IsarNative.jsObjectGet(jsObj, 'chapterId') ?? '') as P;
-    case 'chapterName':
-      return (IsarNative.jsObjectGet(jsObj, 'chapterName') ?? '') as P;
-    case 'createdAt':
-      return (IsarNative.jsObjectGet(jsObj, 'createdAt') != null
-          ? DateTime.fromMillisecondsSinceEpoch(
-                  IsarNative.jsObjectGet(jsObj, 'createdAt'),
-                  isUtc: true)
-              .toLocal()
-          : DateTime.fromMillisecondsSinceEpoch(0)) as P;
-    case 'id':
-      return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
-    case 'image':
-      return (IsarNative.jsObjectGet(jsObj, 'image') ?? '') as P;
-    case 'mangaId':
-      return (IsarNative.jsObjectGet(jsObj, 'mangaId') ?? '') as P;
-    case 'mangaName':
-      return (IsarNative.jsObjectGet(jsObj, 'mangaName') ?? '') as P;
-    case 'status':
-      return (_downloadDownloadStatusConverter.fromIsar(
-          IsarNative.jsObjectGet(jsObj, 'status') ??
-              double.negativeInfinity)) as P;
-    case 'updatedAt':
-      return (IsarNative.jsObjectGet(jsObj, 'updatedAt') != null
-          ? DateTime.fromMillisecondsSinceEpoch(
-                  IsarNative.jsObjectGet(jsObj, 'updatedAt'),
-                  isUtc: true)
-              .toLocal()
-          : DateTime.fromMillisecondsSinceEpoch(0)) as P;
-    default:
-      throw 'Illegal propertyName';
-  }
+void _downloadAttach(IsarCollection<dynamic> col, Id id, Download object) {
+  object.id = id;
 }
-
-void _downloadAttachLinks(IsarCollection col, int id, Download object) {}
 
 extension DownloadQueryWhereSort on QueryBuilder<Download, Download, QWhere> {
   QueryBuilder<Download, Download, QAfterWhere> anyId() {
-    return addWhereClauseInternal(const IdWhereClause.any());
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(const IdWhereClause.any());
+    });
   }
 }
 
 extension DownloadQueryWhere on QueryBuilder<Download, Download, QWhereClause> {
-  QueryBuilder<Download, Download, QAfterWhereClause> idEqualTo(int id) {
-    return addWhereClauseInternal(IdWhereClause.between(
-      lower: id,
-      includeLower: true,
-      upper: id,
-      includeUpper: true,
-    ));
+  QueryBuilder<Download, Download, QAfterWhereClause> idEqualTo(Id id) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IdWhereClause.between(
+        lower: id,
+        upper: id,
+      ));
+    });
   }
 
-  QueryBuilder<Download, Download, QAfterWhereClause> idNotEqualTo(int id) {
-    if (whereSortInternal == Sort.asc) {
-      return addWhereClauseInternal(
-        IdWhereClause.lessThan(upper: id, includeUpper: false),
-      ).addWhereClauseInternal(
-        IdWhereClause.greaterThan(lower: id, includeLower: false),
-      );
-    } else {
-      return addWhereClauseInternal(
-        IdWhereClause.greaterThan(lower: id, includeLower: false),
-      ).addWhereClauseInternal(
-        IdWhereClause.lessThan(upper: id, includeUpper: false),
-      );
-    }
+  QueryBuilder<Download, Download, QAfterWhereClause> idNotEqualTo(Id id) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(
+              IdWhereClause.lessThan(upper: id, includeUpper: false),
+            )
+            .addWhereClause(
+              IdWhereClause.greaterThan(lower: id, includeLower: false),
+            );
+      } else {
+        return query
+            .addWhereClause(
+              IdWhereClause.greaterThan(lower: id, includeLower: false),
+            )
+            .addWhereClause(
+              IdWhereClause.lessThan(upper: id, includeUpper: false),
+            );
+      }
+    });
   }
 
-  QueryBuilder<Download, Download, QAfterWhereClause> idGreaterThan(int id,
+  QueryBuilder<Download, Download, QAfterWhereClause> idGreaterThan(Id id,
       {bool include = false}) {
-    return addWhereClauseInternal(
-      IdWhereClause.greaterThan(lower: id, includeLower: include),
-    );
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IdWhereClause.greaterThan(lower: id, includeLower: include),
+      );
+    });
   }
 
-  QueryBuilder<Download, Download, QAfterWhereClause> idLessThan(int id,
+  QueryBuilder<Download, Download, QAfterWhereClause> idLessThan(Id id,
       {bool include = false}) {
-    return addWhereClauseInternal(
-      IdWhereClause.lessThan(upper: id, includeUpper: include),
-    );
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IdWhereClause.lessThan(upper: id, includeUpper: include),
+      );
+    });
   }
 
   QueryBuilder<Download, Download, QAfterWhereClause> idBetween(
-    int lowerId,
-    int upperId, {
+    Id lowerId,
+    Id upperId, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addWhereClauseInternal(IdWhereClause.between(
-      lower: lowerId,
-      includeLower: includeLower,
-      upper: upperId,
-      includeUpper: includeUpper,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IdWhereClause.between(
+        lower: lowerId,
+        includeLower: includeLower,
+        upper: upperId,
+        includeUpper: includeUpper,
+      ));
+    });
   }
 }
 
@@ -301,240 +259,299 @@ extension DownloadQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'chapterId',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'chapterId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> chapterIdGreaterThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'chapterId',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'chapterId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> chapterIdLessThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'chapterId',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'chapterId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> chapterIdBetween(
     String lower,
     String upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'chapterId',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'chapterId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> chapterIdStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.startsWith,
-      property: 'chapterId',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'chapterId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> chapterIdEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.endsWith,
-      property: 'chapterId',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'chapterId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> chapterIdContains(
       String value,
       {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.contains,
-      property: 'chapterId',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'chapterId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> chapterIdMatches(
       String pattern,
       {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.matches,
-      property: 'chapterId',
-      value: pattern,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'chapterId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition> chapterIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'chapterId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition>
+      chapterIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'chapterId',
+        value: '',
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> chapterNameEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'chapterName',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'chapterName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition>
       chapterNameGreaterThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'chapterName',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'chapterName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> chapterNameLessThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'chapterName',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'chapterName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> chapterNameBetween(
     String lower,
     String upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'chapterName',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'chapterName',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> chapterNameStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.startsWith,
-      property: 'chapterName',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'chapterName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> chapterNameEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.endsWith,
-      property: 'chapterName',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'chapterName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> chapterNameContains(
       String value,
       {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.contains,
-      property: 'chapterName',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'chapterName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> chapterNameMatches(
       String pattern,
       {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.matches,
-      property: 'chapterName',
-      value: pattern,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'chapterName',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition> chapterNameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'chapterName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition>
+      chapterNameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'chapterName',
+        value: '',
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> createdAtEqualTo(
       DateTime value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'createdAt',
-      value: value,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'createdAt',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> createdAtGreaterThan(
     DateTime value, {
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'createdAt',
-      value: value,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'createdAt',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> createdAtLessThan(
     DateTime value, {
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'createdAt',
-      value: value,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'createdAt',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> createdAtBetween(
@@ -543,410 +560,510 @@ extension DownloadQueryFilter
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'createdAt',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'createdAt',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> idIsNull() {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.isNull,
-      property: 'id',
-      value: null,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'id',
+      ));
+    });
   }
 
-  QueryBuilder<Download, Download, QAfterFilterCondition> idEqualTo(int value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'id',
-      value: value,
-    ));
+  QueryBuilder<Download, Download, QAfterFilterCondition> idIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'id',
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition> idEqualTo(Id? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'id',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> idGreaterThan(
-    int value, {
+    Id? value, {
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'id',
-      value: value,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'id',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> idLessThan(
-    int value, {
+    Id? value, {
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'id',
-      value: value,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'id',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> idBetween(
-    int lower,
-    int upper, {
+    Id? lower,
+    Id? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'id',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'id',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> imageEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'image',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'image',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> imageGreaterThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'image',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'image',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> imageLessThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'image',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'image',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> imageBetween(
     String lower,
     String upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'image',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'image',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> imageStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.startsWith,
-      property: 'image',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'image',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> imageEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.endsWith,
-      property: 'image',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'image',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> imageContains(
       String value,
       {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.contains,
-      property: 'image',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'image',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> imageMatches(
       String pattern,
       {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.matches,
-      property: 'image',
-      value: pattern,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'image',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition> imageIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'image',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition> imageIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'image',
+        value: '',
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> mangaIdEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'mangaId',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'mangaId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> mangaIdGreaterThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'mangaId',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'mangaId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> mangaIdLessThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'mangaId',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'mangaId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> mangaIdBetween(
     String lower,
     String upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'mangaId',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'mangaId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> mangaIdStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.startsWith,
-      property: 'mangaId',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'mangaId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> mangaIdEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.endsWith,
-      property: 'mangaId',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'mangaId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> mangaIdContains(
       String value,
       {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.contains,
-      property: 'mangaId',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'mangaId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> mangaIdMatches(
       String pattern,
       {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.matches,
-      property: 'mangaId',
-      value: pattern,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'mangaId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition> mangaIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'mangaId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition> mangaIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'mangaId',
+        value: '',
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> mangaNameEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'mangaName',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'mangaName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> mangaNameGreaterThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'mangaName',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'mangaName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> mangaNameLessThan(
     String value, {
-    bool caseSensitive = true,
     bool include = false,
+    bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'mangaName',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'mangaName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> mangaNameBetween(
     String lower,
     String upper, {
-    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
+    bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'mangaName',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'mangaName',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> mangaNameStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.startsWith,
-      property: 'mangaName',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'mangaName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> mangaNameEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.endsWith,
-      property: 'mangaName',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'mangaName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> mangaNameContains(
       String value,
       {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.contains,
-      property: 'mangaName',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'mangaName',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> mangaNameMatches(
       String pattern,
       {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.matches,
-      property: 'mangaName',
-      value: pattern,
-      caseSensitive: caseSensitive,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'mangaName',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition> mangaNameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'mangaName',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition>
+      mangaNameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'mangaName',
+        value: '',
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> statusEqualTo(
       DownloadStatus value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'status',
-      value: _downloadDownloadStatusConverter.toIsar(value),
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'status',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> statusGreaterThan(
     DownloadStatus value, {
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'status',
-      value: _downloadDownloadStatusConverter.toIsar(value),
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'status',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> statusLessThan(
     DownloadStatus value, {
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'status',
-      value: _downloadDownloadStatusConverter.toIsar(value),
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'status',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> statusBetween(
@@ -955,46 +1072,51 @@ extension DownloadQueryFilter
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'status',
-      lower: _downloadDownloadStatusConverter.toIsar(lower),
-      includeLower: includeLower,
-      upper: _downloadDownloadStatusConverter.toIsar(upper),
-      includeUpper: includeUpper,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'status',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> updatedAtEqualTo(
       DateTime value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'updatedAt',
-      value: value,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'updatedAt',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> updatedAtGreaterThan(
     DateTime value, {
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'updatedAt',
-      value: value,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'updatedAt',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> updatedAtLessThan(
     DateTime value, {
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'updatedAt',
-      value: value,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'updatedAt',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Download, Download, QAfterFilterCondition> updatedAtBetween(
@@ -1003,166 +1125,230 @@ extension DownloadQueryFilter
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'updatedAt',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'updatedAt',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
   }
 }
+
+extension DownloadQueryObject
+    on QueryBuilder<Download, Download, QFilterCondition> {}
 
 extension DownloadQueryLinks
     on QueryBuilder<Download, Download, QFilterCondition> {}
 
-extension DownloadQueryWhereSortBy
-    on QueryBuilder<Download, Download, QSortBy> {
+extension DownloadQuerySortBy on QueryBuilder<Download, Download, QSortBy> {
   QueryBuilder<Download, Download, QAfterSortBy> sortByChapterId() {
-    return addSortByInternal('chapterId', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'chapterId', Sort.asc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> sortByChapterIdDesc() {
-    return addSortByInternal('chapterId', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'chapterId', Sort.desc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> sortByChapterName() {
-    return addSortByInternal('chapterName', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'chapterName', Sort.asc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> sortByChapterNameDesc() {
-    return addSortByInternal('chapterName', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'chapterName', Sort.desc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> sortByCreatedAt() {
-    return addSortByInternal('createdAt', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createdAt', Sort.asc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> sortByCreatedAtDesc() {
-    return addSortByInternal('createdAt', Sort.desc);
-  }
-
-  QueryBuilder<Download, Download, QAfterSortBy> sortById() {
-    return addSortByInternal('id', Sort.asc);
-  }
-
-  QueryBuilder<Download, Download, QAfterSortBy> sortByIdDesc() {
-    return addSortByInternal('id', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createdAt', Sort.desc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> sortByImage() {
-    return addSortByInternal('image', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'image', Sort.asc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> sortByImageDesc() {
-    return addSortByInternal('image', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'image', Sort.desc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> sortByMangaId() {
-    return addSortByInternal('mangaId', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'mangaId', Sort.asc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> sortByMangaIdDesc() {
-    return addSortByInternal('mangaId', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'mangaId', Sort.desc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> sortByMangaName() {
-    return addSortByInternal('mangaName', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'mangaName', Sort.asc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> sortByMangaNameDesc() {
-    return addSortByInternal('mangaName', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'mangaName', Sort.desc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> sortByStatus() {
-    return addSortByInternal('status', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.asc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> sortByStatusDesc() {
-    return addSortByInternal('status', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.desc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> sortByUpdatedAt() {
-    return addSortByInternal('updatedAt', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.asc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> sortByUpdatedAtDesc() {
-    return addSortByInternal('updatedAt', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.desc);
+    });
   }
 }
 
-extension DownloadQueryWhereSortThenBy
+extension DownloadQuerySortThenBy
     on QueryBuilder<Download, Download, QSortThenBy> {
   QueryBuilder<Download, Download, QAfterSortBy> thenByChapterId() {
-    return addSortByInternal('chapterId', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'chapterId', Sort.asc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> thenByChapterIdDesc() {
-    return addSortByInternal('chapterId', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'chapterId', Sort.desc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> thenByChapterName() {
-    return addSortByInternal('chapterName', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'chapterName', Sort.asc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> thenByChapterNameDesc() {
-    return addSortByInternal('chapterName', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'chapterName', Sort.desc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> thenByCreatedAt() {
-    return addSortByInternal('createdAt', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createdAt', Sort.asc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> thenByCreatedAtDesc() {
-    return addSortByInternal('createdAt', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'createdAt', Sort.desc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> thenById() {
-    return addSortByInternal('id', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'id', Sort.asc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> thenByIdDesc() {
-    return addSortByInternal('id', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'id', Sort.desc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> thenByImage() {
-    return addSortByInternal('image', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'image', Sort.asc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> thenByImageDesc() {
-    return addSortByInternal('image', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'image', Sort.desc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> thenByMangaId() {
-    return addSortByInternal('mangaId', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'mangaId', Sort.asc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> thenByMangaIdDesc() {
-    return addSortByInternal('mangaId', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'mangaId', Sort.desc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> thenByMangaName() {
-    return addSortByInternal('mangaName', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'mangaName', Sort.asc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> thenByMangaNameDesc() {
-    return addSortByInternal('mangaName', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'mangaName', Sort.desc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> thenByStatus() {
-    return addSortByInternal('status', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.asc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> thenByStatusDesc() {
-    return addSortByInternal('status', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'status', Sort.desc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> thenByUpdatedAt() {
-    return addSortByInternal('updatedAt', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.asc);
+    });
   }
 
   QueryBuilder<Download, Download, QAfterSortBy> thenByUpdatedAtDesc() {
-    return addSortByInternal('updatedAt', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.desc);
+    });
   }
 }
 
@@ -1170,81 +1356,111 @@ extension DownloadQueryWhereDistinct
     on QueryBuilder<Download, Download, QDistinct> {
   QueryBuilder<Download, Download, QDistinct> distinctByChapterId(
       {bool caseSensitive = true}) {
-    return addDistinctByInternal('chapterId', caseSensitive: caseSensitive);
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'chapterId', caseSensitive: caseSensitive);
+    });
   }
 
   QueryBuilder<Download, Download, QDistinct> distinctByChapterName(
       {bool caseSensitive = true}) {
-    return addDistinctByInternal('chapterName', caseSensitive: caseSensitive);
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'chapterName', caseSensitive: caseSensitive);
+    });
   }
 
   QueryBuilder<Download, Download, QDistinct> distinctByCreatedAt() {
-    return addDistinctByInternal('createdAt');
-  }
-
-  QueryBuilder<Download, Download, QDistinct> distinctById() {
-    return addDistinctByInternal('id');
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'createdAt');
+    });
   }
 
   QueryBuilder<Download, Download, QDistinct> distinctByImage(
       {bool caseSensitive = true}) {
-    return addDistinctByInternal('image', caseSensitive: caseSensitive);
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'image', caseSensitive: caseSensitive);
+    });
   }
 
   QueryBuilder<Download, Download, QDistinct> distinctByMangaId(
       {bool caseSensitive = true}) {
-    return addDistinctByInternal('mangaId', caseSensitive: caseSensitive);
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'mangaId', caseSensitive: caseSensitive);
+    });
   }
 
   QueryBuilder<Download, Download, QDistinct> distinctByMangaName(
       {bool caseSensitive = true}) {
-    return addDistinctByInternal('mangaName', caseSensitive: caseSensitive);
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'mangaName', caseSensitive: caseSensitive);
+    });
   }
 
   QueryBuilder<Download, Download, QDistinct> distinctByStatus() {
-    return addDistinctByInternal('status');
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'status');
+    });
   }
 
   QueryBuilder<Download, Download, QDistinct> distinctByUpdatedAt() {
-    return addDistinctByInternal('updatedAt');
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'updatedAt');
+    });
   }
 }
 
 extension DownloadQueryProperty
     on QueryBuilder<Download, Download, QQueryProperty> {
+  QueryBuilder<Download, int, QQueryOperations> idProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'id');
+    });
+  }
+
   QueryBuilder<Download, String, QQueryOperations> chapterIdProperty() {
-    return addPropertyNameInternal('chapterId');
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'chapterId');
+    });
   }
 
   QueryBuilder<Download, String, QQueryOperations> chapterNameProperty() {
-    return addPropertyNameInternal('chapterName');
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'chapterName');
+    });
   }
 
   QueryBuilder<Download, DateTime, QQueryOperations> createdAtProperty() {
-    return addPropertyNameInternal('createdAt');
-  }
-
-  QueryBuilder<Download, int?, QQueryOperations> idProperty() {
-    return addPropertyNameInternal('id');
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'createdAt');
+    });
   }
 
   QueryBuilder<Download, String, QQueryOperations> imageProperty() {
-    return addPropertyNameInternal('image');
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'image');
+    });
   }
 
   QueryBuilder<Download, String, QQueryOperations> mangaIdProperty() {
-    return addPropertyNameInternal('mangaId');
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'mangaId');
+    });
   }
 
   QueryBuilder<Download, String, QQueryOperations> mangaNameProperty() {
-    return addPropertyNameInternal('mangaName');
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'mangaName');
+    });
   }
 
   QueryBuilder<Download, DownloadStatus, QQueryOperations> statusProperty() {
-    return addPropertyNameInternal('status');
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'status');
+    });
   }
 
   QueryBuilder<Download, DateTime, QQueryOperations> updatedAtProperty() {
-    return addPropertyNameInternal('updatedAt');
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'updatedAt');
+    });
   }
 }

@@ -51,7 +51,7 @@ abstract class _$ReaderLoadingController
 }
 
 String $ReaderPagesControllerHash() =>
-    r'26763d22bfd65aaac403a5268a48b6a08e15d8c5';
+    r'163c82b161e599fd40676a44365c8011b86a307e';
 
 /// See also [ReaderPagesController].
 class ReaderPagesControllerProvider extends AutoDisposeNotifierProviderImpl<

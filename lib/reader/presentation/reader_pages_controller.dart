@@ -1,6 +1,5 @@
-import 'package:async/async.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
+import 'package:fluttiyomi/downloads/application/download_service.dart';
 import 'package:fluttiyomi/reader/data/chapter_details_repository.dart';
 import 'package:fluttiyomi/reader/presentation/reader_load_state.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -91,19 +90,9 @@ class ReaderPagesController extends _$ReaderPagesController {
     Chapter chapter,
     List<String> pages,
   ) async {
-    final FutureGroup futures = FutureGroup<FileInfo>();
-    final CacheManager cacheManager = DefaultCacheManager();
+    final downloadService = ref.read(downloadServiceProvider);
 
-    for (final page in pages) {
-      final file = await cacheManager.getFileFromCache(page);
-
-      if (file == null) {
-        futures.add(cacheManager.downloadFile(page));
-      }
-    }
-
-    futures.close();
-    await futures.future;
+    await downloadService.cachePages(pages);
 
     return _buildReaderPages(chapter, pages);
   }

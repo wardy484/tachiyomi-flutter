@@ -1,4 +1,6 @@
 import 'package:fluttiyomi/auth/auth_repository.dart';
+import 'package:fluttiyomi/data/chapter/chapter.dart';
+import 'package:fluttiyomi/downloads/application/download_service.dart';
 import 'package:fluttiyomi/favourites/data/favourite.dart';
 import 'package:fluttiyomi/favourites/data/favourite_repository.dart';
 import 'package:fluttiyomi/favourites/presentation/favourites_list_controller.dart';
@@ -24,13 +26,19 @@ class FavouritesService {
         mangaDetailsControllerProvider(mangaId).future,
       );
 
-      await favouritesRepository.addFavourite(
+      final favourite = await favouritesRepository.addFavourite(
         user,
         ref.read(sourceClientProvider).src,
         mangaDetails.details.titles.first,
         mangaDetails.details,
         mangaDetails.chapters,
       );
+
+      // TODO: Make auto download a setting
+      ref.read(downloadServiceProvider).downloadChaptersInBackground(
+            favourite.toManga(),
+            favourite.chapters,
+          );
     } else {
       await favouritesRepository.deleteFavourite(
         user,
@@ -78,6 +86,22 @@ class FavouritesService {
       user,
       favourite,
       chaptersToMarkAsRead,
+    );
+  }
+
+  Future<void> setLastRead(
+    Favourite favourite,
+    Chapter chapter,
+    int pageNumber,
+  ) async {
+    final favouritesRepository = ref.watch(favouritesRepositoryProvider);
+    final user = ref.watch(authRepositoryProvider).currentUser;
+
+    await favouritesRepository.setLastRead(
+      user,
+      favourite,
+      chapter,
+      pageNumber,
     );
   }
 }

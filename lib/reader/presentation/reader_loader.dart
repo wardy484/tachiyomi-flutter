@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fluttiyomi/chapter_details/chapter_details_notifier.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/reader/presentation/reader_loader_footer.dart';
 import 'package:fluttiyomi/reader/presentation/reader_loader_header.dart';
-import 'package:fluttiyomi/reader/presentation/reader_pages_controller.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -31,7 +29,7 @@ class _ReaderLoaderState extends ConsumerState<ReaderLoader> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: figure out how to get no data state wihtout reloading whole widget
+    // TODO: figure out how to get no previous chapter state wihtout reloading whole widget
 
     return ScrollConfiguration(
       behavior: DisableGlowingOverscrollIndicator(),
@@ -51,21 +49,22 @@ class _ReaderLoaderState extends ConsumerState<ReaderLoader> {
           reverse: widget.reverse,
         ),
         onRefresh: () async {
-          if (widget.reverse) {
-            await ref.read(chapterDetailsProvider.notifier).nextChapter();
-          } else {
-            await ref.read(chapterDetailsProvider.notifier).previousChapter();
-          }
+          // TODO: Update to use new chapter details provider
+          // if (widget.reverse) {
+          //   await ref.read(chapterDetailsProvider.notifier).nextChapter();
+          // } else {
+          //   await ref.read(chapterDetailsProvider.notifier).previousChapter();
+          // }
 
           _refreshController.loadComplete();
           _refreshController.refreshCompleted();
         },
         onLoading: () async {
-          if (!widget.reverse) {
-            await ref.read(chapterDetailsProvider.notifier).nextChapter();
-          } else {
-            await ref.read(chapterDetailsProvider.notifier).previousChapter();
-          }
+          // if (!widget.reverse) {
+          //   await ref.read(chapterDetailsProvider.notifier).nextChapter();
+          // } else {
+          //   await ref.read(chapterDetailsProvider.notifier).previousChapter();
+          // }
 
           _refreshController.loadComplete();
           _refreshController.refreshCompleted();

@@ -42,7 +42,7 @@ class MangaDetailsHeader extends ConsumerWidget {
                     children: [
                       BookmarkButton(mangaId: manga.id),
                       gapW16,
-                      ContinueButton(mangaId: manga.id)
+                      ContinueButton(mangaId: manga.id),
                     ],
                   ),
                   gapH8,

@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttiyomi/auth/auth_guard.dart';
 import 'package:fluttiyomi/database/database.dart';
-import 'package:fluttiyomi/downloads/download_notifier.dart';
-import 'package:fluttiyomi/javascript/source_client.dart';
+import 'package:fluttiyomi/local_notifications.dart';
 import 'package:fluttiyomi/router.gr.dart';
 import 'package:fluttiyomi/settings/settings_notifier.dart';
 import 'package:fluttiyomi/widgets/refresh_config.dart';
+import 'package:fluttiyomi/work_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 // import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,14 +26,27 @@ void main() async {
     cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   );
 
-  final container = ProviderContainer();
-  container.read(sourceClientProvider.notifier).state =
-      await SourceClient.init();
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestPermission();
 
+  await flutterLocalNotificationsPlugin.initialize(
+    const InitializationSettings(
+      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+    ),
+    onDidReceiveNotificationResponse:
+        (NotificationResponse notificationResponse) async {
+      // ...
+    },
+    onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
+  );
+
+  final container = ProviderContainer();
   await container.read(isarDatabaseProvider).init();
   await container.read(settingsProvider.notifier).loadSettings();
-
-  container.read(downloadProvider.notifier).startDownloadQueue();
+  await container.read(workManagerProvider).initialize(callbackDispatcher);
 
   // await SentryFlutter.init(
   //   (options) {

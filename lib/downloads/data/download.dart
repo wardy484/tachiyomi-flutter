@@ -1,6 +1,6 @@
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
-import 'package:fluttiyomi/downloads/models/download_status.dart';
+import 'package:fluttiyomi/downloads/data/download_status.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'download.freezed.dart';

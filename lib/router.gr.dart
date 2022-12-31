@@ -52,10 +52,7 @@ class AppRouter extends _i5.RootStackRouter {
       return _i5.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i4.ReaderPage(
-              key: args.key,
-              mangaId: args.mangaId,
-              chapter: args.chapter,
-              chapterIndex: args.chapterIndex));
+              key: args.key, mangaId: args.mangaId, chapter: args.chapter));
     }
   };
 
@@ -127,27 +124,18 @@ class MangaDetailsRouteArgs {
 /// [_i4.ReaderPage]
 class ReaderRoute extends _i5.PageRouteInfo<ReaderRouteArgs> {
   ReaderRoute(
-      {_i6.Key? key,
-      required String mangaId,
-      required _i8.Chapter chapter,
-      required int chapterIndex})
+      {_i6.Key? key, required String mangaId, required _i8.Chapter chapter})
       : super(ReaderRoute.name,
             path: '/read/:mangaId',
-            args: ReaderRouteArgs(
-                key: key,
-                mangaId: mangaId,
-                chapter: chapter,
-                chapterIndex: chapterIndex));
+            args:
+                ReaderRouteArgs(key: key, mangaId: mangaId, chapter: chapter));
 
   static const String name = 'ReaderRoute';
 }
 
 class ReaderRouteArgs {
   const ReaderRouteArgs(
-      {this.key,
-      required this.mangaId,
-      required this.chapter,
-      required this.chapterIndex});
+      {this.key, required this.mangaId, required this.chapter});
 
   final _i6.Key? key;
 
@@ -155,10 +143,8 @@ class ReaderRouteArgs {
 
   final _i8.Chapter chapter;
 
-  final int chapterIndex;
-
   @override
   String toString() {
-    return 'ReaderRouteArgs{key: $key, mangaId: $mangaId, chapter: $chapter, chapterIndex: $chapterIndex}';
+    return 'ReaderRouteArgs{key: $key, mangaId: $mangaId, chapter: $chapter}';
   }
 }

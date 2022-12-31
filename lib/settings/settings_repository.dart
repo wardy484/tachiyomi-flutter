@@ -36,7 +36,7 @@ class SettingsRepository {
       ..lastUpdateCheck = DateTime.now()
       ..padding = 0;
 
-    await _database.writeTxn((_) async {
+    await _database.writeTxn(() async {
       await _settings.put(settings);
     });
 
@@ -49,8 +49,8 @@ class SettingsRepository {
     final settings = await getGlobalSettings();
     settings.lastUpdateCheck = lastCheckAt;
 
-    await _database.writeTxn((_) async {
-      await _settings.put(settings, replaceOnConflict: true);
+    await _database.writeTxn(() async {
+      await _settings.put(settings);
     });
 
     return settings;
@@ -62,8 +62,8 @@ class SettingsRepository {
     final settings = await getGlobalSettings();
     settings.padding = padding;
 
-    await _database.writeTxn((_) async {
-      await _settings.put(settings, replaceOnConflict: true);
+    await _database.writeTxn(() async {
+      await _settings.put(settings);
     });
 
     return settings;

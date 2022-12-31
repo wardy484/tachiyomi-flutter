@@ -50,8 +50,8 @@ dependencies:
   path_provider: ^2.0.0
   path: ^1.8.0
   easy_debounce: ^2.0.2
-  isar: ^2.5.0
-  isar_flutter_libs: ^2.5.0
+  isar: ^3.0.5
+  isar_flutter_libs: ^3.0.5
   flutter_advanced_networkimage_2: ^2.0.1
   flutter_form_builder: ^7.1.0
   form_builder_validators: ^7.4.0
@@ -60,7 +60,6 @@ dependencies:
   intl: ^0.17.0
   cupertino_will_pop_scope: ^1.2.0
   extended_image: ^6.3.4
-  image_downloader: ^0.31.0
   loadany: ^1.0.0
   flutter_easyrefresh: ^2.2.1
   refresh_loadmore: ^2.0.5
@@ -100,6 +99,7 @@ dependencies:
   transparent_image: ^2.0.0
   workmanager: ^0.5.1
   dio_logger: ^4.0.8+8
+  flutter_local_notifications: ^12.0.4
 
 dev_dependencies:
   auto_route_generator: ^4.0.0
@@ -107,7 +107,7 @@ dev_dependencies:
     sdk: flutter
   build_runner:
   freezed: ^2.0.1
-  isar_generator: 2.5.0
+  isar_generator: 3.0.5
   dart_code_metrics: ^5.0.1
 
 dependency_overrides:

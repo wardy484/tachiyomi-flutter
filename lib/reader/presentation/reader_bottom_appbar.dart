@@ -41,7 +41,6 @@ class ReaderBottomAppBar extends ConsumerWidget {
 
                   return Text(
                     "$currentPage/$totalPages",
-                    // "0/0",
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),

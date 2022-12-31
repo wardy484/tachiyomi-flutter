@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
@@ -26,13 +25,11 @@ const VISIBILITY_THRESHOLD = 300;
 class ReaderPage extends HookConsumerWidget {
   final String mangaId;
   final Chapter chapter;
-  final int chapterIndex;
 
   const ReaderPage({
     Key? key,
     required this.mangaId,
     required this.chapter,
-    required this.chapterIndex,
   }) : super(key: key);
 
   @override
@@ -42,6 +39,7 @@ class ReaderPage extends HookConsumerWidget {
     final currentPage = useState(1);
     final fetchingMoreResults = useState(false);
     final loadedChapterIds = useState([chapter.id]);
+    final isReadingInReverse = useState(false);
 
     useEffect(() {
       ref
@@ -51,112 +49,123 @@ class ReaderPage extends HookConsumerWidget {
       return null;
     }, []);
 
+    // Not sure why I need this.... its a bit wank I think this is just to trigger
+    // the initial read on the page so something subscribs to it.
     ref.listen(readerPagesControllerProvider(mangaId), (state, next) {
       // print("READ PAGE: resetting fetch more results");
       // fetchingMoreResults.value = false;
     });
 
     return ref.watch(readerLoadingControllerProvider).when(
-          loaded: () => Scaffold(
-            extendBodyBehindAppBar: true,
-            extendBody: true,
-            backgroundColor: Colors.black,
-            appBar: ReaderAppBar(chapter: visibleChapter.value),
-            body: GestureDetector(
-              onTap: () => ref
-                  .read(readerAppbarControllerProvider.notifier)
-                  .toggleVisibility(),
-              child: ScrollingViewer(
-                child: ReaderLoader(
-                  mangaId: mangaId,
-                  currentChapter: currentChapter.value,
-                  // TODO: store read direction
-                  reverse: false,
-                  child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    padding: ref.watch(settingsProvider).when(
-                          initial: () => EdgeInsets.zero,
-                          loaded: (settings) => EdgeInsets.symmetric(
-                            horizontal: settings.padding.toDouble(),
-                          ),
-                        ),
-                    // TODO: Store read direction
-                    reverse: false,
-                    itemCount: ref
-                        .watch(readerPagesControllerProvider(mangaId))
-                        .length,
-                    itemBuilder: (context, index) {
-                      final page = ref
-                          .watch(readerPagesControllerProvider(mangaId))[index];
+          loaded: () => WillPopScope(
+            onWillPop: () async {
+              await _setLastPage(ref, visibleChapter.value, currentPage);
 
-                      if (page.url == "page-break") {
-                        return Padding(
-                          padding: const EdgeInsets.all(30.0),
-                          child: Column(
-                            children: [
-                              const Text("Finished:",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                              Text(
-                                  "Chapter: ${page.previousChapter?.chapterNo}"),
-                              const SizedBox(height: 20),
-                              const Text("Next Chapter:",
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold)),
-                              Text("Chapter: ${page.chapter.chapterNo}"),
-                            ],
+              return true;
+            },
+            child: Scaffold(
+              extendBodyBehindAppBar: true,
+              extendBody: true,
+              backgroundColor: Colors.black,
+              appBar: ReaderAppBar(chapter: visibleChapter.value),
+              body: GestureDetector(
+                onTap: () => ref
+                    .read(readerAppbarControllerProvider.notifier)
+                    .toggleVisibility(),
+                child: ScrollingViewer(
+                  child: ReaderLoader(
+                    mangaId: mangaId,
+                    currentChapter: currentChapter.value,
+                    reverse: isReadingInReverse.value,
+                    child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: ref.watch(settingsProvider).when(
+                            initial: () => EdgeInsets.zero,
+                            loaded: (settings) => EdgeInsets.symmetric(
+                              horizontal: settings.padding.toDouble(),
+                            ),
                           ),
+                      reverse: isReadingInReverse.value,
+                      itemCount: ref
+                          .watch(readerPagesControllerProvider(mangaId))
+                          .length,
+                      itemBuilder: (context, index) {
+                        final pages =
+                            ref.watch(readerPagesControllerProvider(mangaId));
+                        final sortedPages = isReadingInReverse.value
+                            ? pages.reversed.toList()
+                            : pages;
+                        final page = sortedPages[index];
+
+                        if (page.url == "page-break") {
+                          return Padding(
+                            padding: const EdgeInsets.all(30.0),
+                            child: Column(
+                              children: [
+                                const Text("Finished:",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                Text(
+                                    "Chapter: ${page.previousChapter?.chapterNo}"),
+                                const SizedBox(height: 20),
+                                const Text("Next Chapter:",
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                Text("Chapter: ${page.chapter.chapterNo}"),
+                              ],
+                            ),
+                          );
+                        }
+
+                        // Attemping to mitigate flutter lists jumping all the way to
+                        // top of the list when scrolling up a tiny bit and a new page is rendered
+                        // We render keep 3 chapters worth of pages alive while offscreen,
+                        // This will _eventually_ result in jumping when scrolling back up
+                        // but is unlikely to happen when scrolling within the same chapter
+                        // or even the previous, but it will happen and this uses more
+                        // memory as a result. This is a tradeoff I'm willing to make for now.
+                        final keepPageAlive = page.chapter.chapterNo >
+                            visibleChapter.value.chapterNo - 3;
+
+                        return MangaPage(
+                          page: page,
+                          keepAlive: keepPageAlive,
+                          onPageVisible: ((page) {
+                            log("Page ${page.pageNumber} visible");
+
+                            currentPage.value = index + 1;
+                            visibleChapter.value = page.chapter;
+
+                            final halfWayPoint = page.totalPages / 2;
+
+                            if (page.pageNumber > halfWayPoint) {
+                              log("At least half way through chapter");
+                              appendNextChapter(
+                                ref,
+                                visibleChapter,
+                                loadedChapterIds,
+                                fetchingMoreResults,
+                              );
+                            }
+                          }),
                         );
-                      }
-
-                      // Attemping to mitigate flutter lists jumping all the way to
-                      // top of the list when scrolling up a tiny bit and a new page is rendered
-                      // We render keep 3 chapters worth of pages alive while offscreen,
-                      // This will _eventually_ result in jumping when scrolling back up
-                      // but is unlikely to happen when scrolling within the same chapter
-                      // or even the previous, but it will happen and this uses more
-                      // memory as a result. This is a tradeoff I'm willing to make for now.
-                      final keepPageAlive = page.chapter.chapterNo >
-                          visibleChapter.value.chapterNo - 3;
-
-                      return MangaPage(
-                        page: page,
-                        keepAlive: keepPageAlive,
-                        onPageVisible: ((page) {
-                          log("Page ${page.pageNumber} visible");
-
-                          currentPage.value = index + 1;
-                          visibleChapter.value = page.chapter;
-
-                          final halfWayPoint = page.totalPages / 2;
-
-                          if (page.pageNumber > halfWayPoint) {
-                            log("At least half way through chapter");
-                            appendNextChapter(
-                              ref,
-                              visibleChapter,
-                              loadedChapterIds,
-                              fetchingMoreResults,
-                            );
-                          }
-                        }),
-                      );
-                    },
+                      },
+                    ),
                   ),
                 ),
               ),
-            ),
-            bottomNavigationBar: ReaderBottomAppBar(
-              mangaId: mangaId,
-              numberOfPages:
-                  ref.watch(readerPagesControllerProvider(mangaId)).length,
-              chapter: currentChapter.value,
-              currentPage: currentPage.value,
-              onChapterChanged: (newChapter) => loadNewChapter(
-                newChapter,
-                currentChapter,
-                ref,
+              bottomNavigationBar: ReaderBottomAppBar(
+                mangaId: mangaId,
+                numberOfPages:
+                    ref.watch(readerPagesControllerProvider(mangaId)).length,
+                chapter: currentChapter.value,
+                currentPage: currentPage.value,
+                onChapterChanged: (newChapter) => loadNewChapter(
+                  newChapter,
+                  currentChapter,
+                  ref,
+                ),
               ),
             ),
           ),
@@ -249,6 +258,34 @@ class ReaderPage extends HookConsumerWidget {
       mangaId,
       currentChapter,
     ));
+  }
+
+  Future<void> _setLastPage(
+    WidgetRef ref,
+    Chapter chapter,
+    ValueNotifier<int> currentPage,
+  ) async {
+    final mangaDetails =
+        ref.read(mangaDetailsControllerProvider(mangaId)).valueOrNull;
+
+    if (mangaDetails?.favourite != null) {
+      final pages = ref.watch(readerPagesControllerProvider(mangaId));
+      final lastPage = pages[currentPage.value - 1];
+
+      int lastReadPage = 0;
+
+      if (lastPage.url == "page-break") {
+        lastReadPage = pages[pages.length - 2].pageNumber;
+      } else {
+        lastReadPage = lastPage.pageNumber;
+      }
+
+      await ref.read(favouritesServiceProvider).setLastRead(
+            mangaDetails!.favourite!,
+            chapter,
+            lastReadPage,
+          );
+    }
   }
 }
 

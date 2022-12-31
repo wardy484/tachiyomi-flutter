@@ -29,7 +29,6 @@ class _MangaPageState extends State<MangaPage>
   void initState() {
     super.initState();
     keepAlive = widget.keepAlive;
-    print("initState");
   }
 
   @override
@@ -41,6 +40,8 @@ class _MangaPageState extends State<MangaPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return VisibilityDetector(
       key: Key(widget.page.toKey()),
       child: CachedNetworkImage(

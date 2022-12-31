@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fluttiyomi/auth/auth_repository.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
-import 'package:fluttiyomi/downloads/download_notifier.dart';
+import 'package:fluttiyomi/downloads/application/download_service.dart';
 import 'package:fluttiyomi/favourites/applications/favourites_service.dart';
 import 'package:fluttiyomi/favourites/data/favourite.dart';
+import 'package:fluttiyomi/favourites/data/favourite_repository.dart';
 import 'package:fluttiyomi/widgets/common/context_menu.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -22,19 +24,27 @@ class ChapterOptions extends ConsumerWidget {
     return ContextMenu(
       children: [
         ContextMenuItem(
-          icon: FontAwesomeIcons.solidCircleUp,
+          icon: FontAwesomeIcons.trash,
           onPressed: () {
-            ref
-                .read(favouritesServiceProvider)
-                .markChapterAsUnread(favourite, chapter.chapterNo);
+            ref.read(favouritesRepositoryProvider).deleteChapter(
+                  ref.read(authRepositoryProvider).currentUser,
+                  favourite,
+                  chapter.id,
+                );
           },
         ),
         ContextMenuItem(
           icon: FontAwesomeIcons.check,
           onPressed: () {
-            ref
-                .read(favouritesServiceProvider)
-                .markChapterAsRead(favourite, chapter.chapterNo);
+            if (chapter.read) {
+              ref
+                  .read(favouritesServiceProvider)
+                  .markChapterAsUnread(favourite, chapter.chapterNo);
+            } else {
+              ref
+                  .read(favouritesServiceProvider)
+                  .markChapterAsRead(favourite, chapter.chapterNo);
+            }
           },
         ),
         ContextMenuItem(
@@ -48,9 +58,10 @@ class ChapterOptions extends ConsumerWidget {
         ContextMenuItem(
           icon: FontAwesomeIcons.download,
           onPressed: () {
-            ref
-                .read(downloadProvider.notifier)
-                .addDownload(favourite.toManga(), chapter);
+            ref.read(downloadServiceProvider).downloadChaptersInBackground(
+              favourite.toManga(),
+              [chapter],
+            );
 
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(

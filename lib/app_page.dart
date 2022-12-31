@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttiyomi/downloads/widgets/download_tab.dart';
+import 'package:fluttiyomi/downloads/presentation/widgets/download_tab.dart';
 import 'package:fluttiyomi/favourites/presentation/favourites_appbar.dart';
 import 'package:fluttiyomi/favourites/presentation/favourites_tab.dart';
 import 'package:fluttiyomi/home/pages/home_tab.dart';

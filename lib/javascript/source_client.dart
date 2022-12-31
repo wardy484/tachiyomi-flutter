@@ -1,7 +1,8 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:dio_logger/dio_logger.dart';
-import 'package:flutter/foundation.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_details/chapter_details.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
@@ -12,8 +13,8 @@ import 'package:fluttiyomi/data/updated_chapters/updated_chapters.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
-final sourceClientProvider = StateProvider<SourceClient>(
-  (ref) => SourceClient(""),
+final sourceClientProvider = Provider<SourceClient>(
+  (ref) => SourceClient("https://manga-source-proxy.vercel.app/"),
 );
 
 ChapterList parseChapters(dynamic json) {
@@ -63,12 +64,6 @@ class SourceClient {
     _dio.interceptors.add(dioLoggerInterceptor);
   }
 
-  static Future<SourceClient> init({
-    String baseUrl = "https://manga-source-proxy.vercel.app/",
-  }) async {
-    return SourceClient(baseUrl);
-  }
-
   Future<PagedResults> search(String query) async {
     try {
       var response = await _dio.get(
@@ -83,8 +78,10 @@ class SourceClient {
   }
 
   Future<ChapterList> getChapters(String mangaId) async {
+    log("Getting chapters from source for $mangaId");
     var response = await _dio.get("/manga/$mangaId/chapters");
-    return compute(parseChapters, response.data);
+    log("Got a response: ${response.data.toString()}");
+    return parseChapters(response.data);
   }
 
   Future<Manga> getMangaDetails(String mangaId) async {
