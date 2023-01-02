@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttiyomi/auth/auth_guard.dart';
 import 'package:fluttiyomi/database/database.dart';
 import 'package:fluttiyomi/local_notifications.dart';
 import 'package:fluttiyomi/router.gr.dart';
-import 'package:fluttiyomi/settings/settings_notifier.dart';
 import 'package:fluttiyomi/widgets/refresh_config.dart';
 import 'package:fluttiyomi/work_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -45,7 +43,6 @@ void main() async {
 
   final container = ProviderContainer();
   await container.read(isarDatabaseProvider).init();
-  await container.read(settingsProvider.notifier).loadSettings();
   await container.read(workManagerProvider).initialize(callbackDispatcher);
 
   // await SentryFlutter.init(
@@ -96,10 +93,24 @@ class _MyAppState extends ConsumerState<MyApp> {
           useMaterial3: true,
           brightness: Brightness.dark,
           primarySwatch: Colors.blue,
+          bottomAppBarColor: Colors.blueGrey,
+          appBarTheme: const AppBarTheme(
+            // backgroundColor: Colors.blueGrey[900],
+            elevation: 0,
+          ),
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            // backgroundColor: Colors.blueGrey[900],
+            // elevation: 1,
+            // type: BottomNavigationBarType.fixed,
+            selectedItemColor: Colors.amber[800],
+          ),
+          bottomAppBarTheme: BottomAppBarTheme(
+            color: Colors.blueGrey[900],
+            elevation: 0,
+          ),
         ),
         routerDelegate: _appRouter.delegate(),
         routeInformationParser: _appRouter.defaultRouteParser(),
-        builder: EasyLoading.init(),
       ),
     );
   }

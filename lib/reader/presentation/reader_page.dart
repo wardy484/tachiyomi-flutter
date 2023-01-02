@@ -15,12 +15,9 @@ import 'package:fluttiyomi/reader/presentation/reader_bottom_appbar.dart';
 import 'package:fluttiyomi/reader/presentation/reader_loader.dart';
 import 'package:fluttiyomi/reader/presentation/reader_progress_controller.dart';
 import 'package:fluttiyomi/reader/presentation/scrolling_viewer.dart';
-import 'package:fluttiyomi/settings/settings_notifier.dart';
+import 'package:fluttiyomi/settings/presentation/settings_controller.dart';
 import 'package:fluttiyomi/widgets/manga_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-// ignore: constant_identifier_names
-const VISIBILITY_THRESHOLD = 300;
 
 class ReaderPage extends HookConsumerWidget {
   final String mangaId;
@@ -94,12 +91,14 @@ class ReaderPage extends HookConsumerWidget {
                     child: ListView.builder(
                       physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
-                      padding: ref.watch(settingsProvider).when(
-                            initial: () => EdgeInsets.zero,
-                            loaded: (settings) => EdgeInsets.symmetric(
+                      padding: ref.watch(settingsControllerProvider).maybeWhen(
+                          orElse: () => EdgeInsets.zero,
+                          data: (settings) {
+                            log("Reader page: padding: ${settings.padding}");
+                            return EdgeInsets.symmetric(
                               horizontal: settings.padding.toDouble(),
-                            ),
-                          ),
+                            );
+                          }),
                       reverse: isReadingInReverse.value,
                       itemCount: ref
                           .watch(readerPagesControllerProvider(mangaId))

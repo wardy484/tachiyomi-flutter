@@ -3,6 +3,10 @@ import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/reader/presentation/reader_appbar_controller.dart';
 import 'package:fluttiyomi/reader/presentation/reader_pages_controller.dart';
 import 'package:fluttiyomi/reader/presentation/reader_progress_controller.dart';
+import 'package:fluttiyomi/settings/presentation/settings_controller.dart';
+import 'package:fluttiyomi/settings/presentation/settings_tab.dart';
+import 'package:fluttiyomi/widgets/common/full_page_loading_indicator.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReaderBottomAppBar extends ConsumerWidget {
@@ -23,29 +27,24 @@ class ReaderBottomAppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
+    int totalPages = ref.watch(readerPagesControllerProvider(mangaId)).length;
+
     return AnimatedOpacity(
       opacity: ref.watch(readerAppbarControllerProvider) ? 1 : 0,
       duration: const Duration(milliseconds: 300),
       child: BottomAppBar(
-        color: Colors.black.withOpacity(0.9),
+        color: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.95),
         elevation: 0,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 14),
-              child: StatefulBuilder(
-                builder: (context, state) {
-                  int totalPages =
-                      ref.watch(readerPagesControllerProvider(mangaId)).length;
-
-                  return Text(
-                    "$currentPage/$totalPages",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  );
-                },
+              child: Text(
+                "$currentPage/$totalPages",
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             Row(
@@ -81,7 +80,45 @@ class ReaderBottomAppBar extends ConsumerWidget {
                   },
                 ),
               ],
-            )
+            ),
+            IconButton(
+              icon: const FaIcon(FontAwesomeIcons.gear, size: 20),
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) => const SettingsBottomSheet(),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class SettingsBottomSheet extends ConsumerWidget {
+  const SettingsBottomSheet({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return SizedBox(
+      height: 200,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            const Text(
+              "Settings",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            ref.watch(settingsControllerProvider).maybeWhen(
+                orElse: () => const FullPageLoadingIndicator(),
+                data: (settings) {
+                  return SettingsForm(settings: settings);
+                }),
           ],
         ),
       ),

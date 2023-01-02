@@ -23,7 +23,8 @@ class ReaderAppBar extends ConsumerWidget with PreferredSizeWidget {
         title: Text(
           chapter.name ?? "Chapter ${chapter.chapterNo}",
         ),
-        backgroundColor: Colors.black.withOpacity(0.9),
+        backgroundColor:
+            Theme.of(context).scaffoldBackgroundColor.withOpacity(0.95),
         elevation: 0,
       ),
     );
