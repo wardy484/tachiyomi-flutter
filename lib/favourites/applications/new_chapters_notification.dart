@@ -27,7 +27,7 @@ class NewChaptersNotification extends BaseNotification {
       // Generate a random int as an id and pray they don't clash with other notifications
       Random(_id).nextInt(1000),
       favourite.name,
-      "New chapters: ${chapters.map((e) => e.chapterNo).join(', ')}",
+      "New chapters: ${_mapChaptersToText(chapters)}",
       notificationDetails,
     );
   }
@@ -36,4 +36,62 @@ class NewChaptersNotification extends BaseNotification {
 abstract class BaseNotification {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
+}
+
+const String _groupKey = 'com.fluttiyomi.new_chapters';
+const String _groupChannelId = 'new_chapters';
+const String _groupChannelName = 'New chapters';
+const String _groupChannelDescription = 'New chapters notifications';
+
+class NewChaptersGroupNotification extends BaseNotification {
+  final List<UpdatedFavourite> updates;
+
+  NewChaptersGroupNotification(this.updates);
+
+  Future<void> show() async {
+    for (int i = 0; i < updates.length; i++) {
+      final update = updates[i];
+
+      const androidNotificationDetails = AndroidNotificationDetails(
+        _groupChannelId,
+        _groupChannelName,
+        channelDescription: _groupChannelDescription,
+        importance: Importance.max,
+        priority: Priority.high,
+        groupKey: _groupKey,
+      );
+
+      const notificationDetails = NotificationDetails(
+        android: androidNotificationDetails,
+      );
+      await flutterLocalNotificationsPlugin.show(
+        i,
+        update.favourite.name,
+        "New chapters: ${_mapChaptersToText(update.chapters)}",
+        notificationDetails,
+      );
+    }
+  }
+}
+
+String _mapChaptersToText(List<Chapter> chapters) {
+  final chapterNumbers = chapters.map((chapter) {
+    if (chapter.chapterNo % 1 == 0) {
+      return chapter.chapterNo.toInt().toString();
+    } else {
+      return chapter.chapterNo.toString();
+    }
+  }).toList();
+  chapterNumbers.sort();
+
+  final chapterNumbersString = chapterNumbers.join(', ');
+
+  return chapterNumbersString;
+}
+
+class UpdatedFavourite {
+  final Favourite favourite;
+  final List<Chapter> chapters;
+
+  UpdatedFavourite(this.favourite, this.chapters);
 }

@@ -88,6 +88,8 @@ Future<void> checkFavouritesForUpdates(
   final favourites =
       await container.read(favouritesRepositoryProvider).getFavourites(userId);
 
+  final List<UpdatedFavourite> updatedFavourites = [];
+
   log('Work Manger: Got ${favourites.length} favourites');
 
   CheckForUpdatesNotification? checkForUpdatesNotification;
@@ -96,21 +98,22 @@ Future<void> checkFavouritesForUpdates(
     checkForUpdatesNotification = CheckForUpdatesNotification(favourites[0]);
     checkForUpdatesNotification.show(i, favourites.length);
 
-    // TODO: Show more useful notifications like tachiyomi:
-    // .e.g. On completion of updates, if a chapter updates, show a notification
-    // with the manga name and the chapter number(s) that are new.
-    //
-    // The Undefeatable Swordsman
-    // Chapters 147, 148
     final newChapters = await container
         .read(favouritesUpdateServiceProvider)
         .getLatestChapters(favourites[i]);
 
     if (newChapters.isNotEmpty) {
-      NewChaptersNotification(favourites[i], newChapters).show();
+      updatedFavourites.add(UpdatedFavourite(
+        favourites[i],
+        newChapters,
+      ));
     }
 
     checkForUpdatesNotification.show(i + 1, favourites.length);
+  }
+
+  if (updatedFavourites.isNotEmpty) {
+    NewChaptersGroupNotification(updatedFavourites).show();
   }
 
   await Future.delayed(const Duration(seconds: 2), () {

@@ -39,6 +39,8 @@ class ReaderPage extends HookConsumerWidget {
     final currentPage = useState(1);
     final fetchingMoreResults = useState(false);
     final loadedChapterIds = useState([chapter.id]);
+    final markedAsReadIds = useState<List<String>>([]);
+    final markingAsRead = useState(false);
     final isReadingInReverse = useState(false);
 
     useEffect(() {
@@ -75,8 +77,20 @@ class ReaderPage extends HookConsumerWidget {
                 child: ScrollingViewer(
                   child: ReaderLoader(
                     mangaId: mangaId,
-                    currentChapter: currentChapter.value,
+                    currentChapter: visibleChapter.value,
                     reverse: isReadingInReverse.value,
+                    loadNextChapter: () => appendNextChapter(
+                      ref,
+                      visibleChapter,
+                      loadedChapterIds,
+                      fetchingMoreResults,
+                    ),
+                    loadPreviousChapter: () => loadPreviousChapter(
+                      ref,
+                      visibleChapter,
+                      loadedChapterIds,
+                      markedAsReadIds,
+                    ),
                     child: ListView.builder(
                       physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
@@ -137,6 +151,18 @@ class ReaderPage extends HookConsumerWidget {
                             currentPage.value = index + 1;
                             visibleChapter.value = page.chapter;
 
+                            log("READ PAGE - markChapterAsRead: currentChapterNo: ${visibleChapter.value.chapterNo}, page: ${page.pageNumber}, Total Pages: ${page.totalPages}");
+
+                            if (page.pageNumber > page.totalPages - 2) {
+                              log("READ PAGE: Nearing end so attempt to mark as read");
+                              markChapterAsRead(
+                                ref,
+                                page.chapter,
+                                markedAsReadIds,
+                                markingAsRead,
+                              );
+                            }
+
                             final halfWayPoint = page.totalPages / 2;
 
                             if (page.pageNumber > halfWayPoint) {
@@ -191,6 +217,25 @@ class ReaderPage extends HookConsumerWidget {
     }
   }
 
+  Future<void> loadPreviousChapter(
+    WidgetRef ref,
+    ValueNotifier<Chapter> currentChapter,
+    ValueNotifier<List<String>> loadedChapterIds,
+    ValueNotifier<List<String>> markedAsReadIds,
+  ) async {
+    final upcomingChapters = _getUpcomingChapters(ref, currentChapter.value);
+
+    if (upcomingChapters.hasPreviousChapter) {
+      await ref
+          .read(readerPagesControllerProvider(mangaId).notifier)
+          .fetchPages(upcomingChapters.previousChapter!);
+
+      currentChapter.value = upcomingChapters.previousChapter!;
+      loadedChapterIds.value = [];
+      markedAsReadIds.value = [];
+    }
+  }
+
   Future<void> appendNextChapter(
     WidgetRef ref,
     ValueNotifier<Chapter> currentChapter,
@@ -200,6 +245,7 @@ class ReaderPage extends HookConsumerWidget {
     if (loadingMoreChapters.value) return;
 
     loadingMoreChapters.value = true;
+
     final upcomingChapters = _getUpcomingChapters(ref, currentChapter.value);
 
     final chapterIsLoaded = loadedChapterIds.value
@@ -210,11 +256,6 @@ class ReaderPage extends HookConsumerWidget {
       log("READ PAGE: Not fetching next chapter, current chapter: ${currentChapter.value.id}");
       loadingMoreChapters.value = false;
       return;
-    }
-
-    if (!currentChapter.value.read) {
-      log("READ PAGE: Marking chapter as read: ${chapter.chapterNo}");
-      markChapterAsRead(ref, chapter);
     }
 
     if (upcomingChapters.hasNextChapter) {
@@ -238,16 +279,39 @@ class ReaderPage extends HookConsumerWidget {
     loadingMoreChapters.value = false;
   }
 
-  void markChapterAsRead(WidgetRef ref, Chapter currentChapter) {
-    final mangaDetails =
-        ref.read(mangaDetailsControllerProvider(mangaId)).valueOrNull;
+  Future<void> markChapterAsRead(
+    WidgetRef ref,
+    Chapter currentChapter,
+    ValueNotifier<List<String>> markedAsReadIds,
+    ValueNotifier<bool> markingChapterAsRead,
+  ) async {
+    final chapterIsMarkedRead =
+        markedAsReadIds.value.where((id) => id == currentChapter.id).isNotEmpty;
 
-    if (mangaDetails?.favourite != null) {
-      ref.read(favouritesServiceProvider).markChapterAsRead(
-            mangaDetails!.favourite!,
-            currentChapter.chapterNo,
-          );
+    if (!currentChapter.read &&
+        !chapterIsMarkedRead &&
+        !markingChapterAsRead.value) {
+      log("READ PAGE - markChapterAsRead: Marking chapter as read: ${currentChapter.chapterNo}");
+      log("READ PAGE - markChapterAsRead: Reasons: currentChapter.read: ${currentChapter.read}, chapterIsMarkedRead: $markedAsReadIds, chapterIsMarkedRead: $chapterIsMarkedRead, markingChapterAsRead.value: ${markingChapterAsRead.value}");
+
+      markingChapterAsRead.value = true;
+
+      final mangaDetails =
+          ref.read(mangaDetailsControllerProvider(mangaId)).valueOrNull;
+
+      if (mangaDetails?.favourite != null) {
+        await ref.read(favouritesServiceProvider).markChapterAsRead(
+              mangaDetails!.favourite!,
+              currentChapter.chapterNo,
+            );
+      }
+      markedAsReadIds.value.add(currentChapter.id);
+    } else {
+      log("READ PAGE - markChapterAsRead: Not marking chapter as read: ${currentChapter.chapterNo}");
+      log("READ PAGE - markChapterAsRead: Reasons: currentChapter.read: ${currentChapter.read}, chapterIsMarkedRead: $markedAsReadIds, chapterIsMarkedRead: $chapterIsMarkedRead, markingChapterAsRead.value: ${markingChapterAsRead.value}");
     }
+
+    markingChapterAsRead.value = false;
   }
 
   ReaderUpcomingChapters _getUpcomingChapters(

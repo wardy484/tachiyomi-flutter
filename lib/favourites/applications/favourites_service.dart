@@ -34,7 +34,6 @@ class FavouritesService {
         mangaDetails.chapters,
       );
 
-      // TODO: Make auto download a setting
       ref.read(downloadServiceProvider).downloadChaptersInBackground(
             favourite.toManga(),
             favourite.chapters,
@@ -48,11 +47,12 @@ class FavouritesService {
     }
   }
 
-  void markChapterAsRead(Favourite favourite, double chapterNumber) async {
+  Future<void> markChapterAsRead(
+      Favourite favourite, double chapterNumber) async {
     final favouritesRepository = ref.watch(favouritesRepositoryProvider);
     final user = ref.watch(authRepositoryProvider).currentUser;
 
-    favouritesRepository.markAsRead(
+    await favouritesRepository.markAsRead(
       user,
       favourite,
       [chapterNumber],

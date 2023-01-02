@@ -77,6 +77,7 @@ class FavouritesTab extends HookConsumerWidget {
           inputData: {
             'userId': userId,
           },
+
           // ExistingWorkPolicy.keep means that if the task is already running,
           // it will not be restarted and a second will not be started.
           existingWorkPolicy: ExistingWorkPolicy.keep,
