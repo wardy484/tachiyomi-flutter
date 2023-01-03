@@ -34,7 +34,7 @@ class ReaderLoadingController extends _$ReaderLoadingController {
 @riverpod
 class ReaderPagesController extends _$ReaderPagesController {
   @override
-  List<ReaderPage> build(String mangaId) {
+  List<ReaderPageState> build(String mangaId) {
     return [];
   }
 
@@ -73,7 +73,7 @@ class ReaderPagesController extends _$ReaderPagesController {
 
     state = [
       ...state,
-      ReaderPage(
+      ReaderPageState(
         url: "page-break",
         chapter: chapter,
         previousChapter: previousChapter,
@@ -86,7 +86,7 @@ class ReaderPagesController extends _$ReaderPagesController {
     ref.read(readerIsAppendingProvider.notifier).state = false;
   }
 
-  Future<List<ReaderPage>> _precacheImages(
+  Future<List<ReaderPageState>> _precacheImages(
     Chapter chapter,
     List<String> pages,
   ) async {
@@ -94,17 +94,17 @@ class ReaderPagesController extends _$ReaderPagesController {
 
     await downloadService.cachePages(pages);
 
-    return _buildReaderPages(chapter, pages);
+    return _buildReaderPageStates(chapter, pages);
   }
 
-  List<ReaderPage> _buildReaderPages(
+  List<ReaderPageState> _buildReaderPageStates(
     Chapter chapter,
     List<String> pages,
   ) {
-    final List<ReaderPage> readerPages = [];
+    final List<ReaderPageState> readerPageStates = [];
 
     for (int i = 0; i < pages.length; i++) {
-      readerPages.add(ReaderPage(
+      readerPageStates.add(ReaderPageState(
         url: pages[i],
         chapter: chapter,
         totalPages: pages.length,
@@ -112,11 +112,11 @@ class ReaderPagesController extends _$ReaderPagesController {
       ));
     }
 
-    return readerPages;
+    return readerPageStates;
   }
 }
 
-class ReaderPage {
+class ReaderPageState {
   final String url;
   final Chapter chapter;
   final Chapter? previousChapter;
@@ -125,7 +125,7 @@ class ReaderPage {
   final double? width;
   final double? height;
 
-  ReaderPage({
+  ReaderPageState({
     required this.url,
     required this.chapter,
     this.previousChapter,

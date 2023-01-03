@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttiyomi/reader/presentation/reader_pages_controller.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-const visibilityThreadhold = 70;
-
 class MangaPage extends StatefulWidget {
-  final ReaderPage page;
-  final void Function(ReaderPage page) onPageVisible;
+  final ReaderPageState page;
+  final void Function(ReaderPageState page) onPageVisible;
   final bool keepAlive;
 
   const MangaPage({
@@ -50,8 +48,13 @@ class _MangaPageState extends State<MangaPage>
       ),
       onVisibilityChanged: (info) {
         // Guard from unexpected crashes
-        if (info.visibleFraction == 0) return;
-        if (!_pageIsVisible(info)) return;
+        if (info.visibleFraction == 0) {
+          return;
+        }
+
+        if (!_pageIsVisible(info)) {
+          return;
+        }
 
         widget.onPageVisible(widget.page);
       },
@@ -62,6 +65,12 @@ class _MangaPageState extends State<MangaPage>
   bool get wantKeepAlive => keepAlive;
 
   bool _pageIsVisible(VisibilityInfo info) {
-    return info.visibleFraction * 100 > visibilityThreadhold;
+    final double viewportHeight = MediaQuery.of(context).size.height;
+    final double imageHeight = info.size.height;
+    final double visibleHeight =
+        (imageHeight - viewportHeight).clamp(0.0, imageHeight) +
+            info.visibleFraction * viewportHeight;
+    final double visibleFraction = visibleHeight / viewportHeight;
+    return visibleFraction >= 0.7;
   }
 }

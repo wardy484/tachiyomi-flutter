@@ -51,11 +51,11 @@ abstract class _$ReaderLoadingController
 }
 
 String $ReaderPagesControllerHash() =>
-    r'163c82b161e599fd40676a44365c8011b86a307e';
+    r'c21565ffee039e3830b1e19deafd94df802e8f14';
 
 /// See also [ReaderPagesController].
 class ReaderPagesControllerProvider extends AutoDisposeNotifierProviderImpl<
-    ReaderPagesController, List<ReaderPage>> {
+    ReaderPagesController, List<ReaderPageState>> {
   ReaderPagesControllerProvider(
     this.mangaId,
   ) : super(
@@ -84,7 +84,7 @@ class ReaderPagesControllerProvider extends AutoDisposeNotifierProviderImpl<
   }
 
   @override
-  List<ReaderPage> runNotifierBuild(
+  List<ReaderPageState> runNotifierBuild(
     covariant _$ReaderPagesController notifier,
   ) {
     return notifier.build(
@@ -94,12 +94,12 @@ class ReaderPagesControllerProvider extends AutoDisposeNotifierProviderImpl<
 }
 
 typedef ReaderPagesControllerRef
-    = AutoDisposeNotifierProviderRef<List<ReaderPage>>;
+    = AutoDisposeNotifierProviderRef<List<ReaderPageState>>;
 
 /// See also [ReaderPagesController].
 final readerPagesControllerProvider = ReaderPagesControllerFamily();
 
-class ReaderPagesControllerFamily extends Family<List<ReaderPage>> {
+class ReaderPagesControllerFamily extends Family<List<ReaderPageState>> {
   ReaderPagesControllerFamily();
 
   ReaderPagesControllerProvider call(
@@ -111,7 +111,7 @@ class ReaderPagesControllerFamily extends Family<List<ReaderPage>> {
   }
 
   @override
-  AutoDisposeNotifierProviderImpl<ReaderPagesController, List<ReaderPage>>
+  AutoDisposeNotifierProviderImpl<ReaderPagesController, List<ReaderPageState>>
       getProviderOverride(
     covariant ReaderPagesControllerProvider provider,
   ) {
@@ -131,10 +131,10 @@ class ReaderPagesControllerFamily extends Family<List<ReaderPage>> {
 }
 
 abstract class _$ReaderPagesController
-    extends BuildlessAutoDisposeNotifier<List<ReaderPage>> {
+    extends BuildlessAutoDisposeNotifier<List<ReaderPageState>> {
   late final String mangaId;
 
-  List<ReaderPage> build(
+  List<ReaderPageState> build(
     String mangaId,
   );
 }

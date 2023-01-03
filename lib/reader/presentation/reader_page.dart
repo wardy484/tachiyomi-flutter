@@ -34,6 +34,7 @@ class ReaderPage extends HookConsumerWidget {
     final currentChapter = useState(chapter);
     final visibleChapter = useState(chapter);
     final currentPage = useState(1);
+    final visiblePage = useState<ReaderPageState?>(null);
     final fetchingMoreResults = useState(false);
     final loadedChapterIds = useState([chapter.id]);
     final markedAsReadIds = useState<List<String>>([]);
@@ -112,23 +113,7 @@ class ReaderPage extends HookConsumerWidget {
                         final page = sortedPages[index];
 
                         if (page.url == "page-break") {
-                          return Padding(
-                            padding: const EdgeInsets.all(30.0),
-                            child: Column(
-                              children: [
-                                const Text("Finished:",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                                Text(
-                                    "Chapter: ${page.previousChapter?.chapterNo}"),
-                                const SizedBox(height: 20),
-                                const Text("Next Chapter:",
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                                Text("Chapter: ${page.chapter.chapterNo}"),
-                              ],
-                            ),
-                          );
+                          return PageBreak(page: page);
                         }
 
                         // Attemping to mitigate flutter lists jumping all the way to
@@ -149,6 +134,7 @@ class ReaderPage extends HookConsumerWidget {
 
                             currentPage.value = index + 1;
                             visibleChapter.value = page.chapter;
+                            visiblePage.value = page;
 
                             log("READ PAGE - markChapterAsRead: currentChapterNo: ${visibleChapter.value.chapterNo}, page: ${page.pageNumber}, Total Pages: ${page.totalPages}");
 
@@ -182,10 +168,9 @@ class ReaderPage extends HookConsumerWidget {
               ),
               bottomNavigationBar: ReaderBottomAppBar(
                 mangaId: mangaId,
-                numberOfPages:
-                    ref.watch(readerPagesControllerProvider(mangaId)).length,
                 chapter: currentChapter.value,
                 currentPage: currentPage.value,
+                currentPageState: visiblePage.value,
                 onChapterChanged: (newChapter) => loadNewChapter(
                   newChapter,
                   currentChapter,
@@ -349,6 +334,33 @@ class ReaderPage extends HookConsumerWidget {
             lastReadPage,
           );
     }
+  }
+}
+
+class PageBreak extends StatelessWidget {
+  const PageBreak({
+    Key? key,
+    required this.page,
+  }) : super(key: key);
+
+  final ReaderPageState page;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(30.0),
+      child: Column(
+        children: [
+          const Text("Finished:",
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          Text("Chapter: ${page.previousChapter?.chapterNo}"),
+          const SizedBox(height: 20),
+          const Text("Next Chapter:",
+              style: TextStyle(fontWeight: FontWeight.bold)),
+          Text("Chapter: ${page.chapter.chapterNo}"),
+        ],
+      ),
+    );
   }
 }
 
