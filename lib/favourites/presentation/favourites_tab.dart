@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fluttiyomi/auth/auth_repository.dart';
@@ -33,6 +35,8 @@ class FavouritesTab extends HookConsumerWidget {
                 itemCount: results.length,
                 itemBuilder: (context, index) {
                   Favourite favourite = results[index];
+
+                  log("Favourite: ${favourite.mangaId}");
 
                   return FavouriteCard(favourite: favourite);
                 },

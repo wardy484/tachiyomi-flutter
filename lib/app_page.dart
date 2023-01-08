@@ -19,7 +19,7 @@ class AppPage extends ConsumerStatefulWidget {
 }
 
 class _AppPageState extends ConsumerState<AppPage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,6 @@ class _AppPageState extends ConsumerState<AppPage> {
         const DownloadsTab(),
       ].elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
-        // TODO: Theme bottom nav bar, it looks like shit
         showSelectedLabels: false,
         showUnselectedLabels: false,
         items: const <BottomNavigationBarItem>[

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttiyomi/auth/auth_guard.dart';
 import 'package:fluttiyomi/database/database.dart';
+import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/local_notifications.dart';
 import 'package:fluttiyomi/router.gr.dart';
 import 'package:fluttiyomi/widgets/refresh_config.dart';
@@ -45,6 +46,7 @@ void main() async {
   await container.read(isarDatabaseProvider).init();
   await container.read(workManagerProvider).initialize(callbackDispatcher);
 
+  await container.read(sourceClientProvider).initialise();
   // await SentryFlutter.init(
   //   (options) {
   //     options.dsn =

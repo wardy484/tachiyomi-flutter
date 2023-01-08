@@ -9,12 +9,11 @@ import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/data/home_results/home_section.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/data/paged_results/paged_results.dart';
-import 'package:fluttiyomi/data/updated_chapters/updated_chapters.dart';
+import 'package:fluttiyomi/javascript/yaml_source_client.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart';
 
 final sourceClientProvider = Provider<SourceClient>(
-  (ref) => SourceClient("https://manga-source-proxy.vercel.app/"),
+  (ref) => YamlSourceClient("https://manga-source-proxy.vercel.app/"),
 );
 
 ChapterList parseChapters(dynamic json) {
@@ -29,7 +28,8 @@ ChapterList parseChapters(dynamic json) {
 }
 
 class SourceClient {
-  late Dio _dio;
+  late Dio dio;
+
   // ignore: unused_field
   late String _baseUrl;
 
@@ -43,16 +43,18 @@ class SourceClient {
     return "Readm";
   }
 
+  Future<void> initialise() async {}
+
   SourceClient(String baseUrl) {
     _baseUrl = baseUrl;
     src = "readm";
-    _dio = Dio(
+    dio = Dio(
       BaseOptions(
         baseUrl: baseUrl,
       ),
     );
 
-    _dio.interceptors.add(
+    dio.interceptors.add(
       DioCacheManager(
         CacheConfig(
           baseUrl: baseUrl,
@@ -61,12 +63,12 @@ class SourceClient {
       ).interceptor,
     );
 
-    _dio.interceptors.add(dioLoggerInterceptor);
+    dio.interceptors.add(dioLoggerInterceptor);
   }
 
   Future<PagedResults> search(String query) async {
     try {
-      var response = await _dio.get(
+      var response = await dio.get(
         "/",
         queryParameters: {"manga": query},
       );
@@ -79,13 +81,13 @@ class SourceClient {
 
   Future<ChapterList> getChapters(String mangaId) async {
     log("Getting chapters from source for $mangaId");
-    var response = await _dio.get("/manga/$mangaId/chapters");
+    var response = await dio.get("/manga/$mangaId/chapters");
     log("Got a response: ${response.data.toString()}");
     return parseChapters(response.data);
   }
 
   Future<Manga> getMangaDetails(String mangaId) async {
-    var response = await _dio.get("/manga/$mangaId");
+    var response = await dio.get("/manga/$mangaId");
     return Manga.fromJson(response.data);
   }
 
@@ -96,7 +98,7 @@ class SourceClient {
     String decodedMangaId = Uri.encodeQueryComponent(mangaId);
     String decodedChapterId = Uri.encodeQueryComponent(chapterId);
 
-    var response = await _dio.get(
+    var response = await dio.get(
       "/manga/$decodedMangaId/chapters/$decodedChapterId",
       options: buildCacheOptions(const Duration(days: 365)),
     );
@@ -104,25 +106,8 @@ class SourceClient {
     return ChapterDetails.fromJson(response.data);
   }
 
-  Future<UpdatedChapters> checkForUpdates(
-    List<String> mangaIds,
-    DateTime lastCheckedAt,
-  ) async {
-    String ids = mangaIds.map((e) => "'$e'").toString();
-
-    var response = await _dio.post(
-      "/updated-manga",
-      data: {
-        "ids": ids,
-        "time": DateFormat.yMd().add_jm().format(lastCheckedAt),
-      },
-    );
-
-    return UpdatedChapters.fromJson(response.data);
-  }
-
   Future<List<HomeSection>> getHomeSections() async {
-    var data = (await _dio.get('/home')).data as List;
+    var data = (await dio.get('/home')).data as List;
 
     return data.map((e) {
       return HomeSection.fromJson(e);
