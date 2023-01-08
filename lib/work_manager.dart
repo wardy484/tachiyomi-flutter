@@ -35,6 +35,8 @@ void callbackDispatcher() {
     final container = ProviderContainer();
     await container.read(isarDatabaseProvider).init();
 
+    container.read(sourceClientProvider).scraper.setParseInIsolate(true);
+
     switch (task) {
       case checkFavouritesForUpdatesTask:
         log('Work Manger: $task started');

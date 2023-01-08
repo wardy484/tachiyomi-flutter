@@ -1,4 +1,4 @@
-import 'package:fluttiyomi/javascript/yaml/transformers/transformer.dart';
+import 'package:fluttiyomi/javascript/scraper/transformers/transformer.dart';
 import 'package:yaml/yaml.dart';
 
 class RegexTransformer extends Transformer {
@@ -22,5 +22,21 @@ class RegexTransformer extends Transformer {
     }
 
     return defaultValue;
+  }
+
+  factory RegexTransformer.fromJson(Map<String, dynamic> json) {
+    return RegexTransformer(
+      json['pattern'],
+      json['index'],
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'pattern': pattern,
+      'index': index,
+    };
   }
 }

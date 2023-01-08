@@ -1,0 +1,166 @@
+manga_details_schema:
+  request:
+    url: https://mangajar.com/manga/{{ mangaId }}
+  items: 
+    - name: 'titles'
+      selector: 'span.post-name'
+      list: true
+      attribute: text
+      default: ""
+    - name: 'image'
+      selector: 'div.col-md-5.col-lg-4.text-center > img'
+      default: "https://i.imgur.com/GYUxEX8.png"
+      transformers:
+        - type: imageSource
+    - name: 'desc'
+      selector: 'div.manga-description.entry'
+      attribute: text
+      default: "No description available"
+    - name: 'status'
+      selector: 'div.post-info'
+      attribute: text
+      default: "ONGOING"
+      transformers:
+        - type: regex
+          pattern: 'Status: (.*)'
+          index: 1
+    - name: 'tags'
+      selector: 'div.post-info > span > a[href*=genre]'
+      list: true
+      items:
+      - name: 'label'
+        attribute: text
+      - name: 'id'
+        attribute: href
+        transformers:
+          - type: regex
+            pattern: /genre/(\w+)
+            index: 1
+          
+chapters_schema:
+  request:
+    url: https://mangajar.com/manga/{{ mangaId }}
+  items:
+    - name: 'chapters'
+      selector: 'li.list-group-item.chapter-item'
+      list: true
+      items:
+        - name: 'title'
+          selector: 'h6.truncate'
+          attribute: text
+          default: ""
+        - name: "id"
+          selector: 'a'
+          attribute: 'href'
+          default: ""
+          transformers: 
+            - type: regex
+              pattern: '(\d+\.?\d?)+'
+              index: 1
+        - name: "chapNum"
+          selector: 'a'
+          attribute: 'href'
+          default: ""
+          transformers: 
+            - type: regex
+              pattern: '(\d+\.?\d?)+'
+              index: 1
+            - type: cast
+              to: number
+        - name: "time"
+          selector: 'span.chapter-date'
+          attribute: text
+          default: ""
+          transformers:
+            - type: parseDate
+              format: human
+
+chapter_details_schema:
+  request:
+    url: https://mangajar.com/manga/{{ mangaId }}/chapter/{{ chapterId }}
+  selector: "div.mt-1"
+  items:
+      - name: pages
+        list: true
+        selector: 'img'
+        default: ""
+        transformers:
+          - type: imageSource
+        
+home_schema:
+  request:
+    url: https://mangajar.com/
+  items:
+    - name: 'home_sections'
+      selector: ".card.shadow-sm.rounded-0.w-100.mb-2"
+      list: true
+      items:
+        - name: "id"
+          default: ""
+          selector: "h2"
+          attribute: "text" 
+        - name: "title"
+          default: ""
+          selector: "h2"
+          attribute: "text"   
+        - name: "items"
+          selector: "article[class*=flex-item]"
+          list: true
+          items: 
+            - name: "title"
+              items: 
+              - name: 'text'
+                selector: 'div.poster-container > a' 
+                attribute: title
+                default: ""
+            - name: 'id'
+              selector: 'div.poster-container > a'
+              attribute: href
+              default: ""
+              transformers:
+                - type: regex
+                  pattern: /manga/([-\w]*[\w])$
+                  index: 1
+            - name: 'image'
+              selector: 'div.poster-container > a > img'
+              default: "https://i.imgur.com/GYUxEX8.png"
+              transformers:
+                - type: imageSource
+            - name: "subtitle"
+              items: 
+              - name: 'text' 
+                selector: 'div.poster-container > a > div.manga-mini-last-chapter'
+                attribute: text
+                default: ""
+
+search_schema:
+  request:
+    url: https://mangajar.com/search
+    method: GET
+    body:
+      q: '{{query}}'
+  items:
+    - name: 'results'
+      list: true
+      selector: 'article.card.flex-item' 
+      items: 
+        - name: 'id'
+          selector: 'a'
+          attribute: 'href'
+          transformers: 
+            - type: regex
+              pattern: /manga/([-\w]*[\w])$
+              index: 1
+        - name: 'title'
+          items: 
+          - name: 'text'
+            selector: 'a'
+            attribute: 'title'
+            default : ''
+        - name: 'image' 
+          selector: '.card-img-top'
+          default: "https://i.imgur.com/GYUxEX8.png"
+          transformers:
+            - type: imageSource
+
+  

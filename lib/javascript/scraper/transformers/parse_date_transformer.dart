@@ -1,4 +1,4 @@
-import 'package:fluttiyomi/javascript/yaml/transformers/transformer.dart';
+import 'package:fluttiyomi/javascript/scraper/transformers/transformer.dart';
 import 'package:intl/intl.dart';
 import 'package:yaml/yaml.dart';
 
@@ -69,10 +69,52 @@ class ParseDateTransformer extends Transformer {
     } else if (value.contains('SECOND') || value.contains('SECONDS')) {
       time = DateTime.now().subtract(Duration(seconds: number));
     } else {
-      final split = value.split('-');
-      time = DateTime(
-          int.parse(split[2]), int.parse(split[0]) - 1, int.parse(split[1]));
+      time = _tryParseDate(value);
+
+      // time = DateFormat("d MMM y").parseLoose(value);
     }
     return time;
+  }
+
+  DateTime _tryParseDate(String value) {
+    // List of date formats to try
+    List<String> dateFormats = [
+      "d MMM y", // 30 DEC 2022
+      "d MMMM y", // 30 DECEMBER 2022
+      "dd MMM y", // 30 DEC 2022
+      "dd MMMM y", // 30 DECEMBER 2022
+      "yyyy-MM-dd", // 2022-12-30
+      "dd-MM-yyyy", // 30-12-2022
+      "MM-dd-yyyy", // 12-30-2022
+      "d/M/y", // 30/12/22
+      "d/M/yy", // 30/12/22
+      "d/M/yyyy", // 30/12/2022
+    ];
+
+    // Try each date format and return the first one that succeeds
+    for (String format in dateFormats) {
+      try {
+        return DateFormat(format).parseLoose(value);
+      } catch (e) {
+        // Format is invalid, try the next one
+      }
+    }
+
+    // If none of the formats were successful, throw a FormatException
+    throw FormatException("Invalid date format: $value");
+  }
+
+  factory ParseDateTransformer.fromJson(Map<String, dynamic> json) {
+    return ParseDateTransformer(
+      json['format'],
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'format': format,
+    };
   }
 }

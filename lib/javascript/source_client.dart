@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -9,11 +10,12 @@ import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/data/home_results/home_section.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/data/paged_results/paged_results.dart';
+import 'package:fluttiyomi/javascript/scraper.dart';
 import 'package:fluttiyomi/javascript/yaml_source_client.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final sourceClientProvider = Provider<SourceClient>(
-  (ref) => YamlSourceClient("https://manga-source-proxy.vercel.app/"),
+  (ref) => YamlSourceClient(),
 );
 
 ChapterList parseChapters(dynamic json) {
@@ -42,6 +44,8 @@ class SourceClient {
   get sourceName {
     return "Readm";
   }
+
+  Scraper scraper = Scraper();
 
   Future<void> initialise() async {}
 
@@ -112,5 +116,9 @@ class SourceClient {
     return data.map((e) {
       return HomeSection.fromJson(e);
     }).toList();
+  }
+
+  String serialize() {
+    return jsonEncode(this);
   }
 }

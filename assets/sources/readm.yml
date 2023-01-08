@@ -164,7 +164,7 @@ home_schema:
                 default: ""
                 transformers:
                   - type: regex
-                    pattern: /manga/(\w[\w-]*)$
+                    pattern: /manga/([-\w]*[\w])$
                     index: 1
               - name: 'image'
                 selector: 'img'
@@ -202,7 +202,7 @@ home_schema:
                 default: ""
                 transformers:
                   - type: regex
-                    pattern: /manga/(\w[\w-]*)$
+                    pattern: /manga/([-\w]*[\w])$
                     index: 1
               - name: 'image'
                 selector: 'img'
@@ -252,3 +252,40 @@ home_schema:
                     - type: imageSource
                     - type: prefixValue
                       prefix: https://readm.org/
+
+search_schema:
+  request:
+    url: https://readm.org/service/search
+    method: POST
+    headers:
+      Content-Type: application/x-www-form-urlencoded
+      X-Requested-With: 'XMLHttpRequest'
+      accept: application/json
+    body:
+      dataType: json
+      phrase: '{{query}}'
+  items:
+    - name: 'results'
+      list: true
+      selector: 'manga' 
+      items: 
+        - name: 'id'
+          selector: 'url'
+          transformers: 
+            - type: regex
+              pattern: /manga/([-\w]*[\w])$
+              index: 1
+        - name: 'title'
+          items: 
+          - name: 'text'
+            selector: 'title'
+            default : ''
+        - name: 'image' 
+          selector: 'image'
+          default: "https://i.imgur.com/GYUxEX8.png"
+          transformers:
+            - type: prefixValue
+              prefix: https://readm.org/
+
+
+  

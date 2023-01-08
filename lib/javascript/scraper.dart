@@ -1,106 +1,100 @@
-import 'package:fluttiyomi/javascript/yaml/schema.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:fluttiyomi/javascript/scraper/parsers/document_parser.dart';
+import 'package:fluttiyomi/javascript/scraper/parsers/json_parser.dart';
+import 'package:fluttiyomi/javascript/scraper/result.dart';
+import 'package:fluttiyomi/javascript/scraper/schema.dart';
 import 'package:html/dom.dart';
+import 'package:html/parser.dart' show parse;
 
 class Scraper {
-  Map<String, dynamic> parsePage(PageSchema schema, Document document) {
-    final rootNode = schema.selector != null
-        ? document.querySelector(schema.selector!)
-        : document.documentElement;
+  bool parseInIsolate;
+  final _client = Dio();
+  final _jsonParser = JsonParser();
+  final _documentParser = DocumentParser();
 
-    if (rootNode == null) {
-      throw Exception("Root node not found when parsing $PageSchema");
-    }
+  Scraper({this.parseInIsolate = false});
 
-    final Map<String, dynamic> values = {};
-
-    for (final field in schema.items) {
-      if (field.list) {
-        values[field.name] = _parseFieldList(rootNode, field);
-      } else {
-        final element = field.selector != null
-            ? rootNode.querySelector(field.selector!)
-            : rootNode;
-
-        values[field.name] = _parseField(element, field);
-      }
-    }
-
-    return values;
+  void setParseInIsolate(bool value) {
+    parseInIsolate = value;
   }
 
-  List<T> _parseFieldList<T>(dynamic rootNode, FieldSchema field) {
-    final List<T> values = [];
+  Future<Map<String, dynamic>> scrape(
+    PageSchema schema, {
+    Map<String, String>? params,
+    Map<String, String>? body,
+    Map<String, String>? query,
+  }) async {
+    final data = await _makeRequest(
+      schema.request,
+      args: params,
+      data: body,
+      query: query,
+    );
 
-    final nodes = field.selector != null
-        ? rootNode.querySelectorAll(field.selector!)
-        : rootNode;
-
-    for (int i = 0; i < nodes.length; i++) {
-      values.add(_parseField(nodes[i], field));
-    }
-
-    return values;
-  }
-
-  dynamic _parseField(Element? element, FieldSchema field) {
-    if (element == null) {
-      return field.defaultValue;
-    }
-
-    if (field.selector == null &&
-        field.items == null &&
-        field.attribute == null &&
-        field.list == false) {
-      return field.defaultValue;
-    }
-
-    dynamic value;
-
-    switch (field.attribute) {
-      case "text":
-        value = element.text.trim();
-        break;
-      case null:
-        value = element;
-        break;
-      default:
-        value = element.attributes[field.attribute];
-    }
-
-    if (field.items != null && value is Element) {
-      final Map<String, dynamic> data = {};
-
-      for (FieldSchema item in field.items!) {
-        final element =
-            item.selector != null ? value.querySelector(item.selector!) : value;
-
-        if (element == null) {
-          data[item.name] = item.defaultValue;
-        } else if (item.list && item.items != null) {
-          // Passing down value instead of element for lists we can grab an
-          // element from the list
-          data[item.name] = _parseFieldList(value, item);
+    return data.when(
+      json: (json) {
+        if (parseInIsolate) {
+          return compute(_parseMap, {
+            'schema': schema.toJson(),
+            'json': json,
+          });
         } else {
-          data[item.name] = _parseField(element, item);
+          return _jsonParser.parseMap(schema, json);
         }
-      }
-
-      value = data;
-    }
-
-    if (value != null) {
-      dynamic transformedValue = value;
-
-      for (final transformer in field.transformers) {
-        transformedValue = transformer.transform(
-          transformedValue,
-          field.defaultValue,
-        );
-      }
-
-      return transformedValue;
-    }
-
-    return field.defaultValue;
+      },
+      html: (html) {
+        if (parseInIsolate) {
+          return compute(parseDocument, {
+            'schema': schema.toJson(),
+            'html': html.outerHtml,
+          });
+        } else {
+          return _documentParser.parsePage(schema, html);
+        }
+      },
+    );
   }
+
+  Future<Result> _makeRequest(
+    RequestSchema request, {
+    Map<String, String>? args,
+    Map<String, String>? data,
+    Map<String, String>? query,
+  }) async {
+    final url = request.buildUrl(args: args);
+
+    final response = await _client.request(
+      url,
+      options: Options(
+        method: request.method,
+        headers: request.headers,
+      ),
+      data: data,
+      queryParameters: query,
+    );
+
+    if (response.data is String) {
+      final page = parse(response.data);
+      return Result.html(page);
+    } else if (response.data is Map) {
+      return Result.json(response.data);
+    } else {
+      throw Exception("Invalid response type");
+    }
+  }
+}
+
+Map<String, dynamic> parseDocument(Map<String, dynamic> args) {
+  final PageSchema schema = PageSchema.fromJson(args['schema']);
+  final Document document = parse(args['html']);
+
+  return DocumentParser().parsePage(schema, document);
+}
+
+Map<String, dynamic> _parseMap(Map<String, dynamic> args) {
+  final PageSchema schema = PageSchema.fromJson(args['schema']);
+  final Map<String, dynamic> json = args['json'];
+
+  return JsonParser().parseMap(schema, json);
 }

@@ -19,7 +19,7 @@ class AppPage extends ConsumerStatefulWidget {
 }
 
 class _AppPageState extends ConsumerState<AppPage> {
-  int _selectedIndex = 2;
+  int _selectedIndex = 1;
 
   @override
   Widget build(BuildContext context) {

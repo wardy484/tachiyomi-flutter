@@ -1,4 +1,4 @@
-import 'package:fluttiyomi/javascript/yaml/transformers/transformer.dart';
+import 'package:fluttiyomi/javascript/scraper/transformers/transformer.dart';
 import 'package:yaml/yaml.dart';
 
 class CastTransformer extends Transformer {
@@ -16,6 +16,7 @@ class CastTransformer extends Transformer {
   dynamic transform(dynamic value, dynamic defaultValue) {
     switch (to) {
       case 'number':
+        if (value is num) return value;
         return num.tryParse(value) ?? defaultValue;
       case 'boolean':
         return value == 'true' ? true : false;
@@ -24,5 +25,19 @@ class CastTransformer extends Transformer {
       default:
         throw UnimplementedError();
     }
+  }
+
+  factory CastTransformer.fromJson(Map<String, dynamic> json) {
+    return CastTransformer(
+      json['to'],
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'to': to,
+    };
   }
 }
