@@ -4,6 +4,7 @@ import 'package:fluttiyomi/data/source_data.dart';
 import 'package:fluttiyomi/source/parsers/chapter_details_parser.dart';
 import 'package:fluttiyomi/source/parsers/chapters_parser.dart';
 import 'package:fluttiyomi/source/parsers/home_sections_parser.dart';
+import 'package:fluttiyomi/source/parsers/manga_details_parser.dart';
 import 'package:fluttiyomi/source/schema/source_schema.dart';
 import 'package:fluttiyomi/source/scraper/parsers/search_parser.dart';
 import 'package:fluttiyomi/source/scraper/scraper.dart';
@@ -41,20 +42,7 @@ class Source {
       },
     );
 
-    return Manga.fromJson({
-      'langCode': 'en',
-      'id': mangaId,
-      'altTitles': [],
-      'hentai': false,
-      ...mangaDetails,
-      'tags': [
-        {
-          'id': "0",
-          'label': 'genres',
-          'tags': mangaDetails['tags'],
-        }
-      ]
-    });
+    return MangaDetailsParser.parse(mangaDetails, mangaId: mangaId);
   }
 
   Future<ChapterList> getChapters(String mangaId) async {
