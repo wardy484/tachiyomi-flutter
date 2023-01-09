@@ -1,7 +1,7 @@
-import 'package:fluttiyomi/javascript/scraper/transformers/cast_transformer.dart';
-import 'package:fluttiyomi/javascript/scraper/transformers/parse_date_transformer.dart';
-import 'package:fluttiyomi/javascript/scraper/transformers/prefix_transformer.dart';
-import 'package:fluttiyomi/javascript/scraper/transformers/regex_transformer.dart';
+import 'package:fluttiyomi/source/scraper/transformers/cast_transformer.dart';
+import 'package:fluttiyomi/source/scraper/transformers/parse_date_transformer.dart';
+import 'package:fluttiyomi/source/scraper/transformers/prefix_transformer.dart';
+import 'package:fluttiyomi/source/scraper/transformers/regex_transformer.dart';
 import 'package:yaml/yaml.dart';
 
 import 'image_source_transformer.dart';

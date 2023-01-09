@@ -1,3 +1,11 @@
+source_info:
+  name: Mangajar
+  id: mangajar
+  description: Source schema that pulls content from Mangajar
+  version: "0.1"
+  repository_url: https://github.com/wardy484/some-repo
+  website_url: https://mangajar.com/
+
 manga_details_schema:
   request:
     url: https://mangajar.com/manga/{{ mangaId }}
@@ -39,7 +47,11 @@ manga_details_schema:
           
 chapters_schema:
   request:
-    url: https://mangajar.com/manga/{{ mangaId }}
+    url: https://mangajar.com/manga/{{ mangaId }}/chaptersList
+    paged: true
+    body: 
+      page: '{{page}}'
+      infinite: 1
   items:
     - name: 'chapters'
       selector: 'li.list-group-item.chapter-item'
@@ -55,7 +67,7 @@ chapters_schema:
           default: ""
           transformers: 
             - type: regex
-              pattern: '(\d+\.?\d?)+'
+              pattern: \/chapter\/([^\/]+)
               index: 1
         - name: "chapNum"
           selector: 'a'
@@ -63,7 +75,7 @@ chapters_schema:
           default: ""
           transformers: 
             - type: regex
-              pattern: '(\d+\.?\d?)+'
+              pattern: \/chapter\/([^\/]+)
               index: 1
             - type: cast
               to: number

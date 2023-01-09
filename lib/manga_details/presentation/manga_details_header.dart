@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:fluttiyomi/constants/app_sizes.dart';
 import 'package:fluttiyomi/constants/typography.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
-import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/manga_details/presentation/bookmark_button.dart';
 import 'package:fluttiyomi/manga_details/presentation/continue_button.dart';
 import 'package:fluttiyomi/manga_details/presentation/manga_image.dart';
 import 'package:fluttiyomi/manga_details/presentation/manga_tags.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MangaDetailsHeader extends ConsumerWidget {
@@ -94,7 +94,7 @@ class MangaBanner extends ConsumerWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                ref.watch(sourceClientProvider).sourceName,
+                ref.watch(sourceProvider).name,
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.grey[400],

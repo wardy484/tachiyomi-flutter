@@ -5,7 +5,7 @@ import 'package:fluttiyomi/data/source_data.dart';
 import 'package:fluttiyomi/downloads/application/download_service.dart';
 import 'package:fluttiyomi/favourites/data/favourite.dart';
 import 'package:fluttiyomi/favourites/data/favourite_repository.dart';
-import 'package:fluttiyomi/javascript/source_client.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FavouritesUpdateService {
@@ -18,7 +18,7 @@ class FavouritesUpdateService {
   Future<List<Chapter>> getLatestChapters(Favourite favourite) async {
     log('Fetching latest chapters for ${favourite.name}');
 
-    final sourceClient = ref.watch(sourceClientProvider);
+    final sourceClient = ref.watch(sourceProvider);
 
     log("Check if ${favourite.name} has too many unread chapters ");
     if (favourite.unreadChapterCount > 7) {

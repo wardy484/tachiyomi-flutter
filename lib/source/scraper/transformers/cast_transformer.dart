@@ -1,4 +1,4 @@
-import 'package:fluttiyomi/javascript/scraper/transformers/transformer.dart';
+import 'package:fluttiyomi/source/scraper/transformers/transformer.dart';
 import 'package:yaml/yaml.dart';
 
 class CastTransformer extends Transformer {

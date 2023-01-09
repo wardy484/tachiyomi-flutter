@@ -7,7 +7,7 @@ import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/database/download.dart';
 import 'package:fluttiyomi/downloads/data/download_repository.dart';
 import 'package:fluttiyomi/downloads/data/download_status.dart';
-import 'package:fluttiyomi/javascript/source_client.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:fluttiyomi/work_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:workmanager/workmanager.dart';
@@ -15,7 +15,7 @@ import 'package:workmanager/workmanager.dart';
 final downloadServiceProvider = Provider<DownloadService>((ref) {
   return DownloadService(
     downloads: ref.watch(downloadRepositoryProvider),
-    sourceClient: ref.watch(sourceClientProvider),
+    source: ref.watch(sourceProvider),
     cacheManager: DefaultCacheManager(),
     workManager: ref.watch(workManagerProvider),
   );
@@ -23,13 +23,13 @@ final downloadServiceProvider = Provider<DownloadService>((ref) {
 
 class DownloadService {
   final DownloadRepository downloads;
-  final SourceClient sourceClient;
+  final Source source;
   final CacheManager cacheManager;
   final Workmanager workManager;
 
   DownloadService({
     required this.downloads,
-    required this.sourceClient,
+    required this.source,
     required this.cacheManager,
     required this.workManager,
   });
@@ -111,7 +111,7 @@ class DownloadService {
 
     try {
       log("Process download: Downloading chapter ${download.chapterId}");
-      final chapterDetails = await sourceClient.getChapterDetails(
+      final chapterDetails = await source.getChapterDetails(
         download.mangaId,
         download.chapterId,
       );

@@ -4,8 +4,8 @@ import 'package:fluttiyomi/downloads/application/download_service.dart';
 import 'package:fluttiyomi/favourites/data/favourite.dart';
 import 'package:fluttiyomi/favourites/data/favourite_repository.dart';
 import 'package:fluttiyomi/favourites/presentation/favourites_list_controller.dart';
-import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/manga_details/presentation/manga_details_controller.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class FavouritesService {
@@ -28,7 +28,7 @@ class FavouritesService {
 
       final favourite = await favouritesRepository.addFavourite(
         user,
-        ref.read(sourceClientProvider).src,
+        ref.read(sourceProvider).id,
         mangaDetails.details.titles.first,
         mangaDetails.details,
         mangaDetails.chapters,
@@ -41,7 +41,7 @@ class FavouritesService {
     } else {
       await favouritesRepository.deleteFavourite(
         user,
-        ref.read(sourceClientProvider).src,
+        ref.read(sourceProvider).id,
         mangaId,
       );
     }

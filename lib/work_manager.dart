@@ -11,7 +11,7 @@ import 'package:fluttiyomi/favourites/applications/favourites_updates_service.da
 import 'package:fluttiyomi/favourites/applications/new_chapters_notification.dart';
 import 'package:fluttiyomi/favourites/data/favourite_repository.dart';
 import 'package:fluttiyomi/firebase_options.dart';
-import 'package:fluttiyomi/javascript/source_client.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:workmanager/workmanager.dart';
 
@@ -35,7 +35,7 @@ void callbackDispatcher() {
     final container = ProviderContainer();
     await container.read(isarDatabaseProvider).init();
 
-    container.read(sourceClientProvider).scraper.setParseInIsolate(true);
+    container.read(sourceProvider).scraper.setParseInIsolate(true);
 
     switch (task) {
       case checkFavouritesForUpdatesTask:
@@ -128,7 +128,8 @@ Future<void> checkOneForUpdates(
   String userId,
   String mangaId,
 ) async {
-  final sourceId = await container.read(sourceClientProvider).sourceId;
+  final sourceId = await container.read(sourceProvider).id;
+
   final favourite =
       await container.read(favouritesRepositoryProvider).getFavourite(
             userId,

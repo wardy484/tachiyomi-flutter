@@ -1,15 +1,15 @@
 import 'package:fluttiyomi/data/paged_results/paged_results.dart';
-import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/search/search_state.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final searchNotifierProvider =
     StateNotifierProvider<SearchNotifier, SearchState>((ref) {
-  return SearchNotifier(source: ref.watch(sourceClientProvider));
+  return SearchNotifier(source: ref.watch(sourceProvider));
 });
 
 class SearchNotifier extends StateNotifier<SearchState> {
-  final SourceClient source;
+  final Source source;
 
   SearchNotifier({
     required this.source,

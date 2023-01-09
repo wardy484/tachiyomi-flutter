@@ -7,8 +7,8 @@ import 'package:fluttiyomi/downloads/data/download_repository.dart';
 import 'package:fluttiyomi/downloads/data/download_status.dart';
 import 'package:fluttiyomi/downloads/presentation/download_notifier.dart';
 import 'package:fluttiyomi/favourites/data/favourite_repository.dart';
-import 'package:fluttiyomi/javascript/source_client.dart';
 import 'package:fluttiyomi/router.gr.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:fluttiyomi/widgets/common/context_menu.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -58,7 +58,7 @@ class _DownloadsTabState extends ConsumerState<DownloadsTab> {
                             .read(favouritesRepositoryProvider)
                             .getFavourite(
                               user.id,
-                              ref.read(sourceClientProvider).src,
+                              ref.read(sourceProvider).id,
                               download.mangaId,
                             );
 

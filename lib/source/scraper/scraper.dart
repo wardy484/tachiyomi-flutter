@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:fluttiyomi/javascript/scraper/parsers/document_parser.dart';
-import 'package:fluttiyomi/javascript/scraper/parsers/json_parser.dart';
-import 'package:fluttiyomi/javascript/scraper/result.dart';
-import 'package:fluttiyomi/javascript/scraper/schema.dart';
+import 'package:fluttiyomi/source/scraper/parsers/document_parser.dart';
+import 'package:fluttiyomi/source/scraper/parsers/json_parser.dart';
+import 'package:fluttiyomi/source/scraper/result.dart';
+import 'package:fluttiyomi/source/scraper/schemas/page_schema.dart';
+import 'package:fluttiyomi/source/scraper/schemas/request_schema.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' show parse;
 
@@ -21,9 +22,9 @@ class Scraper {
 
   Future<Map<String, dynamic>> scrape(
     PageSchema schema, {
-    Map<String, String>? params,
-    Map<String, String>? body,
-    Map<String, String>? query,
+    Map<String, dynamic>? params,
+    Map<String, dynamic>? body,
+    Map<String, dynamic>? query,
   }) async {
     final data = await _makeRequest(
       schema.request,
@@ -58,9 +59,9 @@ class Scraper {
 
   Future<Result> _makeRequest(
     RequestSchema request, {
-    Map<String, String>? args,
-    Map<String, String>? data,
-    Map<String, String>? query,
+    Map<String, dynamic>? args,
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? query,
   }) async {
     final url = request.buildUrl(args: args);
 

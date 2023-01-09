@@ -1,3 +1,11 @@
+source_info:
+  name: ReadM
+  id : readm
+  description: Source schema that pulls content from Readm
+  version: "0.1"
+  repository_url: https://github.com/wardy484/some-repo
+  website_url: https://readm.org/
+
 manga_details_schema:
   request:
     url: https://readm.org/manga/{{ mangaId }}

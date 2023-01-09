@@ -1,26 +1,40 @@
-import 'package:fluttiyomi/javascript/scraper/schema.dart';
+import 'package:fluttiyomi/source/scraper/schemas/field_schema.dart';
+import 'package:fluttiyomi/source/scraper/schemas/page_schema.dart';
+import 'package:html/dom.dart';
 
-class JsonParser {
-  Map<String, dynamic> parseMap(PageSchema schema, Map<String, dynamic> json) {
+class DocumentParser {
+  Map<String, dynamic> parsePage(PageSchema schema, Document document) {
+    final rootNode = schema.selector != null
+        ? document.querySelector(schema.selector!)
+        : document.documentElement;
+
+    if (rootNode == null) {
+      throw Exception("Root node not found when parsing $PageSchema");
+    }
+
     final Map<String, dynamic> values = {};
 
     for (final field in schema.items) {
       if (field.list) {
-        values[field.name] = _parseFieldList(json, field);
+        values[field.name] = _parseFieldList(rootNode, field);
       } else {
-        values[field.name] = _parseField(json, field);
+        final element = field.selector != null
+            ? rootNode.querySelector(field.selector!)
+            : rootNode;
+
+        values[field.name] = _parseField(element, field);
       }
     }
 
     return values;
   }
 
-  List<T> _parseFieldList<T>(Map<String, dynamic> json, FieldSchema field) {
+  List<T> _parseFieldList<T>(dynamic rootNode, FieldSchema field) {
     final List<T> values = [];
 
-    final nodes = json[field.selector!];
-
-    if (nodes == null) return [];
+    final nodes = field.selector != null
+        ? rootNode.querySelectorAll(field.selector!)
+        : rootNode;
 
     for (int i = 0; i < nodes.length; i++) {
       values.add(_parseField(nodes[i], field));
@@ -29,7 +43,11 @@ class JsonParser {
     return values;
   }
 
-  dynamic _parseField(dynamic json, FieldSchema field) {
+  dynamic _parseField(Element? element, FieldSchema field) {
+    if (element == null) {
+      return field.defaultValue;
+    }
+
     if (field.selector == null &&
         field.items == null &&
         field.attribute == null &&
@@ -41,20 +59,21 @@ class JsonParser {
 
     switch (field.attribute) {
       case "text":
-        value = json[field.selector!];
+        value = element.text.trim();
         break;
       case null:
-        value = json;
+        value = element;
         break;
       default:
-        value = json[field.attribute];
+        value = element.attributes[field.attribute];
     }
 
-    if (field.items != null && value is Map<String, dynamic>) {
+    if (field.items != null && value is Element) {
       final Map<String, dynamic> data = {};
 
       for (FieldSchema item in field.items!) {
-        final element = item.selector != null ? value[item.selector!] : value;
+        final element =
+            item.selector != null ? value.querySelector(item.selector!) : value;
 
         if (element == null) {
           data[item.name] = item.defaultValue;
