@@ -32,7 +32,7 @@ class SourceSchema {
 
   factory SourceSchema.fromJson(Map<String, dynamic> json) {
     return SourceSchema(
-      SourceInfoSchema.fromYaml(json['source_info']),
+      SourceInfoSchema.fromJson(json['source_info']),
       PageSchema.fromJson(json['chapters_schema']),
       PageSchema.fromJson(json['chapter_details_schema']),
       PageSchema.fromJson(json['manga_details_schema']),

@@ -17,12 +17,19 @@ final sourceProvider = Provider<Source>(
 
 class Source {
   final Scraper scraper = Scraper();
+
   late final SourceSchema schema;
 
   Source();
 
   get name => schema.info.name;
   get id => schema.info.id;
+
+  factory Source.fromSchema(SourceSchema schema) {
+    final source = Source()..schema = schema;
+
+    return source;
+  }
 
   Future<void> initialise() async {
     final sourceConfig = await rootBundle.loadString(

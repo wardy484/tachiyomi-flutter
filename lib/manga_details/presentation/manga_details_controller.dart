@@ -1,7 +1,11 @@
 import 'package:async/async.dart';
+import 'package:flutter/foundation.dart';
+import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
+import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/favourites/presentation/favourites_list_controller.dart';
 import 'package:fluttiyomi/manga_details/presentation/manga_details_state.dart';
+import 'package:fluttiyomi/source/schema/source_schema.dart';
 import 'package:fluttiyomi/source/source.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -28,8 +32,14 @@ class MangaDetailsController extends _$MangaDetailsController {
     final sourceClient = ref.watch(sourceProvider);
 
     final futures = FutureGroup();
-    futures.add(sourceClient.getMangaDetails(mangaId));
-    futures.add(sourceClient.getChapters(mangaId));
+    futures.add(compute(_getMangaDetails, {
+      'sourceSchema': sourceClient.schema.toJson(),
+      'mangaId': mangaId,
+    }));
+    futures.add(compute(_getChapters, {
+      'sourceSchema': sourceClient.schema.toJson(),
+      'mangaId': mangaId,
+    }));
     futures.close();
 
     final futuresResult = await futures.future;
@@ -43,4 +53,24 @@ class MangaDetailsController extends _$MangaDetailsController {
       favourite: null,
     );
   }
+}
+
+Future<Manga> _getMangaDetails(Map<String, dynamic> args) async {
+  final sourceSchemaJson = args['sourceSchema'];
+  final mangaId = args['mangaId'] as String;
+
+  final sourceSchema = SourceSchema.fromJson(sourceSchemaJson);
+  final source = Source.fromSchema(sourceSchema);
+
+  return await source.getMangaDetails(mangaId);
+}
+
+Future<ChapterList> _getChapters(Map<String, dynamic> args) async {
+  final sourceSchemaJson = args['sourceSchema'];
+  final mangaId = args['mangaId'] as String;
+
+  final sourceSchema = SourceSchema.fromJson(sourceSchemaJson);
+  final source = Source.fromSchema(sourceSchema);
+
+  return await source.getChapters(mangaId);
 }
