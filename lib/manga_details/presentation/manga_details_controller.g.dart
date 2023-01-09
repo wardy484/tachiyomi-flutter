@@ -30,7 +30,7 @@ class _SystemHash {
 }
 
 String $MangaDetailsControllerHash() =>
-    r'73af7b175cd004ca434546072bfbb057dc7de149';
+    r'fa52ff50fa522dd6adb3ea024e072fdacc192e15';
 
 /// See also [MangaDetailsController].
 class MangaDetailsControllerProvider
