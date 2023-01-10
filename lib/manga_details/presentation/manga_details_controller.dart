@@ -1,6 +1,5 @@
 import 'package:async/async.dart';
 import 'package:flutter/foundation.dart';
-import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
 import 'package:fluttiyomi/data/manga/manga.dart';
 import 'package:fluttiyomi/favourites/presentation/favourites_list_controller.dart';

@@ -34,8 +34,7 @@ void callbackDispatcher() {
 
     final container = ProviderContainer();
     await container.read(isarDatabaseProvider).init();
-
-    container.read(sourceProvider).scraper.setParseInIsolate(true);
+    await container.read(sourceProvider).initialise();
 
     switch (task) {
       case checkFavouritesForUpdatesTask:

@@ -124,7 +124,6 @@ class Source {
   }
 
   Future<PagedResults> search(String query) async {
-    // TODO: Implement paging
     final body = schema.search.request.buildBody({
       'query': query,
     });

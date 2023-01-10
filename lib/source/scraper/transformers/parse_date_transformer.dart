@@ -25,8 +25,6 @@ class ParseDateTransformer extends Transformer {
         throw UnimplementedError();
     }
 
-    // TODO: Get rid of this once we are no longer dependent on
-    // web based source
     String jsFormat = "EEE MMM d yyyy HH:mm:ss";
     DateFormat formatter = DateFormat(jsFormat);
 
