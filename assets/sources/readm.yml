@@ -195,7 +195,7 @@ home_schema:
             - name: 'title'
               default: 'Latest manga'
             - name: 'items'
-              selector: '.latest-updates .poster-xs'
+              selector: '.latest-updates div[alt]'
               list: true
               items:
               - name: "title"
