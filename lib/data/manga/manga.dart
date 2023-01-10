@@ -6,6 +6,8 @@ part 'manga.g.dart';
 
 @freezed
 class Manga with _$Manga {
+  const Manga._();
+
   factory Manga(
     String id,
     List<String> titles,
@@ -24,4 +26,14 @@ class Manga with _$Manga {
   }) = _Manga;
 
   factory Manga.fromJson(Map<String, dynamic> json) => _$MangaFromJson(json);
+
+  String get authorName {
+    if (author == null) {
+      return "Unknown author";
+    } else if (author == "") {
+      return "Unknown author";
+    } else {
+      return author!;
+    }
+  }
 }

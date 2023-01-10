@@ -88,11 +88,11 @@ class _$HomeSectionCopyWithImpl<$Res> implements $HomeSectionCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$HomeSectionCopyWith<$Res>
+abstract class _$$_HomeSectionCopyWith<$Res>
     implements $HomeSectionCopyWith<$Res> {
-  factory _$HomeSectionCopyWith(
-          _HomeSection value, $Res Function(_HomeSection) then) =
-      __$HomeSectionCopyWithImpl<$Res>;
+  factory _$$_HomeSectionCopyWith(
+          _$_HomeSection value, $Res Function(_$_HomeSection) then) =
+      __$$_HomeSectionCopyWithImpl<$Res>;
   @override
   $Res call(
       {String id,
@@ -103,14 +103,14 @@ abstract class _$HomeSectionCopyWith<$Res>
 }
 
 /// @nodoc
-class __$HomeSectionCopyWithImpl<$Res> extends _$HomeSectionCopyWithImpl<$Res>
-    implements _$HomeSectionCopyWith<$Res> {
-  __$HomeSectionCopyWithImpl(
-      _HomeSection _value, $Res Function(_HomeSection) _then)
-      : super(_value, (v) => _then(v as _HomeSection));
+class __$$_HomeSectionCopyWithImpl<$Res> extends _$HomeSectionCopyWithImpl<$Res>
+    implements _$$_HomeSectionCopyWith<$Res> {
+  __$$_HomeSectionCopyWithImpl(
+      _$_HomeSection _value, $Res Function(_$_HomeSection) _then)
+      : super(_value, (v) => _then(v as _$_HomeSection));
 
   @override
-  _HomeSection get _value => super._value as _HomeSection;
+  _$_HomeSection get _value => super._value as _$_HomeSection;
 
   @override
   $Res call({
@@ -120,7 +120,7 @@ class __$HomeSectionCopyWithImpl<$Res> extends _$HomeSectionCopyWithImpl<$Res>
     Object? items = freezed,
     Object? viewMore = freezed,
   }) {
-    return _then(_HomeSection(
+    return _then(_$_HomeSection(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -134,7 +134,7 @@ class __$HomeSectionCopyWithImpl<$Res> extends _$HomeSectionCopyWithImpl<$Res>
           : type // ignore: cast_nullable_to_non_nullable
               as String?,
       items: items == freezed
-          ? _value.items
+          ? _value._items
           : items // ignore: cast_nullable_to_non_nullable
               as List<MangaTile>?,
       viewMore: viewMore == freezed
@@ -187,11 +187,11 @@ class _$_HomeSection implements _HomeSection {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _HomeSection &&
+            other is _$_HomeSection &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.title, title) &&
             const DeepCollectionEquality().equals(other.type, type) &&
-            const DeepCollectionEquality().equals(other.items, items) &&
+            const DeepCollectionEquality().equals(other._items, _items) &&
             const DeepCollectionEquality().equals(other.viewMore, viewMore));
   }
 
@@ -202,13 +202,13 @@ class _$_HomeSection implements _HomeSection {
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(title),
       const DeepCollectionEquality().hash(type),
-      const DeepCollectionEquality().hash(items),
+      const DeepCollectionEquality().hash(_items),
       const DeepCollectionEquality().hash(viewMore));
 
   @JsonKey(ignore: true)
   @override
-  _$HomeSectionCopyWith<_HomeSection> get copyWith =>
-      __$HomeSectionCopyWithImpl<_HomeSection>(this, _$identity);
+  _$$_HomeSectionCopyWith<_$_HomeSection> get copyWith =>
+      __$$_HomeSectionCopyWithImpl<_$_HomeSection>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -228,18 +228,18 @@ abstract class _HomeSection implements HomeSection {
       _$_HomeSection.fromJson;
 
   @override
-  String get id => throw _privateConstructorUsedError;
+  String get id;
   @override
-  String get title => throw _privateConstructorUsedError;
+  String get title;
   @override
-  String? get type => throw _privateConstructorUsedError;
+  String? get type;
   @override
-  List<MangaTile>? get items => throw _privateConstructorUsedError;
+  List<MangaTile>? get items;
   @override
   @JsonKey(name: 'view_more')
-  bool? get viewMore => throw _privateConstructorUsedError;
+  bool? get viewMore;
   @override
   @JsonKey(ignore: true)
-  _$HomeSectionCopyWith<_HomeSection> get copyWith =>
+  _$$_HomeSectionCopyWith<_$_HomeSection> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -6,279 +6,386 @@ part of 'settings.dart';
 // IsarCollectionGenerator
 // **************************************************************************
 
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, unused_local_variable
+// coverage:ignore-file
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters
 
 extension GetSettingCollection on Isar {
-  IsarCollection<Setting> get settings => getCollection();
+  IsarCollection<Setting> get settings => this.collection();
 }
 
 const SettingSchema = CollectionSchema(
-  name: 'Setting',
-  schema:
-      '{"name":"Setting","idName":"id","properties":[{"name":"lastUpdateCheck","type":"Long"},{"name":"padding","type":"Long"},{"name":"showFps","type":"Bool"}],"indexes":[],"links":[]}',
-  idName: 'id',
-  propertyIds: {'lastUpdateCheck': 0, 'padding': 1, 'showFps': 2},
-  listProperties: {},
-  indexIds: {},
-  indexValueTypes: {},
-  linkIds: {},
-  backlinkLinkNames: {},
+  name: r'Setting',
+  id: 2542600759502230801,
+  properties: {
+    r'lastUpdateCheck': PropertySchema(
+      id: 0,
+      name: r'lastUpdateCheck',
+      type: IsarType.dateTime,
+    ),
+    r'padding': PropertySchema(
+      id: 1,
+      name: r'padding',
+      type: IsarType.long,
+    ),
+    r'type': PropertySchema(
+      id: 2,
+      name: r'type',
+      type: IsarType.byte,
+      enumMap: _SettingtypeEnumValueMap,
+    )
+  },
+  estimateSize: _settingEstimateSize,
+  serialize: _settingSerialize,
+  deserialize: _settingDeserialize,
+  deserializeProp: _settingDeserializeProp,
+  idName: r'id',
+  indexes: {
+    r'type': IndexSchema(
+      id: 5117122708147080838,
+      name: r'type',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'type',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
+    )
+  },
+  links: {},
+  embeddedSchemas: {},
   getId: _settingGetId,
-  setId: _settingSetId,
   getLinks: _settingGetLinks,
-  attachLinks: _settingAttachLinks,
-  serializeNative: _settingSerializeNative,
-  deserializeNative: _settingDeserializeNative,
-  deserializePropNative: _settingDeserializePropNative,
-  serializeWeb: _settingSerializeWeb,
-  deserializeWeb: _settingDeserializeWeb,
-  deserializePropWeb: _settingDeserializePropWeb,
-  version: 3,
+  attach: _settingAttach,
+  version: '3.0.5',
 );
 
-int? _settingGetId(Setting object) {
-  if (object.id == Isar.autoIncrement) {
-    return null;
-  } else {
-    return object.id;
-  }
+int _settingEstimateSize(
+  Setting object,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  var bytesCount = offsets.last;
+  return bytesCount;
 }
 
-void _settingSetId(Setting object, int id) {
-  object.id = id;
+void _settingSerialize(
+  Setting object,
+  IsarWriter writer,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
+  writer.writeDateTime(offsets[0], object.lastUpdateCheck);
+  writer.writeLong(offsets[1], object.padding);
+  writer.writeByte(offsets[2], object.type.index);
 }
 
-List<IsarLinkBase> _settingGetLinks(Setting object) {
-  return [];
-}
-
-void _settingSerializeNative(
-    IsarCollection<Setting> collection,
-    IsarRawObject rawObj,
-    Setting object,
-    int staticSize,
-    List<int> offsets,
-    AdapterAlloc alloc) {
-  var dynamicSize = 0;
-  final value0 = object.lastUpdateCheck;
-  final _lastUpdateCheck = value0;
-  final value1 = object.padding;
-  final _padding = value1;
-  final value2 = object.showFps;
-  final _showFps = value2;
-  final size = staticSize + dynamicSize;
-
-  rawObj.buffer = alloc(size);
-  rawObj.buffer_length = size;
-  final buffer = IsarNative.bufAsBytes(rawObj.buffer, size);
-  final writer = IsarBinaryWriter(buffer, staticSize);
-  writer.writeDateTime(offsets[0], _lastUpdateCheck);
-  writer.writeLong(offsets[1], _padding);
-  writer.writeBool(offsets[2], _showFps);
-}
-
-Setting _settingDeserializeNative(IsarCollection<Setting> collection, int id,
-    IsarBinaryReader reader, List<int> offsets) {
+Setting _settingDeserialize(
+  Id id,
+  IsarReader reader,
+  List<int> offsets,
+  Map<Type, List<int>> allOffsets,
+) {
   final object = Setting();
   object.id = id;
   object.lastUpdateCheck = reader.readDateTime(offsets[0]);
   object.padding = reader.readLong(offsets[1]);
-  object.showFps = reader.readBool(offsets[2]);
+  object.type = _SettingtypeValueEnumMap[reader.readByteOrNull(offsets[2])] ??
+      SettingsType.global;
   return object;
 }
 
-P _settingDeserializePropNative<P>(
-    int id, IsarBinaryReader reader, int propertyIndex, int offset) {
-  switch (propertyIndex) {
-    case -1:
-      return id as P;
+P _settingDeserializeProp<P>(
+  IsarReader reader,
+  int propertyId,
+  int offset,
+  Map<Type, List<int>> allOffsets,
+) {
+  switch (propertyId) {
     case 0:
       return (reader.readDateTime(offset)) as P;
     case 1:
       return (reader.readLong(offset)) as P;
     case 2:
-      return (reader.readBool(offset)) as P;
+      return (_SettingtypeValueEnumMap[reader.readByteOrNull(offset)] ??
+          SettingsType.global) as P;
     default:
-      throw 'Illegal propertyIndex';
+      throw IsarError('Unknown property with id $propertyId');
   }
 }
 
-dynamic _settingSerializeWeb(
-    IsarCollection<Setting> collection, Setting object) {
-  final jsObj = IsarNative.newJsObject();
-  IsarNative.jsObjectSet(jsObj, 'id', object.id);
-  IsarNative.jsObjectSet(jsObj, 'lastUpdateCheck',
-      object.lastUpdateCheck.toUtc().millisecondsSinceEpoch);
-  IsarNative.jsObjectSet(jsObj, 'padding', object.padding);
-  IsarNative.jsObjectSet(jsObj, 'showFps', object.showFps);
-  return jsObj;
+const _SettingtypeEnumValueMap = {
+  'global': 0,
+};
+const _SettingtypeValueEnumMap = {
+  0: SettingsType.global,
+};
+
+Id _settingGetId(Setting object) {
+  return object.id ?? Isar.autoIncrement;
 }
 
-Setting _settingDeserializeWeb(
-    IsarCollection<Setting> collection, dynamic jsObj) {
-  final object = Setting();
-  object.id = IsarNative.jsObjectGet(jsObj, 'id');
-  object.lastUpdateCheck =
-      IsarNative.jsObjectGet(jsObj, 'lastUpdateCheck') != null
-          ? DateTime.fromMillisecondsSinceEpoch(
-                  IsarNative.jsObjectGet(jsObj, 'lastUpdateCheck'),
-                  isUtc: true)
-              .toLocal()
-          : DateTime.fromMillisecondsSinceEpoch(0);
-  object.padding =
-      IsarNative.jsObjectGet(jsObj, 'padding') ?? double.negativeInfinity;
-  object.showFps = IsarNative.jsObjectGet(jsObj, 'showFps') ?? false;
-  return object;
+List<IsarLinkBase<dynamic>> _settingGetLinks(Setting object) {
+  return [];
 }
 
-P _settingDeserializePropWeb<P>(Object jsObj, String propertyName) {
-  switch (propertyName) {
-    case 'id':
-      return (IsarNative.jsObjectGet(jsObj, 'id')) as P;
-    case 'lastUpdateCheck':
-      return (IsarNative.jsObjectGet(jsObj, 'lastUpdateCheck') != null
-          ? DateTime.fromMillisecondsSinceEpoch(
-                  IsarNative.jsObjectGet(jsObj, 'lastUpdateCheck'),
-                  isUtc: true)
-              .toLocal()
-          : DateTime.fromMillisecondsSinceEpoch(0)) as P;
-    case 'padding':
-      return (IsarNative.jsObjectGet(jsObj, 'padding') ??
-          double.negativeInfinity) as P;
-    case 'showFps':
-      return (IsarNative.jsObjectGet(jsObj, 'showFps') ?? false) as P;
-    default:
-      throw 'Illegal propertyName';
-  }
+void _settingAttach(IsarCollection<dynamic> col, Id id, Setting object) {
+  object.id = id;
 }
-
-void _settingAttachLinks(IsarCollection col, int id, Setting object) {}
 
 extension SettingQueryWhereSort on QueryBuilder<Setting, Setting, QWhere> {
   QueryBuilder<Setting, Setting, QAfterWhere> anyId() {
-    return addWhereClauseInternal(const IdWhereClause.any());
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(const IdWhereClause.any());
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterWhere> anyType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'type'),
+      );
+    });
   }
 }
 
 extension SettingQueryWhere on QueryBuilder<Setting, Setting, QWhereClause> {
-  QueryBuilder<Setting, Setting, QAfterWhereClause> idEqualTo(int id) {
-    return addWhereClauseInternal(IdWhereClause.between(
-      lower: id,
-      includeLower: true,
-      upper: id,
-      includeUpper: true,
-    ));
+  QueryBuilder<Setting, Setting, QAfterWhereClause> idEqualTo(Id id) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IdWhereClause.between(
+        lower: id,
+        upper: id,
+      ));
+    });
   }
 
-  QueryBuilder<Setting, Setting, QAfterWhereClause> idNotEqualTo(int id) {
-    if (whereSortInternal == Sort.asc) {
-      return addWhereClauseInternal(
-        IdWhereClause.lessThan(upper: id, includeUpper: false),
-      ).addWhereClauseInternal(
-        IdWhereClause.greaterThan(lower: id, includeLower: false),
-      );
-    } else {
-      return addWhereClauseInternal(
-        IdWhereClause.greaterThan(lower: id, includeLower: false),
-      ).addWhereClauseInternal(
-        IdWhereClause.lessThan(upper: id, includeUpper: false),
-      );
-    }
+  QueryBuilder<Setting, Setting, QAfterWhereClause> idNotEqualTo(Id id) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(
+              IdWhereClause.lessThan(upper: id, includeUpper: false),
+            )
+            .addWhereClause(
+              IdWhereClause.greaterThan(lower: id, includeLower: false),
+            );
+      } else {
+        return query
+            .addWhereClause(
+              IdWhereClause.greaterThan(lower: id, includeLower: false),
+            )
+            .addWhereClause(
+              IdWhereClause.lessThan(upper: id, includeUpper: false),
+            );
+      }
+    });
   }
 
-  QueryBuilder<Setting, Setting, QAfterWhereClause> idGreaterThan(int id,
+  QueryBuilder<Setting, Setting, QAfterWhereClause> idGreaterThan(Id id,
       {bool include = false}) {
-    return addWhereClauseInternal(
-      IdWhereClause.greaterThan(lower: id, includeLower: include),
-    );
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IdWhereClause.greaterThan(lower: id, includeLower: include),
+      );
+    });
   }
 
-  QueryBuilder<Setting, Setting, QAfterWhereClause> idLessThan(int id,
+  QueryBuilder<Setting, Setting, QAfterWhereClause> idLessThan(Id id,
       {bool include = false}) {
-    return addWhereClauseInternal(
-      IdWhereClause.lessThan(upper: id, includeUpper: include),
-    );
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IdWhereClause.lessThan(upper: id, includeUpper: include),
+      );
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterWhereClause> idBetween(
-    int lowerId,
-    int upperId, {
+    Id lowerId,
+    Id upperId, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addWhereClauseInternal(IdWhereClause.between(
-      lower: lowerId,
-      includeLower: includeLower,
-      upper: upperId,
-      includeUpper: includeUpper,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IdWhereClause.between(
+        lower: lowerId,
+        includeLower: includeLower,
+        upper: upperId,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterWhereClause> typeEqualTo(
+      SettingsType type) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'type',
+        value: [type],
+      ));
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterWhereClause> typeNotEqualTo(
+      SettingsType type) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'type',
+              lower: [],
+              upper: [type],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'type',
+              lower: [type],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'type',
+              lower: [type],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'type',
+              lower: [],
+              upper: [type],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterWhereClause> typeGreaterThan(
+    SettingsType type, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'type',
+        lower: [type],
+        includeLower: include,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterWhereClause> typeLessThan(
+    SettingsType type, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'type',
+        lower: [],
+        upper: [type],
+        includeUpper: include,
+      ));
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterWhereClause> typeBetween(
+    SettingsType lowerType,
+    SettingsType upperType, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'type',
+        lower: [lowerType],
+        includeLower: includeLower,
+        upper: [upperType],
+        includeUpper: includeUpper,
+      ));
+    });
   }
 }
 
 extension SettingQueryFilter
     on QueryBuilder<Setting, Setting, QFilterCondition> {
   QueryBuilder<Setting, Setting, QAfterFilterCondition> idIsNull() {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.isNull,
-      property: 'id',
-      value: null,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'id',
+      ));
+    });
   }
 
-  QueryBuilder<Setting, Setting, QAfterFilterCondition> idEqualTo(int value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'id',
-      value: value,
-    ));
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> idIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'id',
+      ));
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> idEqualTo(Id? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'id',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterFilterCondition> idGreaterThan(
-    int value, {
+    Id? value, {
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'id',
-      value: value,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'id',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterFilterCondition> idLessThan(
-    int value, {
+    Id? value, {
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'id',
-      value: value,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'id',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterFilterCondition> idBetween(
-    int lower,
-    int upper, {
+    Id? lower,
+    Id? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'id',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'id',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterFilterCondition> lastUpdateCheckEqualTo(
       DateTime value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'lastUpdateCheck',
-      value: value,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'lastUpdateCheck',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterFilterCondition>
@@ -286,24 +393,26 @@ extension SettingQueryFilter
     DateTime value, {
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'lastUpdateCheck',
-      value: value,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'lastUpdateCheck',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterFilterCondition> lastUpdateCheckLessThan(
     DateTime value, {
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'lastUpdateCheck',
-      value: value,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'lastUpdateCheck',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterFilterCondition> lastUpdateCheckBetween(
@@ -312,46 +421,51 @@ extension SettingQueryFilter
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'lastUpdateCheck',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'lastUpdateCheck',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterFilterCondition> paddingEqualTo(
       int value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'padding',
-      value: value,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'padding',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterFilterCondition> paddingGreaterThan(
     int value, {
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'padding',
-      value: value,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'padding',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterFilterCondition> paddingLessThan(
     int value, {
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'padding',
-      value: value,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'padding',
+        value: value,
+      ));
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterFilterCondition> paddingBetween(
@@ -360,131 +474,210 @@ extension SettingQueryFilter
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'padding',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-    ));
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'padding',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
   }
 
-  QueryBuilder<Setting, Setting, QAfterFilterCondition> showFpsEqualTo(
-      bool value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'showFps',
-      value: value,
-    ));
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> typeEqualTo(
+      SettingsType value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'type',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> typeGreaterThan(
+    SettingsType value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'type',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> typeLessThan(
+    SettingsType value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'type',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Setting, Setting, QAfterFilterCondition> typeBetween(
+    SettingsType lower,
+    SettingsType upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'type',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
   }
 }
+
+extension SettingQueryObject
+    on QueryBuilder<Setting, Setting, QFilterCondition> {}
 
 extension SettingQueryLinks
     on QueryBuilder<Setting, Setting, QFilterCondition> {}
 
-extension SettingQueryWhereSortBy on QueryBuilder<Setting, Setting, QSortBy> {
-  QueryBuilder<Setting, Setting, QAfterSortBy> sortById() {
-    return addSortByInternal('id', Sort.asc);
-  }
-
-  QueryBuilder<Setting, Setting, QAfterSortBy> sortByIdDesc() {
-    return addSortByInternal('id', Sort.desc);
-  }
-
+extension SettingQuerySortBy on QueryBuilder<Setting, Setting, QSortBy> {
   QueryBuilder<Setting, Setting, QAfterSortBy> sortByLastUpdateCheck() {
-    return addSortByInternal('lastUpdateCheck', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastUpdateCheck', Sort.asc);
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterSortBy> sortByLastUpdateCheckDesc() {
-    return addSortByInternal('lastUpdateCheck', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastUpdateCheck', Sort.desc);
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterSortBy> sortByPadding() {
-    return addSortByInternal('padding', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'padding', Sort.asc);
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterSortBy> sortByPaddingDesc() {
-    return addSortByInternal('padding', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'padding', Sort.desc);
+    });
   }
 
-  QueryBuilder<Setting, Setting, QAfterSortBy> sortByShowFps() {
-    return addSortByInternal('showFps', Sort.asc);
+  QueryBuilder<Setting, Setting, QAfterSortBy> sortByType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'type', Sort.asc);
+    });
   }
 
-  QueryBuilder<Setting, Setting, QAfterSortBy> sortByShowFpsDesc() {
-    return addSortByInternal('showFps', Sort.desc);
+  QueryBuilder<Setting, Setting, QAfterSortBy> sortByTypeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'type', Sort.desc);
+    });
   }
 }
 
-extension SettingQueryWhereSortThenBy
+extension SettingQuerySortThenBy
     on QueryBuilder<Setting, Setting, QSortThenBy> {
   QueryBuilder<Setting, Setting, QAfterSortBy> thenById() {
-    return addSortByInternal('id', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'id', Sort.asc);
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterSortBy> thenByIdDesc() {
-    return addSortByInternal('id', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'id', Sort.desc);
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterSortBy> thenByLastUpdateCheck() {
-    return addSortByInternal('lastUpdateCheck', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastUpdateCheck', Sort.asc);
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterSortBy> thenByLastUpdateCheckDesc() {
-    return addSortByInternal('lastUpdateCheck', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'lastUpdateCheck', Sort.desc);
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterSortBy> thenByPadding() {
-    return addSortByInternal('padding', Sort.asc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'padding', Sort.asc);
+    });
   }
 
   QueryBuilder<Setting, Setting, QAfterSortBy> thenByPaddingDesc() {
-    return addSortByInternal('padding', Sort.desc);
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'padding', Sort.desc);
+    });
   }
 
-  QueryBuilder<Setting, Setting, QAfterSortBy> thenByShowFps() {
-    return addSortByInternal('showFps', Sort.asc);
+  QueryBuilder<Setting, Setting, QAfterSortBy> thenByType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'type', Sort.asc);
+    });
   }
 
-  QueryBuilder<Setting, Setting, QAfterSortBy> thenByShowFpsDesc() {
-    return addSortByInternal('showFps', Sort.desc);
+  QueryBuilder<Setting, Setting, QAfterSortBy> thenByTypeDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'type', Sort.desc);
+    });
   }
 }
 
 extension SettingQueryWhereDistinct
     on QueryBuilder<Setting, Setting, QDistinct> {
-  QueryBuilder<Setting, Setting, QDistinct> distinctById() {
-    return addDistinctByInternal('id');
-  }
-
   QueryBuilder<Setting, Setting, QDistinct> distinctByLastUpdateCheck() {
-    return addDistinctByInternal('lastUpdateCheck');
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'lastUpdateCheck');
+    });
   }
 
   QueryBuilder<Setting, Setting, QDistinct> distinctByPadding() {
-    return addDistinctByInternal('padding');
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'padding');
+    });
   }
 
-  QueryBuilder<Setting, Setting, QDistinct> distinctByShowFps() {
-    return addDistinctByInternal('showFps');
+  QueryBuilder<Setting, Setting, QDistinct> distinctByType() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'type');
+    });
   }
 }
 
 extension SettingQueryProperty
     on QueryBuilder<Setting, Setting, QQueryProperty> {
-  QueryBuilder<Setting, int?, QQueryOperations> idProperty() {
-    return addPropertyNameInternal('id');
+  QueryBuilder<Setting, int, QQueryOperations> idProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'id');
+    });
   }
 
   QueryBuilder<Setting, DateTime, QQueryOperations> lastUpdateCheckProperty() {
-    return addPropertyNameInternal('lastUpdateCheck');
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'lastUpdateCheck');
+    });
   }
 
   QueryBuilder<Setting, int, QQueryOperations> paddingProperty() {
-    return addPropertyNameInternal('padding');
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'padding');
+    });
   }
 
-  QueryBuilder<Setting, bool, QQueryOperations> showFpsProperty() {
-    return addPropertyNameInternal('showFps');
+  QueryBuilder<Setting, SettingsType, QQueryOperations> typeProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'type');
+    });
   }
 }

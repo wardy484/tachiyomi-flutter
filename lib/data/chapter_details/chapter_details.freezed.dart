@@ -77,25 +77,25 @@ class _$ChapterDetailsCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$ChapterDetailsCopyWith<$Res>
+abstract class _$$_ChapterDetailsCopyWith<$Res>
     implements $ChapterDetailsCopyWith<$Res> {
-  factory _$ChapterDetailsCopyWith(
-          _ChapterDetails value, $Res Function(_ChapterDetails) then) =
-      __$ChapterDetailsCopyWithImpl<$Res>;
+  factory _$$_ChapterDetailsCopyWith(
+          _$_ChapterDetails value, $Res Function(_$_ChapterDetails) then) =
+      __$$_ChapterDetailsCopyWithImpl<$Res>;
   @override
   $Res call({String id, String mangaId, List<String> pages, bool longStrip});
 }
 
 /// @nodoc
-class __$ChapterDetailsCopyWithImpl<$Res>
+class __$$_ChapterDetailsCopyWithImpl<$Res>
     extends _$ChapterDetailsCopyWithImpl<$Res>
-    implements _$ChapterDetailsCopyWith<$Res> {
-  __$ChapterDetailsCopyWithImpl(
-      _ChapterDetails _value, $Res Function(_ChapterDetails) _then)
-      : super(_value, (v) => _then(v as _ChapterDetails));
+    implements _$$_ChapterDetailsCopyWith<$Res> {
+  __$$_ChapterDetailsCopyWithImpl(
+      _$_ChapterDetails _value, $Res Function(_$_ChapterDetails) _then)
+      : super(_value, (v) => _then(v as _$_ChapterDetails));
 
   @override
-  _ChapterDetails get _value => super._value as _ChapterDetails;
+  _$_ChapterDetails get _value => super._value as _$_ChapterDetails;
 
   @override
   $Res call({
@@ -104,7 +104,7 @@ class __$ChapterDetailsCopyWithImpl<$Res>
     Object? pages = freezed,
     Object? longStrip = freezed,
   }) {
-    return _then(_ChapterDetails(
+    return _then(_$_ChapterDetails(
       id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -114,7 +114,7 @@ class __$ChapterDetailsCopyWithImpl<$Res>
           : mangaId // ignore: cast_nullable_to_non_nullable
               as String,
       pages == freezed
-          ? _value.pages
+          ? _value._pages
           : pages // ignore: cast_nullable_to_non_nullable
               as List<String>,
       longStrip == freezed
@@ -158,10 +158,10 @@ class _$_ChapterDetails implements _ChapterDetails {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _ChapterDetails &&
+            other is _$_ChapterDetails &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.mangaId, mangaId) &&
-            const DeepCollectionEquality().equals(other.pages, pages) &&
+            const DeepCollectionEquality().equals(other._pages, _pages) &&
             const DeepCollectionEquality().equals(other.longStrip, longStrip));
   }
 
@@ -171,13 +171,13 @@ class _$_ChapterDetails implements _ChapterDetails {
       runtimeType,
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(mangaId),
-      const DeepCollectionEquality().hash(pages),
+      const DeepCollectionEquality().hash(_pages),
       const DeepCollectionEquality().hash(longStrip));
 
   @JsonKey(ignore: true)
   @override
-  _$ChapterDetailsCopyWith<_ChapterDetails> get copyWith =>
-      __$ChapterDetailsCopyWithImpl<_ChapterDetails>(this, _$identity);
+  _$$_ChapterDetailsCopyWith<_$_ChapterDetails> get copyWith =>
+      __$$_ChapterDetailsCopyWithImpl<_$_ChapterDetails>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -193,15 +193,15 @@ abstract class _ChapterDetails implements ChapterDetails {
       _$_ChapterDetails.fromJson;
 
   @override
-  String get id => throw _privateConstructorUsedError;
+  String get id;
   @override
-  String get mangaId => throw _privateConstructorUsedError;
+  String get mangaId;
   @override
-  List<String> get pages => throw _privateConstructorUsedError;
+  List<String> get pages;
   @override
-  bool get longStrip => throw _privateConstructorUsedError;
+  bool get longStrip;
   @override
   @JsonKey(ignore: true)
-  _$ChapterDetailsCopyWith<_ChapterDetails> get copyWith =>
+  _$$_ChapterDetailsCopyWith<_$_ChapterDetails> get copyWith =>
       throw _privateConstructorUsedError;
 }

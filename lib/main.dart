@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttiyomi/auth/auth_guard.dart';
 import 'package:fluttiyomi/database/database.dart';
-import 'package:fluttiyomi/debug/fps_widget.dart';
-import 'package:fluttiyomi/javascript/source_client.dart';
+import 'package:fluttiyomi/local_notifications.dart';
 import 'package:fluttiyomi/router.gr.dart';
-import 'package:fluttiyomi/settings/settings_notifier.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:fluttiyomi/widgets/refresh_config.dart';
+import 'package:fluttiyomi/work_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 // import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,11 +25,27 @@ void main() async {
     cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   );
 
-  final container = ProviderContainer();
-  container.read(sourceClientProvider.state).state = await SourceClient.init();
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.requestPermission();
 
+  await flutterLocalNotificationsPlugin.initialize(
+    const InitializationSettings(
+      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+    ),
+    onDidReceiveNotificationResponse:
+        (NotificationResponse notificationResponse) async {
+      // ...
+    },
+    onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
+  );
+
+  final container = ProviderContainer();
   await container.read(isarDatabaseProvider).init();
-  await container.read(settingsProvider.notifier).loadSettings();
+  await container.read(workManagerProvider).initialize(callbackDispatcher);
+  await container.read(sourceProvider).initialise();
 
   // await SentryFlutter.init(
   //   (options) {
@@ -41,8 +57,6 @@ void main() async {
   //   },
   //   appRunner: () => runApp(MyApp()),
   // );
-
-  // container.read(eventsProvider).registerGlobalEvents();
 
   runApp(
     UncontrolledProviderScope(
@@ -73,26 +87,32 @@ class _MyAppState extends ConsumerState<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    bool showFps = ref.watch(settingsProvider).when(
-          initial: () => false,
-          loaded: (settings) => settings.showFps,
-        );
-
     return RefreshConfig(
-      child: FPSWidget(
-        show: showFps,
-        child: MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          title: 'Fluttiyomi',
-          theme: ThemeData(
-            // useMaterial3: true,
-            brightness: Brightness.dark,
-            primarySwatch: Colors.blue,
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        title: 'Fluttiyomi',
+        theme: ThemeData(
+          useMaterial3: true,
+          brightness: Brightness.dark,
+          primarySwatch: Colors.blue,
+          bottomAppBarColor: Colors.blueGrey,
+          appBarTheme: const AppBarTheme(
+            // backgroundColor: Colors.blueGrey[900],
+            elevation: 0,
           ),
-          routerDelegate: _appRouter.delegate(),
-          routeInformationParser: _appRouter.defaultRouteParser(),
-          builder: EasyLoading.init(),
+          bottomNavigationBarTheme: BottomNavigationBarThemeData(
+            // backgroundColor: Colors.blueGrey[900],
+            // elevation: 1,
+            // type: BottomNavigationBarType.fixed,
+            selectedItemColor: Colors.amber[800],
+          ),
+          bottomAppBarTheme: BottomAppBarTheme(
+            color: Colors.blueGrey[900],
+            elevation: 0,
+          ),
         ),
+        routerDelegate: _appRouter.delegate(),
+        routeInformationParser: _appRouter.defaultRouteParser(),
       ),
     );
   }

@@ -148,9 +148,9 @@ class _$MangaCopyWithImpl<$Res> implements $MangaCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$MangaCopyWith<$Res> implements $MangaCopyWith<$Res> {
-  factory _$MangaCopyWith(_Manga value, $Res Function(_Manga) then) =
-      __$MangaCopyWithImpl<$Res>;
+abstract class _$$_MangaCopyWith<$Res> implements $MangaCopyWith<$Res> {
+  factory _$$_MangaCopyWith(_$_Manga value, $Res Function(_$_Manga) then) =
+      __$$_MangaCopyWithImpl<$Res>;
   @override
   $Res call(
       {String id,
@@ -170,13 +170,13 @@ abstract class _$MangaCopyWith<$Res> implements $MangaCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$MangaCopyWithImpl<$Res> extends _$MangaCopyWithImpl<$Res>
-    implements _$MangaCopyWith<$Res> {
-  __$MangaCopyWithImpl(_Manga _value, $Res Function(_Manga) _then)
-      : super(_value, (v) => _then(v as _Manga));
+class __$$_MangaCopyWithImpl<$Res> extends _$MangaCopyWithImpl<$Res>
+    implements _$$_MangaCopyWith<$Res> {
+  __$$_MangaCopyWithImpl(_$_Manga _value, $Res Function(_$_Manga) _then)
+      : super(_value, (v) => _then(v as _$_Manga));
 
   @override
-  _Manga get _value => super._value as _Manga;
+  _$_Manga get _value => super._value as _$_Manga;
 
   @override
   $Res call({
@@ -195,13 +195,13 @@ class __$MangaCopyWithImpl<$Res> extends _$MangaCopyWithImpl<$Res>
     Object? lastUpdate = freezed,
     Object? favourite = freezed,
   }) {
-    return _then(_Manga(
+    return _then(_$_Manga(
       id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
       titles == freezed
-          ? _value.titles
+          ? _value._titles
           : titles // ignore: cast_nullable_to_non_nullable
               as List<String>,
       image == freezed
@@ -229,7 +229,7 @@ class __$MangaCopyWithImpl<$Res> extends _$MangaCopyWithImpl<$Res>
           : artist // ignore: cast_nullable_to_non_nullable
               as String?,
       covers == freezed
-          ? _value.covers
+          ? _value._covers
           : covers // ignore: cast_nullable_to_non_nullable
               as List<String>?,
       desc == freezed
@@ -241,7 +241,7 @@ class __$MangaCopyWithImpl<$Res> extends _$MangaCopyWithImpl<$Res>
           : follows // ignore: cast_nullable_to_non_nullable
               as double?,
       tags == freezed
-          ? _value.tags
+          ? _value._tags
           : tags // ignore: cast_nullable_to_non_nullable
               as List<TagSection>?,
       lastUpdate == freezed
@@ -258,7 +258,7 @@ class __$MangaCopyWithImpl<$Res> extends _$MangaCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Manga implements _Manga {
+class _$_Manga extends _Manga {
   _$_Manga(
       this.id,
       final List<String> titles,
@@ -276,7 +276,8 @@ class _$_Manga implements _Manga {
       {this.favourite = false})
       : _titles = titles,
         _covers = covers,
-        _tags = tags;
+        _tags = tags,
+        super._();
 
   factory _$_Manga.fromJson(Map<String, dynamic> json) =>
       _$$_MangaFromJson(json);
@@ -339,9 +340,9 @@ class _$_Manga implements _Manga {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Manga &&
+            other is _$_Manga &&
             const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.titles, titles) &&
+            const DeepCollectionEquality().equals(other._titles, _titles) &&
             const DeepCollectionEquality().equals(other.image, image) &&
             const DeepCollectionEquality().equals(other.rating, rating) &&
             const DeepCollectionEquality()
@@ -349,10 +350,10 @@ class _$_Manga implements _Manga {
             const DeepCollectionEquality().equals(other.langFlag, langFlag) &&
             const DeepCollectionEquality().equals(other.author, author) &&
             const DeepCollectionEquality().equals(other.artist, artist) &&
-            const DeepCollectionEquality().equals(other.covers, covers) &&
+            const DeepCollectionEquality().equals(other._covers, _covers) &&
             const DeepCollectionEquality().equals(other.desc, desc) &&
             const DeepCollectionEquality().equals(other.follows, follows) &&
-            const DeepCollectionEquality().equals(other.tags, tags) &&
+            const DeepCollectionEquality().equals(other._tags, _tags) &&
             const DeepCollectionEquality()
                 .equals(other.lastUpdate, lastUpdate) &&
             const DeepCollectionEquality().equals(other.favourite, favourite));
@@ -363,24 +364,24 @@ class _$_Manga implements _Manga {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(titles),
+      const DeepCollectionEquality().hash(_titles),
       const DeepCollectionEquality().hash(image),
       const DeepCollectionEquality().hash(rating),
       const DeepCollectionEquality().hash(mangaStatus),
       const DeepCollectionEquality().hash(langFlag),
       const DeepCollectionEquality().hash(author),
       const DeepCollectionEquality().hash(artist),
-      const DeepCollectionEquality().hash(covers),
+      const DeepCollectionEquality().hash(_covers),
       const DeepCollectionEquality().hash(desc),
       const DeepCollectionEquality().hash(follows),
-      const DeepCollectionEquality().hash(tags),
+      const DeepCollectionEquality().hash(_tags),
       const DeepCollectionEquality().hash(lastUpdate),
       const DeepCollectionEquality().hash(favourite));
 
   @JsonKey(ignore: true)
   @override
-  _$MangaCopyWith<_Manga> get copyWith =>
-      __$MangaCopyWithImpl<_Manga>(this, _$identity);
+  _$$_MangaCopyWith<_$_Manga> get copyWith =>
+      __$$_MangaCopyWithImpl<_$_Manga>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -388,7 +389,7 @@ class _$_Manga implements _Manga {
   }
 }
 
-abstract class _Manga implements Manga {
+abstract class _Manga extends Manga {
   factory _Manga(
       final String id,
       final List<String> titles,
@@ -404,38 +405,40 @@ abstract class _Manga implements Manga {
       final List<TagSection>? tags,
       final DateTime? lastUpdate,
       {final bool favourite}) = _$_Manga;
+  _Manga._() : super._();
 
   factory _Manga.fromJson(Map<String, dynamic> json) = _$_Manga.fromJson;
 
   @override
-  String get id => throw _privateConstructorUsedError;
+  String get id;
   @override
-  List<String> get titles => throw _privateConstructorUsedError;
+  List<String> get titles;
   @override
-  String get image => throw _privateConstructorUsedError;
+  String get image;
   @override
-  double? get rating => throw _privateConstructorUsedError;
+  double? get rating;
   @override
-  String? get mangaStatus => throw _privateConstructorUsedError;
+  String? get mangaStatus;
   @override
-  String? get langFlag => throw _privateConstructorUsedError;
+  String? get langFlag;
   @override
-  String? get author => throw _privateConstructorUsedError;
+  String? get author;
   @override
-  String? get artist => throw _privateConstructorUsedError;
+  String? get artist;
   @override
-  List<String>? get covers => throw _privateConstructorUsedError;
+  List<String>? get covers;
   @override
-  String? get desc => throw _privateConstructorUsedError;
+  String? get desc;
   @override
-  double? get follows => throw _privateConstructorUsedError;
+  double? get follows;
   @override
-  List<TagSection>? get tags => throw _privateConstructorUsedError;
+  List<TagSection>? get tags;
   @override
-  DateTime? get lastUpdate => throw _privateConstructorUsedError;
+  DateTime? get lastUpdate;
   @override
-  bool get favourite => throw _privateConstructorUsedError;
+  bool get favourite;
   @override
   @JsonKey(ignore: true)
-  _$MangaCopyWith<_Manga> get copyWith => throw _privateConstructorUsedError;
+  _$$_MangaCopyWith<_$_Manga> get copyWith =>
+      throw _privateConstructorUsedError;
 }

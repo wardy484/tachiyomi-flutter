@@ -21,8 +21,16 @@ class ChapterList with _$ChapterList {
     return chapters[index];
   }
 
+  int indexOf(Chapter chapter) {
+    return chapters.indexOf(chapter);
+  }
+
   Chapter getByChapterNumber(double chapterNumber) {
     return chapters.firstWhere((chapter) => chapter.chapterNo == chapterNumber);
+  }
+
+  Chapter getByChapterId(String chapterId) {
+    return chapters.firstWhere((chapter) => chapter.id == chapterId);
   }
 
   Chapter? getNextChapter(Chapter currentChapter) {
@@ -81,5 +89,20 @@ class ChapterList with _$ChapterList {
       }
     }
     return unreadChapterCount;
+  }
+
+  bool contains(Chapter chapter) {
+    return chapters.contains(chapter);
+  }
+
+  get isEmpty {
+    return chapters.isEmpty;
+  }
+
+  ChapterList append(List<Chapter> newChapters) {
+    return ChapterList([
+      ...newChapters,
+      ...chapters,
+    ]);
   }
 }

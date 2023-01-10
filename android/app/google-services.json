@@ -14,6 +14,50 @@
       },
       "oauth_client": [
         {
+          "client_id": "235165685655-i1otm6cq6s1blrd4j40lqcvjm21b55hu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fluttiyomi",
+            "certificate_hash": "a8c7f0afc930752042d53542e3401a95964e56fd"
+          }
+        },
+        {
+          "client_id": "235165685655-tmjksjfjqhbq4sqlf75hc93l96vsiu82.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz2vvMSQ6Go289kjFV0m8o3IqXchvq2DM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "235165685655-tmjksjfjqhbq4sqlf75hc93l96vsiu82.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "235165685655-l9i4a774u0r8s27g26bp16ao32k7npiq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.wardy484.fluttiyomi"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:235165685655:android:368c01daa6c2f8b467d6d2",
+        "android_client_info": {
+          "package_name": "com.kimward.flutter_manga_reader"
+        }
+      },
+      "oauth_client": [
+        {
           "client_id": "235165685655-tmjksjfjqhbq4sqlf75hc93l96vsiu82.apps.googleusercontent.com",
           "client_type": 3
         }

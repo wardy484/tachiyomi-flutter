@@ -1,0 +1,299 @@
+source_info:
+  name: ReadM
+  id : readm
+  description: Source schema that pulls content from Readm
+  version: "0.1"
+  repository_url: https://github.com/wardy484/some-repo
+  website_url: https://readm.org/
+
+manga_details_schema:
+  request:
+    url: https://readm.org/manga/{{ mangaId }}
+  items: 
+    - name: 'titles'
+      selector: 'h1.page-title'
+      list: true
+      attribute: text
+      default: ""
+    - name: 'image'
+      selector: 'img.series-profile-thumb'
+      default: "https://i.imgur.com/GYUxEX8.png"
+      transformers:
+          - type: imageSource
+          - type: prefixValue
+            prefix: https://readm.org/
+    - name: 'author'
+      selector: "#first_episode small"
+      attribute: text
+      default: ""
+    - name: 'artist'
+      selector: "#last_episode small"
+      attribute: text
+      default: ""
+    - name: 'desc'
+      selector: 'div.series-summary-wrapper > p > span'
+      attribute: text
+      default: "No description available"
+    - name: 'status'
+      selector: 'div.series-genres'
+      attribute: text
+      default: "ONGOING"
+    - name: 'tags'
+      selector: 'div.ui.list > .item > a'
+      list: true
+      items:
+      - name: 'label'
+        attribute: text
+      - name: 'id'
+        attribute: href
+        transformers:
+          - type: regex
+            pattern: /category/(\w+)
+            index: 1
+          
+chapters_schema:
+  request:
+    url: https://readm.org/manga/{{ mangaId }}
+  items:
+    - name: 'chapters'
+      selector: 'div.season_start'
+      list: true
+      items:
+        - name: 'title'
+          selector: 'h6.truncate'
+          attribute: text
+          default: ""
+        - name: "id"
+          selector: 'a'
+          attribute: 'href'
+          default: ""
+          transformers: 
+            - type: regex
+              pattern: /manga/(?:.*)/(.+)/
+              index: 1
+        - name: "chapNum"
+          selector: 'h6.truncate'
+          attribute: text
+          default: 0
+          transformers:
+            - type: regex
+              pattern: '(\d+\.?\d?)+'
+              index: 1
+            - type: cast
+              to: number
+        - name: "time"
+          selector: 'td.episode-date'
+          attribute: text
+          default: ""
+          transformers:
+            - type: parseDate
+              format: human
+
+chapter_details_schema:
+  request:
+    url: https://readm.org/manga/{{ mangaId }}/{{ chapterId }}/all-pages
+  selector: "div.ch-images > center"
+  items:
+      - name: pages
+        list: true
+        selector: 'img.img-responsive'
+        default: ""
+        transformers:
+          - type: imageSource
+          - type: prefixValue
+            prefix: https://readm.org/
+        
+home_schema:
+  request:
+    url: https://readm.org/
+  items:
+    - name: 'home_sections'
+      items:
+        - name: 'hot_manga'
+          items:
+            - name: 'id'
+              default: 'hot_update'
+            - name: 'title'
+              default: 'Hot manga updates'
+            - name: 'items'
+              selector: '#manga-hot-updates .item'
+              list: true
+              items:
+                - name: "title"
+                  items: 
+                  - name: 'text'
+                    selector: 'strong'
+                    attribute: text
+                    default: ""
+                - name: 'id'
+                  selector: 'a'
+                  attribute: href
+                  default: ""
+                  transformers:
+                    - type: regex
+                      pattern: /manga/(.*?)/
+                      index: 1
+                - name: 'image'
+                  selector: 'img'
+                  default: "https://i.imgur.com/GYUxEX8.png"
+                  transformers:
+                    - type: imageSource
+                    - type: prefixValue
+                      prefix: https://readm.org/
+                - name: "subtitle"
+                  items: 
+                  - name: 'text' 
+                    selector: 'a.caption > span'
+                    attribute: text
+                    default: ""
+                    transformers:
+                      - type: prefixValue
+                        prefix: "Chapter "
+
+        - name: 'popular_manga'
+          items:
+            - name: 'id'
+              default: 'popular_manga'
+            - name: 'title'
+              default: 'Popular manga'
+            - name: 'items'
+              selector: '#latest_trailers li'
+              list: true
+              items:
+              - name: "title"
+                items: 
+                - name: 'text'
+                  selector: 'h6'
+                  attribute: text
+                  default: ""
+              - name: 'id'
+                selector: 'a'
+                attribute: href
+                default: ""
+                transformers:
+                  - type: regex
+                    pattern: /manga/([-\w]*[\w])$
+                    index: 1
+              - name: 'image'
+                selector: 'img'
+                default: "https://i.imgur.com/GYUxEX8.png"
+                transformers:
+                  - type: imageSource
+                  - type: prefixValue
+                    prefix: https://readm.org/
+              - name: "subtitle"
+                items: 
+                - name: 'text' 
+                  selector: 'small'
+                  attribute: text
+                  default: ""
+
+        - name: 'latest_manga'
+          items:
+            - name: 'id'
+              default: 'latest_manga'
+            - name: 'title'
+              default: 'Latest manga'
+            - name: 'items'
+              selector: '.latest-updates .poster-xs'
+              list: true
+              items:
+              - name: "title"
+                items:
+                - name: 'text'
+                  selector: 'h2.truncate'
+                  attribute: text
+                  default: ""
+              - name: 'id'
+                selector: 'h2 > a'
+                attribute: href
+                default: ""
+                transformers:
+                  - type: regex
+                    pattern: /manga/([-\w]*[\w])$
+                    index: 1
+              - name: 'image'
+                selector: 'img'
+                default: "https://i.imgur.com/GYUxEX8.png"
+                transformers:
+                  - type: imageSource
+                  - type: prefixValue
+                    prefix: https://readm.org/
+              - name: "subtitle"
+                items:
+                - name: 'text' 
+                  selector: 'div.poster-subject > ul.chapters > li'
+                  attribute: text
+                  default: ""
+                  transformers:
+                  - type: prefixValue
+                    prefix: "Chapter "
+
+        - name: 'new_manga'
+          items:
+            - name: 'id'
+              default: 'new_manga'
+            - name: 'title'
+              default: 'New manga'
+            - name: 'items'
+              selector: '.clearfix.mb-0 > li'
+              list: true
+              items:
+                - name: "title"
+                  items:
+                  - name: 'text'
+                    selector: 'h2'
+                    attribute: text
+                    default: ""
+                - name: 'id'
+                  selector: 'a'
+                  attribute: href
+                  default: ""
+                  transformers:
+                    - type: regex
+                      pattern: /manga/(.*?)/
+                      index: 1
+                - name: 'image'
+                  selector: 'img'
+                  default: "https://i.imgur.com/GYUxEX8.png"
+                  transformers:
+                    - type: imageSource
+                    - type: prefixValue
+                      prefix: https://readm.org/
+
+search_schema:
+  request:
+    url: https://readm.org/service/search
+    method: POST
+    headers:
+      Content-Type: application/x-www-form-urlencoded
+      X-Requested-With: 'XMLHttpRequest'
+      accept: application/json
+    body:
+      dataType: json
+      phrase: '{{query}}'
+  items:
+    - name: 'results'
+      list: true
+      selector: 'manga' 
+      items: 
+        - name: 'id'
+          selector: 'url'
+          transformers: 
+            - type: regex
+              pattern: /manga/([-\w]*[\w])$
+              index: 1
+        - name: 'title'
+          items: 
+          - name: 'text'
+            selector: 'title'
+            default : ''
+        - name: 'image' 
+          selector: 'image'
+          default: "https://i.imgur.com/GYUxEX8.png"
+          transformers:
+            - type: prefixValue
+              prefix: https://readm.org/
+
+
+  

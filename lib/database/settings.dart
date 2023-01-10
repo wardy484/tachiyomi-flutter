@@ -6,15 +6,13 @@ enum SettingsType { global }
 
 @Collection()
 class Setting {
-  @Id()
-  int? id;
+  Id? id;
 
   @Index()
+  @enumerated
   late SettingsType type;
 
   int padding = 0;
-
-  bool showFps = false;
 
   late DateTime lastUpdateCheck;
 }

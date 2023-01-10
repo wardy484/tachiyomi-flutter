@@ -63,28 +63,30 @@ class _$IconTextCopyWithImpl<$Res> implements $IconTextCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$IconTextCopyWith<$Res> implements $IconTextCopyWith<$Res> {
-  factory _$IconTextCopyWith(_IconText value, $Res Function(_IconText) then) =
-      __$IconTextCopyWithImpl<$Res>;
+abstract class _$$_IconTextCopyWith<$Res> implements $IconTextCopyWith<$Res> {
+  factory _$$_IconTextCopyWith(
+          _$_IconText value, $Res Function(_$_IconText) then) =
+      __$$_IconTextCopyWithImpl<$Res>;
   @override
   $Res call({String text, String? icon});
 }
 
 /// @nodoc
-class __$IconTextCopyWithImpl<$Res> extends _$IconTextCopyWithImpl<$Res>
-    implements _$IconTextCopyWith<$Res> {
-  __$IconTextCopyWithImpl(_IconText _value, $Res Function(_IconText) _then)
-      : super(_value, (v) => _then(v as _IconText));
+class __$$_IconTextCopyWithImpl<$Res> extends _$IconTextCopyWithImpl<$Res>
+    implements _$$_IconTextCopyWith<$Res> {
+  __$$_IconTextCopyWithImpl(
+      _$_IconText _value, $Res Function(_$_IconText) _then)
+      : super(_value, (v) => _then(v as _$_IconText));
 
   @override
-  _IconText get _value => super._value as _IconText;
+  _$_IconText get _value => super._value as _$_IconText;
 
   @override
   $Res call({
     Object? text = freezed,
     Object? icon = freezed,
   }) {
-    return _then(_IconText(
+    return _then(_$_IconText(
       text: text == freezed
           ? _value.text
           : text // ignore: cast_nullable_to_non_nullable
@@ -119,7 +121,7 @@ class _$_IconText implements _IconText {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _IconText &&
+            other is _$_IconText &&
             const DeepCollectionEquality().equals(other.text, text) &&
             const DeepCollectionEquality().equals(other.icon, icon));
   }
@@ -133,8 +135,8 @@ class _$_IconText implements _IconText {
 
   @JsonKey(ignore: true)
   @override
-  _$IconTextCopyWith<_IconText> get copyWith =>
-      __$IconTextCopyWithImpl<_IconText>(this, _$identity);
+  _$$_IconTextCopyWith<_$_IconText> get copyWith =>
+      __$$_IconTextCopyWithImpl<_$_IconText>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -149,11 +151,11 @@ abstract class _IconText implements IconText {
   factory _IconText.fromJson(Map<String, dynamic> json) = _$_IconText.fromJson;
 
   @override
-  String get text => throw _privateConstructorUsedError;
+  String get text;
   @override
-  String? get icon => throw _privateConstructorUsedError;
+  String? get icon;
   @override
   @JsonKey(ignore: true)
-  _$IconTextCopyWith<_IconText> get copyWith =>
+  _$$_IconTextCopyWith<_$_IconText> get copyWith =>
       throw _privateConstructorUsedError;
 }

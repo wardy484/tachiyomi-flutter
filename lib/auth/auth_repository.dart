@@ -53,7 +53,7 @@ class AuthRepository {
     }
   }
 
-  local_user.User getCurrentUser() {
+  local_user.User get currentUser {
     final user = FirebaseAuth.instance.currentUser;
 
     if (user is User) {

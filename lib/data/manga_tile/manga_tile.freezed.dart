@@ -145,10 +145,10 @@ class _$MangaTileCopyWithImpl<$Res> implements $MangaTileCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$MangaTileCopyWith<$Res> implements $MangaTileCopyWith<$Res> {
-  factory _$MangaTileCopyWith(
-          _MangaTile value, $Res Function(_MangaTile) then) =
-      __$MangaTileCopyWithImpl<$Res>;
+abstract class _$$_MangaTileCopyWith<$Res> implements $MangaTileCopyWith<$Res> {
+  factory _$$_MangaTileCopyWith(
+          _$_MangaTile value, $Res Function(_$_MangaTile) then) =
+      __$$_MangaTileCopyWithImpl<$Res>;
   @override
   $Res call(
       {String id,
@@ -170,13 +170,14 @@ abstract class _$MangaTileCopyWith<$Res> implements $MangaTileCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$MangaTileCopyWithImpl<$Res> extends _$MangaTileCopyWithImpl<$Res>
-    implements _$MangaTileCopyWith<$Res> {
-  __$MangaTileCopyWithImpl(_MangaTile _value, $Res Function(_MangaTile) _then)
-      : super(_value, (v) => _then(v as _MangaTile));
+class __$$_MangaTileCopyWithImpl<$Res> extends _$MangaTileCopyWithImpl<$Res>
+    implements _$$_MangaTileCopyWith<$Res> {
+  __$$_MangaTileCopyWithImpl(
+      _$_MangaTile _value, $Res Function(_$_MangaTile) _then)
+      : super(_value, (v) => _then(v as _$_MangaTile));
 
   @override
-  _MangaTile get _value => super._value as _MangaTile;
+  _$_MangaTile get _value => super._value as _$_MangaTile;
 
   @override
   $Res call({
@@ -188,7 +189,7 @@ class __$MangaTileCopyWithImpl<$Res> extends _$MangaTileCopyWithImpl<$Res>
     Object? secondaryText = freezed,
     Object? badge = freezed,
   }) {
-    return _then(_MangaTile(
+    return _then(_$_MangaTile(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -260,7 +261,7 @@ class _$_MangaTile implements _MangaTile {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _MangaTile &&
+            other is _$_MangaTile &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.title, title) &&
             const DeepCollectionEquality().equals(other.image, image) &&
@@ -287,8 +288,8 @@ class _$_MangaTile implements _MangaTile {
 
   @JsonKey(ignore: true)
   @override
-  _$MangaTileCopyWith<_MangaTile> get copyWith =>
-      __$MangaTileCopyWithImpl<_MangaTile>(this, _$identity);
+  _$$_MangaTileCopyWith<_$_MangaTile> get copyWith =>
+      __$$_MangaTileCopyWithImpl<_$_MangaTile>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -310,21 +311,21 @@ abstract class _MangaTile implements MangaTile {
       _$_MangaTile.fromJson;
 
   @override
-  String get id => throw _privateConstructorUsedError;
+  String get id;
   @override
-  IconText get title => throw _privateConstructorUsedError;
+  IconText get title;
   @override
-  String get image => throw _privateConstructorUsedError;
+  String get image;
   @override
-  IconText? get subtitleText => throw _privateConstructorUsedError;
+  IconText? get subtitleText;
   @override
-  IconText? get primaryText => throw _privateConstructorUsedError;
+  IconText? get primaryText;
   @override
-  IconText? get secondaryText => throw _privateConstructorUsedError;
+  IconText? get secondaryText;
   @override
-  int? get badge => throw _privateConstructorUsedError;
+  int? get badge;
   @override
   @JsonKey(ignore: true)
-  _$MangaTileCopyWith<_MangaTile> get copyWith =>
+  _$$_MangaTileCopyWith<_$_MangaTile> get copyWith =>
       throw _privateConstructorUsedError;
 }

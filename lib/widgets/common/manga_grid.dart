@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:fluttiyomi/update_queue/update_queue.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MangaGrid extends ConsumerStatefulWidget {
@@ -23,8 +22,6 @@ class MangaGrid extends ConsumerStatefulWidget {
 class _MangaGridState extends ConsumerState<MangaGrid> {
   Future<void> _onRefresh() async {
     await widget.onRefresh!();
-
-    ref.read(updateQueueProvider.notifier).setOnComplete(() {});
   }
 
   @override

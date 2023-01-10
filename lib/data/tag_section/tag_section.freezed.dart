@@ -70,23 +70,24 @@ class _$TagSectionCopyWithImpl<$Res> implements $TagSectionCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$TagSectionCopyWith<$Res> implements $TagSectionCopyWith<$Res> {
-  factory _$TagSectionCopyWith(
-          _TagSection value, $Res Function(_TagSection) then) =
-      __$TagSectionCopyWithImpl<$Res>;
+abstract class _$$_TagSectionCopyWith<$Res>
+    implements $TagSectionCopyWith<$Res> {
+  factory _$$_TagSectionCopyWith(
+          _$_TagSection value, $Res Function(_$_TagSection) then) =
+      __$$_TagSectionCopyWithImpl<$Res>;
   @override
   $Res call({String id, String label, List<Tag> tags});
 }
 
 /// @nodoc
-class __$TagSectionCopyWithImpl<$Res> extends _$TagSectionCopyWithImpl<$Res>
-    implements _$TagSectionCopyWith<$Res> {
-  __$TagSectionCopyWithImpl(
-      _TagSection _value, $Res Function(_TagSection) _then)
-      : super(_value, (v) => _then(v as _TagSection));
+class __$$_TagSectionCopyWithImpl<$Res> extends _$TagSectionCopyWithImpl<$Res>
+    implements _$$_TagSectionCopyWith<$Res> {
+  __$$_TagSectionCopyWithImpl(
+      _$_TagSection _value, $Res Function(_$_TagSection) _then)
+      : super(_value, (v) => _then(v as _$_TagSection));
 
   @override
-  _TagSection get _value => super._value as _TagSection;
+  _$_TagSection get _value => super._value as _$_TagSection;
 
   @override
   $Res call({
@@ -94,7 +95,7 @@ class __$TagSectionCopyWithImpl<$Res> extends _$TagSectionCopyWithImpl<$Res>
     Object? label = freezed,
     Object? tags = freezed,
   }) {
-    return _then(_TagSection(
+    return _then(_$_TagSection(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -104,7 +105,7 @@ class __$TagSectionCopyWithImpl<$Res> extends _$TagSectionCopyWithImpl<$Res>
           : label // ignore: cast_nullable_to_non_nullable
               as String,
       tags: tags == freezed
-          ? _value.tags
+          ? _value._tags
           : tags // ignore: cast_nullable_to_non_nullable
               as List<Tag>,
     ));
@@ -141,10 +142,10 @@ class _$_TagSection implements _TagSection {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _TagSection &&
+            other is _$_TagSection &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.label, label) &&
-            const DeepCollectionEquality().equals(other.tags, tags));
+            const DeepCollectionEquality().equals(other._tags, _tags));
   }
 
   @JsonKey(ignore: true)
@@ -153,12 +154,12 @@ class _$_TagSection implements _TagSection {
       runtimeType,
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(label),
-      const DeepCollectionEquality().hash(tags));
+      const DeepCollectionEquality().hash(_tags));
 
   @JsonKey(ignore: true)
   @override
-  _$TagSectionCopyWith<_TagSection> get copyWith =>
-      __$TagSectionCopyWithImpl<_TagSection>(this, _$identity);
+  _$$_TagSectionCopyWith<_$_TagSection> get copyWith =>
+      __$$_TagSectionCopyWithImpl<_$_TagSection>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -176,13 +177,13 @@ abstract class _TagSection implements TagSection {
       _$_TagSection.fromJson;
 
   @override
-  String get id => throw _privateConstructorUsedError;
+  String get id;
   @override
-  String get label => throw _privateConstructorUsedError;
+  String get label;
   @override
-  List<Tag> get tags => throw _privateConstructorUsedError;
+  List<Tag> get tags;
   @override
   @JsonKey(ignore: true)
-  _$TagSectionCopyWith<_TagSection> get copyWith =>
+  _$$_TagSectionCopyWith<_$_TagSection> get copyWith =>
       throw _privateConstructorUsedError;
 }

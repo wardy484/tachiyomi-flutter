@@ -66,7 +66,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '235165685655',
     projectId: 'fluttiyomi',
     storageBucket: 'fluttiyomi.appspot.com',
-    iosClientId: '235165685655-l9i4a774u0r8s27g26bp16ao32k7npiq.apps.googleusercontent.com',
+    iosClientId:
+        '235165685655-l9i4a774u0r8s27g26bp16ao32k7npiq.apps.googleusercontent.com',
     iosBundleId: 'com.wardy484.fluttiyomi',
   );
 
@@ -76,7 +77,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '235165685655',
     projectId: 'fluttiyomi',
     storageBucket: 'fluttiyomi.appspot.com',
-    iosClientId: '235165685655-s83uvqn7ll7akhcvdmi4652ib5blou84.apps.googleusercontent.com',
-    iosBundleId: 'com.example.fluttiyomi',
+    iosClientId:
+        '235165685655-s83uvqn7ll7akhcvdmi4652ib5blou84.apps.googleusercontent.com',
+    iosBundleId: 'com.kimward.flutter_manga_reader',
   );
 }

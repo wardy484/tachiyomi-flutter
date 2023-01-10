@@ -121,9 +121,10 @@ class _$ChapterCopyWithImpl<$Res> implements $ChapterCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$ChapterCopyWith<$Res> implements $ChapterCopyWith<$Res> {
-  factory _$ChapterCopyWith(_Chapter value, $Res Function(_Chapter) then) =
-      __$ChapterCopyWithImpl<$Res>;
+abstract class _$$_ChapterCopyWith<$Res> implements $ChapterCopyWith<$Res> {
+  factory _$$_ChapterCopyWith(
+          _$_Chapter value, $Res Function(_$_Chapter) then) =
+      __$$_ChapterCopyWithImpl<$Res>;
   @override
   $Res call(
       {String id,
@@ -139,13 +140,13 @@ abstract class _$ChapterCopyWith<$Res> implements $ChapterCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$ChapterCopyWithImpl<$Res> extends _$ChapterCopyWithImpl<$Res>
-    implements _$ChapterCopyWith<$Res> {
-  __$ChapterCopyWithImpl(_Chapter _value, $Res Function(_Chapter) _then)
-      : super(_value, (v) => _then(v as _Chapter));
+class __$$_ChapterCopyWithImpl<$Res> extends _$ChapterCopyWithImpl<$Res>
+    implements _$$_ChapterCopyWith<$Res> {
+  __$$_ChapterCopyWithImpl(_$_Chapter _value, $Res Function(_$_Chapter) _then)
+      : super(_value, (v) => _then(v as _$_Chapter));
 
   @override
-  _Chapter get _value => super._value as _Chapter;
+  _$_Chapter get _value => super._value as _$_Chapter;
 
   @override
   $Res call({
@@ -160,7 +161,7 @@ class __$ChapterCopyWithImpl<$Res> extends _$ChapterCopyWithImpl<$Res>
     Object? read = freezed,
     Object? page = freezed,
   }) {
-    return _then(_Chapter(
+    return _then(_$_Chapter(
       id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -248,7 +249,7 @@ class _$_Chapter implements _Chapter {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _Chapter &&
+            other is _$_Chapter &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.mangaId, mangaId) &&
             const DeepCollectionEquality().equals(other.chapterNo, chapterNo) &&
@@ -278,8 +279,8 @@ class _$_Chapter implements _Chapter {
 
   @JsonKey(ignore: true)
   @override
-  _$ChapterCopyWith<_Chapter> get copyWith =>
-      __$ChapterCopyWithImpl<_Chapter>(this, _$identity);
+  _$$_ChapterCopyWith<_$_Chapter> get copyWith =>
+      __$$_ChapterCopyWithImpl<_$_Chapter>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -303,28 +304,28 @@ abstract class _Chapter implements Chapter {
   factory _Chapter.fromJson(Map<String, dynamic> json) = _$_Chapter.fromJson;
 
   @override
-  String get id => throw _privateConstructorUsedError;
+  String get id;
   @override
-  String get mangaId => throw _privateConstructorUsedError;
+  String get mangaId;
   @override
   @JsonKey(name: 'chapNum')
-  double get chapterNo => throw _privateConstructorUsedError;
+  double get chapterNo;
   @override
-  String get langCode => throw _privateConstructorUsedError;
+  String get langCode;
   @override
-  String? get name => throw _privateConstructorUsedError;
+  String? get name;
   @override
-  String? get volume => throw _privateConstructorUsedError;
+  String? get volume;
   @override
-  String? get group => throw _privateConstructorUsedError;
+  String? get group;
   @override
-  String? get time => throw _privateConstructorUsedError;
+  String? get time;
   @override
-  bool get read => throw _privateConstructorUsedError;
+  bool get read;
   @override
-  int get page => throw _privateConstructorUsedError;
+  int get page;
   @override
   @JsonKey(ignore: true)
-  _$ChapterCopyWith<_Chapter> get copyWith =>
+  _$$_ChapterCopyWith<_$_Chapter> get copyWith =>
       throw _privateConstructorUsedError;
 }
