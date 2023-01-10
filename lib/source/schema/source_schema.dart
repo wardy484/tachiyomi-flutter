@@ -1,4 +1,4 @@
-import 'package:fluttiyomi/javascript/schema/source_info_schema.dart';
+import 'package:fluttiyomi/source/schema/source_info_schema.dart';
 import 'package:fluttiyomi/source/scraper/schemas/page_schema.dart';
 import 'package:yaml/yaml.dart';
 
