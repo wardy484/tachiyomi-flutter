@@ -30,7 +30,7 @@ class _SystemHash {
 }
 
 String $InstalledSourceControllerHash() =>
-    r'1d1c77344125d42a626fcaedba708c9ad042f0f9';
+    r'8899eb03625ace217a125a7409e770b168c65766';
 
 /// See also [InstalledSourceController].
 final installedSourceControllerProvider = AutoDisposeAsyncNotifierProvider<

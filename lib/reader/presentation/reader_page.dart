@@ -17,7 +17,7 @@ import 'package:fluttiyomi/reader/presentation/reader_progress_controller.dart';
 import 'package:fluttiyomi/reader/presentation/scrolling_viewer.dart';
 import 'package:fluttiyomi/settings/presentation/settings_controller.dart';
 import 'package:fluttiyomi/source/source.dart';
-import 'package:fluttiyomi/widgets/manga_page.dart';
+import 'package:fluttiyomi/widgets/search/manga_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReaderPage extends HookConsumerWidget {

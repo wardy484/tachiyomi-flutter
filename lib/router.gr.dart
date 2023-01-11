@@ -11,52 +11,53 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i10;
-import 'package:flutter/material.dart' as _i11;
+import 'package:auto_route/auto_route.dart' as _i11;
+import 'package:flutter/material.dart' as _i12;
 
 import 'app_page.dart' as _i2;
-import 'auth/auth_guard.dart' as _i12;
+import 'auth/auth_guard.dart' as _i13;
 import 'auth/screens/login_page.dart' as _i1;
-import 'data/chapter/chapter.dart' as _i14;
+import 'data/chapter/chapter.dart' as _i15;
 import 'home/pages/home_tab.dart' as _i9;
 import 'manga_details/presentation/manga_details_page.dart' as _i3;
 import 'reader/presentation/reader_page.dart' as _i4;
+import 'search/search_page.dart' as _i10;
 import 'settings/presentation/account_settings_page.dart' as _i6;
 import 'settings/presentation/add_source_page.dart' as _i8;
 import 'settings/presentation/reader_settings_page.dart' as _i5;
 import 'settings/presentation/source_settings_page.dart' as _i7;
-import 'source/source.dart' as _i13;
+import 'source/source.dart' as _i14;
 
-class AppRouter extends _i10.RootStackRouter {
+class AppRouter extends _i11.RootStackRouter {
   AppRouter(
-      {_i11.GlobalKey<_i11.NavigatorState>? navigatorKey,
+      {_i12.GlobalKey<_i12.NavigatorState>? navigatorKey,
       required this.authGuard})
       : super(navigatorKey);
 
-  final _i12.AuthGuard authGuard;
+  final _i13.AuthGuard authGuard;
 
   @override
-  final Map<String, _i10.PageFactory> pagesMap = {
+  final Map<String, _i11.PageFactory> pagesMap = {
     LoginRoute.name: (routeData) {
       final args = routeData.argsAs<LoginRouteArgs>();
-      return _i10.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i1.LoginPage(key: args.key, onLogin: args.onLogin));
     },
     AppRoute.name: (routeData) {
-      return _i10.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i2.AppPage());
     },
     MangaDetailsRoute.name: (routeData) {
       final args = routeData.argsAs<MangaDetailsRouteArgs>();
-      return _i10.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i3.MangaDetailsPage(
               key: args.key, id: args.id, source: args.source));
     },
     ReaderRoute.name: (routeData) {
       final args = routeData.argsAs<ReaderRouteArgs>();
-      return _i10.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i4.ReaderPage(
               key: args.key,
@@ -65,47 +66,54 @@ class AppRouter extends _i10.RootStackRouter {
               chapter: args.chapter));
     },
     ReaderSettingsRoute.name: (routeData) {
-      return _i10.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i5.ReaderSettingsPage());
     },
     AccountSettingsRoute.name: (routeData) {
-      return _i10.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i6.AccountSettingsPage());
     },
     SourceSettingsRoute.name: (routeData) {
-      return _i10.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i7.SourceSettingsPage());
     },
     AddSourceRoute.name: (routeData) {
-      return _i10.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
           routeData: routeData, child: const _i8.AddSourcePage());
     },
     BrowseSourceRoute.name: (routeData) {
       final args = routeData.argsAs<BrowseSourceRouteArgs>();
-      return _i10.MaterialPageX<dynamic>(
+      return _i11.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i9.BrowseSourcePage(key: args.key, source: args.source));
+    },
+    SearchRoute.name: (routeData) {
+      final args = routeData.argsAs<SearchRouteArgs>();
+      return _i11.MaterialPageX<dynamic>(
+          routeData: routeData,
+          child: _i10.SearchPage(key: args.key, source: args.source));
     }
   };
 
   @override
-  List<_i10.RouteConfig> get routes => [
-        _i10.RouteConfig(LoginRoute.name, path: '/login'),
-        _i10.RouteConfig(AppRoute.name, path: '/', guards: [authGuard]),
-        _i10.RouteConfig(MangaDetailsRoute.name, path: '/manga/:id/details'),
-        _i10.RouteConfig(ReaderRoute.name, path: '/read/:mangaId'),
-        _i10.RouteConfig(ReaderSettingsRoute.name, path: '/settings/reader'),
-        _i10.RouteConfig(AccountSettingsRoute.name, path: '/settings/account'),
-        _i10.RouteConfig(SourceSettingsRoute.name, path: '/settings/sources'),
-        _i10.RouteConfig(AddSourceRoute.name, path: '/settings/sources/add'),
-        _i10.RouteConfig(BrowseSourceRoute.name, path: '/browse/:sourceId')
+  List<_i11.RouteConfig> get routes => [
+        _i11.RouteConfig(LoginRoute.name, path: '/login'),
+        _i11.RouteConfig(AppRoute.name, path: '/', guards: [authGuard]),
+        _i11.RouteConfig(MangaDetailsRoute.name, path: '/manga/:id/details'),
+        _i11.RouteConfig(ReaderRoute.name, path: '/read/:mangaId'),
+        _i11.RouteConfig(ReaderSettingsRoute.name, path: '/settings/reader'),
+        _i11.RouteConfig(AccountSettingsRoute.name, path: '/settings/account'),
+        _i11.RouteConfig(SourceSettingsRoute.name, path: '/settings/sources'),
+        _i11.RouteConfig(AddSourceRoute.name, path: '/settings/sources/add'),
+        _i11.RouteConfig(BrowseSourceRoute.name, path: '/browse/:sourceId'),
+        _i11.RouteConfig(SearchRoute.name, path: '/browse/:sourceId/search')
       ];
 }
 
 /// generated route for
 /// [_i1.LoginPage]
-class LoginRoute extends _i10.PageRouteInfo<LoginRouteArgs> {
-  LoginRoute({_i11.Key? key, required void Function() onLogin})
+class LoginRoute extends _i11.PageRouteInfo<LoginRouteArgs> {
+  LoginRoute({_i12.Key? key, required void Function() onLogin})
       : super(LoginRoute.name,
             path: '/login', args: LoginRouteArgs(key: key, onLogin: onLogin));
 
@@ -115,7 +123,7 @@ class LoginRoute extends _i10.PageRouteInfo<LoginRouteArgs> {
 class LoginRouteArgs {
   const LoginRouteArgs({this.key, required this.onLogin});
 
-  final _i11.Key? key;
+  final _i12.Key? key;
 
   final void Function() onLogin;
 
@@ -127,7 +135,7 @@ class LoginRouteArgs {
 
 /// generated route for
 /// [_i2.AppPage]
-class AppRoute extends _i10.PageRouteInfo<void> {
+class AppRoute extends _i11.PageRouteInfo<void> {
   const AppRoute() : super(AppRoute.name, path: '/');
 
   static const String name = 'AppRoute';
@@ -135,9 +143,9 @@ class AppRoute extends _i10.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.MangaDetailsPage]
-class MangaDetailsRoute extends _i10.PageRouteInfo<MangaDetailsRouteArgs> {
+class MangaDetailsRoute extends _i11.PageRouteInfo<MangaDetailsRouteArgs> {
   MangaDetailsRoute(
-      {_i11.Key? key, required String id, required _i13.Source source})
+      {_i12.Key? key, required String id, required _i14.Source source})
       : super(MangaDetailsRoute.name,
             path: '/manga/:id/details',
             args: MangaDetailsRouteArgs(key: key, id: id, source: source));
@@ -149,11 +157,11 @@ class MangaDetailsRouteArgs {
   const MangaDetailsRouteArgs(
       {this.key, required this.id, required this.source});
 
-  final _i11.Key? key;
+  final _i12.Key? key;
 
   final String id;
 
-  final _i13.Source source;
+  final _i14.Source source;
 
   @override
   String toString() {
@@ -163,12 +171,12 @@ class MangaDetailsRouteArgs {
 
 /// generated route for
 /// [_i4.ReaderPage]
-class ReaderRoute extends _i10.PageRouteInfo<ReaderRouteArgs> {
+class ReaderRoute extends _i11.PageRouteInfo<ReaderRouteArgs> {
   ReaderRoute(
-      {_i11.Key? key,
-      required _i13.Source source,
+      {_i12.Key? key,
+      required _i14.Source source,
       required String mangaId,
-      required _i14.Chapter chapter})
+      required _i15.Chapter chapter})
       : super(ReaderRoute.name,
             path: '/read/:mangaId',
             args: ReaderRouteArgs(
@@ -184,13 +192,13 @@ class ReaderRouteArgs {
       required this.mangaId,
       required this.chapter});
 
-  final _i11.Key? key;
+  final _i12.Key? key;
 
-  final _i13.Source source;
+  final _i14.Source source;
 
   final String mangaId;
 
-  final _i14.Chapter chapter;
+  final _i15.Chapter chapter;
 
   @override
   String toString() {
@@ -200,7 +208,7 @@ class ReaderRouteArgs {
 
 /// generated route for
 /// [_i5.ReaderSettingsPage]
-class ReaderSettingsRoute extends _i10.PageRouteInfo<void> {
+class ReaderSettingsRoute extends _i11.PageRouteInfo<void> {
   const ReaderSettingsRoute()
       : super(ReaderSettingsRoute.name, path: '/settings/reader');
 
@@ -209,7 +217,7 @@ class ReaderSettingsRoute extends _i10.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i6.AccountSettingsPage]
-class AccountSettingsRoute extends _i10.PageRouteInfo<void> {
+class AccountSettingsRoute extends _i11.PageRouteInfo<void> {
   const AccountSettingsRoute()
       : super(AccountSettingsRoute.name, path: '/settings/account');
 
@@ -218,7 +226,7 @@ class AccountSettingsRoute extends _i10.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i7.SourceSettingsPage]
-class SourceSettingsRoute extends _i10.PageRouteInfo<void> {
+class SourceSettingsRoute extends _i11.PageRouteInfo<void> {
   const SourceSettingsRoute()
       : super(SourceSettingsRoute.name, path: '/settings/sources');
 
@@ -227,7 +235,7 @@ class SourceSettingsRoute extends _i10.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i8.AddSourcePage]
-class AddSourceRoute extends _i10.PageRouteInfo<void> {
+class AddSourceRoute extends _i11.PageRouteInfo<void> {
   const AddSourceRoute()
       : super(AddSourceRoute.name, path: '/settings/sources/add');
 
@@ -236,8 +244,8 @@ class AddSourceRoute extends _i10.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i9.BrowseSourcePage]
-class BrowseSourceRoute extends _i10.PageRouteInfo<BrowseSourceRouteArgs> {
-  BrowseSourceRoute({_i11.Key? key, required _i13.Source source})
+class BrowseSourceRoute extends _i11.PageRouteInfo<BrowseSourceRouteArgs> {
+  BrowseSourceRoute({_i12.Key? key, required _i14.Source source})
       : super(BrowseSourceRoute.name,
             path: '/browse/:sourceId',
             args: BrowseSourceRouteArgs(key: key, source: source));
@@ -248,12 +256,36 @@ class BrowseSourceRoute extends _i10.PageRouteInfo<BrowseSourceRouteArgs> {
 class BrowseSourceRouteArgs {
   const BrowseSourceRouteArgs({this.key, required this.source});
 
-  final _i11.Key? key;
+  final _i12.Key? key;
 
-  final _i13.Source source;
+  final _i14.Source source;
 
   @override
   String toString() {
     return 'BrowseSourceRouteArgs{key: $key, source: $source}';
+  }
+}
+
+/// generated route for
+/// [_i10.SearchPage]
+class SearchRoute extends _i11.PageRouteInfo<SearchRouteArgs> {
+  SearchRoute({_i12.Key? key, required _i14.Source source})
+      : super(SearchRoute.name,
+            path: '/browse/:sourceId/search',
+            args: SearchRouteArgs(key: key, source: source));
+
+  static const String name = 'SearchRoute';
+}
+
+class SearchRouteArgs {
+  const SearchRouteArgs({this.key, required this.source});
+
+  final _i12.Key? key;
+
+  final _i14.Source source;
+
+  @override
+  String toString() {
+    return 'SearchRouteArgs{key: $key, source: $source}';
   }
 }

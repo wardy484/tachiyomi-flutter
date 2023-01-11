@@ -30,7 +30,7 @@ class _SystemHash {
 }
 
 String $BookmarkButtonControllerHash() =>
-    r'8f34362c8207b39202aa31e8f5cb5df27f534b19';
+    r'45929ee271e060171bb20d4f02e163ee1b37b04a';
 
 /// See also [BookmarkButtonController].
 class BookmarkButtonControllerProvider

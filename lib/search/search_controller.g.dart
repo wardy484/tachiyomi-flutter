@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'manga_details_controller.dart';
+part of 'search_controller.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -29,86 +29,71 @@ class _SystemHash {
   }
 }
 
-String $MangaDetailsControllerHash() =>
-    r'8c4e835d73e19c69476a38469ecc6dfd2c3942e4';
+String $SearchControllerHash() => r'50fd9938964a1331f810b354f6e0d966fec679e5';
 
-/// See also [MangaDetailsController].
-class MangaDetailsControllerProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<MangaDetailsController,
-        MangaDetailsState> {
-  MangaDetailsControllerProvider(
+/// See also [SearchController].
+class SearchControllerProvider extends AutoDisposeAsyncNotifierProviderImpl<
+    SearchController, PagedResults> {
+  SearchControllerProvider(
     this.source,
-    this.mangaId,
   ) : super(
-          () => MangaDetailsController()
-            ..source = source
-            ..mangaId = mangaId,
-          from: mangaDetailsControllerProvider,
-          name: r'mangaDetailsControllerProvider',
+          () => SearchController()..source = source,
+          from: searchControllerProvider,
+          name: r'searchControllerProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : $MangaDetailsControllerHash,
+                  : $SearchControllerHash,
         );
 
   final Source source;
-  final String mangaId;
 
   @override
   bool operator ==(Object other) {
-    return other is MangaDetailsControllerProvider &&
-        other.source == source &&
-        other.mangaId == mangaId;
+    return other is SearchControllerProvider && other.source == source;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, source.hashCode);
-    hash = _SystemHash.combine(hash, mangaId.hashCode);
 
     return _SystemHash.finish(hash);
   }
 
   @override
-  FutureOr<MangaDetailsState> runNotifierBuild(
-    covariant _$MangaDetailsController notifier,
+  FutureOr<PagedResults> runNotifierBuild(
+    covariant _$SearchController notifier,
   ) {
     return notifier.build(
       source,
-      mangaId,
     );
   }
 }
 
-typedef MangaDetailsControllerRef
-    = AutoDisposeAsyncNotifierProviderRef<MangaDetailsState>;
+typedef SearchControllerRef = AutoDisposeAsyncNotifierProviderRef<PagedResults>;
 
-/// See also [MangaDetailsController].
-final mangaDetailsControllerProvider = MangaDetailsControllerFamily();
+/// See also [SearchController].
+final searchControllerProvider = SearchControllerFamily();
 
-class MangaDetailsControllerFamily
-    extends Family<AsyncValue<MangaDetailsState>> {
-  MangaDetailsControllerFamily();
+class SearchControllerFamily extends Family<AsyncValue<PagedResults>> {
+  SearchControllerFamily();
 
-  MangaDetailsControllerProvider call(
+  SearchControllerProvider call(
     Source source,
-    String mangaId,
   ) {
-    return MangaDetailsControllerProvider(
+    return SearchControllerProvider(
       source,
-      mangaId,
     );
   }
 
   @override
-  AutoDisposeAsyncNotifierProviderImpl<MangaDetailsController,
-      MangaDetailsState> getProviderOverride(
-    covariant MangaDetailsControllerProvider provider,
+  AutoDisposeAsyncNotifierProviderImpl<SearchController, PagedResults>
+      getProviderOverride(
+    covariant SearchControllerProvider provider,
   ) {
     return call(
       provider.source,
-      provider.mangaId,
     );
   }
 
@@ -119,16 +104,14 @@ class MangaDetailsControllerFamily
   List<ProviderOrFamily>? get dependencies => null;
 
   @override
-  String? get name => r'mangaDetailsControllerProvider';
+  String? get name => r'searchControllerProvider';
 }
 
-abstract class _$MangaDetailsController
-    extends BuildlessAutoDisposeAsyncNotifier<MangaDetailsState> {
+abstract class _$SearchController
+    extends BuildlessAutoDisposeAsyncNotifier<PagedResults> {
   late final Source source;
-  late final String mangaId;
 
-  FutureOr<MangaDetailsState> build(
+  FutureOr<PagedResults> build(
     Source source,
-    String mangaId,
   );
 }

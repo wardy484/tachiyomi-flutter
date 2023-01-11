@@ -57,6 +57,27 @@ class BrowseSourcePage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(source.name),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              AutoRouter.of(context).push(
+                SearchRoute(source: source),
+              );
+            },
+          ),
+          // IconButton(
+          //   icon: const Icon(Icons.language),
+          //   onPressed: () {
+          //     // AutoRouter.of(context).push(
+          //     //   SourceSettingsRoute(
+          //     //     source: source,
+          //     //   ),
+          //     // );
+          //   },
+          // ),
+          const SizedBox(width: 4),
+        ],
       ),
       body: SourceHomeSections(
         source: source,
@@ -65,7 +86,7 @@ class BrowseSourcePage extends ConsumerWidget {
   }
 }
 
-class SourceHomeSections extends ConsumerWidget {
+class SourceHomeSections extends HookConsumerWidget {
   final Source source;
 
   const SourceHomeSections({

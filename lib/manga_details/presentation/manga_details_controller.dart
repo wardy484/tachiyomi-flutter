@@ -16,7 +16,7 @@ class MangaDetailsController extends _$MangaDetailsController {
   FutureOr<MangaDetailsState> build(Source source, String mangaId) {
     final favourite = ref
         .watch(
-          favouriteBySourceProvider(source, mangaId),
+          favouriteProvider(source, mangaId),
         )
         .valueOrNull;
 

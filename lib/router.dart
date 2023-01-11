@@ -5,6 +5,7 @@ import 'package:fluttiyomi/home/pages/home_tab.dart';
 import 'package:fluttiyomi/manga_details/presentation/manga_details_page.dart';
 import 'package:fluttiyomi/app_page.dart';
 import 'package:fluttiyomi/reader/presentation/reader_page.dart';
+import 'package:fluttiyomi/search/search_page.dart';
 import 'package:fluttiyomi/settings/presentation/account_settings_page.dart';
 import 'package:fluttiyomi/settings/presentation/add_source_page.dart';
 import 'package:fluttiyomi/settings/presentation/reader_settings_page.dart';
@@ -52,6 +53,10 @@ import 'package:fluttiyomi/settings/presentation/source_settings_page.dart';
     AutoRoute(
       path: '/browse/:sourceId',
       page: BrowseSourcePage,
+    ),
+    AutoRoute(
+      path: '/browse/:sourceId/search',
+      page: SearchPage,
     ),
   ],
 )

@@ -18,8 +18,7 @@ class FavouritesService {
     final favouritesRepository = ref.watch(favouritesRepositoryProvider);
     final user = ref.watch(authRepositoryProvider).currentUser;
 
-    final favourite =
-        await ref.read(favouriteBySourceProvider(source, mangaId).future);
+    final favourite = await ref.read(favouriteProvider(source, mangaId).future);
 
     if (favourite == null) {
       final mangaDetails = await ref.read(

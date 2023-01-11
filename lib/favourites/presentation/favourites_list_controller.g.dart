@@ -29,25 +29,25 @@ class _SystemHash {
   }
 }
 
-String $favouriteBySourceHash() => r'21ac0597342f41f7d2c4275522f1d56d971f1539';
+String $favouriteHash() => r'0481c61e00f65437e8761a7163101995f155d20a';
 
-/// See also [favouriteBySource].
-class FavouriteBySourceProvider extends AutoDisposeFutureProvider<Favourite?> {
-  FavouriteBySourceProvider(
+/// See also [favourite].
+class FavouriteProvider extends AutoDisposeFutureProvider<Favourite?> {
+  FavouriteProvider(
     this.source,
     this.mangaId,
   ) : super(
-          (ref) => favouriteBySource(
+          (ref) => favourite(
             ref,
             source,
             mangaId,
           ),
-          from: favouriteBySourceProvider,
-          name: r'favouriteBySourceProvider',
+          from: favouriteProvider,
+          name: r'favouriteProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : $favouriteBySourceHash,
+                  : $favouriteHash,
         );
 
   final Source source;
@@ -55,7 +55,7 @@ class FavouriteBySourceProvider extends AutoDisposeFutureProvider<Favourite?> {
 
   @override
   bool operator ==(Object other) {
-    return other is FavouriteBySourceProvider &&
+    return other is FavouriteProvider &&
         other.source == source &&
         other.mangaId == mangaId;
   }
@@ -70,19 +70,19 @@ class FavouriteBySourceProvider extends AutoDisposeFutureProvider<Favourite?> {
   }
 }
 
-typedef FavouriteBySourceRef = AutoDisposeFutureProviderRef<Favourite?>;
+typedef FavouriteRef = AutoDisposeFutureProviderRef<Favourite?>;
 
-/// See also [favouriteBySource].
-final favouriteBySourceProvider = FavouriteBySourceFamily();
+/// See also [favourite].
+final favouriteProvider = FavouriteFamily();
 
-class FavouriteBySourceFamily extends Family<AsyncValue<Favourite?>> {
-  FavouriteBySourceFamily();
+class FavouriteFamily extends Family<AsyncValue<Favourite?>> {
+  FavouriteFamily();
 
-  FavouriteBySourceProvider call(
+  FavouriteProvider call(
     Source source,
     String mangaId,
   ) {
-    return FavouriteBySourceProvider(
+    return FavouriteProvider(
       source,
       mangaId,
     );
@@ -90,7 +90,7 @@ class FavouriteBySourceFamily extends Family<AsyncValue<Favourite?>> {
 
   @override
   AutoDisposeFutureProvider<Favourite?> getProviderOverride(
-    covariant FavouriteBySourceProvider provider,
+    covariant FavouriteProvider provider,
   ) {
     return call(
       provider.source,
@@ -105,5 +105,5 @@ class FavouriteBySourceFamily extends Family<AsyncValue<Favourite?>> {
   List<ProviderOrFamily>? get dependencies => null;
 
   @override
-  String? get name => r'favouriteBySourceProvider';
+  String? get name => r'favouriteProvider';
 }

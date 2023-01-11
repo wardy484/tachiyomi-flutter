@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:fluttiyomi/database/installed_source_model.dart';
+import 'package:fluttiyomi/settings/application/source_service.dart';
 import 'package:fluttiyomi/settings/data/installed_source_repository.dart';
 
 import 'package:fluttiyomi/source/schema/source_schema.dart';
@@ -52,11 +53,13 @@ class InstalledSourceController extends _$InstalledSourceController {
     if (existingSource != null) {
       throw ExistingSourceException(schema.info.name);
     }
-    await ref
+    final installedSource = await ref
         .read(installedSourceRepositoryProvider)
         .addInstalledSource(schema);
 
     DefaultCacheManager().downloadFile(schema.info.iconUrl);
+
+    ref.read(sourceContainerProvider).addSource(installedSource.source);
   }
 
   void removeSource(InstalledSource source) async {

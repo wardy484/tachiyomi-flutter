@@ -10,7 +10,7 @@ part 'bookmark_button_controller.g.dart';
 class BookmarkButtonController extends _$BookmarkButtonController {
   @override
   FutureOr<Favourite?> build(Source source, String mangaId) {
-    return ref.watch(favouriteBySourceProvider(source, mangaId)).value;
+    return ref.watch(favouriteProvider(source, mangaId)).value;
   }
 
   void toggleFavourite(String mangaId) {
