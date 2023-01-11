@@ -51,15 +51,18 @@ abstract class _$ReaderLoadingController
 }
 
 String $ReaderPagesControllerHash() =>
-    r'c21565ffee039e3830b1e19deafd94df802e8f14';
+    r'a5bf9ad4accc3288acd96847ed07278444aaf360';
 
 /// See also [ReaderPagesController].
 class ReaderPagesControllerProvider extends AutoDisposeNotifierProviderImpl<
     ReaderPagesController, List<ReaderPageState>> {
   ReaderPagesControllerProvider(
+    this.source,
     this.mangaId,
   ) : super(
-          () => ReaderPagesController()..mangaId = mangaId,
+          () => ReaderPagesController()
+            ..source = source
+            ..mangaId = mangaId,
           from: readerPagesControllerProvider,
           name: r'readerPagesControllerProvider',
           debugGetCreateSourceHash:
@@ -68,16 +71,20 @@ class ReaderPagesControllerProvider extends AutoDisposeNotifierProviderImpl<
                   : $ReaderPagesControllerHash,
         );
 
+  final Source source;
   final String mangaId;
 
   @override
   bool operator ==(Object other) {
-    return other is ReaderPagesControllerProvider && other.mangaId == mangaId;
+    return other is ReaderPagesControllerProvider &&
+        other.source == source &&
+        other.mangaId == mangaId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, source.hashCode);
     hash = _SystemHash.combine(hash, mangaId.hashCode);
 
     return _SystemHash.finish(hash);
@@ -88,6 +95,7 @@ class ReaderPagesControllerProvider extends AutoDisposeNotifierProviderImpl<
     covariant _$ReaderPagesController notifier,
   ) {
     return notifier.build(
+      source,
       mangaId,
     );
   }
@@ -103,9 +111,11 @@ class ReaderPagesControllerFamily extends Family<List<ReaderPageState>> {
   ReaderPagesControllerFamily();
 
   ReaderPagesControllerProvider call(
+    Source source,
     String mangaId,
   ) {
     return ReaderPagesControllerProvider(
+      source,
       mangaId,
     );
   }
@@ -116,6 +126,7 @@ class ReaderPagesControllerFamily extends Family<List<ReaderPageState>> {
     covariant ReaderPagesControllerProvider provider,
   ) {
     return call(
+      provider.source,
       provider.mangaId,
     );
   }
@@ -132,9 +143,11 @@ class ReaderPagesControllerFamily extends Family<List<ReaderPageState>> {
 
 abstract class _$ReaderPagesController
     extends BuildlessAutoDisposeNotifier<List<ReaderPageState>> {
+  late final Source source;
   late final String mangaId;
 
   List<ReaderPageState> build(
+    Source source,
     String mangaId,
   );
 }

@@ -5,16 +5,19 @@ import 'package:fluttiyomi/downloads/application/download_service.dart';
 import 'package:fluttiyomi/favourites/applications/favourites_service.dart';
 import 'package:fluttiyomi/favourites/data/favourite.dart';
 import 'package:fluttiyomi/favourites/data/favourite_repository.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:fluttiyomi/widgets/common/context_menu.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ChapterOptions extends ConsumerWidget {
+  final Source source;
   final Favourite favourite;
   final Chapter chapter;
 
   const ChapterOptions({
     Key? key,
+    required this.source,
     required this.favourite,
     required this.chapter,
   }) : super(key: key);
@@ -59,6 +62,7 @@ class ChapterOptions extends ConsumerWidget {
           icon: FontAwesomeIcons.download,
           onPressed: () {
             ref.read(downloadServiceProvider).downloadChaptersInBackground(
+              source,
               favourite.toManga(),
               [chapter],
             );

@@ -8,12 +8,7 @@ import 'package:fluttiyomi/source/parsers/manga_details_parser.dart';
 import 'package:fluttiyomi/source/schema/source_schema.dart';
 import 'package:fluttiyomi/source/scraper/parsers/search_parser.dart';
 import 'package:fluttiyomi/source/scraper/scraper.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:yaml/yaml.dart';
-
-final sourceProvider = Provider<Source>(
-  (ref) => Source(),
-);
 
 class Source {
   final Scraper scraper = Scraper();
@@ -22,8 +17,8 @@ class Source {
 
   Source();
 
-  get name => schema.info.name;
-  get id => schema.info.id;
+  String get name => schema.info.name;
+  String get id => schema.info.id;
 
   factory Source.fromSchema(SourceSchema schema) {
     final source = Source()..schema = schema;

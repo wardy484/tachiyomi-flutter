@@ -85,6 +85,29 @@ class FavouritesRepository {
         : null;
   }
 
+  Future<Favourite?> getFavouriteById(String id) async {
+    log("READ: Getting favourite $id");
+    DocumentSnapshot<Map<String, dynamic>> favourite;
+
+    try {
+      favourite = await db.collection("favourites").doc(id).get();
+    } catch (e) {
+      log("READ: Error getting favourite $id");
+      return null;
+    }
+
+    log("READ: Getting chapters for favourite $id");
+
+    final data = favourite.data();
+
+    return data != null
+        ? Favourite.fromJson({
+            ...data,
+            "id": favourite.id,
+          })
+        : null;
+  }
+
   Future<Favourite> addFavourite(
     User user,
     String sourceId,

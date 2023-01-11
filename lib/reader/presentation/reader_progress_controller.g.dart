@@ -30,17 +30,19 @@ class _SystemHash {
 }
 
 String $ReaderUpcomingChaptersControllerHash() =>
-    r'ee51f08f727addd236e732627aaea33fe0e9abed';
+    r'5187c9e6be593c23c18edf88d1d42baa980a1e6c';
 
 /// See also [ReaderUpcomingChaptersController].
 class ReaderUpcomingChaptersControllerProvider
     extends AutoDisposeNotifierProviderImpl<ReaderUpcomingChaptersController,
         ReaderUpcomingChapters> {
   ReaderUpcomingChaptersControllerProvider(
+    this.source,
     this.mangaId,
     this.chapter,
   ) : super(
           () => ReaderUpcomingChaptersController()
+            ..source = source
             ..mangaId = mangaId
             ..chapter = chapter,
           from: readerUpcomingChaptersControllerProvider,
@@ -51,12 +53,14 @@ class ReaderUpcomingChaptersControllerProvider
                   : $ReaderUpcomingChaptersControllerHash,
         );
 
+  final Source source;
   final String mangaId;
   final Chapter chapter;
 
   @override
   bool operator ==(Object other) {
     return other is ReaderUpcomingChaptersControllerProvider &&
+        other.source == source &&
         other.mangaId == mangaId &&
         other.chapter == chapter;
   }
@@ -64,6 +68,7 @@ class ReaderUpcomingChaptersControllerProvider
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, source.hashCode);
     hash = _SystemHash.combine(hash, mangaId.hashCode);
     hash = _SystemHash.combine(hash, chapter.hashCode);
 
@@ -75,6 +80,7 @@ class ReaderUpcomingChaptersControllerProvider
     covariant _$ReaderUpcomingChaptersController notifier,
   ) {
     return notifier.build(
+      source,
       mangaId,
       chapter,
     );
@@ -93,10 +99,12 @@ class ReaderUpcomingChaptersControllerFamily
   ReaderUpcomingChaptersControllerFamily();
 
   ReaderUpcomingChaptersControllerProvider call(
+    Source source,
     String mangaId,
     Chapter chapter,
   ) {
     return ReaderUpcomingChaptersControllerProvider(
+      source,
       mangaId,
       chapter,
     );
@@ -108,6 +116,7 @@ class ReaderUpcomingChaptersControllerFamily
     covariant ReaderUpcomingChaptersControllerProvider provider,
   ) {
     return call(
+      provider.source,
       provider.mangaId,
       provider.chapter,
     );
@@ -125,10 +134,12 @@ class ReaderUpcomingChaptersControllerFamily
 
 abstract class _$ReaderUpcomingChaptersController
     extends BuildlessAutoDisposeNotifier<ReaderUpcomingChapters> {
+  late final Source source;
   late final String mangaId;
   late final Chapter chapter;
 
   ReaderUpcomingChapters build(
+    Source source,
     String mangaId,
     Chapter chapter,
   );

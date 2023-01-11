@@ -5,17 +5,21 @@ import 'package:fluttiyomi/manga_details/presentation/manga_details_controller.d
 import 'package:fluttiyomi/manga_details/presentation/chapter_options.dart';
 import 'package:fluttiyomi/manga_details/presentation/manga_details_header.dart';
 import 'package:fluttiyomi/manga_details/presentation/chapter_list_item.dart';
+import 'package:fluttiyomi/manga_details/presentation/manga_details_state.dart';
 import 'package:fluttiyomi/router.gr.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:fluttiyomi/work_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:workmanager/workmanager.dart';
 
 class MangaDetailsPage extends ConsumerStatefulWidget {
   final String id;
+  final Source source;
 
   const MangaDetailsPage({
     Key? key,
     required this.id,
+    required this.source,
   }) : super(key: key);
 
   @override
@@ -31,15 +35,20 @@ class _MangaDetailsPageState extends ConsumerState<MangaDetailsPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: ref.watch(mangaDetailsControllerProvider(widget.id)).when(
+      body: ref
+          .watch(mangaDetailsControllerProvider(widget.source, widget.id))
+          .when(
             data: (mangaDetails) => RefreshIndicator(
-              onRefresh: () => _onRefresh(ref),
+              onRefresh: () => _onRefresh(ref, mangaDetails),
               child: CustomScrollView(
                 slivers: [
                   SliverList(
                     delegate: SliverChildListDelegate.fixed(
                       [
-                        MangaDetailsHeader(manga: mangaDetails.details),
+                        MangaDetailsHeader(
+                          source: widget.source,
+                          manga: mangaDetails.details,
+                        ),
                       ],
                     ),
                   ),
@@ -57,6 +66,7 @@ class _MangaDetailsPageState extends ConsumerState<MangaDetailsPage> {
                               onTap: () {
                                 AutoRouter.of(context).push(
                                   ReaderRoute(
+                                    source: widget.source,
                                     mangaId: widget.id,
                                     chapter: chapter,
                                   ),
@@ -69,6 +79,7 @@ class _MangaDetailsPageState extends ConsumerState<MangaDetailsPage> {
                                     barrierDismissible: true,
                                     builder: (BuildContext context) {
                                       return ChapterOptions(
+                                        source: widget.source,
                                         favourite: mangaDetails.favourite!,
                                         chapter: chapter,
                                       );
@@ -98,8 +109,14 @@ class _MangaDetailsPageState extends ConsumerState<MangaDetailsPage> {
     );
   }
 
-  Future<void> _onRefresh(WidgetRef ref) async {
+  Future<void> _onRefresh(
+    WidgetRef ref,
+    MangaDetailsState mangaDetails,
+  ) async {
     final userId = ref.read(authRepositoryProvider).currentUser.id;
+    final favourite = mangaDetails.favourite;
+
+    if (favourite == null) return;
 
     ref.read(workManagerProvider).registerOneOffTask(
           "$checkFavouriteForUpdatesTask$userId",
@@ -108,8 +125,7 @@ class _MangaDetailsPageState extends ConsumerState<MangaDetailsPage> {
             networkType: NetworkType.connected,
           ),
           inputData: {
-            'userId': userId,
-            'mangaId': widget.id,
+            'favouriteId': favourite.id,
           },
           // ExistingWorkPolicy.keep means that if the task is already running,
           // it will not be restarted and a second will not be started.

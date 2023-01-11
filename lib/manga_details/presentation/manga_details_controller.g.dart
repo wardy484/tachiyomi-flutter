@@ -30,16 +30,19 @@ class _SystemHash {
 }
 
 String $MangaDetailsControllerHash() =>
-    r'fa52ff50fa522dd6adb3ea024e072fdacc192e15';
+    r'ac29405d4fa19df77310790dd671b5a526645882';
 
 /// See also [MangaDetailsController].
 class MangaDetailsControllerProvider
     extends AutoDisposeAsyncNotifierProviderImpl<MangaDetailsController,
         MangaDetailsState> {
   MangaDetailsControllerProvider(
+    this.source,
     this.mangaId,
   ) : super(
-          () => MangaDetailsController()..mangaId = mangaId,
+          () => MangaDetailsController()
+            ..source = source
+            ..mangaId = mangaId,
           from: mangaDetailsControllerProvider,
           name: r'mangaDetailsControllerProvider',
           debugGetCreateSourceHash:
@@ -48,16 +51,20 @@ class MangaDetailsControllerProvider
                   : $MangaDetailsControllerHash,
         );
 
+  final Source source;
   final String mangaId;
 
   @override
   bool operator ==(Object other) {
-    return other is MangaDetailsControllerProvider && other.mangaId == mangaId;
+    return other is MangaDetailsControllerProvider &&
+        other.source == source &&
+        other.mangaId == mangaId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, source.hashCode);
     hash = _SystemHash.combine(hash, mangaId.hashCode);
 
     return _SystemHash.finish(hash);
@@ -68,6 +75,7 @@ class MangaDetailsControllerProvider
     covariant _$MangaDetailsController notifier,
   ) {
     return notifier.build(
+      source,
       mangaId,
     );
   }
@@ -84,9 +92,11 @@ class MangaDetailsControllerFamily
   MangaDetailsControllerFamily();
 
   MangaDetailsControllerProvider call(
+    Source source,
     String mangaId,
   ) {
     return MangaDetailsControllerProvider(
+      source,
       mangaId,
     );
   }
@@ -97,6 +107,7 @@ class MangaDetailsControllerFamily
     covariant MangaDetailsControllerProvider provider,
   ) {
     return call(
+      provider.source,
       provider.mangaId,
     );
   }
@@ -113,9 +124,11 @@ class MangaDetailsControllerFamily
 
 abstract class _$MangaDetailsController
     extends BuildlessAutoDisposeAsyncNotifier<MangaDetailsState> {
+  late final Source source;
   late final String mangaId;
 
   FutureOr<MangaDetailsState> build(
+    Source source,
     String mangaId,
   );
 }

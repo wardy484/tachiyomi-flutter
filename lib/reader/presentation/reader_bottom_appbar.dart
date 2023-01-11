@@ -4,12 +4,14 @@ import 'package:fluttiyomi/reader/presentation/reader_appbar_controller.dart';
 import 'package:fluttiyomi/reader/presentation/reader_pages_controller.dart';
 import 'package:fluttiyomi/reader/presentation/reader_progress_controller.dart';
 import 'package:fluttiyomi/settings/presentation/settings_controller.dart';
-import 'package:fluttiyomi/settings/presentation/settings_tab.dart';
+import 'package:fluttiyomi/settings/presentation/reader_settings_page.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:fluttiyomi/widgets/common/full_page_loading_indicator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReaderBottomAppBar extends ConsumerWidget {
+  final Source source;
   final String mangaId;
   final Chapter chapter;
   final ReaderPageState? currentPageState;
@@ -20,6 +22,7 @@ class ReaderBottomAppBar extends ConsumerWidget {
 
   const ReaderBottomAppBar({
     Key? key,
+    required this.source,
     required this.mangaId,
     required this.chapter,
     required this.currentPageState,
@@ -29,7 +32,7 @@ class ReaderBottomAppBar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ref) {
-    final pages = ref.watch(readerPagesControllerProvider(mangaId));
+    final pages = ref.watch(readerPagesControllerProvider(source, mangaId));
     return AnimatedOpacity(
       opacity: ref.watch(readerAppbarControllerProvider) ? 1 : 0,
       duration: const Duration(milliseconds: 300),
@@ -73,6 +76,7 @@ class ReaderBottomAppBar extends ConsumerWidget {
                         onPressed: () {
                           final newChapter = ref
                               .read(readerUpcomingChaptersControllerProvider(
+                                source,
                                 mangaId,
                                 chapter,
                               ))
@@ -88,6 +92,7 @@ class ReaderBottomAppBar extends ConsumerWidget {
                         onPressed: () {
                           final newChapter = ref
                               .read(readerUpcomingChaptersControllerProvider(
+                                source,
                                 mangaId,
                                 chapter,
                               ))

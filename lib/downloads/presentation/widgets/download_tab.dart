@@ -8,7 +8,7 @@ import 'package:fluttiyomi/downloads/data/download_status.dart';
 import 'package:fluttiyomi/downloads/presentation/download_notifier.dart';
 import 'package:fluttiyomi/favourites/data/favourite_repository.dart';
 import 'package:fluttiyomi/router.gr.dart';
-import 'package:fluttiyomi/source/source.dart';
+import 'package:fluttiyomi/settings/application/source_service.dart';
 import 'package:fluttiyomi/widgets/common/context_menu.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -52,13 +52,17 @@ class _DownloadsTabState extends ConsumerState<DownloadsTab> {
                       return;
                     }
 
+                    final source = ref
+                        .read(sourceContainerProvider)
+                        .get(download.sourceId);
+
                     ref.read(authNotifierProvider).whenOrNull(
                       authenticated: (user) async {
                         final favourite = await ref
                             .read(favouritesRepositoryProvider)
                             .getFavourite(
                               user.id,
-                              ref.read(sourceProvider).id,
+                              source.id,
                               download.mangaId,
                             );
 
@@ -68,8 +72,13 @@ class _DownloadsTabState extends ConsumerState<DownloadsTab> {
                             download.chapterId,
                           );
 
+                          final source = ref
+                              .read(sourceContainerProvider)
+                              .get(download.sourceId);
+
                           await AutoRouter.of(context).push(
                             ReaderRoute(
+                              source: source,
                               mangaId: download.mangaId,
                               chapter: chapter,
                             ),

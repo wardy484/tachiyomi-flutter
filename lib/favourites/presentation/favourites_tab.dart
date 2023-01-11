@@ -6,6 +6,8 @@ import 'package:fluttiyomi/auth/auth_repository.dart';
 import 'package:fluttiyomi/favourites/data/favourite.dart';
 import 'package:fluttiyomi/favourites/presentation/favourite_card.dart';
 import 'package:fluttiyomi/favourites/presentation/favourites_list_controller.dart';
+import 'package:fluttiyomi/settings/application/source_service.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:fluttiyomi/widgets/common/full_page_loading_indicator.dart';
 import 'package:fluttiyomi/widgets/common/manga_grid.dart';
 import 'package:fluttiyomi/work_manager.dart';
@@ -35,10 +37,13 @@ class FavouritesTab extends HookConsumerWidget {
                 itemCount: results.length,
                 itemBuilder: (context, index) {
                   Favourite favourite = results[index];
+                  Source source = ref
+                      .watch(sourceContainerProvider)
+                      .get(favourite.sourceId);
 
                   log("Favourite: ${favourite.mangaId}");
 
-                  return FavouriteCard(favourite: favourite);
+                  return FavouriteCard(source: source, favourite: favourite);
                 },
               ),
             );

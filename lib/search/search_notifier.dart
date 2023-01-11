@@ -1,13 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:fluttiyomi/data/paged_results/paged_results.dart';
 import 'package:fluttiyomi/search/search_state.dart';
+import 'package:fluttiyomi/settings/application/source_service.dart';
 import 'package:fluttiyomi/source/schema/source_schema.dart';
 import 'package:fluttiyomi/source/source.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 final searchNotifierProvider =
     StateNotifierProvider<SearchNotifier, SearchState>((ref) {
-  return SearchNotifier(source: ref.watch(sourceProvider));
+  // TODO: This is a hack to pass the source schema to the isolate.
+  return SearchNotifier(source: ref.read(sourceContainerProvider).get("readm"));
 });
 
 class SearchNotifier extends StateNotifier<SearchState> {

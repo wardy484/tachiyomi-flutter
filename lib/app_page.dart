@@ -4,9 +4,9 @@ import 'package:fluttiyomi/favourites/presentation/favourites_appbar.dart';
 import 'package:fluttiyomi/favourites/presentation/favourites_tab.dart';
 import 'package:fluttiyomi/home/pages/home_tab.dart';
 import 'package:fluttiyomi/home/widgets/home_appbar.dart';
-import 'package:fluttiyomi/settings/presentation/settings_tab.dart';
 import 'package:fluttiyomi/search/widgets/search_appbar.dart';
 import 'package:fluttiyomi/settings/presentation/settings_appbar.dart';
+import 'package:fluttiyomi/settings/presentation/settings_tab.dart';
 import 'package:fluttiyomi/widgets/search/search_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -28,18 +28,18 @@ class _AppPageState extends ConsumerState<AppPage> {
         const FavouritesAppbar(),
         const SearchAppbar(),
         const HomeAppbar(),
-        const SettingsAppbar(),
         AppBar(
           centerTitle: false,
           title: const Text("Downloads"),
         ),
+        const SettingsAppbar(),
       ].elementAt(_selectedIndex),
       body: [
         const FavouritesTab(),
         const SearchTab(),
         const HomeTab(),
-        const SettingsTab(),
         const DownloadsTab(),
+        const SettingsTab(),
       ].elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         showSelectedLabels: false,
@@ -58,12 +58,12 @@ class _AppPageState extends ConsumerState<AppPage> {
             label: 'Browse',
           ),
           BottomNavigationBarItem(
-            icon: BottomAppbarIcon(icon: FontAwesomeIcons.gear),
-            label: 'Settings',
-          ),
-          BottomNavigationBarItem(
             icon: BottomAppbarIcon(icon: FontAwesomeIcons.download),
             label: 'Downloads',
+          ),
+          BottomNavigationBarItem(
+            icon: BottomAppbarIcon(icon: FontAwesomeIcons.gear),
+            label: 'Settings',
           ),
         ],
         currentIndex: _selectedIndex,

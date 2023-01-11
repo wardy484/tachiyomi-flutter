@@ -12,10 +12,12 @@ import 'package:fluttiyomi/source/source.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MangaDetailsHeader extends ConsumerWidget {
+  final Source source;
   final Manga manga;
 
   const MangaDetailsHeader({
     Key? key,
+    required this.source,
     required this.manga,
   }) : super(key: key);
 
@@ -36,13 +38,13 @@ class MangaDetailsHeader extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  MangaBanner(manga: manga),
+                  MangaBanner(source: source, manga: manga),
                   gapH8,
                   Row(
                     children: [
-                      BookmarkButton(mangaId: manga.id),
+                      BookmarkButton(source: source, mangaId: manga.id),
                       gapW16,
-                      ContinueButton(mangaId: manga.id),
+                      ContinueButton(source: source, mangaId: manga.id),
                     ],
                   ),
                   gapH8,
@@ -63,10 +65,12 @@ class MangaDetailsHeader extends ConsumerWidget {
 class MangaBanner extends ConsumerWidget {
   const MangaBanner({
     Key? key,
+    required this.source,
     required this.manga,
   }) : super(key: key);
 
   final Manga manga;
+  final Source source;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -94,7 +98,7 @@ class MangaBanner extends ConsumerWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                ref.watch(sourceProvider).name,
+                source.name,
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.grey[400],

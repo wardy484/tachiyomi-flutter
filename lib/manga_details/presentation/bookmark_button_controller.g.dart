@@ -30,16 +30,19 @@ class _SystemHash {
 }
 
 String $BookmarkButtonControllerHash() =>
-    r'096e72b82197c083c081e8faf57d0e27eb15cf8d';
+    r'8f34362c8207b39202aa31e8f5cb5df27f534b19';
 
 /// See also [BookmarkButtonController].
 class BookmarkButtonControllerProvider
     extends AutoDisposeAsyncNotifierProviderImpl<BookmarkButtonController,
         Favourite?> {
   BookmarkButtonControllerProvider(
+    this.source,
     this.mangaId,
   ) : super(
-          () => BookmarkButtonController()..mangaId = mangaId,
+          () => BookmarkButtonController()
+            ..source = source
+            ..mangaId = mangaId,
           from: bookmarkButtonControllerProvider,
           name: r'bookmarkButtonControllerProvider',
           debugGetCreateSourceHash:
@@ -48,17 +51,20 @@ class BookmarkButtonControllerProvider
                   : $BookmarkButtonControllerHash,
         );
 
+  final Source source;
   final String mangaId;
 
   @override
   bool operator ==(Object other) {
     return other is BookmarkButtonControllerProvider &&
+        other.source == source &&
         other.mangaId == mangaId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, source.hashCode);
     hash = _SystemHash.combine(hash, mangaId.hashCode);
 
     return _SystemHash.finish(hash);
@@ -69,6 +75,7 @@ class BookmarkButtonControllerProvider
     covariant _$BookmarkButtonController notifier,
   ) {
     return notifier.build(
+      source,
       mangaId,
     );
   }
@@ -84,9 +91,11 @@ class BookmarkButtonControllerFamily extends Family<AsyncValue<Favourite?>> {
   BookmarkButtonControllerFamily();
 
   BookmarkButtonControllerProvider call(
+    Source source,
     String mangaId,
   ) {
     return BookmarkButtonControllerProvider(
+      source,
       mangaId,
     );
   }
@@ -97,6 +106,7 @@ class BookmarkButtonControllerFamily extends Family<AsyncValue<Favourite?>> {
     covariant BookmarkButtonControllerProvider provider,
   ) {
     return call(
+      provider.source,
       provider.mangaId,
     );
   }
@@ -113,9 +123,11 @@ class BookmarkButtonControllerFamily extends Family<AsyncValue<Favourite?>> {
 
 abstract class _$BookmarkButtonController
     extends BuildlessAutoDisposeAsyncNotifier<Favourite?> {
+  late final Source source;
   late final String mangaId;
 
   FutureOr<Favourite?> build(
+    Source source,
     String mangaId,
   );
 }

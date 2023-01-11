@@ -4,13 +4,16 @@ import 'package:fluttiyomi/data/chapter/chapter.dart';
 
 import 'package:fluttiyomi/manga_details/presentation/manga_details_controller.dart';
 import 'package:fluttiyomi/router.gr.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ContinueButton extends ConsumerWidget {
+  final Source source;
   final String mangaId;
 
   const ContinueButton({
     Key? key,
+    required this.source,
     required this.mangaId,
   }) : super(key: key);
 
@@ -19,7 +22,8 @@ class ContinueButton extends ConsumerWidget {
     return Expanded(
       child: ElevatedButton.icon(
         onPressed: () async {
-          final manga = ref.read(mangaDetailsControllerProvider(mangaId)).value;
+          final manga =
+              ref.read(mangaDetailsControllerProvider(source, mangaId)).value;
           final favourite = manga?.favourite;
           Chapter chapter;
 
@@ -33,6 +37,7 @@ class ContinueButton extends ConsumerWidget {
 
           AutoRouter.of(context).push(
             ReaderRoute(
+              source: source,
               mangaId: mangaId,
               chapter: chapter,
             ),

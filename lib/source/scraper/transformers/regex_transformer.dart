@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:fluttiyomi/source/scraper/transformers/transformer.dart';
 import 'package:yaml/yaml.dart';
 
@@ -7,21 +9,23 @@ class RegexTransformer extends Transformer {
 
   RegexTransformer(this.pattern, this.index) : super('regex', null);
 
-  factory RegexTransformer.fromYaml(YamlMap yaml) {
-    return RegexTransformer(
-      yaml['pattern'],
-      yaml['index'],
-    );
-  }
-
   @override
   dynamic transform(dynamic value, dynamic defaultValue) {
+    log('RegexTransformer: $value, $defaultValue, $pattern, $index');
+
     final matches = RegExp(pattern).allMatches(value);
     if (matches.isNotEmpty) {
       return matches.elementAt(0).group(index);
     }
 
     return defaultValue;
+  }
+
+  factory RegexTransformer.fromYaml(YamlMap yaml) {
+    return RegexTransformer(
+      yaml['pattern'],
+      yaml['index'],
+    );
   }
 
   factory RegexTransformer.fromJson(Map<String, dynamic> json) {

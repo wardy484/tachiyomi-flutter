@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'chapter_details_repository.dart';
+part of 'favourites_list_controller.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -29,39 +29,35 @@ class _SystemHash {
   }
 }
 
-String $chapterDetailsHash() => r'7c4e4a2dd18a4b182ff9454178b7a2674068400b';
+String $favouriteBySourceHash() => r'21ac0597342f41f7d2c4275522f1d56d971f1539';
 
-/// See also [chapterDetails].
-class ChapterDetailsProvider extends AutoDisposeFutureProvider<ChapterDetails> {
-  ChapterDetailsProvider(
+/// See also [favouriteBySource].
+class FavouriteBySourceProvider extends AutoDisposeFutureProvider<Favourite?> {
+  FavouriteBySourceProvider(
     this.source,
     this.mangaId,
-    this.chapterId,
   ) : super(
-          (ref) => chapterDetails(
+          (ref) => favouriteBySource(
             ref,
             source,
             mangaId,
-            chapterId,
           ),
-          from: chapterDetailsProvider,
-          name: r'chapterDetailsProvider',
+          from: favouriteBySourceProvider,
+          name: r'favouriteBySourceProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : $chapterDetailsHash,
+                  : $favouriteBySourceHash,
         );
 
   final Source source;
   final String mangaId;
-  final String chapterId;
 
   @override
   bool operator ==(Object other) {
-    return other is ChapterDetailsProvider &&
+    return other is FavouriteBySourceProvider &&
         other.source == source &&
-        other.mangaId == mangaId &&
-        other.chapterId == chapterId;
+        other.mangaId == mangaId;
   }
 
   @override
@@ -69,40 +65,36 @@ class ChapterDetailsProvider extends AutoDisposeFutureProvider<ChapterDetails> {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, source.hashCode);
     hash = _SystemHash.combine(hash, mangaId.hashCode);
-    hash = _SystemHash.combine(hash, chapterId.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-typedef ChapterDetailsRef = AutoDisposeFutureProviderRef<ChapterDetails>;
+typedef FavouriteBySourceRef = AutoDisposeFutureProviderRef<Favourite?>;
 
-/// See also [chapterDetails].
-final chapterDetailsProvider = ChapterDetailsFamily();
+/// See also [favouriteBySource].
+final favouriteBySourceProvider = FavouriteBySourceFamily();
 
-class ChapterDetailsFamily extends Family<AsyncValue<ChapterDetails>> {
-  ChapterDetailsFamily();
+class FavouriteBySourceFamily extends Family<AsyncValue<Favourite?>> {
+  FavouriteBySourceFamily();
 
-  ChapterDetailsProvider call(
+  FavouriteBySourceProvider call(
     Source source,
     String mangaId,
-    String chapterId,
   ) {
-    return ChapterDetailsProvider(
+    return FavouriteBySourceProvider(
       source,
       mangaId,
-      chapterId,
     );
   }
 
   @override
-  AutoDisposeFutureProvider<ChapterDetails> getProviderOverride(
-    covariant ChapterDetailsProvider provider,
+  AutoDisposeFutureProvider<Favourite?> getProviderOverride(
+    covariant FavouriteBySourceProvider provider,
   ) {
     return call(
       provider.source,
       provider.mangaId,
-      provider.chapterId,
     );
   }
 
@@ -113,5 +105,5 @@ class ChapterDetailsFamily extends Family<AsyncValue<ChapterDetails>> {
   List<ProviderOrFamily>? get dependencies => null;
 
   @override
-  String? get name => r'chapterDetailsProvider';
+  String? get name => r'favouriteBySourceProvider';
 }

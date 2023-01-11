@@ -16,15 +16,18 @@ import 'package:fluttiyomi/reader/presentation/reader_loader.dart';
 import 'package:fluttiyomi/reader/presentation/reader_progress_controller.dart';
 import 'package:fluttiyomi/reader/presentation/scrolling_viewer.dart';
 import 'package:fluttiyomi/settings/presentation/settings_controller.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:fluttiyomi/widgets/manga_page.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class ReaderPage extends HookConsumerWidget {
+  final Source source;
   final String mangaId;
   final Chapter chapter;
 
   const ReaderPage({
     Key? key,
+    required this.source,
     required this.mangaId,
     required this.chapter,
   }) : super(key: key);
@@ -43,7 +46,7 @@ class ReaderPage extends HookConsumerWidget {
 
     useEffect(() {
       ref
-          .read(readerPagesControllerProvider(mangaId).notifier)
+          .read(readerPagesControllerProvider(source, mangaId).notifier)
           .fetchPages(currentChapter.value);
 
       return null;
@@ -51,7 +54,7 @@ class ReaderPage extends HookConsumerWidget {
 
     // Not sure why I need this.... its a bit wank I think this is just to trigger
     // the initial read on the page so something subscribs to it.
-    ref.listen(readerPagesControllerProvider(mangaId), (state, next) {
+    ref.listen(readerPagesControllerProvider(source, mangaId), (state, next) {
       // print("READ PAGE: resetting fetch more results");
       // fetchingMoreResults.value = false;
     });
@@ -74,6 +77,7 @@ class ReaderPage extends HookConsumerWidget {
                     .toggleVisibility(),
                 child: ScrollingViewer(
                   child: ReaderLoader(
+                    source: source,
                     mangaId: mangaId,
                     currentChapter: visibleChapter.value,
                     reverse: isReadingInReverse.value,
@@ -102,11 +106,11 @@ class ReaderPage extends HookConsumerWidget {
                           }),
                       reverse: isReadingInReverse.value,
                       itemCount: ref
-                          .watch(readerPagesControllerProvider(mangaId))
+                          .watch(readerPagesControllerProvider(source, mangaId))
                           .length,
                       itemBuilder: (context, index) {
-                        final pages =
-                            ref.watch(readerPagesControllerProvider(mangaId));
+                        final pages = ref.watch(
+                            readerPagesControllerProvider(source, mangaId));
                         final sortedPages = isReadingInReverse.value
                             ? pages.reversed.toList()
                             : pages;
@@ -167,6 +171,7 @@ class ReaderPage extends HookConsumerWidget {
                 ),
               ),
               bottomNavigationBar: ReaderBottomAppBar(
+                source: source,
                 mangaId: mangaId,
                 chapter: currentChapter.value,
                 currentPage: currentPage.value,
@@ -194,7 +199,7 @@ class ReaderPage extends HookConsumerWidget {
   ) {
     if (newChapter != null) {
       ref
-          .read(readerPagesControllerProvider(mangaId).notifier)
+          .read(readerPagesControllerProvider(source, mangaId).notifier)
           .fetchPages(newChapter);
 
       currentChapter.value = newChapter;
@@ -211,7 +216,7 @@ class ReaderPage extends HookConsumerWidget {
 
     if (upcomingChapters.hasPreviousChapter) {
       await ref
-          .read(readerPagesControllerProvider(mangaId).notifier)
+          .read(readerPagesControllerProvider(source, mangaId).notifier)
           .fetchPages(upcomingChapters.previousChapter!);
 
       currentChapter.value = upcomingChapters.previousChapter!;
@@ -250,7 +255,7 @@ class ReaderPage extends HookConsumerWidget {
       currentChapter.value = upcomingChapters.nextChapter!;
 
       final pagesController =
-          ref.read(readerPagesControllerProvider(mangaId).notifier);
+          ref.read(readerPagesControllerProvider(source, mangaId).notifier);
 
       await pagesController.appendChapterPages(
         previousChapter,
@@ -281,7 +286,7 @@ class ReaderPage extends HookConsumerWidget {
       markingChapterAsRead.value = true;
 
       final mangaDetails =
-          ref.read(mangaDetailsControllerProvider(mangaId)).valueOrNull;
+          ref.read(mangaDetailsControllerProvider(source, mangaId)).valueOrNull;
 
       if (mangaDetails?.favourite != null) {
         await ref.read(favouritesServiceProvider).markChapterAsRead(
@@ -303,6 +308,7 @@ class ReaderPage extends HookConsumerWidget {
     Chapter currentChapter,
   ) {
     return ref.read(readerUpcomingChaptersControllerProvider(
+      source,
       mangaId,
       currentChapter,
     ));
@@ -314,10 +320,10 @@ class ReaderPage extends HookConsumerWidget {
     ValueNotifier<int> currentPage,
   ) async {
     final mangaDetails =
-        ref.read(mangaDetailsControllerProvider(mangaId)).valueOrNull;
+        ref.read(mangaDetailsControllerProvider(source, mangaId)).valueOrNull;
 
     if (mangaDetails?.favourite != null) {
-      final pages = ref.watch(readerPagesControllerProvider(mangaId));
+      final pages = ref.watch(readerPagesControllerProvider(source, mangaId));
       final lastPage = pages[currentPage.value - 1];
 
       int lastReadPage = 0;

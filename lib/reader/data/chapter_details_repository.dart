@@ -9,9 +9,9 @@ part 'chapter_details_repository.g.dart';
 
 @riverpod
 FutureOr<ChapterDetails> chapterDetails(
-    Ref ref, String mangaId, String chapterId) {
+    Ref ref, Source source, String mangaId, String chapterId) {
   return compute(_getChapterDetails, {
-    'sourceSchema': ref.watch(sourceProvider).schema.toJson(),
+    'sourceSchema': source.schema.toJson(),
     'mangaId': mangaId,
     'chapterId': chapterId,
   });

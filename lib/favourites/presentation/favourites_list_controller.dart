@@ -1,35 +1,40 @@
-import 'dart:developer';
-
 import 'package:collection/collection.dart';
 import 'package:fluttiyomi/auth/auth_repository.dart';
 import 'package:fluttiyomi/favourites/data/favourite.dart';
 import 'package:fluttiyomi/favourites/data/favourite_repository.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'favourites_list_controller.g.dart';
 
 final favouritesStreamProvider = StreamProvider<List<Favourite>>(
   (ref) {
     final user = ref.watch(authRepositoryProvider).currentUser;
-    log("MangaDetailsController: User");
+
     return ref
         .watch(favouritesRepositoryProvider)
         .watchFavourites(user)
-        .map((favourites) => _sortAndGroup(favourites));
+        .map((favourites) => sortAndGroup(favourites));
   },
 );
 
-final favouriteProvider = FutureProvider.family<Favourite?, String>(
-  (ref, mangaId) async {
-    final favourites = ref.watch(favouritesStreamProvider);
+@riverpod
+FutureOr<Favourite?> favourite(
+  Ref ref,
+  Source source,
+  String mangaId,
+) {
+  final favourites = ref.watch(favouritesStreamProvider);
 
-    return favourites.whenData((favourites) {
-      return favourites.firstWhereOrNull((favourite) {
-        return favourite.mangaId == mangaId;
-      });
-    }).value;
-  },
-);
+  return favourites.whenData((favourites) {
+    return favourites.firstWhereOrNull((favourite) {
+      return favourite.mangaId == mangaId && favourite.sourceId == source.id;
+    });
+  }).value;
+}
 
-List<Favourite> _sortAndGroup(List<Favourite> favourites) {
+List<Favourite> sortAndGroup(List<Favourite> favourites) {
   final withNewChapters = favourites.where((favourite) {
     return favourite.unreadChapterCount > 0;
   }).toList()

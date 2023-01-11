@@ -5,13 +5,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:fluttiyomi/database/database.dart';
 import 'package:fluttiyomi/downloads/application/download_service.dart';
 import 'package:fluttiyomi/downloads/application/notifications/download_progress_notification.dart';
-import 'package:fluttiyomi/downloads/data/download_repository.dart';
 import 'package:fluttiyomi/favourites/applications/check_for_updates_notification.dart';
 import 'package:fluttiyomi/favourites/applications/favourites_updates_service.dart';
 import 'package:fluttiyomi/favourites/applications/new_chapters_notification.dart';
 import 'package:fluttiyomi/favourites/data/favourite_repository.dart';
 import 'package:fluttiyomi/firebase_options.dart';
-import 'package:fluttiyomi/source/source.dart';
+import 'package:fluttiyomi/settings/application/source_service.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:workmanager/workmanager.dart';
 
@@ -34,7 +33,6 @@ void callbackDispatcher() {
 
     final container = ProviderContainer();
     await container.read(isarDatabaseProvider).init();
-    await container.read(sourceProvider).initialise();
 
     switch (task) {
       case checkFavouritesForUpdatesTask:
@@ -58,8 +56,7 @@ void callbackDispatcher() {
 
         await checkOneForUpdates(
           container,
-          inputData['userId'],
-          inputData['mangaId'],
+          inputData['favouriteId'],
         );
 
         return Future.value(true);
@@ -124,17 +121,11 @@ Future<void> checkFavouritesForUpdates(
 
 Future<void> checkOneForUpdates(
   ProviderContainer container,
-  String userId,
-  String mangaId,
+  String favouriteId,
 ) async {
-  final sourceId = await container.read(sourceProvider).id;
-
-  final favourite =
-      await container.read(favouritesRepositoryProvider).getFavourite(
-            userId,
-            sourceId,
-            mangaId,
-          );
+  final favourite = await container
+      .read(favouritesRepositoryProvider)
+      .getFavouriteById(favouriteId);
 
   if (favourite != null) {
     final checkForUpdatesNotification = CheckForUpdatesNotification(favourite);
@@ -164,19 +155,20 @@ Future<void> downloadChapter(
   int? downloadId,
 ) async {
   final downloadService = container.read(downloadServiceProvider);
-  final downloadRepository = container.read(downloadRepositoryProvider);
 
   if (downloadId == null) return;
 
-  final download = await downloadRepository.get(downloadId);
+  final download = await downloadService.getDownload(downloadId);
 
   if (download == null) return;
 
   log("Work manager: starting download for ${download.mangaId}");
 
   final notification = DownloadProgressNotification(download)..show(0, 0);
+  final source = container.read(sourceContainerProvider).get(download.sourceId);
 
   await downloadService.processDownload(
+    source,
     download,
     onProgress: (index, total) {
       notification.show(index, total);

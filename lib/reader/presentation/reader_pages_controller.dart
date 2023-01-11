@@ -2,6 +2,7 @@ import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/downloads/application/download_service.dart';
 import 'package:fluttiyomi/reader/data/chapter_details_repository.dart';
 import 'package:fluttiyomi/reader/presentation/reader_load_state.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -34,7 +35,7 @@ class ReaderLoadingController extends _$ReaderLoadingController {
 @riverpod
 class ReaderPagesController extends _$ReaderPagesController {
   @override
-  List<ReaderPageState> build(String mangaId) {
+  List<ReaderPageState> build(Source source, String mangaId) {
     return [];
   }
 
@@ -45,7 +46,7 @@ class ReaderPagesController extends _$ReaderPagesController {
         );
 
     final chapterDetails = await ref.watch(
-      chapterDetailsProvider(mangaId, chapter.id).future,
+      chapterDetailsProvider(source, mangaId, chapter.id).future,
     );
 
     state = await _precacheImages(
@@ -63,7 +64,7 @@ class ReaderPagesController extends _$ReaderPagesController {
     ref.read(readerIsAppendingProvider.notifier).state = true;
 
     final chapterDetails = await ref.watch(
-      chapterDetailsProvider(mangaId, chapter.id).future,
+      chapterDetailsProvider(source, mangaId, chapter.id).future,
     );
 
     final precachedPages = await _precacheImages(

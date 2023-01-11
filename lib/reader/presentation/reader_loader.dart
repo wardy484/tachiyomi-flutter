@@ -3,10 +3,12 @@ import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/reader/presentation/reader_loader_footer.dart';
 import 'package:fluttiyomi/reader/presentation/reader_loader_header.dart';
 import 'package:fluttiyomi/reader/presentation/reader_progress_controller.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ReaderLoader extends ConsumerStatefulWidget {
+  final Source source;
   final String mangaId;
   final Chapter currentChapter;
   final Widget child;
@@ -16,6 +18,7 @@ class ReaderLoader extends ConsumerStatefulWidget {
 
   const ReaderLoader({
     Key? key,
+    required this.source,
     required this.child,
     required this.reverse,
     required this.mangaId,
@@ -36,6 +39,7 @@ class _ReaderLoaderState extends ConsumerState<ReaderLoader> {
   Widget build(BuildContext context) {
     ref.listen(
         readerUpcomingChaptersControllerProvider(
+          widget.source,
           widget.mangaId,
           widget.currentChapter,
         ), (_, ReaderUpcomingChapters next) {
@@ -52,11 +56,13 @@ class _ReaderLoaderState extends ConsumerState<ReaderLoader> {
         enablePullDown: true,
         enablePullUp: true,
         header: ReaderLoaderHeader(
+          source: widget.source,
           mangaId: widget.mangaId,
           currentChapter: widget.currentChapter,
           reverse: widget.reverse,
         ),
         footer: ReaderLoaderFooter(
+          source: widget.source,
           mangaId: widget.mangaId,
           currentChapter: widget.currentChapter,
           reverse: widget.reverse,

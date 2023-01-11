@@ -12,6 +12,8 @@ class Download {
 
   late String mangaName;
 
+  late String sourceId;
+
   late String mangaId;
 
   late String image;

@@ -2,6 +2,7 @@ source_info:
   name: Mangajar
   id: mangajar
   description: Source schema that pulls content from Mangajar
+  icon_url: https://raw.githubusercontent.com/TheNetsky/netskys-extensions/gh-pages/0.8/MangaJar/includes/icon.png
   version: "0.1"
   repository_url: https://github.com/wardy484/some-repo
   website_url: https://mangajar.com/
@@ -75,7 +76,7 @@ chapters_schema:
           default: ""
           transformers: 
             - type: regex
-              pattern: \/chapter\/([^\/]+)
+              pattern: ^.*\/chapter\/(\d+)[_\/]?.*$
               index: 1
             - type: cast
               to: number

@@ -1,29 +1,84 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/home/home_notifier.dart';
+import 'package:fluttiyomi/router.gr.dart';
+import 'package:fluttiyomi/settings/presentation/installed_source_controller.dart';
+import 'package:fluttiyomi/settings/presentation/source_settings_page.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:fluttiyomi/widgets/common/full_page_loading_indicator.dart';
 import 'package:fluttiyomi/widgets/common/manga_card.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class HomeTab extends ConsumerStatefulWidget {
-  const HomeTab({Key? key}) : super(key: key);
+class HomeTab extends HookConsumerWidget {
+  const HomeTab({super.key});
 
   @override
-  _HomeTabState createState() => _HomeTabState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ref.watch(installedSourceStreamProvider).when(
+          data: (sources) {
+            return sources.isEmpty
+                ? const Center(
+                    child: Text("No sources installed, click add to add one."),
+                  )
+                : ListView.separated(
+                    separatorBuilder: (context, index) => const Divider(),
+                    itemCount: sources.length,
+                    itemBuilder: (context, index) {
+                      final installedSource = sources[index];
+                      return SourceTile(
+                        source: installedSource,
+                        onPressed: () {
+                          AutoRouter.of(context).push(
+                            BrowseSourceRoute(
+                              source: installedSource.source,
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+          },
+          error: (error, stack) => const Text('Error'),
+          loading: (() => const FullPageLoadingIndicator()),
+        );
+  }
 }
 
-class _HomeTabState extends ConsumerState<HomeTab> {
-  @override
-  void initState() {
-    super.initState();
+class BrowseSourcePage extends ConsumerWidget {
+  final Source source;
 
-    ref.read(homeProvider.notifier).load();
+  const BrowseSourcePage({
+    Key? key,
+    required this.source,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(source.name),
+      ),
+      body: SourceHomeSections(
+        source: source,
+      ),
+    );
   }
+}
+
+class SourceHomeSections extends ConsumerWidget {
+  final Source source;
+
+  const SourceHomeSections({
+    super.key,
+    required this.source,
+  });
 
   @override
-  Widget build(BuildContext context) {
-    return ref.watch(homeProvider).when(
-          initial: () => const FullPageLoadingIndicator(),
-          loaded: (results) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ref.watch(homeSectionsControllerProvider(source)).when(
+          loading: () => const FullPageLoadingIndicator(),
+          error: (error, stack) => const Text('Error'),
+          data: (results) {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: ListView.separated(
@@ -60,6 +115,7 @@ class _HomeTabState extends ConsumerState<HomeTab> {
                             return SizedBox(
                               width: 170,
                               child: MangaCard(
+                                source: source,
                                 mangaId: manga.id,
                                 name: manga.title.text,
                                 image: manga.image,

@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:fluttiyomi/database/download.dart';
+import 'package:fluttiyomi/database/installed_source_model.dart';
 import 'package:fluttiyomi/database/settings.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
@@ -17,6 +18,7 @@ class Database {
       [
         SettingSchema,
         DownloadSchema,
+        InstalledSourceSchema,
       ],
       directory: dir.path,
       inspector: kDebugMode,

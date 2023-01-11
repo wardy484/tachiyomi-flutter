@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/reader/presentation/reader_paging_indicator.dart';
 import 'package:fluttiyomi/reader/presentation/reader_progress_controller.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ReaderLoaderFooter extends ConsumerStatefulWidget {
+  final Source source;
   final String mangaId;
   final Chapter currentChapter;
   final bool reverse;
 
   const ReaderLoaderFooter({
     Key? key,
+    required this.source,
     required this.mangaId,
     required this.currentChapter,
     required this.reverse,
@@ -44,6 +47,7 @@ class _ReaderLoaderFooterState extends ConsumerState<ReaderLoaderFooter>
   @override
   Widget build(BuildContext context) {
     final upcomingChapters = ref.watch(readerUpcomingChaptersControllerProvider(
+      widget.source,
       widget.mangaId,
       widget.currentChapter,
     ));

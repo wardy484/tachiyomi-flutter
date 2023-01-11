@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'chapter_details_repository.dart';
+part of 'home_notifier.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -29,80 +29,75 @@ class _SystemHash {
   }
 }
 
-String $chapterDetailsHash() => r'7c4e4a2dd18a4b182ff9454178b7a2674068400b';
+String $HomeSectionsControllerHash() =>
+    r'739de2f42101ede78722eca107279afbbe1823c3';
 
-/// See also [chapterDetails].
-class ChapterDetailsProvider extends AutoDisposeFutureProvider<ChapterDetails> {
-  ChapterDetailsProvider(
+/// See also [HomeSectionsController].
+class HomeSectionsControllerProvider
+    extends AutoDisposeAsyncNotifierProviderImpl<HomeSectionsController,
+        List<HomeSection>> {
+  HomeSectionsControllerProvider(
     this.source,
-    this.mangaId,
-    this.chapterId,
   ) : super(
-          (ref) => chapterDetails(
-            ref,
-            source,
-            mangaId,
-            chapterId,
-          ),
-          from: chapterDetailsProvider,
-          name: r'chapterDetailsProvider',
+          () => HomeSectionsController()..source = source,
+          from: homeSectionsControllerProvider,
+          name: r'homeSectionsControllerProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : $chapterDetailsHash,
+                  : $HomeSectionsControllerHash,
         );
 
   final Source source;
-  final String mangaId;
-  final String chapterId;
 
   @override
   bool operator ==(Object other) {
-    return other is ChapterDetailsProvider &&
-        other.source == source &&
-        other.mangaId == mangaId &&
-        other.chapterId == chapterId;
+    return other is HomeSectionsControllerProvider && other.source == source;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, source.hashCode);
-    hash = _SystemHash.combine(hash, mangaId.hashCode);
-    hash = _SystemHash.combine(hash, chapterId.hashCode);
 
     return _SystemHash.finish(hash);
   }
+
+  @override
+  FutureOr<List<HomeSection>> runNotifierBuild(
+    covariant _$HomeSectionsController notifier,
+  ) {
+    return notifier.build(
+      source,
+    );
+  }
 }
 
-typedef ChapterDetailsRef = AutoDisposeFutureProviderRef<ChapterDetails>;
+typedef HomeSectionsControllerRef
+    = AutoDisposeAsyncNotifierProviderRef<List<HomeSection>>;
 
-/// See also [chapterDetails].
-final chapterDetailsProvider = ChapterDetailsFamily();
+/// See also [HomeSectionsController].
+final homeSectionsControllerProvider = HomeSectionsControllerFamily();
 
-class ChapterDetailsFamily extends Family<AsyncValue<ChapterDetails>> {
-  ChapterDetailsFamily();
+class HomeSectionsControllerFamily
+    extends Family<AsyncValue<List<HomeSection>>> {
+  HomeSectionsControllerFamily();
 
-  ChapterDetailsProvider call(
+  HomeSectionsControllerProvider call(
     Source source,
-    String mangaId,
-    String chapterId,
   ) {
-    return ChapterDetailsProvider(
+    return HomeSectionsControllerProvider(
       source,
-      mangaId,
-      chapterId,
     );
   }
 
   @override
-  AutoDisposeFutureProvider<ChapterDetails> getProviderOverride(
-    covariant ChapterDetailsProvider provider,
+  AutoDisposeAsyncNotifierProviderImpl<HomeSectionsController,
+      List<HomeSection>> getProviderOverride(
+    covariant HomeSectionsControllerProvider provider,
   ) {
     return call(
       provider.source,
-      provider.mangaId,
-      provider.chapterId,
     );
   }
 
@@ -113,5 +108,14 @@ class ChapterDetailsFamily extends Family<AsyncValue<ChapterDetails>> {
   List<ProviderOrFamily>? get dependencies => null;
 
   @override
-  String? get name => r'chapterDetailsProvider';
+  String? get name => r'homeSectionsControllerProvider';
+}
+
+abstract class _$HomeSectionsController
+    extends BuildlessAutoDisposeAsyncNotifier<List<HomeSection>> {
+  late final Source source;
+
+  FutureOr<List<HomeSection>> build(
+    Source source,
+  );
 }

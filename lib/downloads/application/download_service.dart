@@ -15,7 +15,6 @@ import 'package:workmanager/workmanager.dart';
 final downloadServiceProvider = Provider<DownloadService>((ref) {
   return DownloadService(
     downloads: ref.watch(downloadRepositoryProvider),
-    source: ref.watch(sourceProvider),
     cacheManager: DefaultCacheManager(),
     workManager: ref.watch(workManagerProvider),
   );
@@ -23,20 +22,27 @@ final downloadServiceProvider = Provider<DownloadService>((ref) {
 
 class DownloadService {
   final DownloadRepository downloads;
-  final Source source;
   final CacheManager cacheManager;
   final Workmanager workManager;
 
   DownloadService({
     required this.downloads,
-    required this.source,
     required this.cacheManager,
     required this.workManager,
   });
 
-  Future<Download> addDownload(Manga manga, Chapter chapter) async {
+  Future<Download?> getDownload(int id) async {
+    return await downloads.get(id);
+  }
+
+  Future<Download> addDownload(
+    Source source,
+    Manga manga,
+    Chapter chapter,
+  ) async {
     log('Adding download for ${manga.titles[0]} - ${chapter.chapterNo}');
     final download = Download()
+      ..sourceId = source.id
       ..image = manga.image
       ..mangaName = manga.titles[0]
       ..chapterId = chapter.id
@@ -55,24 +61,6 @@ class DownloadService {
 
     return null;
   }
-
-  // Future cachePages(
-  //   List<String> pages, {
-  //   Function(int, int)? onProgress,
-  // }) async {
-  //   for (int i = 0; i < pages.length; i++) {
-  //     final page = pages[i];
-  //     final future = _cachePage(page);
-
-  //     if (future != null) {
-  //       await _cachePage(page);
-
-  //       if (onProgress != null) {
-  //         onProgress(i + 1, pages.length);
-  //       }
-  //     }
-  //   }
-  // }
 
   Future cachePages(
     List<String> pages, {
@@ -100,6 +88,7 @@ class DownloadService {
   }
 
   Future<void> processDownload(
+    Source source,
     Download download, {
     Function(int, int)? onProgress,
   }) async {
@@ -141,10 +130,13 @@ class DownloadService {
   }
 
   Future<void> downloadChaptersInBackground(
-      Manga manga, List<Chapter> chapters) async {
+    Source source,
+    Manga manga,
+    List<Chapter> chapters,
+  ) async {
     log("Download chapters in background: Downloading chapters");
     for (final chapter in chapters) {
-      final download = await addDownload(manga, chapter);
+      final download = await addDownload(source, manga, chapter);
       fireDownloadInBackground(download);
     }
   }

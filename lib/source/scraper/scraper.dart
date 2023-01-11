@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:fluttiyomi/source/scraper/parsers/document_parser.dart';
 import 'package:fluttiyomi/source/scraper/parsers/json_parser.dart';
@@ -19,6 +21,8 @@ class Scraper {
     Map<String, dynamic>? body,
     Map<String, dynamic>? query,
   }) async {
+    log("Scraping ${schema.request.url}");
+
     final data = await _makeRequest(
       schema.request,
       args: params,
@@ -43,6 +47,8 @@ class Scraper {
     Map<String, dynamic>? query,
   }) async {
     final url = request.buildUrl(args: args);
+
+    log("Hitting $url");
 
     final response = await _client.request(
       url,

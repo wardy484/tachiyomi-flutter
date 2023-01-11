@@ -1,6 +1,7 @@
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/search/search_notifier.dart';
+import 'package:fluttiyomi/settings/application/source_service.dart';
 import 'package:fluttiyomi/widgets/common/full_page_loading_indicator.dart';
 import 'package:fluttiyomi/widgets/common/manga_card.dart';
 import 'package:fluttiyomi/widgets/common/manga_grid.dart';
@@ -50,7 +51,13 @@ class _SearchTabState extends ConsumerState<SearchTab> {
                     itemBuilder: (context, index) {
                       var manga = results.results[index];
 
+                      // TODO: pass source down
+                      // TODO: Move search screen under specific source
+                      // this can be a search icon in the action bar for that source
+                      final source =
+                          ref.read(sourceContainerProvider).get("readm");
                       return MangaCard(
+                        source: source,
                         mangaId: manga.id,
                         name: manga.title.text,
                         image: manga.image,

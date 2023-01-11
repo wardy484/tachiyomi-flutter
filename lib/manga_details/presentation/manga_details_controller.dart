@@ -13,11 +13,15 @@ part 'manga_details_controller.g.dart';
 @riverpod
 class MangaDetailsController extends _$MangaDetailsController {
   @override
-  FutureOr<MangaDetailsState> build(String mangaId) {
-    final favourite = ref.watch(favouriteProvider(mangaId)).valueOrNull;
+  FutureOr<MangaDetailsState> build(Source source, String mangaId) {
+    final favourite = ref
+        .watch(
+          favouriteBySourceProvider(source, mangaId),
+        )
+        .valueOrNull;
 
     if (favourite == null) {
-      return _getFromSource(mangaId);
+      return _getFromSource(source, mangaId);
     }
 
     return MangaDetailsState(
@@ -27,18 +31,22 @@ class MangaDetailsController extends _$MangaDetailsController {
     );
   }
 
-  Future<MangaDetailsState> _getFromSource(String mangaId) async {
-    final sourceClient = ref.watch(sourceProvider);
-
+  Future<MangaDetailsState> _getFromSource(
+    Source source,
+    String mangaId,
+  ) async {
     final futures = FutureGroup();
+
     futures.add(compute(_getMangaDetails, {
-      'sourceSchema': sourceClient.schema.toJson(),
+      'sourceSchema': source.schema.toJson(),
       'mangaId': mangaId,
     }));
+
     futures.add(compute(_getChapters, {
-      'sourceSchema': sourceClient.schema.toJson(),
+      'sourceSchema': source.schema.toJson(),
       'mangaId': mangaId,
     }));
+
     futures.close();
 
     final futuresResult = await futures.future;

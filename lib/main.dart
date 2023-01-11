@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttiyomi/auth/auth_guard.dart';
 import 'package:fluttiyomi/database/database.dart';
 import 'package:fluttiyomi/local_notifications.dart';
 import 'package:fluttiyomi/router.gr.dart';
-import 'package:fluttiyomi/source/source.dart';
+import 'package:fluttiyomi/settings/application/source_service.dart';
+import 'package:fluttiyomi/settings/data/installed_source_repository.dart';
+import 'package:fluttiyomi/settings/presentation/installed_source_controller.dart';
 import 'package:fluttiyomi/widgets/refresh_config.dart';
 import 'package:fluttiyomi/work_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -42,10 +45,13 @@ void main() async {
     onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
   );
 
-  final container = ProviderContainer();
+  ProviderContainer container = ProviderContainer();
   await container.read(isarDatabaseProvider).init();
+  await container.read(sourceServiceProvider).initialiseSources();
+
   await container.read(workManagerProvider).initialize(callbackDispatcher);
-  await container.read(sourceProvider).initialise();
+
+  await installTestSources(container);
 
   // await SentryFlutter.init(
   //   (options) {
@@ -113,7 +119,42 @@ class _MyAppState extends ConsumerState<MyApp> {
         ),
         routerDelegate: _appRouter.delegate(),
         routeInformationParser: _appRouter.defaultRouteParser(),
+        builder: EasyLoading.init(),
       ),
     );
+  }
+}
+
+// Temporary function to install test sources
+Future<void> installTestSources(ProviderContainer container) async {
+  final testSources = [
+    {
+      "id": "readm",
+      "url":
+          "https://gist.githubusercontent.com/wardy484/74db6d1a96015b0574b17d113d04cc84/raw/7b2c58acc48f27e259ac3f77798ac5e839bba074/readm.yml",
+    },
+    {
+      "id": "mangajar",
+      "url":
+          "https://gist.githubusercontent.com/wardy484/eab8bd651c1841a6e5d1d634211e1239/raw/d17ea39a4b1e8f7f2e4f7f25d2622ab376db4404/mangajar.yml",
+    }
+  ];
+
+  for (final testSource in testSources) {
+    final sourceId = testSource['id'] as String;
+    final url = testSource['url'] as String;
+
+    final source = await container
+        .read(installedSourceRepositoryProvider)
+        .getInstalledSource(sourceId);
+
+    // Purge the source on first run so we can debug
+    if (source != null) {
+      container.read(installedSourceRepositoryProvider).delete(source);
+    }
+
+    await container
+        .read(installedSourceControllerProvider.notifier)
+        .addSource(url);
   }
 }

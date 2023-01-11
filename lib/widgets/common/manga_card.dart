@@ -2,9 +2,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/router.gr.dart';
+import 'package:fluttiyomi/source/source.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class MangaCard extends ConsumerWidget {
+  final Source source;
   final String mangaId;
   final String name;
   final String image;
@@ -12,6 +14,7 @@ class MangaCard extends ConsumerWidget {
 
   const MangaCard({
     Key? key,
+    required this.source,
     required this.mangaId,
     required this.name,
     required this.image,
@@ -24,6 +27,7 @@ class MangaCard extends ConsumerWidget {
       onTap: () async {
         await AutoRouter.of(context).push(
           MangaDetailsRoute(
+            source: source,
             id: mangaId,
           ),
         );

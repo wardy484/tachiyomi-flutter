@@ -47,14 +47,19 @@ const DownloadSchema = CollectionSchema(
       name: r'mangaName',
       type: IsarType.string,
     ),
-    r'status': PropertySchema(
+    r'sourceId': PropertySchema(
       id: 6,
+      name: r'sourceId',
+      type: IsarType.string,
+    ),
+    r'status': PropertySchema(
+      id: 7,
       name: r'status',
       type: IsarType.byte,
       enumMap: _DownloadstatusEnumValueMap,
     ),
     r'updatedAt': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'updatedAt',
       type: IsarType.dateTime,
     )
@@ -84,6 +89,7 @@ int _downloadEstimateSize(
   bytesCount += 3 + object.image.length * 3;
   bytesCount += 3 + object.mangaId.length * 3;
   bytesCount += 3 + object.mangaName.length * 3;
+  bytesCount += 3 + object.sourceId.length * 3;
   return bytesCount;
 }
 
@@ -99,8 +105,9 @@ void _downloadSerialize(
   writer.writeString(offsets[3], object.image);
   writer.writeString(offsets[4], object.mangaId);
   writer.writeString(offsets[5], object.mangaName);
-  writer.writeByte(offsets[6], object.status.index);
-  writer.writeDateTime(offsets[7], object.updatedAt);
+  writer.writeString(offsets[6], object.sourceId);
+  writer.writeByte(offsets[7], object.status.index);
+  writer.writeDateTime(offsets[8], object.updatedAt);
 }
 
 Download _downloadDeserialize(
@@ -117,10 +124,11 @@ Download _downloadDeserialize(
   object.image = reader.readString(offsets[3]);
   object.mangaId = reader.readString(offsets[4]);
   object.mangaName = reader.readString(offsets[5]);
+  object.sourceId = reader.readString(offsets[6]);
   object.status =
-      _DownloadstatusValueEnumMap[reader.readByteOrNull(offsets[6])] ??
+      _DownloadstatusValueEnumMap[reader.readByteOrNull(offsets[7])] ??
           DownloadStatus.pending;
-  object.updatedAt = reader.readDateTime(offsets[7]);
+  object.updatedAt = reader.readDateTime(offsets[8]);
   return object;
 }
 
@@ -144,9 +152,11 @@ P _downloadDeserializeProp<P>(
     case 5:
       return (reader.readString(offset)) as P;
     case 6:
+      return (reader.readString(offset)) as P;
+    case 7:
       return (_DownloadstatusValueEnumMap[reader.readByteOrNull(offset)] ??
           DownloadStatus.pending) as P;
-    case 7:
+    case 8:
       return (reader.readDateTime(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1030,6 +1040,136 @@ extension DownloadQueryFilter
     });
   }
 
+  QueryBuilder<Download, Download, QAfterFilterCondition> sourceIdEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'sourceId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition> sourceIdGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'sourceId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition> sourceIdLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'sourceId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition> sourceIdBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'sourceId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition> sourceIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'sourceId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition> sourceIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'sourceId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition> sourceIdContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'sourceId',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition> sourceIdMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'sourceId',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition> sourceIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'sourceId',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterFilterCondition> sourceIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'sourceId',
+        value: '',
+      ));
+    });
+  }
+
   QueryBuilder<Download, Download, QAfterFilterCondition> statusEqualTo(
       DownloadStatus value) {
     return QueryBuilder.apply(this, (query) {
@@ -1216,6 +1356,18 @@ extension DownloadQuerySortBy on QueryBuilder<Download, Download, QSortBy> {
     });
   }
 
+  QueryBuilder<Download, Download, QAfterSortBy> sortBySourceId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sourceId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterSortBy> sortBySourceIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sourceId', Sort.desc);
+    });
+  }
+
   QueryBuilder<Download, Download, QAfterSortBy> sortByStatus() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'status', Sort.asc);
@@ -1327,6 +1479,18 @@ extension DownloadQuerySortThenBy
     });
   }
 
+  QueryBuilder<Download, Download, QAfterSortBy> thenBySourceId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sourceId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Download, Download, QAfterSortBy> thenBySourceIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'sourceId', Sort.desc);
+    });
+  }
+
   QueryBuilder<Download, Download, QAfterSortBy> thenByStatus() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'status', Sort.asc);
@@ -1395,6 +1559,13 @@ extension DownloadQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Download, Download, QDistinct> distinctBySourceId(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'sourceId', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<Download, Download, QDistinct> distinctByStatus() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'status');
@@ -1449,6 +1620,12 @@ extension DownloadQueryProperty
   QueryBuilder<Download, String, QQueryOperations> mangaNameProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'mangaName');
+    });
+  }
+
+  QueryBuilder<Download, String, QQueryOperations> sourceIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'sourceId');
     });
   }
 

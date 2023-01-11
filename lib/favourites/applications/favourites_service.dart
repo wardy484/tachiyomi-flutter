@@ -1,6 +1,5 @@
 import 'package:fluttiyomi/auth/auth_repository.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
-import 'package:fluttiyomi/downloads/application/download_service.dart';
 import 'package:fluttiyomi/favourites/data/favourite.dart';
 import 'package:fluttiyomi/favourites/data/favourite_repository.dart';
 import 'package:fluttiyomi/favourites/presentation/favourites_list_controller.dart';
@@ -15,33 +14,37 @@ class FavouritesService {
     required this.ref,
   });
 
-  void toggleFavourite(String mangaId) async {
+  void toggleFavourite(Source source, String mangaId) async {
     final favouritesRepository = ref.watch(favouritesRepositoryProvider);
     final user = ref.watch(authRepositoryProvider).currentUser;
 
-    final favourite = await ref.read(favouriteProvider(mangaId).future);
+    final favourite =
+        await ref.read(favouriteBySourceProvider(source, mangaId).future);
 
     if (favourite == null) {
       final mangaDetails = await ref.read(
-        mangaDetailsControllerProvider(mangaId).future,
+        mangaDetailsControllerProvider(source, mangaId).future,
       );
 
-      final favourite = await favouritesRepository.addFavourite(
+      await favouritesRepository.addFavourite(
         user,
-        ref.read(sourceProvider).id,
+        source.id,
         mangaDetails.details.titles.first,
         mangaDetails.details,
         mangaDetails.chapters,
       );
 
-      ref.read(downloadServiceProvider).downloadChaptersInBackground(
-            favourite.toManga(),
-            favourite.chapters,
-          );
+      // TODO: Handle all chapter download in thread and make it a setting
+      // it chugs and chokes out app
+      // ref.read(downloadServiceProvider).downloadChaptersInBackground(
+      //       source,
+      //       favourite.toManga(),
+      //       favourite.chapters,
+      //     );
     } else {
       await favouritesRepository.deleteFavourite(
         user,
-        ref.read(sourceProvider).id,
+        source.id,
         mangaId,
       );
     }
