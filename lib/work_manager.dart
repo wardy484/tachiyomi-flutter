@@ -33,6 +33,7 @@ void callbackDispatcher() {
 
     final container = ProviderContainer();
     await container.read(isarDatabaseProvider).init();
+    await container.read(sourceServiceProvider).initialiseSources();
 
     switch (task) {
       case checkFavouritesForUpdatesTask:

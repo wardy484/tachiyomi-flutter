@@ -102,8 +102,9 @@ class _MyAppState extends ConsumerState<MyApp> {
           brightness: Brightness.dark,
           primarySwatch: Colors.blue,
           bottomAppBarColor: Colors.blueGrey,
-          appBarTheme: const AppBarTheme(
-            // backgroundColor: Colors.blueGrey[900],
+          appBarTheme: AppBarTheme(
+            scrolledUnderElevation: 0,
+            backgroundColor: Colors.grey[800],
             elevation: 0,
           ),
           bottomNavigationBarTheme: BottomNavigationBarThemeData(

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fluttiyomi/auth/auth_repository.dart';
 import 'package:fluttiyomi/manga_details/presentation/manga_details_controller.dart';
 import 'package:fluttiyomi/manga_details/presentation/chapter_options.dart';
@@ -12,7 +13,7 @@ import 'package:fluttiyomi/work_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:workmanager/workmanager.dart';
 
-class MangaDetailsPage extends ConsumerStatefulWidget {
+class MangaDetailsPage extends HookConsumerWidget {
   final String id;
   final Source source;
 
@@ -23,30 +24,41 @@ class MangaDetailsPage extends ConsumerStatefulWidget {
   }) : super(key: key);
 
   @override
-  _MangaDetailsPageState createState() => _MangaDetailsPageState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final opacity = useState(0.0);
+    final scrollController = useScrollController();
 
-class _MangaDetailsPageState extends ConsumerState<MangaDetailsPage> {
-  @override
-  Widget build(BuildContext context) {
+    useEffect(() {
+      // ignore: prefer_function_declarations_over_variables
+      final listener = () {
+        final newOpacity = 0 + scrollController.offset / 100;
+        opacity.value = newOpacity.clamp(0.0, 1.0);
+      };
+
+      scrollController.addListener(listener);
+      return () => scrollController.removeListener(listener);
+    }, [scrollController]);
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context)
+            .appBarTheme
+            .backgroundColor!
+            .withOpacity(opacity.value),
         elevation: 0,
       ),
-      body: ref
-          .watch(mangaDetailsControllerProvider(widget.source, widget.id))
-          .when(
+      body: ref.watch(mangaDetailsControllerProvider(source, id)).when(
             data: (mangaDetails) => RefreshIndicator(
               onRefresh: () => _onRefresh(ref, mangaDetails),
               child: CustomScrollView(
+                controller: scrollController,
                 slivers: [
                   SliverList(
                     delegate: SliverChildListDelegate.fixed(
                       [
                         MangaDetailsHeader(
-                          source: widget.source,
+                          source: source,
                           manga: mangaDetails.details,
                         ),
                       ],
@@ -66,8 +78,8 @@ class _MangaDetailsPageState extends ConsumerState<MangaDetailsPage> {
                               onTap: () {
                                 AutoRouter.of(context).push(
                                   ReaderRoute(
-                                    source: widget.source,
-                                    mangaId: widget.id,
+                                    source: source,
+                                    mangaId: id,
                                     chapter: chapter,
                                   ),
                                 );
@@ -79,7 +91,7 @@ class _MangaDetailsPageState extends ConsumerState<MangaDetailsPage> {
                                     barrierDismissible: true,
                                     builder: (BuildContext context) {
                                       return ChapterOptions(
-                                        source: widget.source,
+                                        source: source,
                                         favourite: mangaDetails.favourite!,
                                         chapter: chapter,
                                       );
