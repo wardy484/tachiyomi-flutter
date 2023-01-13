@@ -35,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "235165685655-tmjksjfjqhbq4sqlf75hc93l96vsiu82.apps.googleusercontent.com",
+              "client_id": "235165685655-n8j64jrtd7pv3rttbn9csjvhknmleguf.apps.googleusercontent.com",
               "client_type": 3
             },
             {
@@ -58,6 +58,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "235165685655-khk5g1bcmo88rolf3kn70ul0k4djmeaa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kimward.flutter_manga_reader",
+            "certificate_hash": "a8c7f0afc930752042d53542e3401a95964e56fd"
+          }
+        },
+        {
           "client_id": "235165685655-tmjksjfjqhbq4sqlf75hc93l96vsiu82.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -71,7 +79,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "235165685655-tmjksjfjqhbq4sqlf75hc93l96vsiu82.apps.googleusercontent.com",
+              "client_id": "235165685655-n8j64jrtd7pv3rttbn9csjvhknmleguf.apps.googleusercontent.com",
               "client_type": 3
             },
             {

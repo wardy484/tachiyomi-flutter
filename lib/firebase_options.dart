@@ -25,7 +25,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -54,7 +57,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDz2vvMSQ6Go289kjFV0m8o3IqXchvq2DM',
-    appId: '1:235165685655:android:296af008f5afbb1767d6d2',
+    appId: '1:235165685655:android:368c01daa6c2f8b467d6d2',
     messagingSenderId: '235165685655',
     projectId: 'fluttiyomi',
     storageBucket: 'fluttiyomi.appspot.com',
@@ -66,19 +69,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '235165685655',
     projectId: 'fluttiyomi',
     storageBucket: 'fluttiyomi.appspot.com',
-    iosClientId:
-        '235165685655-l9i4a774u0r8s27g26bp16ao32k7npiq.apps.googleusercontent.com',
+    androidClientId: '235165685655-i1otm6cq6s1blrd4j40lqcvjm21b55hu.apps.googleusercontent.com',
+    iosClientId: '235165685655-l9i4a774u0r8s27g26bp16ao32k7npiq.apps.googleusercontent.com',
     iosBundleId: 'com.wardy484.fluttiyomi',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyCaIqSqwfA6W3ee6wuCxGG0vHJo1J58wJM',
-    appId: '1:235165685655:ios:0f60673bb808d9f567d6d2',
-    messagingSenderId: '235165685655',
-    projectId: 'fluttiyomi',
-    storageBucket: 'fluttiyomi.appspot.com',
-    iosClientId:
-        '235165685655-s83uvqn7ll7akhcvdmi4652ib5blou84.apps.googleusercontent.com',
-    iosBundleId: 'com.kimward.flutter_manga_reader',
   );
 }
