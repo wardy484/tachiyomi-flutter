@@ -1,5 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:expandable_text/expandable_text.dart';
-import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/constants/app_sizes.dart';
 import 'package:fluttiyomi/constants/typography.dart';
@@ -134,9 +134,8 @@ class MangaDetailsBackground extends StatelessWidget {
           ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height - 50));
         },
         blendMode: BlendMode.dstIn,
-        child: ExtendedImage.network(
-          manga.image,
-          cache: true,
+        child: CachedNetworkImage(
+          imageUrl: manga.image,
           fit: BoxFit.cover,
         ),
       ),

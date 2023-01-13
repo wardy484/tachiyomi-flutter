@@ -1,13 +1,10 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttiyomi/database/download.dart';
 import 'package:fluttiyomi/favourites/applications/check_for_updates_notification.dart';
 
 const int _id = 99;
 
 class DownloadProgressNotification extends ProgressNotification {
-  final Download download;
-
-  DownloadProgressNotification(this.download);
+  DownloadProgressNotification();
 
   @override
   Future<void> show(int progress, int maxProgress) async {
@@ -15,9 +12,11 @@ class DownloadProgressNotification extends ProgressNotification {
         AndroidNotificationDetails(
       'chapter_downloads',
       'Chapter downloads',
-      importance: Importance.max,
-      priority: Priority.high,
+      importance: Importance.none,
+      priority: Priority.min,
       onlyAlertOnce: true,
+      playSound: false,
+      showWhen: false,
       showProgress: true,
       progress: progress,
       maxProgress: maxProgress,
@@ -29,7 +28,7 @@ class DownloadProgressNotification extends ProgressNotification {
 
     await flutterLocalNotificationsPlugin.show(
       _id,
-      'Downloading ${download.mangaName} -  Chapter: ${download.chapterName}',
+      'Downloading chapters ($progress/$maxProgress)',
       null,
       notificationDetails,
     );

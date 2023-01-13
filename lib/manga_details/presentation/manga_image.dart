@@ -1,4 +1,4 @@
-import 'package:extended_image/extended_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class MangaImage extends StatelessWidget {
@@ -9,9 +9,8 @@ class MangaImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(14),
-      child: ExtendedImage.network(
-        url,
-        cache: true,
+      child: CachedNetworkImage(
+        imageUrl: url,
         fit: BoxFit.cover,
       ),
     );

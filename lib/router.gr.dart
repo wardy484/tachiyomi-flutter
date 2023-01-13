@@ -53,7 +53,10 @@ class AppRouter extends _i11.RootStackRouter {
       return _i11.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i3.MangaDetailsPage(
-              key: args.key, id: args.id, source: args.source));
+              key: args.key,
+              id: args.id,
+              name: args.name,
+              source: args.source));
     },
     ReaderRoute.name: (routeData) {
       final args = routeData.argsAs<ReaderRouteArgs>();
@@ -145,27 +148,33 @@ class AppRoute extends _i11.PageRouteInfo<void> {
 /// [_i3.MangaDetailsPage]
 class MangaDetailsRoute extends _i11.PageRouteInfo<MangaDetailsRouteArgs> {
   MangaDetailsRoute(
-      {_i12.Key? key, required String id, required _i14.Source source})
+      {_i12.Key? key,
+      required String id,
+      required String name,
+      required _i14.Source source})
       : super(MangaDetailsRoute.name,
             path: '/manga/:id/details',
-            args: MangaDetailsRouteArgs(key: key, id: id, source: source));
+            args: MangaDetailsRouteArgs(
+                key: key, id: id, name: name, source: source));
 
   static const String name = 'MangaDetailsRoute';
 }
 
 class MangaDetailsRouteArgs {
   const MangaDetailsRouteArgs(
-      {this.key, required this.id, required this.source});
+      {this.key, required this.id, required this.name, required this.source});
 
   final _i12.Key? key;
 
   final String id;
 
+  final String name;
+
   final _i14.Source source;
 
   @override
   String toString() {
-    return 'MangaDetailsRouteArgs{key: $key, id: $id, source: $source}';
+    return 'MangaDetailsRouteArgs{key: $key, id: $id, name: $name, source: $source}';
   }
 }
 

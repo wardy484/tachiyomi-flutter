@@ -1,13 +1,8 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttiyomi/favourites/data/favourite.dart';
 
 const int _id = 22;
 
 class CheckForUpdatesNotification extends ProgressNotification {
-  final Favourite favourite;
-
-  CheckForUpdatesNotification(this.favourite);
-
   @override
   Future<void> show(int progress, int maxProgress) async {
     final AndroidNotificationDetails androidNotificationDetails =
@@ -33,7 +28,7 @@ class CheckForUpdatesNotification extends ProgressNotification {
     await flutterLocalNotificationsPlugin.show(
       _id,
       message,
-      favourite.name,
+      null,
       notificationDetails,
     );
   }

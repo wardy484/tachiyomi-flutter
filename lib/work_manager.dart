@@ -1,7 +1,9 @@
 import 'dart:developer';
 
+import 'package:async/async.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fluttiyomi/data/chapter/chapter.dart';
 import 'package:fluttiyomi/database/database.dart';
 import 'package:fluttiyomi/downloads/application/download_service.dart';
 import 'package:fluttiyomi/downloads/application/notifications/download_progress_notification.dart';
@@ -17,6 +19,7 @@ import 'package:workmanager/workmanager.dart';
 const checkFavouritesForUpdatesTask = "checkFavouritesForUpdatesTask";
 const checkFavouriteForUpdatesTask = "checkFavouriteForUpdatesTask";
 const downloadChaptersTask = "downloadChaptersTask";
+const downloadManyChaptersTask = "downloadManyChaptersTask";
 final workManagerProvider = Provider((ref) => Workmanager());
 
 @pragma('vm:entry-point')
@@ -75,6 +78,24 @@ void callbackDispatcher() {
         );
 
         return Future.value(true);
+      case downloadManyChaptersTask:
+        log('Work Manger: $task started');
+
+        if (inputData == null) {
+          log('Work Manger: $task inputData is null');
+          return Future.value(false);
+        }
+
+        final downloadIdsString = inputData['downloadIds'] as String;
+        final ids =
+            downloadIdsString.split(',').map((e) => int.parse(e)).toList();
+
+        await downloadManyChapters(
+          container,
+          ids,
+        );
+
+        return Future.value(true);
     }
     return Future.value(true);
   });
@@ -92,24 +113,30 @@ Future<void> checkFavouritesForUpdates(
   log('Work Manger: Got ${favourites.length} favourites');
 
   CheckForUpdatesNotification? checkForUpdatesNotification;
+  checkForUpdatesNotification = CheckForUpdatesNotification();
+  final FutureGroup<List<Chapter>> futures = FutureGroup();
+  int updated = 0;
 
   for (int i = 0; i < favourites.length; i++) {
-    checkForUpdatesNotification = CheckForUpdatesNotification(favourites[0]);
-    checkForUpdatesNotification.show(i, favourites.length);
-
-    final newChapters = await container
+    final future = container
         .read(favouritesUpdateServiceProvider)
         .getLatestChapters(favourites[i]);
 
-    if (newChapters.isNotEmpty) {
-      updatedFavourites.add(UpdatedFavourite(
-        favourites[i],
-        newChapters,
-      ));
-    }
+    future.then((value) {
+      if (value.isNotEmpty) {
+        updatedFavourites.add(UpdatedFavourite(
+          favourites[i],
+          value,
+        ));
+      }
 
-    checkForUpdatesNotification.show(i + 1, favourites.length);
+      updated += 1;
+      checkForUpdatesNotification?.show(updated, favourites.length);
+    });
   }
+
+  futures.close();
+  await futures.future;
 
   if (updatedFavourites.isNotEmpty) {
     NewChaptersGroupNotification(updatedFavourites).show();
@@ -129,7 +156,7 @@ Future<void> checkOneForUpdates(
       .getFavouriteById(favouriteId);
 
   if (favourite != null) {
-    final checkForUpdatesNotification = CheckForUpdatesNotification(favourite);
+    final checkForUpdatesNotification = CheckForUpdatesNotification();
 
     log('Work Manger: Got ${favourite.name}');
 
@@ -165,19 +192,38 @@ Future<void> downloadChapter(
 
   log("Work manager: starting download for ${download.mangaId}");
 
-  final notification = DownloadProgressNotification(download)..show(0, 0);
   final source = container.read(sourceContainerProvider).get(download.sourceId);
 
   await downloadService.processDownload(
     source,
     download,
-    onProgress: (index, total) {
-      notification.show(index, total);
-    },
   );
 
-  await Future.delayed(const Duration(seconds: 2));
-  await notification.hide();
-
   log("Work manager: finished download for ${download.mangaId}");
+}
+
+Future<void> downloadManyChapters(
+  ProviderContainer container,
+  List<int?> downloadId,
+) async {
+  final notification = DownloadProgressNotification()
+    ..show(0, downloadId.length);
+
+  final futures = FutureGroup();
+  int completed = 0;
+
+  for (int i = 0; i < downloadId.length; i++) {
+    final future = downloadChapter(container, downloadId[i]);
+
+    futures.add(future);
+
+    future.then((value) {
+      completed += 1;
+      notification.show(completed, downloadId.length);
+    });
+  }
+
+  futures.close();
+  await futures.future;
+  await notification.hide();
 }

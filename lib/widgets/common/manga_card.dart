@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:extended_image/extended_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/router.gr.dart';
 import 'package:fluttiyomi/source/source.dart';
@@ -28,6 +28,7 @@ class MangaCard extends ConsumerWidget {
         await AutoRouter.of(context).push(
           MangaDetailsRoute(
             source: source,
+            name: name,
             id: mangaId,
           ),
         );
@@ -42,10 +43,7 @@ class MangaCard extends ConsumerWidget {
               borderRadius: BorderRadius.circular(8),
               image: DecorationImage(
                 fit: BoxFit.fill,
-                image: ExtendedNetworkImageProvider(
-                  image,
-                  cache: true,
-                ),
+                image: CachedNetworkImageProvider(image),
               ),
             ),
           ),

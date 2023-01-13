@@ -1,5 +1,6 @@
 import 'package:fluttiyomi/auth/auth_repository.dart';
 import 'package:fluttiyomi/data/chapter/chapter.dart';
+import 'package:fluttiyomi/downloads/application/download_service.dart';
 import 'package:fluttiyomi/favourites/data/favourite.dart';
 import 'package:fluttiyomi/favourites/data/favourite_repository.dart';
 import 'package:fluttiyomi/favourites/presentation/favourites_list_controller.dart';
@@ -25,7 +26,7 @@ class FavouritesService {
         mangaDetailsControllerProvider(source, mangaId).future,
       );
 
-      await favouritesRepository.addFavourite(
+      final favourite = await favouritesRepository.addFavourite(
         user,
         source.id,
         mangaDetails.details.titles.first,
@@ -33,13 +34,11 @@ class FavouritesService {
         mangaDetails.chapters,
       );
 
-      // TODO: Handle all chapter download in thread and make it a setting
-      // it chugs and chokes out app
-      // ref.read(downloadServiceProvider).downloadChaptersInBackground(
-      //       source,
-      //       favourite.toManga(),
-      //       favourite.chapters,
-      //     );
+      ref.read(downloadServiceProvider).downloadChaptersInBackground(
+            source,
+            favourite.toManga(),
+            favourite.chapters,
+          );
     } else {
       await favouritesRepository.deleteFavourite(
         user,

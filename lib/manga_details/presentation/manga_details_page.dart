@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:fluttiyomi/auth/auth_repository.dart';
+import 'package:fluttiyomi/downloads/application/download_service.dart';
 import 'package:fluttiyomi/manga_details/presentation/manga_details_controller.dart';
 import 'package:fluttiyomi/manga_details/presentation/chapter_options.dart';
 import 'package:fluttiyomi/manga_details/presentation/manga_details_header.dart';
@@ -15,11 +16,13 @@ import 'package:workmanager/workmanager.dart';
 
 class MangaDetailsPage extends HookConsumerWidget {
   final String id;
+  final String name;
   final Source source;
 
   const MangaDetailsPage({
     Key? key,
     required this.id,
+    required this.name,
     required this.source,
   }) : super(key: key);
 
@@ -47,6 +50,30 @@ class MangaDetailsPage extends HookConsumerWidget {
             .backgroundColor!
             .withOpacity(opacity.value),
         elevation: 0,
+        title: AnimatedOpacity(
+          opacity: opacity.value,
+          duration: const Duration(milliseconds: 200),
+          child: Text(
+            name,
+            style: Theme.of(context).textTheme.headline6,
+          ),
+        ),
+        actions:
+            ref.watch(mangaDetailsControllerProvider(source, id)).whenOrNull(
+                  data: (mangaDetails) => [
+                    PopupMenuButton(
+                      onSelected: (String value) =>
+                          _handleOptionsTapped(ref, value, mangaDetails),
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          child: Text('Download all'),
+                          value: 'download_all',
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 6)
+                  ],
+                ),
       ),
       body: ref.watch(mangaDetailsControllerProvider(source, id)).when(
             data: (mangaDetails) => RefreshIndicator(
@@ -142,6 +169,27 @@ class MangaDetailsPage extends HookConsumerWidget {
           // ExistingWorkPolicy.keep means that if the task is already running,
           // it will not be restarted and a second will not be started.
           existingWorkPolicy: ExistingWorkPolicy.keep,
+        );
+  }
+
+  void _handleOptionsTapped(
+    WidgetRef ref,
+    String key,
+    MangaDetailsState mangaDetails,
+  ) {
+    switch (key) {
+      case 'download_all':
+        _downloadAll(ref, mangaDetails);
+        break;
+    }
+  }
+
+  Future<void> _downloadAll(
+      WidgetRef ref, MangaDetailsState mangaDetails) async {
+    ref.read(downloadServiceProvider).downloadChaptersInBackground(
+          source,
+          mangaDetails.details,
+          mangaDetails.chapters.toList(),
         );
   }
 }

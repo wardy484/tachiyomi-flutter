@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:fluttiyomi/database/chapter_details_model.dart';
 import 'package:fluttiyomi/database/download.dart';
 import 'package:fluttiyomi/database/installed_source_model.dart';
 import 'package:fluttiyomi/database/settings.dart';
@@ -19,6 +20,7 @@ class Database {
         SettingSchema,
         DownloadSchema,
         InstalledSourceSchema,
+        ChapterDetailsCacheSchema,
       ],
       directory: dir.path,
       inspector: kDebugMode,

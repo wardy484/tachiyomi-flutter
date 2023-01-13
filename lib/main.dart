@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttiyomi/auth/auth_guard.dart';
 import 'package:fluttiyomi/database/database.dart';
@@ -120,7 +119,6 @@ class _MyAppState extends ConsumerState<MyApp> {
         ),
         routerDelegate: _appRouter.delegate(),
         routeInformationParser: _appRouter.defaultRouteParser(),
-        builder: EasyLoading.init(),
       ),
     );
   }

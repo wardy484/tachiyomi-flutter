@@ -60,8 +60,10 @@ class ChapterOptions extends ConsumerWidget {
         ),
         ContextMenuItem(
           icon: FontAwesomeIcons.download,
-          onPressed: () {
-            ref.read(downloadServiceProvider).downloadChaptersInBackground(
+          onPressed: () async {
+            await ref
+                .read(downloadServiceProvider)
+                .downloadChaptersInBackground(
               source,
               favourite.toManga(),
               [chapter],

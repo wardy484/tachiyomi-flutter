@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:extended_image/extended_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/auth/auth_notifier.dart';
 import 'package:fluttiyomi/data/chapter_list/chapterlist.dart';
@@ -37,9 +37,8 @@ class _DownloadsTabState extends ConsumerState<DownloadsTab> {
                     height: 50,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(4),
-                      child: ExtendedImage.network(
-                        download.image,
-                        cache: true,
+                      child: CachedNetworkImage(
+                        imageUrl: download.image,
                         fit: BoxFit.cover,
                       ),
                     ),
