@@ -118,21 +118,16 @@ Future<void> checkFavouritesForUpdates(
   int updated = 0;
 
   for (int i = 0; i < favourites.length; i++) {
-    final future = container
+    final chapters = await container
         .read(favouritesUpdateServiceProvider)
         .getLatestChapters(favourites[i]);
 
-    future.then((value) {
-      if (value.isNotEmpty) {
-        updatedFavourites.add(UpdatedFavourite(
-          favourites[i],
-          value,
-        ));
-      }
+    if (chapters.isNotEmpty) {
+      updatedFavourites.add(UpdatedFavourite(favourites[i], chapters));
+    }
 
-      updated += 1;
-      checkForUpdatesNotification?.show(updated, favourites.length);
-    });
+    updated += 1;
+    checkForUpdatesNotification.show(updated, favourites.length);
   }
 
   futures.close();

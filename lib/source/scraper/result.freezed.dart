@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'result.dart';
 
@@ -24,8 +24,8 @@ mixin _$Result {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(Document html)? html,
-    TResult Function(Map<String, dynamic> json)? json,
+    TResult? Function(Document html)? html,
+    TResult? Function(Map<String, dynamic> json)? json,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -43,8 +43,8 @@ mixin _$Result {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_Html value)? html,
-    TResult Function(_Json value)? json,
+    TResult? Function(_Html value)? html,
+    TResult? Function(_Json value)? json,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -59,40 +59,41 @@ mixin _$Result {
 /// @nodoc
 abstract class $ResultCopyWith<$Res> {
   factory $ResultCopyWith(Result value, $Res Function(Result) then) =
-      _$ResultCopyWithImpl<$Res>;
+      _$ResultCopyWithImpl<$Res, Result>;
 }
 
 /// @nodoc
-class _$ResultCopyWithImpl<$Res> implements $ResultCopyWith<$Res> {
+class _$ResultCopyWithImpl<$Res, $Val extends Result>
+    implements $ResultCopyWith<$Res> {
   _$ResultCopyWithImpl(this._value, this._then);
 
-  final Result _value;
   // ignore: unused_field
-  final $Res Function(Result) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 }
 
 /// @nodoc
 abstract class _$$_HtmlCopyWith<$Res> {
   factory _$$_HtmlCopyWith(_$_Html value, $Res Function(_$_Html) then) =
       __$$_HtmlCopyWithImpl<$Res>;
+  @useResult
   $Res call({Document html});
 }
 
 /// @nodoc
-class __$$_HtmlCopyWithImpl<$Res> extends _$ResultCopyWithImpl<$Res>
+class __$$_HtmlCopyWithImpl<$Res> extends _$ResultCopyWithImpl<$Res, _$_Html>
     implements _$$_HtmlCopyWith<$Res> {
   __$$_HtmlCopyWithImpl(_$_Html _value, $Res Function(_$_Html) _then)
-      : super(_value, (v) => _then(v as _$_Html));
+      : super(_value, _then);
 
-  @override
-  _$_Html get _value => super._value as _$_Html;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? html = freezed,
+    Object? html = null,
   }) {
     return _then(_$_Html(
-      html == freezed
+      null == html
           ? _value.html
           : html // ignore: cast_nullable_to_non_nullable
               as Document,
@@ -118,15 +119,15 @@ class _$_Html implements _Html {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Html &&
-            const DeepCollectionEquality().equals(other.html, html));
+            (identical(other.html, html) || other.html == html));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(html));
+  int get hashCode => Object.hash(runtimeType, html);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_HtmlCopyWith<_$_Html> get copyWith =>
       __$$_HtmlCopyWithImpl<_$_Html>(this, _$identity);
 
@@ -142,8 +143,8 @@ class _$_Html implements _Html {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(Document html)? html,
-    TResult Function(Map<String, dynamic> json)? json,
+    TResult? Function(Document html)? html,
+    TResult? Function(Map<String, dynamic> json)? json,
   }) {
     return html?.call(this.html);
   }
@@ -173,8 +174,8 @@ class _$_Html implements _Html {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_Html value)? html,
-    TResult Function(_Json value)? json,
+    TResult? Function(_Html value)? html,
+    TResult? Function(_Json value)? json,
   }) {
     return html?.call(this);
   }
@@ -205,24 +206,23 @@ abstract class _Html implements Result {
 abstract class _$$_JsonCopyWith<$Res> {
   factory _$$_JsonCopyWith(_$_Json value, $Res Function(_$_Json) then) =
       __$$_JsonCopyWithImpl<$Res>;
+  @useResult
   $Res call({Map<String, dynamic> json});
 }
 
 /// @nodoc
-class __$$_JsonCopyWithImpl<$Res> extends _$ResultCopyWithImpl<$Res>
+class __$$_JsonCopyWithImpl<$Res> extends _$ResultCopyWithImpl<$Res, _$_Json>
     implements _$$_JsonCopyWith<$Res> {
   __$$_JsonCopyWithImpl(_$_Json _value, $Res Function(_$_Json) _then)
-      : super(_value, (v) => _then(v as _$_Json));
+      : super(_value, _then);
 
-  @override
-  _$_Json get _value => super._value as _$_Json;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? json = freezed,
+    Object? json = null,
   }) {
     return _then(_$_Json(
-      json == freezed
+      null == json
           ? _value._json
           : json // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
@@ -238,6 +238,7 @@ class _$_Json implements _Json {
   final Map<String, dynamic> _json;
   @override
   Map<String, dynamic> get json {
+    if (_json is EqualUnmodifiableMapView) return _json;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableMapView(_json);
   }
@@ -261,6 +262,7 @@ class _$_Json implements _Json {
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_JsonCopyWith<_$_Json> get copyWith =>
       __$$_JsonCopyWithImpl<_$_Json>(this, _$identity);
 
@@ -276,8 +278,8 @@ class _$_Json implements _Json {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(Document html)? html,
-    TResult Function(Map<String, dynamic> json)? json,
+    TResult? Function(Document html)? html,
+    TResult? Function(Map<String, dynamic> json)? json,
   }) {
     return json?.call(this.json);
   }
@@ -307,8 +309,8 @@ class _$_Json implements _Json {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_Html value)? html,
-    TResult Function(_Json value)? json,
+    TResult? Function(_Html value)? html,
+    TResult? Function(_Json value)? json,
   }) {
     return json?.call(this);
   }

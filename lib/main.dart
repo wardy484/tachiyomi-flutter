@@ -1,4 +1,8 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttiyomi/auth/auth_guard.dart';
@@ -11,9 +15,12 @@ import 'package:fluttiyomi/settings/presentation/installed_source_controller.dar
 import 'package:fluttiyomi/widgets/refresh_config.dart';
 import 'package:fluttiyomi/work_manager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-// import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+
+// ignore: constant_identifier_names
+const GOOGLE_CLIENT_ID =
+    "235165685655-tmjksjfjqhbq4sqlf75hc93l96vsiu82.apps.googleusercontent.com";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,6 +33,9 @@ void main() async {
     persistenceEnabled: true,
     cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   );
+  FirebaseUIAuth.configureProviders([
+    GoogleProvider(clientId: GOOGLE_CLIENT_ID),
+  ]);
 
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   flutterLocalNotificationsPlugin
@@ -51,17 +61,6 @@ void main() async {
   await container.read(workManagerProvider).initialize(callbackDispatcher);
 
   await installTestSources(container);
-
-  // await SentryFlutter.init(
-  //   (options) {
-  //     options.dsn =
-  //         'https://7fe8e00f82e64d7d83a6fb366a762855@o1207946.ingest.sentry.io/6341248';
-  //     // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
-  //     // We recommend adjusting this value in production.
-  //     options.tracesSampleRate = 1.0;
-  //   },
-  //   appRunner: () => runApp(MyApp()),
-  // );
 
   runApp(
     UncontrolledProviderScope(
@@ -130,7 +129,7 @@ Future<void> installTestSources(ProviderContainer container) async {
     {
       "id": "readm",
       "url":
-          "https://gist.githubusercontent.com/wardy484/74db6d1a96015b0574b17d113d04cc84/raw/7b2c58acc48f27e259ac3f77798ac5e839bba074/readm.yml",
+          "https://gist.githubusercontent.com/wardy484/74db6d1a96015b0574b17d113d04cc84/raw/e2f6835c119e6ce4f5567dfd3e0d91bd5b56a4f9/readm.yml",
     },
     {
       "id": "mangajar",

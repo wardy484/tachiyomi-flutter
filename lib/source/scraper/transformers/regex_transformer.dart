@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:fluttiyomi/source/scraper/transformers/transformer.dart';
 import 'package:yaml/yaml.dart';
 
@@ -11,8 +9,6 @@ class RegexTransformer extends Transformer {
 
   @override
   dynamic transform(dynamic value, dynamic defaultValue) {
-    log('RegexTransformer: $value, $defaultValue, $pattern, $index');
-
     final matches = RegExp(pattern).allMatches(value);
     if (matches.isNotEmpty) {
       return matches.elementAt(0).group(index);

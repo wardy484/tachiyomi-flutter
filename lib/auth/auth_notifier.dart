@@ -1,28 +1,30 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:fluttiyomi/auth/auth_repository.dart';
-import 'package:fluttiyomi/auth/auth_state.dart';
+import 'package:fluttiyomi/auth/auth_state.dart' as auth_state;
 import 'package:fluttiyomi/auth/user.dart' as auth_user;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-final authNotifierProvider = StateNotifierProvider<AuthNotifier, AuthState>(
+final authNotifierProvider =
+    StateNotifierProvider<AuthNotifier, auth_state.AuthState>(
   (ref) => AuthNotifier(
     auth: ref.read(authRepositoryProvider),
   ),
 );
 
-class AuthNotifier extends StateNotifier<AuthState> {
+class AuthNotifier extends StateNotifier<auth_state.AuthState> {
   final AuthRepository auth;
 
   AuthNotifier({
     required this.auth,
-  }) : super(const AuthState.unauthenticated());
+  }) : super(const auth_state.AuthState.unauthenticated());
 
   Future<void> signInAnnonymously() async {
     final credentials = await auth.signInAnnonymously();
     final user = credentials.user;
 
     if (user != null) {
-      state = AuthState.authenticated(
+      state = auth_state.AuthState.authenticated(
         auth_user.User(id: user.uid, providerId: "annonymous"),
       );
     }
@@ -33,7 +35,22 @@ class AuthNotifier extends StateNotifier<AuthState> {
     final user = credentials.user;
 
     if (user != null) {
-      state = AuthState.authenticated(
+      state = auth_state.AuthState.authenticated(
+        auth_user.User(
+          id: user.uid,
+          providerId: "Google",
+          email: user.email,
+          name: user.displayName,
+        ),
+      );
+    }
+  }
+
+  void onSignedIn(SignedIn state) {
+    final user = state.user;
+
+    if (user != null) {
+      this.state = auth_state.AuthState.authenticated(
         auth_user.User(
           id: user.uid,
           providerId: "Google",
@@ -50,15 +67,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
         final user = FirebaseAuth.instance.currentUser;
 
         if (user != null) {
-          state = AuthState.authenticated(
-            auth_user.User(
-              id: user.uid,
-              providerId: "Google",
-              email: user.email,
-              name: user.displayName,
-            ),
-          );
-
           return true;
         }
 

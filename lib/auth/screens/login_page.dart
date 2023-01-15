@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttiyomi/auth/auth_notifier.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -18,30 +17,15 @@ class LoginPage extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Login'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            MaterialButton(
-              color: Theme.of(context).colorScheme.primary,
-              child: const Text(
-                "Login with Google",
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () async {
-                try {
-                  await ref
-                      .read(authNotifierProvider.notifier)
-                      .signInWithGoogle();
-
-                  onLogin();
-                } catch (e) {
-                  log("Auth error: $e");
-                }
-              },
-            ),
-          ],
-        ),
+      body: SignInScreen(
+        actions: [
+          AuthStateChangeAction((context, state) {
+            if (state is SignedIn && state.user != null) {
+              ref.read(authNotifierProvider.notifier).onSignedIn(state);
+              onLogin();
+            }
+          })
+        ],
       ),
     );
   }
