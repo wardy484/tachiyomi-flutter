@@ -45,9 +45,8 @@ class ReaderPagesController extends _$ReaderPagesController {
               ref.read(readerLoadingControllerProvider.notifier).loading(),
         );
 
-    final chapterDetails = await ref.watch(
-      chapterDetailsProvider(source, mangaId, chapter.id).future,
-    );
+    final chapterDetails =
+        await fetchChapterDetails(ref, source, mangaId, chapter.id);
 
     state = await _precacheImages(
       chapter,
@@ -63,8 +62,11 @@ class ReaderPagesController extends _$ReaderPagesController {
   ) async {
     ref.read(readerIsAppendingProvider.notifier).state = true;
 
-    final chapterDetails = await ref.watch(
-      chapterDetailsProvider(source, mangaId, chapter.id).future,
+    final chapterDetails = await fetchChapterDetails(
+      ref,
+      source,
+      mangaId,
+      chapter.id,
     );
 
     final precachedPages = await _precacheImages(

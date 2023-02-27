@@ -8,12 +8,8 @@ import 'package:fluttiyomi/source/schema/source_schema.dart';
 import 'package:fluttiyomi/source/source.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'chapter_details_repository.g.dart';
-
-@riverpod
-FutureOr<ChapterDetails> chapterDetails(
+Future<ChapterDetails> fetchChapterDetails(
   Ref ref,
   Source source,
   String mangaId,
@@ -77,6 +73,8 @@ class ChapterDetailsCacheRepository {
     await db.writeTxn(() async {
       await db.chapterDetailsCaches.put(cache);
     });
+
+    log('Chapter details cache update: ${chapterDetails.id}');
 
     return chapterDetails;
   }
